@@ -1,0 +1,52 @@
+/* 代码整理：大头网 www.datouwang.com */
+/*默认蓝色*/
+.SonlineBox{ width:162px; font-size:12px;overflow:hidden; z-index:9999;}
+.SonlineBox .openTrigger{ width:30px; height:110px; position:absolute; top:0px;  z-index:1; cursor:pointer;  background:#0176ba url(../images/openTrigger.jpg) no-repeat;}
+.SonlineBox .titleBox{ width:176px; height:35px; line-height:35px; background:#038bdc url(../images/SonlineTitleBg.gif) repeat-x; border-bottom:2px solid #0176ba;}
+.SonlineBox .titleBox span{ margin-left:10px; color:#fff; font-size:14px; font-family:'微软雅黑','黑体';}
+.SonlineBox .contentBox{ width:176px; height:auto; border:2px solid #0176ba; background:#fff; position:absolute; z-index:2;}
+.SonlineBox .contentBox .closeTrigger{ width:25px; height:25px; display:block; cursor:pointer;  position:absolute; top:5px;right:5px;-webkit-transition:all 0.8s ease-out;}
+.SonlineBox .contentBox .closeTrigger:hover{-webkit-transform:scale(1) rotate(360deg);}
+.SonlineBox .contentBox .listBox{overflow:hidden; margin-bottom:10px;}
+.SonlineBox .contentBox .listBox .QQList{ display:block; width:86%; height:22px; margin:10px auto 0px auto;}
+.SonlineBox .contentBox .listBox .QQList span{float:left; line-height:22px;}
+.SonlineBox .contentBox .listBox .QQList a{float:left;}
+
+/*灰色*/
+.SonlineBox2{ width:200px; font-size:12px;overflow:hidden; z-index:9999;}
+.SonlineBox2 .openTrigger{ width:31px; height:110px; position:absolute; top:0px;  z-index:1; cursor:pointer;  background:#7b7b7b url(../images/grayOpen.jpg) no-repeat;} 
+.SonlineBox2 .titleBox{ width:176px; height:35px; line-height:35px; background:#27979b url(../images/grayTitleBg.gif) repeat-x; border-bottom:2px solid #7b7b7b;}
+.SonlineBox2 .titleBox span{ margin-left:10px; color:#fff; font-size:14px; font-family:'微软雅黑','黑体';}
+.SonlineBox2 .contentBox{ width:176px; height:auto; border:2px solid #7b7b7b; background:#fff; position:absolute; z-index:2;}
+.SonlineBox2 .contentBox .closeTrigger{ width:25px; height:25px; display:block; cursor:pointer;  position:absolute; top:5px;right:5px;-webkit-transition:all 0.8s ease-out;}
+.SonlineBox2 .contentBox .closeTrigger:hover{-webkit-transform:scale(1) rotate(360deg);}
+.SonlineBox2 .contentBox .listBox{overflow:hidden; margin-bottom:10px;}
+.SonlineBox2 .contentBox .listBox .QQList{ display:block; width:86%; height:22px; margin:10px auto 0px auto;}
+.SonlineBox2 .contentBox .listBox .QQList span{float:left; line-height:22px;}
+.SonlineBox2 .contentBox .listBox .QQList a{float:left;}
+
+/*绿色*/
+.SonlineBox3{ width:180px; font-size:12px;overflow:hidden; z-index:9999;}
+.SonlineBox3 .openTrigger{ width:30px; height:110px; position:absolute; top:0px;  z-index:1; cursor:pointer;  background:#27979b url(../images/greenOpen.jpg) no-repeat;} 
+.SonlineBox3 .titleBox{ width:176px; height:35px; line-height:35px; background:#27979b url(../images/greenTitleBg.gif) repeat-x; border-bottom:2px solid #27979b;}
+.SonlineBox3 .titleBox span{ margin-left:10px; color:#fff; font-size:14px; font-family:'微软雅黑','黑体';}
+.SonlineBox3 .contentBox{ width:176px; height:auto; border:2px solid #27979b; background:#fff; position:absolute; z-index:2;}
+.SonlineBox3 .contentBox .closeTrigger{ width:25px; height:25px; display:block; cursor:pointer;  position:absolute; top:5px;right:5px;-webkit-transition:all 0.8s ease-out;}
+.SonlineBox3 .contentBox .closeTrigger:hover{-webkit-transform:scale(1) rotate(360deg);}
+.SonlineBox3 .contentBox .listBox{overflow:hidden; margin-bottom:10px;}
+.SonlineBox3 .contentBox .listBox .QQList{ display:block; width:86%; height:22px; margin:10px auto 0px auto;}
+.SonlineBox3 .contentBox .listBox .QQList span{float:left; line-height:22px;}
+.SonlineBox3 .contentBox .listBox .QQList a{float:left;}
+
+/*红色*/
+.SonlineBox4{ width:162px; font-size:12px;overflow:hidden; z-index:9999;}
+.SonlineBox4 .openTrigger{ width:31px; height:110px; position:absolute; top:0px;  z-index:1; cursor:pointer;  background:#c30202 url(../images/redOpen.jpg) no-repeat;} 
+.SonlineBox4 .titleBox{ width:176px; height:35px; line-height:35px; background:#27979b url(../images/redTitleBg.gif) repeat-x; border-bottom:2px solid #c30202;}
+.SonlineBox4 .titleBox span{ margin-left:10px; color:#fff; font-size:14px; font-family:'微软雅黑','黑体';}
+.SonlineBox4 .contentBox{ width:176px; height:auto; border:2px solid #c30202; background:#fff; position:absolute; z-index:2;}
+.SonlineBox4 .contentBox .closeTrigger{ width:25px; height:25px; display:block; cursor:pointer;  position:absolute; top:5px;right:5px;-webkit-transition:all 0.8s ease-out;}
+.SonlineBox4 .contentBox .closeTrigger:hover{-webkit-transform:scale(1) rotate(360deg);}
+.SonlineBox4 .contentBox .listBox{overflow:hidden; margin-bottom:10px;}
+.SonlineBox4 .contentBox .listBox .QQList{ display:block; width:86%; height:22px; margin:10px auto 0px auto;}
+.SonlineBox4 .contentBox .listBox .QQList span{float:left; line-height:22px;}
+.SonlineBox4 .contentBox .listBox .QQList a{float:left;}

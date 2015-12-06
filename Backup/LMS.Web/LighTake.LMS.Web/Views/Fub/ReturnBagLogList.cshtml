@@ -1,0 +1,114 @@
+﻿@{
+    ViewBag.Title = "退件记录查询";
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+
+}
+@model LMS.Controllers.FubController.Models.ReturnBagLogListModel
+
+
+@using (Html.BeginForm())
+{
+    <div>
+        <h2>退件记录查询</h2>
+        <hr style="width: 100%" align="left"/>
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select"  style="width:50%">
+                <td>
+                    <span class="info_box info_select">包裹单号:</span>
+                    <br/>
+                    @Html.TextAreaFor(p => p.FilterModel.TrackNumber, new { @style = "height:80px; width:210px;" })
+                </td>
+                
+                
+                <td>
+                 
+                      <span class="info_box info_select">退回日期:</span>
+                    <input id="FilterModel_StartTime" name="FilterModel.StartTime" class="txt wdate" style="width:130px" type="text"  Value = "@String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.StartTime)" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'FilterModel_EndTime\',{M:-1});}',maxDate:'#F{$dp.$D(\'FilterModel_EndTime\',{d:0});}',isShowClear:false})" />
+                     &nbsp;&nbsp;&nbsp;
+                    <span style="width:70px">至:</span>
+                      &nbsp;&nbsp;&nbsp;
+                    <input id="FilterModel_EndTime" name="FilterModel.EndTime" class="txt wdate" style="width:130px" type="text" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'FilterModel_StartTime\',{d:0});}',maxDate:'#F{$dp.$D(\'FilterModel_StartTime\',{M:2});}',isShowClear:false})" Value = "@String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.EndTime)" />
+                 
+                    <br />
+                    <br />
+                    <br />
+
+                    
+                
+                    <span class="info_box info_select">退回原因:</span>
+                    @Html.DropDownListFor(a=>a.FilterModel.ReasonType, Model.SelectListItem)
+                    
+                    &nbsp;&nbsp;&nbsp;
+
+                    <span class="info_box info_select" style="width:100px">退回操作人:</span>
+                    @Html.TextBoxFor(a=>a.FilterModel.ReturnBy)
+                </td>
+
+            </tr>
+
+            <tr class="date_row_select" style="width:50%">
+                <td>
+             
+                    <input type="submit" name="Search" value="查 询" class="btn"/>
+                    @for (int i = 0; i < 15; i++)
+                    {
+                        <text> &nbsp;</text>
+                    }
+                  
+                    <input type="submit" name="btnExport" value="导 出" class="btn"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+}
+
+
+
+<div>
+    <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr class="data_row_two">
+                    <th>包裹单号
+                    </th>
+                    <th>运输方式
+                    </th>
+                    <th>发货国家 
+                    </th>
+                    <th>重量kg 
+                    </th>
+                    <th>退回原因 
+                    </th>
+                    <th>退回时间
+                    </th>
+                    <th>退回操作人
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @{
+
+                    foreach (var item in Model.PagedList.InnerList)
+                    {
+                        <tr class="data_row_dan" style="text-align: center">
+                            <td>@item.TrackNumber</td>
+                            <td>@item.InShippingMethodName</td>
+                            <td>@item.CountryCode</td>
+                            <td>@item.Weight kg</td>
+                            <td>@item.ReturnReason</td>
+                            <td>@item.ReturnOn</td>
+                            <td>@item.ReturnBy</td>
+                        </tr>
+                    }
+
+                }
+                
+
+                <tr class="data_row_none">
+                    <td colspan="10">
+                         @Html.Pager(Model.PagedList, Model.FilterModel)
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</div>

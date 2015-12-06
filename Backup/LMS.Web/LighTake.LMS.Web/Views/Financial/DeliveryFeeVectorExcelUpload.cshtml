@@ -1,0 +1,125 @@
+﻿@model LMS.Controllers.FinancialController.FileUploadJsonModel
+@{
+        //Layout = null;
+}
+<script type="text/javascript">
+    function closeThisWindow() {
+        window.parent.importExcelComplete();
+    }
+    function CheckSubmit() {
+        if ($("#IsCheckSubmit").val() == "1") {
+            $("#IsCheckSubmit").val("2");
+            $("#msg").html("<span style='color:red'>上传中，请等待！</span>");
+            return true;
+        } else {
+            alert("上传中，请等待！");
+            return false;
+        }
+    }
+</script>
+
+<div style="padding: 10px;">
+    @using (Html.BeginForm("DeliveryFeeVectorExcelUploadPost", "Financial", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {   
+         @Html.HiddenFor(p=>p.VenderCode)
+        <div class="mt10" style="border-bottom:1px dotted #0094ff; padding-bottom:10px;">
+            <input type="hidden" id="IsCheckSubmit" value="1"/>
+            <span class="info_box ">选择导入单号类型:</span>
+            @Html.DropDownListFor(p => p.SelectOrderNo, Model.SelectOrderNoList, new { @style = "width:100px;" })
+            <input type="file" id="uploadfile" name="uploadfile" /> <input type="submit" value="上传" onclick=" return CheckSubmit();" />
+        </div> 
+                    
+        <div id="msg" class="mt10">
+            @{
+        bool isUploadShow = true;
+        bool isErrorShow = false;
+        if (Model != null)
+        {
+            switch (Model.Status)
+            {
+                case 1:
+                    isUploadShow = false;
+                    @Html.Raw(string.Format("<span style='color:green'>上传成功导入{0}条!</span>即将进入<b>[已导入待审核]<b>!", Model.UploadSuccessCount, Model.UploadFailCount));  
+                    <script type="text/javascript">
+                        //跳转到已导入待审核
+                        //setTimeout(closeThisWindow, 10 * 1000);
+                    </script>  
+                                                                                                                                                              break;
+
+                case 3:
+                                                                                                                                                              isUploadShow = false;
+                    @Html.Raw(string.Format("<span style='color:green'>上传成功导入{0}条</span>,<span style='color:red'>失败{1}条</span>", Model.UploadSuccessCount, Model.UploadFailCount));
+                                                                                                                                                                                isErrorShow = true;
+                                                                                                                                                                                break;
+
+                case 0:
+                case 2: 
+                    @Html.Raw("<span style='color:red'>上传失败," + Model.Info + "</span>");
+                                                                                       break;
+            }
+        } 
+            }
+        </div>        
+        if (isErrorShow)
+        {
+    <table id="dataTable" class="data_table mt10" width="100%" border="1" cellpadding="0" cellspacing="0">
+    <thead>
+        <tr class="data_row_two"> 
+             <th>序号
+            </th>          
+            <th>订单号/跟踪号
+            </th>           
+            <th>收货日期
+            </th>
+            <th>服务商
+            </th>
+            <th>运输方式
+            </th>
+            <th>国家
+            </th>
+            <th>货物重量kg
+            </th>
+            <th>计费重量kg
+            </th>
+            <th>总费用
+            </th>
+           <th style="background-color:yellow; color:black;">错误原因
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var a = 1;
+        }
+        @foreach (var d in Model.ErrorData)
+        {            
+            <tr>               
+                <td>@(a)   @{ a++; }
+                </td>
+                <!--info-->
+                <td>@d.OrderNumber
+                </td>
+                <td>@d.ReceivingDate
+                </td>
+                <td>@d.VenderName
+                </td>
+                <td>@d.ShippingMethodName
+                </td>
+                <td>@d.CountryName
+                </td>
+                <td>@d.Weight
+                </td>
+                <td>@d.SettleWeight
+                </td>
+                <td>@d.TotalFee
+                </td>               
+                <td style="background-color:yellow">@d.ErrorReason
+                </td>                      
+            </tr> 
+        }
+        </tbody>
+  </table>             
+        }
+    }
+</div>
+

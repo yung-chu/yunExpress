@@ -1,0 +1,474 @@
+﻿@{
+    ViewBag.Title = "国际小包优+";
+    Layout = null;
+}
+
+
+@using System.Globalization
+@model LMS.FrontDesk.Controllers.FubController.InTrackingLogInfoModel
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>国际小包优+</title>
+        <script src="@Url.Content("~/Scripts/jquery-1.7.1.min.js")" type="text/javascript"></script>
+        <link type="text/css" rel="stylesheet" href="@Url.Content("~/Css/Css/base.css")" />
+        
+        
+        <style type="text/css">
+            body{ margin:0; background:url(@Url.Content("~/Images/Images/bg_bn.png")) no-repeat #f4f4f4 center fixed;}
+            .main_box{width:860px;  margin-left:auto; margin-right:auto; }
+            .ml160{ margin-left:160px;}
+            .leftbar{height: 100%;float: left;clear: left;margin-right: -140px;width: 140px;}
+            .Diamond_position{position:absolute; line-height:22px; left:50%; width:20px; text-align:center; margin-left:-10px; top:-20px;}
+            .Diamond_out{color:#fff; position:absolute;font-size:20px;}
+            .Diamond{ color:#006fbd;  font-size:20px; margin-top:-3px; display:inline-block;}
+            .main_ovh{background:#fff; height:366px; border:1px solid #dbdbdb;}
+            .Trans{
+	            -webkit-transition:margin-left 0.2s cubic-bezier(0.42, 0, 0.58, 1.0);
+	               -moz-transition:margin-left 0.2s cubic-bezier(0.42, 0, 0.58, 1.0);
+	                -ms-transition:margin-left 0.2s cubic-bezier(0.42, 0, 0.58, 1.0);
+	                 -o-transition:margin-left 0.2s cubic-bezier(0.42, 0, 0.58, 1.0);	
+	                   transition:margin-left 0.2s cubic-bezier(0.42, 0, 0.58, 1.0); 
+			
+            }
+            .main_pd{ line-height:196px; height:196px;}
+            .main_inner{height:174px; width:140px; margin-bottom:18px; background:#fff; border:1px solid #dbdbdb; text-align:center;}
+            .u1{ background:url(@Url.Content("~/Images/Images/n1.jpg")) no-repeat; display:inline-block; width:73px; height:98px; vertical-align:middle;}
+            .u111{ background-position: 0 0;}
+            .u112{ background-position: 0 -100px;}
+            .u113{ background-position: 0 -200px;}
+
+            .sr_area{background:#fff; margin-top:20px; width:860px; margin:0 auto; border:1px solid #dbdbdb;}
+            .foot_solid{ border-top:1px solid #dbdbdb; border-bottom:1px solid #fff;}
+            .foot{ width:860px; margin:0 auto; text-align:center; padding:20px 0;}
+            .Tb{ border-collapse:collapse; width:100%; border:2px solid #cecece; background:#fff}
+            .Tb td,.Tb th{ padding:10px; border:1px solid #cecece}
+            .Tb td{ color:#000; }
+            .Tb th{ text-align:center; background:#f2f2f2}
+            .cocbeaff{ background:#cbeaff}
+            .main_select .u111{ background-position: -75px 0;}
+            .main_select .u112{ background-position: -75px -100px;}
+            .main_select .u113{ background-position: -75px -200px;}
+            .hptc110{ height:100%}
+            .mt90{ margin-top:90px} 
+            .main_pdI{ font-size:16px; background:#fdfdfd; height:372px; overflow:auto; font-family:"微软雅黑"; text-shadow: 1px 1px 0 #ddd;}
+            .main_mg{ margin:80px 0;}
+            .main_solid{border-top:1px solid #eaeaea; margin:15px -30px; border-bottom:1px solid #fff;}
+            .textArea{ padding:10px; height:31px; border:2px solid #006fbd; width:350px; box-shadow:-2px 2px 8px #ccc inset; outline-style:none; overflow-y:auto;}
+            .main_btn{ background:url(@Url.Content("~/Images/Images/FYB_07.jpg")) no-repeat; cursor:pointer; vertical-align:middle; height:55px; width:138px; border:none;}
+            .main_block{ width:12px; height:4px; display:inline-block; overflow:hidden; background:#444;}
+            .main_position{ max-width:300px; _width:200px; border:2px solid #006fbd; display:none;  box-shadow: 0 0 8px #ddd inset; padding:10px; background:#fff; position:absolute; z-index:4;}
+            .ml3{ margin-left:3px;}
+            .part img{ display:block; margin-bottom:20px;}
+            .pack_in{ padding:0 30px 30px 30px;}
+            .pack_in h3{ font-size:20px; font-family:"微软雅黑"; font-weight:normal; margin-bottom:10px;}
+            .pack_in h2{ font-size:30px;  font-family:"微软雅黑"; font-weight:normal; margin-bottom:20px; text-align:center;}
+            .part p{line-height:180%; margin-bottom:15px; font-size:14px; font-weight:normal; text-shadow:none;}
+            .pack_in ol{ line-height:200%;  font-weight:normal; text-shadow:none;}
+            .pack_in img{ display:block; max-width:90%; margin:20px 0;}
+            .part{ margin-bottom:30px; text-align:justify; letter-spacing:1px;}
+</style>
+        
+
+    </head>
+
+
+    <body>
+
+
+        <!--提示信息-->
+        <div class="main_position main_Warp">
+            <div class="rel">
+                <div class="lh20 g4">
+                    <div class="meeeage_title" id="CorrectMess">正在查询，请稍后...</div>
+                    <div class="meeeage_body tj"  id="ErrorMess">
+                        你好，您输入的单号过长 <br/>
+                        多余会被过滤
+                    </div>
+                </div>
+                <div class="Diamond_position">
+                    <span class="Diamond_out">◆</span>
+                    <span class="Diamond">◆</span>
+                </div>
+            </div>
+        </div>
+    
+        <form action="#list" method="POST">
+             <div class="main_box fix">
+                <div class="leftbar">
+                    <div class="cpi acod_Active main_inner main_select">
+                        <i class="u1 u111"></i>
+                        <span class="dib_vm"></span>
+                    </div>
+                    <div class="cpi acod_Active main_inner">
+                        <i class="u1 u112"></i>
+                        <span class="dib_vm"></span>
+                    </div>
+                    <div class="cpi acod_Active main_inner">
+                        <i class="u1 u113"></i>
+                        <span class="dib_vm"></span>
+                    </div>
+                </div>
+                <div class="ml160 rel ovh hptc110">
+                    <div class="tc main_pd">
+                        <span class="dib_vm"></span>
+                        <img src="@Url.Content("~/Images/Images/FYB_03.png")" class="vm" alt="国际小包优+"/>
+                    </div>
+                    
+                    
+                   <!--锚点-->
+                 @*<a name="list"></a>*@
+                    
+                    
+
+                    <div class="main_ovh">
+                        <div class="Trans zx2 pct100 abs">
+                            <table cellpadding="0" width="100%">
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td width="80%">
+                                        <div class="inline_box mt90">
+
+                                            @Html.TextAreaFor(a=>a.Number,new{ @class="textArea vm inline_any"})
+
+                                            <input type="button" class="main_btn inline_any ml3 Avtive"  title="查询结果" data="main_Warp" value=""/>
+
+                                        </div>
+                                        <div class="mt30">
+                                            <div class="mb15">
+                                                <i class="main_block vm mr5"></i><span class="dib vm">请输入单号，共计50位的国际小包优+单号</span>
+                                            </div>
+                                            <div class="mb15">
+                                                <i class="main_block vm mr5"></i><span class="dib vm">系统支持最多50个单号的同时查询，每个单号请以回车分割</span>
+                                            </div>
+                                            <div class="mb15">
+                                                <i class="main_block vm mr5"></i><span class="dib vm">最多可查询50个</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            </table>       
+                        </div>
+
+                        <!--新闻信息-->
+                        <div class="Trans zx1 pct100 abs">
+                            <div class="b g4 main_pdI">
+                                <div class="p30">
+                                    <div class="pack_in">
+                                        <h2>	
+                                            我是一级标题
+                                        </h2>
+                                        <h3>
+                                            我是二级标题(图片)
+                                        </h3>
+                                        <div class="part">
+                                            <img src="@Url.Content("~/Images/Images/20131220020547856.jpg")">
+                                        </div>
+                                        <h3>
+                                            我是二级标题(图片)
+                                        </h3>
+                                        <div class="part">
+                                            <img src="@Url.Content("~/Images/Images/20131220020547856.jpg")">
+                                        </div>
+                                        <h3>
+                                            我是二级标题
+                                        </h3>
+                                        <div class="part">
+                                            <p>
+                                                DHL国际快递服务公司为DHL集团公司直属全资公司，主要经营国际、国内DHL特快专递业务，是中国速递服务的最早供应商，也是目前中国速递行业的最大运营商和领导者。公司拥有员工20,000多人，DHL业务通达全球200多个国家和地区以及国内近2,000个城市。 DHL特快专递业务自1980年开办以来，业务量逐年增长，业务种类不断丰富，服务质量不断提高。除提供国内、国际特快专递服务外，DHL相继推出国内次晨达和次日递、国际承诺服务和限时递等高端服务，同时提供代收货款、收件人付费、鲜花礼仪速递等增值服务。
+                                            </p>
+                                            <p>
+                                                DHL国际快递服务公司为DHL集团公司直属全资公司，主要经营国际、国内DHL特快专递业务，是中国速递服务的最早供应商，也是目前中国速递行业的最大运营商和领导者。公司拥有员工20,000多人，DHL业务通达全球200多个国家和地区以及国内近2,000个城市。 DHL特快专递业务自1980年开办以来，业务量逐年增长，业务种类不断丰富，服务质量不断提高。除提供国内、国际特快专递服务外，DHL相继推出国内次晨达和次日递、国际承诺服务和限时递等高端服务，同时提供代收货款、收件人付费、鲜花礼仪速递等增值服务。
+                                            </p>
+                                        </div>
+                                        <h3>
+                                            我是二级标题
+                                        </h3>
+                                        <div class="part">
+                                            <p>
+                                                DHL国际快递服务公司为DHL集团公司直属全资公司，主要经营国际、国内DHL特快专递业务，是中国速递服务的最早供应商，也是目前中国速递行业的最大运营商和领导者。公司拥有员工20,000多人，DHL业务通达全球200多个国家和地区以及国内近2,000个城市。 DHL特快专递业务自1980年开办以来，业务量逐年增长，业务种类不断丰富，服务质量不断提高。除提供国内、国际特快专递服务外，DHL相继推出国内次晨达和次日递、国际承诺服务和限时递等高端服务，同时提供代收货款、收件人付费、鲜花礼仪速递等增值服务。
+                                            </p>
+                                        </div>
+                                        <h3>
+                                            我是二级标题(使用有序列表)
+                                        </h3>
+                                        <div class="part">
+                                            <ol type="1">
+                                                <li>
+                                                    使用有序列表
+                                                </li>
+                                                <li>b
+                                                    使用有序列表
+                                                </li>
+                                                <li>
+                                                    使用有序列表
+                                                </li>
+                                                <li>
+                                                    使用有序列表
+                                                </li>
+                                            </ol>
+                                        </div>
+                                        <h3>
+                                            我是二级标题(图片)
+                                        </h3>
+                                    </div>
+                                </div>
+                   	  
+                            </div>
+                        </div>
+                        <!--联系信息-->
+                        <div class="Trans pct100 abs" style="height:100%;">
+                            <div class="b g4 main_pdI">
+                                <div class="p30">
+                                    <div>
+                                        贝邮宝全国热线电话：4008-206-207
+                                    </div>
+                                    <div class="main_solid" ></div>
+                                    <div>
+                                        客服邮箱：customer_service@ppbyb.com
+                                    </div>
+                                    <div class="main_solid" ></div>
+                                    <div >
+                                        技术支持邮箱（API等问题）：tech_support@ppbyb.com
+                                    </div>
+                                    <div class="main_solid" ></div>
+                                    <div >
+                                        其余时间，您可以联系：0
+                                    </div>
+                                    <div class="main_solid" ></div>
+                                    <div >
+                                        Yvonne yang:13601919736
+                                    </div>
+                                    <div class="main_solid" ></div>
+                                    <div >
+                                        Henry     cao: 13916391308
+                                    </div>
+                                </div>
+                   	  
+                            </div>
+                        </div>  
+                    </div>
+                </div>
+            </div>
+        </form>
+      
+        
+            
+
+            
+            <div class="sr_area">
+               @* <div class="p30">*@
+            
+
+                    <div class="sr_load tc pb20" id="LoadImage" style="display:none">
+                        <img src="@Url.Content("~/Images/Images/89.GIF")"  height="60"/>
+                        <div class="mt10">
+                            加载中...
+                        </div>
+                    </div>
+            
+                    <div id="appendTrackingInfo">
+            
+                    </div>
+            
+@*                    @if (Model != null && Model.ListModel!=null)
+                    {
+                        foreach (var item in Model.ListModel.GroupBy(a => a.TrackingNumber))
+                        {
+                            var getTrackingNumber = item.Key;
+                    
+                            <table class="Tb">
+                                <tr>
+                                    <th colspan="3" class="" style="background:#30bdce; color:#fff; text-align:left; padding-left:20px;">
+                                        单号：@getTrackingNumber
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        日期
+                                    </th>
+                                    <th>
+                                        动态
+                                    </th>
+                                    <th>
+                                        地址
+                                    </th>
+                                </tr>
+                
+                         
+                                @foreach (var item1 in Model.ListModel)
+                                {
+                                    if (item1.TrackingNumber == getTrackingNumber)
+                                    {
+                                        <tr>
+                                            <td align="center">
+                                              @{
+                                                  var getProcessDate = item1.ProcessDate != null ? item1.ProcessDate.ToString().Substring(0, 10) : System.DateTime.Now.ToString(CultureInfo.InvariantCulture).Substring(0, 10);
+                                               }
+                                                @getProcessDate
+                                            </td>
+                                            <td align="center">
+                                                @item1.ProcessContent
+                                            </td>
+                                            <td align="center">
+                                                @item1.ProcessLocation
+                                            </td>
+                                        </tr>
+                                    }
+
+                                }
+
+                            </table>   
+                        }
+                    }*@
+
+      
+              @*  </div>*@
+            </div>
+
+     
+
+      
+    
+
+        <div class="foot">
+            <div class="foot_solid mb20"></div>
+            Copyright 2013, 版权所有深圳市云途物流有限公司 ICP/IP证：粤ICP备14056559号
+        </div>
+   
+ 
+    </body>
+    
+    <script type="text/javascript">
+        
+  $(function() {
+    $('.Tb td').hover(
+        function() { $(this).parent().addClass('cod3faff'); },
+        function() { $(this).parent().removeClass('cod3faff'); }
+    );
+    $('.main_box').css('margin-top', ($(window).height() - $('.main_box').height()) / 2);
+      
+    var annimate = (function() {
+        var it = $('.main_ovh > div');
+        it.removeClass('Trans').css({ 'z-index': '', 'margin-left': '700px' })
+            .eq(0).addClass('Trans').css({ 'z-index': '3', 'margin-left': '0' });
+        return {
+            Action: function() {
+                $(this).addClass('main_select').siblings().removeClass('main_select');
+                it.removeClass('Trans').css({ 'z-index': '', 'margin-left': '700px' })
+                    .eq($(this).index()).addClass('Trans').css({ 'z-index': '3', 'margin-left': '0' });
+            }
+        };
+    })();
+
+
+    $('.acod_Active').bind('click', annimate.Action);
+
+
+      $('.Avtive').click(function() {
+
+          var getSearchNumber = $("#Number").val();
+          var numberArray = getSearchNumber.split('\n');
+          var numberCount = numberArray.length;
+
+
+          if (getSearchNumber == "") {
+
+              showTips("", "请输入您要查询的内容");
+
+          } else {
+
+              $.ajax({
+                  type: "POST",
+                  url: "@Url.Action("ReturnModel", "Home")",
+                  data: { number: getSearchNumber },
+                  success: function(data) {
+
+                      $("#appendTrackingInfo").html(data.TrackData);
+                      //$("#Number").val(data.NumberData);
+
+                      if (data.NoQueryNumber != "") {
+                          $("#noQueryNumber").val(data.NoQueryNumber);
+                      }
+
+                  },
+                  beforeSend: function() {
+                      $("#LoadImage").show();
+
+                      var unableCheckNumber = [];
+                      $.each(numberArray, function(i, item) {
+
+                          if ($.trim(item.length) != 11 || item.indexOf("591")) {
+                              if (item != "") {
+                                  unableCheckNumber.push(item);
+                              }
+                          }
+                      });
+
+                      if (unableCheckNumber.length != 0) {
+
+                          showTips("", "单号不是11位长度或不是以591开头 " + "<br/>" + unableCheckNumber.join(" "));
+                      } else if (numberCount > 50) { //超过50个过滤,信息提示
+
+                          var getDeleteNumber = numberArray.splice(50, numberArray.length - 50);
+                          $("#Number").val(numberArray.join('\n'));
+
+                          showTips("", "您查询的单号超过50个,剩余会被过滤 " + "<br/>" + getDeleteNumber.join(" "));
+
+                      }
+                          //服务器返回
+                      else if ($("#noQueryNumber").val() != "") {
+                          var getnoQueryNumberArray = $("#noQueryNumber").val().split(',');
+
+                          showTips("", "对不起，没有查到单号 " + "<br/>" + getnoQueryNumberArray.join(" "));
+                      } else { //正确提示
+
+                          showTips("正在查询，请稍后...", "");
+
+                      }
+
+                  },
+                  complete: function() {
+
+                      $("#LoadImage").hide();
+                  }
+              });
+
+          }
+      });//click
+      
+
+  }) //function
+
+        var showTips = function (msg_title, msg_body) {
+            var a = $('.Avtive');
+            var warp = $('.main_Warp');
+
+            warp.find('.meeeage_title').html(msg_title);
+            warp.find('.meeeage_body').html(msg_body);
+
+            if (!warp.is(':visible')) {
+                warp.show().css({ 'left': a.offset().left - (warp.width() - a.width()) / 2, 'top': a.offset().top + a.height() + 20 });
+                window.tt = window.setTimeout(function () {
+                    warp.hide();
+                }, 2000);
+
+                warp.bind({
+                    mouseenter: function () {
+                        clearTimeout(window.tt);
+                    },
+                    mouseleave: function () {
+                        clearTimeout(window.tt);
+                        window.tt = window.setTimeout(function () {
+                            warp.hide();
+                        }, 1000);
+                    }
+                });
+            }
+        };
+
+    </script>
+</html>

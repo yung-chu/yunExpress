@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="UTF-8"?><req:ShipmentValidateRequestAP xmlns:req="http://www.dhl.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.dhl.com ship-val-req_AP.xsd">
+  <Request>
+    <ServiceHeader>
+      <MessageTime>2011-10-27T15:28:56.000-08:00</MessageTime>
+      <MessageReference>1234567890123456789012345678901</MessageReference>
+      <SiteID>DServiceVal</SiteID>
+      <Password>testServVal</Password>
+    </ServiceHeader>
+  </Request>
+  <LanguageCode>en</LanguageCode>
+  <PiecesEnabled>Y</PiecesEnabled>
+  <Billing>
+    <ShipperAccountNumber>550000055</ShipperAccountNumber>
+    <ShippingPaymentType>S</ShippingPaymentType>
+    <!--BillingAccountNumber>921019963</BillingAccountNumber-->
+    <DutyPaymentType>R</DutyPaymentType>
+    <!--DutyAccountNumber>921019963</DutyAccountNumber-->
+  </Billing>
+  <Consignee>
+    <CompanyName>Prasanta INC</CompanyName>
+    <AddressLine>2711 St</AddressLine>
+    <AddressLine>Appt 211</AddressLine>
+    <City>RedWood City</City>
+    <!--Division>Maharashtra</Division-->
+    <DivisionCode>CA</DivisionCode>
+    <PostalCode>94065</PostalCode>
+    <CountryCode>US</CountryCode>
+    <CountryName>United States of America</CountryName>
+    <Contact>
+      <PersonName>Prasanta Sinha</PersonName>
+      <PhoneNumber>11234325423</PhoneNumber>
+      <PhoneExtension>45232</PhoneExtension>
+      <FaxNumber>11234325423</FaxNumber>
+      <Telex>454586</Telex>
+      <Email>
+        <From>dsa@us.dhl.com</From>
+        <To>dsa@us.dhl.com</To>
+        <cc>String</cc>
+        <cc>String</cc>
+        <Subject>String</Subject>
+        <ReplyTo>String</ReplyTo>
+        <Body>dsa@us.dhl.com</Body>
+      </Email>
+    </Contact>
+  </Consignee>
+  <Commodity>
+    <CommodityCode>1</CommodityCode>
+    <CommodityName>String</CommodityName>
+  </Commodity>
+  <Dutiable>
+    <DeclaredValue>50.10</DeclaredValue>
+    <DeclaredCurrency>USD</DeclaredCurrency>
+    <ShipperEIN>Text</ShipperEIN>
+  </Dutiable>
+  <Reference>
+    <ReferenceID>String</ReferenceID>
+    <ReferenceType>St</ReferenceType>
+  </Reference>
+  <ShipmentDetails>
+    <NumberOfPieces>2</NumberOfPieces>
+    <CurrencyCode>USD</CurrencyCode>
+    <Pieces>
+      <Piece>
+        <!--PieceID>String</PieceID><PackageType>EE</PackageType-->
+        <Weight>0.5</Weight>
+        <Depth>2</Depth>
+        <Width>2</Width>
+        <Height>2</Height>
+        <!--DimWeight>10.0</DimWeight><Width>1212</Width><Height>112</Height><Depth>1212</Depth-->
+      </Piece>
+      <Piece>
+        <!--PieceID>String</PieceID><PackageType>EE</PackageType-->
+        <Weight>0.5</Weight>
+        <Depth>2</Depth>
+        <Width>2</Width>
+        <Height>2</Height>
+        <!--DimWeight>10.0</DimWeight><Width>1212</Width><Height>112</Height><Depth>1212</Depth-->
+      </Piece>
+    </Pieces>
+    <PackageType>EE</PackageType>
+    <Weight>0.5</Weight>
+    <DimensionUnit>C</DimensionUnit>
+    <WeightUnit>K</WeightUnit>
+    <!--ProductCode>W</ProductCode-->
+    <GlobalProductCode>P</GlobalProductCode>
+    <LocalProductCode>P</LocalProductCode>
+    <DoorTo>DD</DoorTo>
+    <Date>2014-04-02</Date>
+    <Contents>For testing purpose only. Please do not ship</Contents>
+    <!--DimensionUnit>I</DimensionUnit-->
+    <!--InsuredAmount>3000.10</InsuredAmount-->
+    <!--CurrencyCode>USD</CurrencyCode-->
+  </ShipmentDetails>
+  <Shipper>
+    <ShipperID>550000055</ShipperID>
+    <CompanyName>Santa inc</CompanyName>
+    <!--RegisteredAccount>550000055</RegisteredAccount-->
+    <AddressLine>333 Twin </AddressLine>
+    <AddressLine>Suit 333</AddressLine>
+    <AddressLine>Suit 333</AddressLine>
+    <City>Kuala Lumpur</City>
+    <!--Division>California</Division-->
+    <DivisionCode>KL</DivisionCode>
+    <PostalCode>94065</PostalCode>
+    <CountryCode>MY</CountryCode>
+    <CountryName>Malaysia</CountryName>
+    <Contact>
+      <PersonName>santa santa</PersonName>
+      <PhoneNumber>15356456364</PhoneNumber>
+      <PhoneExtension>6536</PhoneExtension>
+      <FaxNumber>17456356365</FaxNumber>
+      <Telex>74558</Telex>
+      <Email>
+        <From>djogi@dhl.com</From>
+        <To>djogi@dhl.com</To>
+        <cc>String</cc>
+        <cc>String</cc>
+        <Subject>String</Subject>
+        <ReplyTo>String</ReplyTo>
+        <Body>djogi@dhl.com</Body>
+      </Email>
+    </Contact>
+  </Shipper>
+  <!--SpecialService><SpecialServiceType>S</SpecialServiceType><ChargeValue>3.1</ChargeValue><CurrencyCode>USD</CurrencyCode></SpecialService-->
+</req:ShipmentValidateRequestAP>
+
+

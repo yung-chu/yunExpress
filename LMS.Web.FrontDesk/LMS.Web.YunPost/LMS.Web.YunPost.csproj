@@ -1,0 +1,407 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{DC7483C4-BED3-4BCD-8495-AD389120A905}</ProjectGuid>
+    <ProjectTypeGuids>{E53F8FEA-EAE0-44A6-8774-FFD645390401};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LMS.Web.YuPost</RootNamespace>
+    <AssemblyName>LMS.Web.YuPost</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <MvcProjectUpgradeChecked>true</MvcProjectUpgradeChecked>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\EntityFramework.6.1.1\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.Extended, Version=6.1.0.0, Culture=neutral, PublicKeyToken=05b7e29bdd433584, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\EntityFramework.Extended.6.1.0.95\lib\net40\EntityFramework.Extended.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\..\packages\EntityFramework.6.1.1\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.1.0.20105.408\lib\net40\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\packages\Microsoft.AspNet.Mvc.3.0.20105.1\lib\net40\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Providers">
+      <HintPath>..\..\packages\Microsoft.AspNet.Providers.Core.1.1\lib\net40\System.Web.Providers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\packages\Microsoft.AspNet.Razor.1.0.20105.408\lib\net40\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.1.0.20105.408\lib\net40\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.1.0.20105.408\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.1.0.20105.408\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="404.html" />
+    <Content Include="css\base.css" />
+    <Content Include="css\datouwang.css" />
+    <Content Include="css\logistics.css" />
+    <Content Include="css\logistics_pub.css" />
+    <Content Include="css\logistics_style.css" />
+    <Content Include="css\skin.css" />
+    <Content Include="Global.asax" />
+    <None Include="Properties\PublishProfiles\YunPost.pubxml" />
+    <None Include="Scripts\jquery-1.7.1.intellisense.js" />
+    <Content Include="images\20140514-云途物流-02_03.jpg" />
+    <Content Include="images\20140514-云途物流-02_05.jpg" />
+    <Content Include="images\2342_03.jpg" />
+    <Content Include="images\2342_17.jpg" />
+    <Content Include="images\345.jpg" />
+    <Content Include="images\404_03.jpg" />
+    <Content Include="images\546456_03.jpg" />
+    <Content Include="images\546456_07.jpg" />
+    <Content Include="images\546456_08.jpg" />
+    <Content Include="images\advt_03.jpg" />
+    <Content Include="images\asdasdsadasd_07.jpg" />
+    <Content Include="images\banner\banner1.jpg" />
+    <Content Include="images\banner\banner2.jpg" />
+    <Content Include="images\banner\banner_in_03.jpg" />
+    <Content Include="images\banner\banner_in_04.jpg" />
+    <Content Include="images\banner\banner_in_05.jpg" />
+    <Content Include="images\banner\banner_in_06.jpg" />
+    <Content Include="images\banner\banner_in_07.jpg" />
+    <Content Include="images\banner\bn1.jpg" />
+    <Content Include="images\banner\bn2.jpg" />
+    <Content Include="images\banner\bn3.jpg" />
+    <Content Include="images\banner\bn4.jpg" />
+    <Content Include="images\banner\bn5.jpg" />
+    <Content Include="images\banner\bn6.jpg" />
+    <Content Include="images\banner\bn7.jpg" />
+    <Content Include="images\banner\default_04.jpg" />
+    <Content Include="images\banner\default_04_2.jpg" />
+    <Content Include="images\banner\default_04_3.jpg" />
+    <Content Include="images\banner\default_04_4.jpg" />
+    <Content Include="images\banner_1.jpg" />
+    <Content Include="images\banner_in_03.jpg" />
+    <Content Include="images\bd_icon.jpg" />
+    <Content Include="images\bg_1_03.jpg" />
+    <Content Include="images\bg_1_04.jpg" />
+    <Content Include="images\caro_icon.jpg" />
+    <Content Include="images\caro_icon2.jpg" />
+    <Content Include="images\certificate.png" />
+    <Content Include="images\circle_1.png" />
+    <Content Include="images\circle_2.png" />
+    <Content Include="images\clock_1.jpg" />
+    <Content Include="images\closeBtnImg.gif" />
+    <Content Include="images\default2_03.jpg" />
+    <Content Include="images\default2_07.jpg" />
+    <Content Include="images\default2_10.jpg" />
+    <Content Include="images\defaultImg.png" />
+    <Content Include="images\default_01.jpg" />
+    <Content Include="images\default_04.jpg" />
+    <Content Include="images\default_06.jpg" />
+    <Content Include="images\default_20.jpg" />
+    <Content Include="images\default_25.jpg" />
+    <Content Include="images\delete.png" />
+    <Content Include="images\favicon.ico" />
+    <Content Include="images\grayOpen.jpg" />
+    <Content Include="images\grayTitleBg.gif" />
+    <Content Include="images\greenOpen.jpg" />
+    <Content Include="images\greenTitleBg.gif" />
+    <Content Include="images\grid.jpg" />
+    <Content Include="images\grid.png" />
+    <Content Include="images\head__03.jpg" />
+    <Content Include="images\head__05.jpg" />
+    <Content Include="images\house.jpg" />
+    <Content Include="images\idxC_bg_03.jpg" />
+    <Content Include="images\idxC_bg_07.jpg" />
+    <Content Include="images\idx_1.jpg" />
+    <Content Include="images\idx_2.jpg" />
+    <Content Include="images\idx_3.jpg" />
+    <Content Include="images\idx_4.jpg" />
+    <Content Include="images\idx_5.jpg" />
+    <Content Include="images\idx_6.jpg" />
+    <Content Include="images\idx_7.jpg" />
+    <Content Include="images\idx_8.png" />
+    <Content Include="images\index_06.jpg" />
+    <Content Include="images\index_06.png" />
+    <Content Include="images\index_15.jpg" />
+    <Content Include="images\index_18.jpg" />
+    <Content Include="images\index_20.jpg" />
+    <Content Include="images\index_21.jpg" />
+    <Content Include="images\index_24.jpg" />
+    <Content Include="images\index_30.jpg" />
+    <Content Include="images\index_32.jpg" />
+    <Content Include="images\logo.jpg" />
+    <Content Include="images\logo.png" />
+    <Content Include="images\logo1.png" />
+    <Content Include="images\logo2.png" />
+    <Content Include="images\logo3.png" />
+    <Content Include="images\logo4.png" />
+    <Content Include="images\logo_1.png" />
+    <Content Include="images\logo_2.jpg" />
+    <Content Include="images\logo_white.png" />
+    <Content Include="images\menu_in.png" />
+    <Content Include="images\menu_in_03.png" />
+    <Content Include="images\menu_in_05.png" />
+    <Content Include="images\menu_in_07.png" />
+    <Content Include="images\menu_in_09.png" />
+    <Content Include="images\menu_in_11.jpg" />
+    <Content Include="images\more_03.jpg" />
+    <Content Include="images\more_07.jpg" />
+    <Content Include="images\mul_03.jpg" />
+    <Content Include="images\mul_ll_03.jpg" />
+    <Content Include="images\nav_icon.jpg" />
+    <Content Include="images\nav_icon1.jpg" />
+    <Content Include="images\nav_icon2.jpg" />
+    <Content Include="images\nav_icon_03.jpg" />
+    <Content Include="images\openTrigger.jpg" />
+    <Content Include="images\partner.jpg" />
+    <Content Include="images\phone.jpg" />
+    <Content Include="images\postyun.gif" />
+    <Content Include="images\product_bn.jpg" />
+    <Content Include="images\quan_1.png" />
+    <Content Include="images\quan_2.png" />
+    <Content Include="images\redOpen.jpg" />
+    <Content Include="images\redTitleBg.gif" />
+    <Content Include="images\rgst_03.jpg" />
+    <Content Include="images\rgst_07.jpg" />
+    <Content Include="images\rgst_11.jpg" />
+    <Content Include="images\share_03.jpg" />
+    <Content Include="images\share_05.jpg" />
+    <Content Include="images\share_07.jpg" />
+    <Content Include="images\share_09.jpg" />
+    <Content Include="images\share_1.jpg" />
+    <Content Include="images\share_2.jpg" />
+    <Content Include="images\share_3.jpg" />
+    <Content Include="images\small.jpg" />
+    <Content Include="images\SonlineTitleBg.gif" />
+    <Content Include="images\srarch_bg_07.jpg" />
+    <Content Include="images\uadmin_logo.png" />
+    <Content Include="images\u_home.jpg" />
+    <Content Include="images\weichat_17.jpg" />
+    <Content Include="images\welcome_03.png" />
+    <Content Include="images\year.png" />
+    <Content Include="images\yunpostBarCode.jpg" />
+    <Content Include="Scripts\autocomplete\jquery-1.9.1.js" />
+    <Content Include="Scripts\autocomplete\jquery-ui.css" />
+    <Content Include="Scripts\autocomplete\jquery-ui.js" />
+    <Content Include="Scripts\chosen\chosen-sprite.png" />
+    <Content Include="Scripts\chosen\chosen.css" />
+    <Content Include="Scripts\chosen\chosen.jquery.js" />
+    <Content Include="Scripts\chosen\index.html" />
+    <Content Include="Scripts\client.js" />
+    <Content Include="Scripts\jquery-1.4.4.min.js" />
+    <Content Include="Scripts\jquery-1.7.1.js" />
+    <Content Include="Scripts\jquery-1.7.1.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-powerSwitch-min.js" />
+    <Content Include="Scripts\jquery-ui-1.8.20.js" />
+    <Content Include="Scripts\jquery-ui-1.8.20.min.js" />
+    <Content Include="Scripts\jquery.Sonline.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\modernizr-2.5.3.js" />
+    <Content Include="Scripts\qq\brd.gif" />
+    <Content Include="Scripts\qq\ico.gif" />
+    <Content Include="Scripts\qq\qq.css" />
+    <Content Include="Scripts\qq\qqservice.js" />
+    <Content Include="Scripts\website\cookie.js" />
+    <Content Include="Scripts\website\info_sch.js" />
+    <Content Include="Scripts\website\jquery.soChange-min.js" />
+    <Content Include="Scripts\website\jquery.soChange.js" />
+    <Content Include="Scripts\website\UtilEvent.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\MicrosoftAjax.js" />
+    <Content Include="Scripts\MicrosoftAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Billing\FreightTrial.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\ContactUs.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\ProductServices.cshtml" />
+    <Content Include="Views\Home\_About.cshtml" />
+    <Content Include="Views\Home\_CompanyNewPartial.cshtml" />
+    <Content Include="Views\Home\_HomeBannerPartial.cshtml" />
+    <Content Include="Views\Home\_NewsPartial.cshtml" />
+    <Content Include="Views\Home\_PartnersPartial.cshtml" />
+    <Content Include="Views\Home\_PriceSearchPartial.cshtml" />
+    <Content Include="Views\New\NewList.cshtml" />
+    <Content Include="Views\Shared\_LogOnPartial.cshtml" />
+    <Content Include="Views\Shared\_ShowDialog.cshtml" />
+    <Content Include="Views\User\AddSuccess.cshtml" />
+    <Content Include="Views\User\AddUser.cshtml" />
+    <Content Include="Views\New\NewDetailed.cshtml" />
+    <Content Include="Views\Home\HelpCenter.cshtml" />
+    <Content Include="Views\RemoteAddress\Search.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Web\LighTake.Infrastructure.Web.csproj">
+      <Project>{977faf23-8a6b-4392-a877-59d9aa2efb99}</Project>
+      <Name>LighTake.Infrastructure.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Core\LMS.Core\LMS.Core.csproj">
+      <Project>{336e1dce-a844-4977-aa9a-8f6720c72f6d}</Project>
+      <Name>LMS.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LMS.Web.FrontDesk.Controllers\LMS.FrontDesk.Controllers.BillingController\LMS.FrontDesk.Controllers.BillingController.csproj">
+      <Project>{26e9697d-8c90-4e37-807f-b6ced7a3ce98}</Project>
+      <Name>LMS.FrontDesk.Controllers.BillingController</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LMS.Web.FrontDesk.Controllers\LMS.FrontDesk.Controllers.HomeController\LMS.FrontDesk.Controllers.HomeController.csproj">
+      <Project>{501f5896-c425-4a99-adf8-ba0d5069b321}</Project>
+      <Name>LMS.FrontDesk.Controllers.HomeController</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LMS.Web.FrontDesk.Controllers\LMS.FrontDesk.Controllers.NewController\LMS.FrontDesk.Controllers.NewController.csproj">
+      <Project>{15413514-4069-4fa9-8749-6baa54ab0071}</Project>
+      <Name>LMS.FrontDesk.Controllers.NewController</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LMS.Web.FrontDesk.Controllers\LMS.FrontDesk.Controllers.RemoteAddressController\LMS.FrontDesk.Controllers.RemoteAddressController.csproj">
+      <Project>{280b91eb-cb43-4c61-8e75-3ee65ccb583a}</Project>
+      <Name>LMS.FrontDesk.Controllers.RemoteAddressController</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LMS.Web.FrontDesk.Controllers\LMS.FrontDesk.Controllers.TrackController\LMS.FrontDesk.Controllers.TrackController.csproj">
+      <Project>{8b82c18f-fde4-4ca1-b7de-d417400cec00}</Project>
+      <Name>LMS.FrontDesk.Controllers.TrackController</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LMS.Web.FrontDesk.Controllers\LMS.FrontDesk.Controllers.UserController\LMS.FrontDesk.Controllers.UserController.csproj">
+      <Project>{c20b4af8-15a2-4c71-9844-8c63eab2b56d}</Project>
+      <Name>LMS.FrontDesk.Controllers.UserController</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LMS.Web.FrontDesk.Kernels\LMS.FrontDesk.Framework\LMS.FrontDesk.Framework.csproj">
+      <Project>{61187749-556b-408b-8a44-4871e4f71569}</Project>
+      <Name>LMS.FrontDesk.Framework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="images\images\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>6002</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

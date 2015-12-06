@@ -1,0 +1,150 @@
+﻿<span style="white-space:normal;">
+    #set($)
+    @{ string gift = Model.AppLicationType == 1 ? "checked" : ""; string commercial = Model.AppLicationType == 2 ? "checked" : ""; string documents = Model.AppLicationType == 3 ? "checked=\"checked\"" : ""; string other = Model.AppLicationType == 4 ? "checked=\"checked\"" : ""; }
+</span> 
+
+#foreach( $Model in $ProductList )
+<div style="white-space:normal;height:280px;margin-bottom:12px;">
+    <div style="height:280px;width:330px;float:left;border:1px dashed #000000;margin-right:15px;font-size:11px;line-height:12px;font-family:Arial, Helvetica, sans-serif;margin-bottom:12px;">
+        <table border="0" cellpadding="0" cellspacing="0" class="ke-zeroborder" style="width:328.8888854980469px;height:386.66668701171875px;">
+            <tbody>
+                <tr>
+                    <td colspan="2" style="padding:3px;">
+                        <table cellpadding="0" width="100%" cellspacing="0" border="0" class="ke-zeroborder">
+                            <tbody>
+                                <tr>
+                                    <td width="55%" style="font-size:11px;line-height:12px;font-family:'Times New Roman', Times, serif;">
+                                        <p>
+                                            (GC)(L3P) B102 BLDG 5 NO.49 WUHE RD NAN KENG BanTian,LongGang ShenZhen,GuangDong,518128 China
+                                        </p>
+                                    </td>
+                                    <td width="45%" style="text-align:right;">
+                                        &nbsp;<img src="http://a.lightake.net:811/Images/News/20140220140217165951_8868.jpg" width="130" height="43" alt="" /> 
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="height:0px;border-top-width:1px;border-top-style:solid;border-top-color:#000000;margin:5px 0px;">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" valign="top">
+                        <table cellpadding="0" width="100%" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td colspan="2">
+                                        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="ke-zeroborder" style="padding-bottom:0px;">
+                                            <tbody>
+                                                <tr style="border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#000000;">
+                                                    <td valign="top" width="8%" style="font-weight:bold;font-size:16px;padding:0px;text-align:center;">
+                                                        TO:
+                                                    </td>
+                                                    <td valign="top" style="padding:0px;">
+                                                        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="ke-zeroborder" style="font-size:11px;line-height:12px;">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div style="font-size:10px;height:12px;line-height:12px;">
+                                                                            ($Model.ShippingFirstName + " " + $Model.ShippingLastName)
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div style="max-height:24px;font-size:10px;line-height:12px;">
+                                                                            @Model.ShippingAddress @Model.ShippingAddress
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div style="font-size:10px;height:12px;line-height:12px;">
+                                                                            @(Model.ShippingCity + " " + Model.ShippingState)
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div style="font-size:10px;height:12px;line-height:12px;">
+                                                                            @Model.ShippingZip
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div style="font-size:10px;height:12px;line-height:12px;">
+                                                                            @Model.CountryName
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div style="font-size:10px;margin-bottom:3px;height:12px;line-height:12px;">
+                                                                            @Model.ShippingPhone
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <div style="height:0px;border-top-width:1px;border-top-style:solid;border-top-color:#000000;margin:5px 0px;">
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="middle" align="right" style="width:63.333335876464844px;">
+                                                        <br />
+                                                    </td>
+                                                    <td style="line-height:normal;">
+                                                        <div style="text-align:center;">
+                                                            <div style="font-family:c39P36DmTt;font-size:40px;text-align:left;">
+                                                                @Model.BarCode
+                                                            </div>
+                                                            <strong>@Model.TrackingNumber</strong> 
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <div style="height:14px;font-size:10px;">
+                                                            customer code:@Model.CustomerCode
+                                                        </div>
+                                                        <div style="height:14px;font-size:10px;">
+                                                            customer order:@Model.CustomerOrderNumber
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="height:0px;border-top-width:1px;border-top-style:solid;border-top-color:#000000;margin:5px 0px;">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" valign="top" style="border-top-style:none;height:84px;text-align:justify;padding:3px;">
+                        <div style="height:84px;">
+                            <br />
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+#end

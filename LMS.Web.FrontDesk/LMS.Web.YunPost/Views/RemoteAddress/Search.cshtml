@@ -1,0 +1,193 @@
+﻿@{
+    ViewBag.Title = "Search";
+}
+
+@using LighTake.Infrastructure.Web
+@model LMS.FrontDesk.Controllers.RemoteAddressController.ViewModel
+
+
+<style type="text/css">
+/*分页控件样式*/
+.pages { color:red;font-weight:bold; font-size:11px;}
+.pages  .item a{padding: 1px 6px;font-size: 13px;} /*数字页索引样式*/
+.pages .cpb {color:red;padding: 1px 6px;font-size: 13px;} /*当前页样式*/
+.pages a { text-decoration:none;padding: 0 5px; border: 1px solid #ddd;margin:0 2px; color:#000;font-weight:normal;}
+.pages a:hover { background-color: #E61636; color:#fff;border:1px solid #E61636; text-decoration:none;font-weight:normal;}
+.pages .pagingInfo { float: right; padding-right: 6px;vertical-align: middle;color:#000;font-weight: normal;}
+.date_row_none td{ padding:7px; line-height:15px;}
+</style>
+
+
+
+
+@using (Html.BeginForm())
+{
+    <div class="conStr">
+  <div class="strIn">
+      <div class="pt50">
+      	<h2 class="mb10">
+        	 偏远地址库查询功能
+        </h2>
+      	  <div class="from_box pt10 pb10">
+@*          				<div class="fix from_horizontal">
+                           <div class="pl30 b code lh22">
+                           		<div>
+                                	DHL 偏远附加费 按照结算重量收取 3元/kg +燃油费,最低 150元/票<br/>
+                                    UPS 偏远附加费 按照结算重量收取 3元/kg +燃油费,最低 180元/票
+                                </div>
+                           </div>
+                        </div>*@
+                        <div class="fix from_horizontal">
+                            <div class="ww32 l">
+                                <div class="fix">
+                                    <span class="vm">&emsp;&emsp;&emsp;&emsp;运输方式 </span>
+
+                                       @Html.DropDownListFor(p => Model.FilterModel.ShippingMethodId, Model.ShippingMethodLists, new Dictionary<string, object> { { "class", "chzn-select-deselect select_middle  w160" }, { "data-placeholder", "请选择..." } })
+
+                                </div>
+                            </div>
+                            <div class="cell">
+                                <div class="fix">
+                                    <div class="l ww44">
+                                        <div class="fix">
+                                        	<span class="vm">&emsp;&emsp;&emsp;&emsp;目的国家</span>
+
+                                         @Html.DropDownListFor(p => Model.FilterModel.CountryCode, Model.Countrylists, new Dictionary<string, object> { { "class", "chzn-select-deselect select_middle  w160" }, { "data-placeholder", "请选择..." } })
+                                        </div>
+                                    </div>
+                                    <div class="cell pl20 fix">
+                                        <span class="vm">省/州(cm)：</span>
+                                        @Html.TextBoxFor(p=>p.FilterModel.State,new{@class="ist_m ist_h",@maxLength=50})
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="fix from_horizontal">
+                            <div class="ww32 l">
+                                <div class=" fix">
+                                    <span class="vm">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;城市</span>
+                                    @Html.TextBoxFor(p=>p.FilterModel.City,new{@class="ist_m ist_h",@maxLength=50})
+                                </div>
+                            </div>
+                            <div class="cell">
+                                <div class="fix">
+                                    <div class="l ww44">
+                                        <div class="fix">
+                                        	&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;邮编 
+                                            @Html.TextBoxFor(p=>p.FilterModel.Zip,new{@class="ist_m ist_h",@maxLength=30}) 
+                                            <span style="color:red" id="errorMeeage"></span>                              
+                                        </div>
+                                    </div>
+
+                            </div>
+
+                        </div>
+                    </div>        
+                    <div class="fix ">
+                            <div class="ww32 l">
+                                <div class="from_horizontal fix">
+                                	 <span class="vm">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</span>
+                                    <button type="submit" id="Search" class="btn--g">查 询</button>
+                                </div>
+                            </div>
+
+                        </div>          
+      </div>
+      
+  </div>
+      <div class=" mt20 mb30">
+          <div class="mr-1">
+              <table class="out_order" width="100%">
+                  <tbody>
+                      <tr>
+                          <th width="15%">
+                              运输方式   
+                          </th>
+                          <th width="15%">
+                              国家全称英文 
+                          </th>
+                          <th width="15%">
+                              国家简码
+                          </th>
+                          <th width="30%">
+                              省/州
+                          </th>
+                          <th width="15%">
+                              城市
+                          </th>
+                          <th width="10%">
+                              起码邮编
+                          </th>
+                             <th width="10%">
+                              终止邮编
+                          </th>
+                      </tr>
+          
+                      @foreach (var item in Model.PagedList)
+                      {
+
+                          var getCurrentIndex = Model.PagedList.InnerList.IndexOf(item) + 1;
+
+                          var getCurrentClass = getCurrentIndex % 2 == 0 ? "table_even" : "table_single";
+                                            
+                                            
+                          <tr class="@getCurrentClass">
+                              <td>
+                                  @item.ShippingMethodName
+                              </td>
+                                <td>
+                                  @item.EName
+                              </td>
+                              <td>
+                                  @item.CountryCode
+                              </td>
+                            
+                              <td>
+                                  @item.State
+                              </td>
+                              <td>
+                                  @item.City
+                              </td>
+                              <td>
+                                  @item.Zip
+                              </td>
+                              <td>
+                                  @item.ZipEnd
+                              </td>
+                          </tr>
+                     
+
+                      }
+                                        
+                      <tr class="data_row_none">
+                          <td colspan="20" >
+                              @Html.Pager(Model.PagedList, Model.FilterModel)
+                          </td>
+                    </tr>
+                  </tbody>
+              </table>
+              
+              
+
+          </div>
+      </div>
+
+  </div>
+</div>
+}
+
+<script type="text/javascript">
+    var config = {
+        '.chzn-select': {},
+        '.chzn-select-deselect': { allow_single_deselect: true },
+        '.chzn-select-no-single': { disable_search_threshold: 10 },
+        '.chzn-select-no-results': { no_results_text: 'Oops, nothing found!' },
+        '.chzn-select-width': { width: "95%" }
+    };
+    for (var selector in config) {
+        $(selector).chosen(config[selector]);
+    }
+
+</script>

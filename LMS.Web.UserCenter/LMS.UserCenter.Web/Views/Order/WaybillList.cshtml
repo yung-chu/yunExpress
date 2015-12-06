@@ -1,0 +1,213 @@
+﻿@using System.Globalization
+@using LMS.Core
+@using LMS.Data.Entity
+@model LMS.UserCenter.Controllers.OrderController.Models.WayBillListViewModel
+@{
+    var shippingMethods = (List<SelectListItem>)ViewBag.ShippingMethods;
+    var countryList = (List<SelectListItem>)ViewBag.CountryList;
+
+    var currentUrl = "";
+    
+}
+<div class="p20">
+
+    @Html.Partial("_Notifications")
+
+    <!-- 高级搜索 Start -->
+    @using (Html.BeginForm())
+    {
+        @Html.HiddenFor(f => f.Filter.Status)
+
+        <div class="tab_conStr">
+            <div class="from_box mt10">
+                <div class="fix ">
+                    <div class="ww32 l">
+                        <div class="from_horizontal fix">
+                            <span class="info_box info_middle">订单号：</span>
+                            @Html.TextBoxFormFor(p => Model.Filter.SearchContext)
+                        </div>
+                    </div>
+                    <div class="cell">
+                        <div class="fix">
+                            <div class="l ww49">
+                                <div class="from_horizontal fix">
+                                    <span class="info_box info_middle">所属产品：</span>
+                                    @Html.DropDownListFormFor(p => p.Filter.ShippingMethodId, shippingMethods, new Dictionary<string, object> { { "class", "chzn-select-deselect select_middle" }, { "data-placeholder", "全部" } })
+                                </div>
+                            </div>
+                            <div class="cell pl20 from_horizontal fix">
+                                <span class="info_box info_middle">交货时间：</span>
+
+                                @Html.DateFormFor(p => Model.Filter.StartTime)
+                                到:
+                                @Html.DateFormFor(p => Model.Filter.EndTime)
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="fix ">
+                    <div class="ww49 l">
+                        <div class="from_horizontal fix">
+                            <span class="info_box info_middle">发货国家：</span>
+                            @Html.DropDownListFormFor(p => p.Filter.CountryCode, countryList, new Dictionary<string, object> { { "class", "chzn-select-deselect select_middle" }, { "data-placeholder", "全部" }, { "style", " width:310px;" } })
+                        </div>
+                    </div>
+                    <div class="cell">
+                        <div class="fix">
+                            <div class="l ww32">
+                                <div class="from_horizontal fix">
+                                    <span class="info_box info_middle"></span>
+
+                                </div>
+                            </div>
+                            <div class="cell pl20 from_horizontal fix" style="display: none">
+                                <span class="info_box info_middle"></span>
+
+                            </div>
+
+                            <div class="cell pl20 from_horizontal fix">
+                                <span class="info_box info_middle"></span>
+
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="fix ">
+
+                    <div class="ww32 l">
+                        <div class="from_horizontal fix">
+                            <span class="info_box info_middle"></span>
+                            <input type="submit" class="btn btn_red" value="搜索" />
+
+                            @if (Model.Filter.Status == CustomerOrder.StatusEnum.Submitted.GetStatusValue())
+                            {
+                                currentUrl = Html.GetUrl("submitted", Model.Filter);
+                               
+                            }
+                            else 
+                            {
+                                currentUrl = Html.GetUrl("received", Model.Filter);
+                                
+                            }
+
+                        </div>
+                    </div>
+                    <div class="cell">
+                        <div class="fix">
+                            <div class="l ww49">
+                                <div class="from_horizontal fix">
+                                    <span class="info_box info_middle"></span>
+
+                                </div>
+                            </div>
+
+
+                            <div class="cell pl20 from_horizontal fix">
+                                <span class="info_box info_middle"></span>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        
+    
+
+        <!-- 高级搜索 End -->
+
+        <!-- 列表 Start -->
+        <div class="top_solid mt20"></div>
+        <table class="data_table " width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class=" data_row_head">
+                <th valign="middle" width="3%">
+                    <input type="checkbox" id="selectAll" /></th>
+                <th valign="middle" width="3%">序号</th>
+                <th width="12%">销售订单号</th>
+                <th width="12%">运单号</th>
+                <th width="10%">跟踪号</th>
+                <th width="10%">发货国家</th>
+                <th width="">运输方式</th>
+                <th width="5%">状态</th>
+                <th width="10%">交货时间</th>
+                <th width="10%">操作</th>
+            </tr>
+            @{
+            
+                            int i = 1;
+            }
+            @foreach (var item in Model.PagedList)
+            {
+
+                bool flag = i % 2 > 0;
+                <tr class="@(flag ? "data_row_dan" : "data_row_shuang")">
+                    <td valign="middle">
+                        <input type="checkbox" name="selected" value="@item.WayBillNumber"/></td>
+                    <td valign="middle">
+                        @(i + (Model.Filter.Page - 1) * Model.Filter.PageSize)</td>
+                    <td valign="middle"><a class="tdl txt_tip" title="点击编辑" href="@Url.Action("Edit", new { id = item.CustomerOrderID })">@item.CustomerOrderNumber</a></td>
+                    <td>@item.WayBillNumber</td>
+                    <td>@item.TrackingNumber</td>
+                    <td>@(item.CountryCode.IsNullOrWhiteSpace() ? "" :item.CountryCode)</td>
+                    <td>@item.InShippingMethodName</td>
+                    <td>@CustomerOrder.GetStatusDescription(item.Status)</td>
+                    <td>@item.CreatedOn.ToString(sysConfig.DefaultDatetimeFormat)</td>
+                    <td>
+                        <div class="tc f0">
+                            <a title="编辑" class="data_btn data_btn_edit" href="@Url.Action("Edit", new { ID = item.CustomerOrderID, ReturnUrl = currentUrl })">
+                                <i class="icon-edit data_delete"></i>
+                            </a>
+                            @if (Model.Filter.Status == CustomerOrder.StatusEnum.None.GetStatusValue())
+                            {
+                                <a title="删除" class="data_btn data_btn_del" onclick="return confirm('确认删除吗?');" href="@Url.Action("Delete", new { ID = item.WayBillNumber })">
+                                    <i class="icon-delete data_delete"></i>
+                                </a>
+                            }
+                            @if (Model.Filter.Status == CustomerOrder.StatusEnum.OK.GetStatusValue())
+                            {
+                                <a title="取消确认" class="data_btn data_btn_del" onclick="return confirm('确认取消吗?');" href="@Url.Action("Cancel", new { ID = item.WayBillNumber })">
+                                    <i class="icon-delete data_delete"></i>
+                                </a>
+                            }
+
+                        </div>
+                    </td>
+                </tr>
+                            {
+                                i++;
+                            }
+            }
+            <tr class="date_row_none">
+                <td colspan="9">
+                    <div class="fix">
+                        @Html.Pager(Model.PagedList, Url.MergeRouteValues(Model.Filter))
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <!-- 列表 End -->
+    }
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $('#selectAll').click(function () {
+            //$("input[name='selected']").attr("checked", "true");
+            var isSelected = $(this).attr("checked");
+            $("input[name='selected']").each(function () {
+                if (isSelected) {
+                    $(this).attr("checked", "true");
+                } else {
+                    $(this).removeAttr("checked");
+                }
+            });
+        });
+    });
+</script>

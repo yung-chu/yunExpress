@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C58806C1-962F-43FA-AA9A-6C4DFBCD8F43}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LMS.Client.UpdateOutStoragePrice</RootNamespace>
+    <AssemblyName>LMS.Client.UpdateOutStoragePrice</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DbHelper">
+      <HintPath>..\..\libs\DbHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="SmartThreadPool">
+      <HintPath>..\..\libs\SmartThreadPool.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controller\FreightController.cs" />
+    <Compile Include="Controller\WayBillController.cs" />
+    <Compile Include="LogTime.cs" />
+    <Compile Include="Model\PackageModel.cs" />
+    <Compile Include="Model\PriceProviderResult.cs" />
+    <Compile Include="Model\ShippingMethodList.cs" />
+    <Compile Include="UpdateOutStoragePrice.cs" />
+    <Compile Include="UpdateOutStoragePriceJob.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Common.Logging\LighTake.Infrastructure.Common.Logging.csproj">
+      <Project>{7a557dc4-3f10-4c27-b8f4-8d5f7f5d8b3c}</Project>
+      <Name>LighTake.Infrastructure.Common.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Common\LighTake.Infrastructure.Common.csproj">
+      <Project>{eac46871-3661-4d4e-8f6a-fe44593e1191}</Project>
+      <Name>LighTake.Infrastructure.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Http\LighTake.Infrastructure.Http.csproj">
+      <Project>{fd9c304c-1ed0-4667-b24a-9ec341490ebd}</Project>
+      <Name>LighTake.Infrastructure.Http</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

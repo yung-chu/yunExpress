@@ -1,0 +1,138 @@
+﻿@model LMS.Controllers.WayBillController.OutStorageConfigureViewModel
+@{
+    ViewBag.Title = "OutStorageShippinMethodConfigure";
+    <link rel="stylesheet" type="text/css" href="@Url.Content("/Scripts/chosen/chosen.css")" />
+    
+    Html.AddScriptParts("/Scripts/chosen/chosen.jquery.min.js");
+}
+<div id="showVenderList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showShippingMethodList" tabindex="100" style="overflow: scroll; display: none; position: relative">
+</div>
+@Html.Partial("_ShowDialog")
+@using (Html.BeginForm("OutStorageShippinMethodConfigure", "WayBill"))
+{
+    <div class="domebg" id="right_con"  style="width: 1000px;">
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+                <td>
+                    <span>入仓运输方式</span>
+                    @Html.DropDownListControlFor(o => Model.OutStorageConfigureModel.InShippingMethodId, Model.InShippingMethods, new Dictionary<string, object> { { "style", "width:150px" } })
+                </td>
+                <td>
+                    <span>绑定发货服务商:</span>
+                    <input type="text" id="_VenderName" class="txt txt_short" />
+                    <input type="button" id="selectVender" class="btn" value="选择" />
+                </td>
+                <td>
+                    <span>绑定发货渠道:</span>
+                    <input type="text" id="ShippingName" class="txt txt_short" />
+                    <input type="button" id="selectShippingMethod" class="btn" value="选择" disabled="disabled" />
+                </td>
+                <td style="text-align: center">
+                    <input type="hidden" id="_VenderId" name="OutStorageConfigureModel.VenderId" value="" />
+                    <input type="hidden" id="_VenderCode" value="" />
+                    <input type="hidden" id="btn_VenderName" name="OutStorageConfigureModel.VenderName" value="" />
+                    <input type="hidden" id="ShippingMethodId" name="OutStorageConfigureModel.OutShippingMethodId" value="" />
+                    <input type="hidden" id="btnShippingMethodName" name="OutStorageConfigureModel.OutShippingMethodName" value="" />
+                    <input type="submit" id="btnSave" name="Save" value="保存"/>
+                </td>
+            </tr>
+        </table>
+        <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="data_row_two">
+                <th>入仓运输方式</th>
+                <th>绑定发货服务商</th>
+                <th>绑定发货渠道</th>
+                <th>操作</th>
+            </tr>
+            @foreach (var row in Model.OutStorageConfigureModels)
+            {
+                <tr class="data_row_dan">
+                    <td>
+                        @row.InShippingMethodName
+                    </td>
+                    <td>
+                        @row.VenderName
+                    </td>
+                    <td>
+                        @row.OutShippingMethodName
+                    </td>
+                    <td>
+                        <a href="@Url.Action("DeleteOutStorageShippinMethodConfigure", "WayBill", new { inshippingMethodId = row.InShippingMethodId, deliveryChannelConfigurationId = row.DeliveryChannelConfigurationId })" class="btn_href">删除</a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("#InShippingMethodId").val($("#OutStorageConfigureModel_InShippingMethodId").val());
+        //选择服务商
+        $("#selectVender").bind("click", function() {
+            $("#showVenderList").showWindow("@Url.Action("SelectVender", "WayBill")", "选择服务商");
+            var parentWindow = $("#showVenderList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                    top: 120
+                }, {
+                    duration: 1000,
+                    step: function(now, fx) {
+                        $(".window").css("top", now);
+                    }
+                });
+            $("#showVenderList").show();
+        });
+        //选择运输方式
+        $("#selectShippingMethod").bind("click", function() {
+            $("#showShippingMethodList").showWindow("@Url.Action("FilterShippingMethod", "WayBill")?venderCode=" + $("#_VenderCode").val() + "&type=2", "选择运输方式");
+            var parentWindow = $("#showShippingMethodList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                    top: 120
+                }, {
+                    duration: 1000,
+                    step: function(now, fx) {
+                        $(".window").css("top", now);
+                    }
+                });
+            $("#showShippingMethodList").show();
+        });
+        
+        $("#btnSave").click(function () {
+            if ($("#_VenderId").val() == "") {
+                alert("请选择服务商！");
+                return false;
+            } else {
+                $("#btn_VenderName").val($("#_VenderName").val());
+            }
+            if ($("#ShippingMethodId").val() == "") {
+                alert("请选择运输方式！");
+                return false;
+            } else {
+                $("#btnShippingMethodName").val($("#ShippingName").val());
+            }
+        });
+        //查询
+        $("#OutStorageConfigureModel_InShippingMethodId").change(function () {
+            location.href = "@Url.Action("SelectOutStorageShippinMethodConfigure", "WayBill")?inshippingMethodId=" + $("#OutStorageConfigureModel_InShippingMethodId").val();
+        });
+        //删除
+        
+    });
+</script>
+<script type="text/javascript">
+    var config = {
+        '.chzn-select': {},
+        '.chzn-select-deselect': { allow_single_deselect: true },
+        '.chzn-select-no-single': { disable_search_threshold: 10 },
+        '.chzn-select-no-results': { no_results_text: 'Oops, nothing found!' },
+        '.chzn-select-width': { width: "95%" }
+    };
+    for (var selector in config) {
+        $(selector).chosen(config[selector]);
+    }
+
+</script>

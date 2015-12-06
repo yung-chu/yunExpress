@@ -1,0 +1,219 @@
+﻿
+@{
+    ViewBag.Title = "OperationLog";
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+}
+
+@using LighTake.Infrastructure.Common.BizLogging
+@using LMS.Data.Entity
+@model  LMS.Controllers.OperationLogController.OperationLogViewModel
+<div id="showCustomerList" tabindex="200" style="overflow: scroll; display: none; position: relative">
+</div>
+
+<div id="showModuleList"  style="overflow: scroll; display: none; position: relative">
+</div>
+
+
+
+@using (Html.BeginForm())
+{
+  <div class="domebg" id="right_con">
+
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+                <td width="15%">
+                    <span class="info_box info_select">所属系统:</span>
+                    @Html.DropDownListFor(a => a.FilterModel.SystemCode, Model.SystemTypeList, new { @style = "width:100px" })
+                </td>
+
+                <td width="25%"> 
+                    <span class="info_box info_select">所属模块:</span>
+                    <input type="text" id="ModuleName" value="@Model.FilterModel.ModuleName" name="FilterModel.ModuleName" readonly="readonly" class="txt txt_short" />
+                    <a href="javascript:void(0)" id="selectModule" class="btn_href">选择</a>
+                </td>
+
+                <td width="33%">
+                    <span class="info_box info_select">关键字类型:</span>
+                    @Html.DropDownListFor(a => a.FilterModel.KeywordTypeID, Model.KeywordTypeList, new { @style = "width:100px" })
+                    &nbsp; &nbsp; &nbsp;
+                    @Html.TextAreaFor(a => Model.FilterModel.Keyword, new { @style = "height:60px; width:120px;" })
+               
+                </td>
+            </tr>
+            
+
+            <tr class="date_row_select">
+                <td width="15px">
+                    <span class="info_box info_select">操作概要:</span>
+                    @Html.TextAreaFor(a => Model.FilterModel.Summary, new { @style = "width:120px;height:60px" })
+                </td>
+
+
+                <td width="25px">
+                    <span class="info_box info_select">操作日期:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.StartTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.StartTime), @class = "txt wdate", @style = "width:130px;" })
+                    <span>至:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.EndTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.EndTime), @class = "txt wdate", @style = "width:130px;" })
+                </td>
+
+                <td width="25px">
+                    <span class="info_box info_select">操作人:</span>
+                    <input type="text" id="UserRealName" value="@Model.FilterModel.UserRealName" name="FilterModel.UserRealName" />
+                </td>
+
+            </tr>
+            
+            
+            
+            <tr class="date_row_select">
+                <td>
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+                    <input type="submit" value="查 询" id="Search" name="Search" class="btn"/>
+                </td>
+            </tr>
+        </table>
+        
+        <div id="pm_dis_div">
+            <table id="report" class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr class="data_row_two">
+                        <th>所属模块
+                        </th>
+                        <th>客户类型
+                        </th>
+                        <th>操作人
+                        </th>
+                        <th>操作主体
+                        </th>
+                        <th>操作概要
+                        </th>
+                        <th>操作时间
+                        </th>
+                        <th>操作IP地址
+                        </th>
+                          <th>操作MAC地址
+                        </th>
+             
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (Model != null)
+                        {
+                            foreach (var row in Model.PagedList.InnerList)
+                            {
+                            
+                                <tr class="data_row_dan">
+    
+                                <td style="text-align: center">
+                                    @row.ModuleName
+                                </td>
+                                <td style="text-align: center">
+                                  
+                                    @if (row.UserType == 1)
+                                    {
+                                      <text>物流用户</text>
+                                    }
+                                    else
+                                    {
+                                      <text>运费用户</text>
+                                    }
+
+                                </td>
+                                <td style="text-align: center">
+                                    @row.UserRealName
+                                </td>
+                                <td style="text-align: center">
+                                    @OperateLog.GetKeyWordTypeDescription(row.KeywordTypeID)   @row.Keyword
+                                </td>
+                                <td style="text-align: center">
+                                    @row.Summary
+                                </td>
+
+                                <td style="text-align: center;width: 50px">
+                                @row.CreateOn
+                                </td>
+                                <td style="text-align: center">
+                                @row.IP
+                                </td>
+                                <td style="text-align: center">
+                                @row.Mac
+                                </td>
+
+                            </tr>
+                                <tr>
+                                    <td colspan="10">
+                                            <div class="fix" style="padding: 7px; background-color: #f7f7f7;">
+                                                <div class="l" style=" width:100%; margin-right:5px">@row.Details</div>
+                                            </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+                    }
+                    <tr class="data_row_none">
+                        <td colspan="14">
+                            @Html.Pager(Model.PagedList, Model.FilterModel)
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+  
+</div>
+}
+<style type="text/css">
+    #report tr.odd td
+    {
+        cursor: pointer;
+    }
+</style>
+
+<script type="text/javascript">
+    
+    $(function() {
+
+
+
+
+
+        $("#selectModule").bind("click", function () {
+            var getSystemCode = $("#FilterModel_SystemCode").val();
+
+            $("#showModuleList").showWindow("@Url.Action("SelectModuleName", "OperationLog")?systemCode=" + getSystemCode, "选择模块");
+            var parentWindow = $("#showModuleList").parent("div");
+                    $(parentWindow).css("top", "0");
+                    $(parentWindow).animate({
+                        top: 100
+                    }, {
+                        duration: 800,
+                        step: function (now, fx) {
+                            $(".window").css("top", now);
+                        }
+                    });
+                    $("#showModuleList").show();
+        });
+
+        ////切换系统模块
+        //$("#FilterModel_SystemCode").bind("change", function () {
+          
+   
+        //    alert($(this).children("option:selected").html());
+
+        //});
+
+
+       
+        $("#report tr:odd").addClass("odd");
+        $("#report tr:not(.odd)").hide();
+        $("#report tr:first-child").show();
+
+        $("#report tr:odd").click(function () {
+            $(this).next("tr").toggle();
+        });
+
+    })
+
+</script>

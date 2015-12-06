@@ -1,0 +1,99 @@
+﻿@model  LMS.Controllers.NewsController.ArticleModel
+@{
+    Html.AddScriptParts(Url.Content("~/Scripts/kindeditor/lang/zh_CN.js"));
+    Html.AddScriptParts(Url.Content("~/Scripts/kindeditor/kindeditor-min.js"));
+}
+<form id="editfrom">
+     @Html.HiddenFor(p => p.ArticleID)
+     <div id="right_con">
+            <ul>
+                <li class="mt20"><span class="info_box info_middle">类目 : </span>
+                     <select id="_categoryID" name="CategoryID" style="width: 300px;"></select>
+                   @* <input type="text" name="CategoryID" id="_categoryID" class="txt" value="@Model.CategoryName" />*@
+                </li>
+                <li class="mt20"><span class="info_box info_middle">标题 : </span>
+                    <input type="text" name="title" id="Title" class="txt" value="@Model.Title"/>
+                </li>
+                <li class="mt20"><span class="info_box info_middle">来源 : </span>
+                    <input type="text" name="Source" id="source" class="txt" value="@Model.Source"/>
+                </li>
+                <li class="mt20">
+                    <span class="info_box info_middle" style="float:left;">内容 : </span>
+                    <span style="float:left;"><textarea id="detail" name="Detail" style="width:550px;height:350px;">@Model.Detail</textarea></span>
+                </li>
+                <input type="button" class="btnSave" value="保存" name="btnSave" onclick="Save();" style="margin-left: 150px; margin-top: 10px;" />
+            </ul>
+     </div>
+</form>
+<script type="text/javascript">
+
+    var editor;
+    $(function () {
+        $('#_categoryID').combotree({
+            url: '/Website/GetAllCategorySelect',
+            onLoadSuccess: function (data) {
+                $('#_categoryID').combotree('setValue', '@Model.CategoryID');
+            }
+        });
+        
+        KindEditor.ready(function (K) {
+            editor = K.create('textarea[name="Detail"]', {
+                allowFileManager: true,
+                uploadJson: "/KindEditor/Upload",
+                filePostName: "imgFile",
+                filterMode: false,
+                urlType: "domain"//为带域名的绝对路径
+                
+            });
+            editor.sync();
+        });
+
+    
+
+
+
+        var isTop = $("#IsTop").val();
+        if (isTop == "False")
+            $("#isTop").get(0).selectedIndex = 0;
+        else
+            $("#isTop").get(0).selectedIndex = 1;
+        
+     
+    });
+
+    function Save() {
+        editor.sync();
+        if ($('#title').val() == "") {
+            alert("请输入标题！");
+            return false;
+        }
+        if ($.trim(editor.text()).length == 0) {
+            alert("请输入内容！");
+            return false;
+        }
+
+        $("#editfrom #btnSave").attr('disabled', true);
+        $.ajax({
+            type: "POST",
+            url: "NewsEdit",
+            dataType: "json",
+            data: $("#editfrom").serialize(),
+            success: function (data) {
+                //debugger;
+                if (data == "1") {
+                    //debugger;
+                    alert("修改成功！");
+                    parent.window.grid.datagrid("reload");
+                    parent.window.editWin.close();
+                    //$('#test').dialog("close");
+                } else {
+                    alert("操作失败！");
+                }
+            },
+            error: function (data) {
+                //alert(data.responseText);
+            }
+        });
+    }
+
+</script>

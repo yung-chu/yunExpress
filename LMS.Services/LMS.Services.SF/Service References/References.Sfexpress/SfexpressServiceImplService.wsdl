@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:ns2="http://schemas.xmlsoap.org/soap/http" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://impl.appservice.sfexpress.business.ieca.sf.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://appservice.sfexpress.business.ieca.sf.com/" name="SfexpressServiceImplService" targetNamespace="http://impl.appservice.sfexpress.business.ieca.sf.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:import namespace="http://appservice.sfexpress.business.ieca.sf.com/" location="http://www.sfb2c.com:8003/CBTA/ws/sfexpressService?wsdl=SfexpressService.wsdl" />
+  <wsdl:types />
+  <wsdl:binding name="SfexpressServiceImplServiceSoapBinding" type="ns1:SfexpressService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <wsdl:operation name="sfexpressService">
+      <soap:operation soapAction="" style="rpc" />
+      <wsdl:input name="sfexpressService">
+        <soap:body use="literal" namespace="http://appservice.sfexpress.business.ieca.sf.com/" />
+      </wsdl:input>
+      <wsdl:output name="sfexpressServiceResponse">
+        <soap:body use="literal" namespace="http://appservice.sfexpress.business.ieca.sf.com/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SfexpressServiceImplService">
+    <wsdl:port name="SfexpressServiceImplPort" binding="tns:SfexpressServiceImplServiceSoapBinding">
+      <soap:address location="http://www.sfb2c.com:8003/CBTA/ws/sfexpressService" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

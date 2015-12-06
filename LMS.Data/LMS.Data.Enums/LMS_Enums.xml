@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Root>
+  <Data Name="Order">
+    <Collect Name="OrderType" Desc="OrderType">
+      <Item ID="1" Value="General" CNName="团购订单" ENName="团购订单"></Item>
+      <Item ID="2" Value="Redirect" CNName="重寄订单" ENName="重寄订单"></Item>
+      <Item ID="3" Value="Sample" CNName="样品订单" ENName="样品订单"></Item>
+    </Collect>
+
+
+    <Collect Name="DisplayRows" Desc="DisplayRows">
+      <Item ID="1000" Value="r_1000" CNName="Top 1000" ENName="Top 1000"></Item>
+      <Item ID="3000" Value="r_3000" CNName="Top 3000" ENName="Top 3000"></Item>
+      <Item ID="5000" Value="r_5000" CNName="Top 5000" ENName="Top 5000"></Item>
+      <Item ID="10000" Value="r_10000" CNName="Top 10000" ENName="Top 10000"></Item>
+      <Item ID="50000" Value="r_50000" CNName="Top  50000" ENName="Top 50000"></Item>
+    </Collect>
+
+    <Collect Name="Status" Desc="Status">
+      <Item ID="130" Value="Processing" CNName="已审核" ENName="Processing"></Item>
+      <Item ID="140" Value="Canceled" CNName="已取消" ENName="Canceled"></Item>
+      <Item ID="200" Value="Imported" CNName="已导入" ENName="Imported"></Item>
+      <Item ID="300" Value="Printed" CNName="已打印" ENName="Printed"></Item>
+      <Item ID="400" Value="Picked" CNName="已捡货" ENName="Picked"></Item>
+      <Item ID="500" Value="Packaged" CNName="已包装" ENName="Packaged"></Item>
+      <Item ID="600" Value="PartialShipped" CNName="部分发货" ENName="Partial Shipped"></Item>
+      <Item ID="690" Value="HasHandover" CNName="已交递" ENName="HasHandover"></Item>
+      <Item ID="700" Value="FullShipped" CNName="全部发货" ENName="Full Shipped"></Item>
+      <Item ID="900" Value="RefundCancel" CNName="退款取消" ENName="Refund Cancel"></Item>
+    </Collect>
+    <Collect Name="PaymentStatus" Desc="PaymentStatus">
+      <Item ID="1" Value="Unpaid" CNName="未付款" ENName="Unpaid"></Item>
+      <Item ID="2" Value="Pending" CNName="Pending" ENName="Pending"></Item>
+      <Item ID="3" Value="Paid" CNName="已付款" ENName="Paid"></Item>
+      <Item ID="4" Value="PartiallyRefunded" CNName="部分退款" ENName="PartiallyRefunded"></Item>
+      <Item ID="5" Value="Refunded" CNName="全额退款" ENName="Refunded"></Item>
+    </Collect>
+
+    <Collect Name="ShippingMethod" Desc="ShippingMethod">
+      <Item ID="1" Value="Airmail" CNName="Airmail" ENName="Airmail"></Item>
+      <Item ID="2" Value="EMS" CNName="EMS" ENName="EMS"></Item>
+      <Item ID="3" Value="DHL" CNName="DHL" ENName="DHL"></Item>
+
+    </Collect>
+
+    <Collect Name="PaymentMethod" Desc="PaymentMethod">
+      <Item ID="1" Value="Paypal" CNName="Paypal" ENName="Paypal"></Item>
+      <Item ID="2" Value="CreditCard" CNName="CreditCard" ENName="CreditCard"></Item>
+    </Collect>
+
+  </Data>
+
+  <Data Name="OrderDetail">
+    <Collect Name="ShippingStatus" Desc="ShippingStatus">
+      <Item ID="1" Value="UnShipped" CNName="未发货" ENName="UnShipped"></Item>
+      <Item ID="2" Value="Shipped " CNName="已发货" ENName="Shipped"></Item>
+      <Item ID="3" Value="Cancelled " CNName="已取消" ENName="Cancelled"></Item>
+    </Collect>
+  </Data>
+
+  <Data Name="OrderPayment">
+    <Collect Name="OrderPaymentMethod" Desc="PaymentMethod">
+      <Item ID="1" Value="Paypal" CNName="Paypal" ENName="Paypal"></Item>
+      <Item ID="2" Value="PaypalIPN " CNName="Paypal IPN" ENName="Paypal IPN"></Item>
+    </Collect>
+  </Data>
+
+  <Data Name="OrderShipping">
+    <Collect Name="ShippingMethod" Desc="ShippingMethod">
+      <Item ID="1" Value="Airmail" CNName="Airmail" ENName="Airmail"></Item>
+      <Item ID="2" Value="EMS" CNName="EMS" ENName="EMS"></Item>
+      <Item ID="3" Value="DHL" CNName="DHL" ENName="DHL"></Item>
+
+    </Collect>
+  </Data>
+  <Data Name="Product">
+    <Collect Name="Status" Desc="Status">
+      <Item ID="0" Value="None" CNName="" ENName=""></Item>
+      <Item ID="1" Value="New" CNName="未上架" ENName="未上架"></Item>
+      <Item ID="2" Value="Selling " CNName="上架" ENName="上架"></Item>
+      <Item ID="3" Value="SoldOut " CNName="下架" ENName="下架"></Item>
+    </Collect>
+  </Data>
+
+  <Data Name="ProductSynchroLog">
+    <Collect Name="Status" Desc="Status">
+      <Item ID="0" Value="None" CNName="" ENName=""></Item>
+      <Item ID="1" Value="Incompleted" CNName="未完成" ENName="未完成"></Item>
+      <Item ID="2" Value="Completed " CNName="已完成" ENName="已完成"></Item>
+    </Collect>
+  </Data>
+
+
+  <Data Name="Quotation">
+    <Collect Name="Status" Desc="Status">
+      <Item ID="1" Value="Enable" CNName="启用" ENName="Enable"></Item>
+      <Item ID="2" Value="Disable" CNName="禁用" ENName="Disable"></Item>
+
+
+      <!--<Item ID="2" Value="Activate " CNName="Activate" ENName="Activate"></Item>
+      <Item ID="3" Value="Expired " CNName="Expired" ENName="Expired"></Item>
+      <Item ID="4" Value="Invalid " CNName="Invalid" ENName="Invalid"></Item>-->
+    </Collect>
+  </Data>
+
+
+  <Data Name="Customer">
+    <Collect Name="CustomerType" Desc="CustomerType">
+      <Item ID="1" Value="Ordinary" CNName="普通客户" ENName="普通客户"></Item>
+    </Collect>
+    <Collect Name="Status" Desc="Status">
+      <Item ID="1" Value="On" CNName="启用" ENName="启用"></Item>
+      <Item ID="2" Value="Off" CNName="禁用" ENName="禁用"></Item>
+    </Collect>
+  </Data>
+
+  <Data Name="CustomersContact">
+    <Collect Name="CustomerType" Desc="CustomerType">
+      <Item ID="1" Value="Sale" CNName="Sale" ENName="Sale"></Item>
+      <Item ID="2" Value="CEO" CNName="CEO" ENName="CEO"></Item>
+      <Item ID="3" Value="CS" CNName="CS" ENName="CS"></Item>
+    </Collect>
+  </Data>
+
+
+  <Data Name="Safetys">
+    <Collect Name="SafetysType" Desc="">
+      <Item ID="1" Value="类型" CNName="保险" ENName="保险"></Item>
+      <Item ID="1" Value="类型" CNName="保险" ENName="保险"></Item>
+    </Collect>
+  </Data>
+</Root>
+

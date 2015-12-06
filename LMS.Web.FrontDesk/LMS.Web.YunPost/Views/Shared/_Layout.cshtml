@@ -1,0 +1,525 @@
+﻿@using LMS.Core
+@using LighTake.Infrastructure.Common
+@using LighTake.Infrastructure.Common.InversionOfControl
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html >
+    <head>
+        @RenderSection("ExtraHeadContent", required: false)
+        <title>@ViewBag.Title</title>
+ 
+        <link rel="shortcut icon" href="@Url.Content("~/images/favicon.ico")" />
+        <link type="text/css" rel="stylesheet" href="@Url.Content("~/css/base.css")"/>
+        <link type="text/css" rel="stylesheet" href="@Url.Content("~/css/logistics_pub.css")"/>
+        <link type="text/css" rel="stylesheet" href="@Url.Content("~/css/logistics_style.css")"/>
+         <!--下拉框-->
+        <link href="@Url.Content("~/Scripts/chosen/chosen.css")" rel="stylesheet" type="text/css" />
+        <!--客服-->
+        <link rel="stylesheet" type="text/css" href="@Url.Content("~/css/datouwang.css")"/>
+
+        <script type="text/javascript" src="@Url.Content("~/Scripts/jquery-1.4.4.min.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/Scripts/jquery-powerSwitch-min.js")"></script>
+        <script src="@Url.Content("~/Scripts/chosen/chosen.jquery.js")" type="text/javascript"></script>
+        <!--客服-->
+        <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.Sonline.js")"></script>
+
+        
+
+        <script type="text/javascript">
+            /*百度流量*/
+            var _hmt = _hmt || [];
+            (function () {
+                var hm = document.createElement("script");
+                hm.src = "//hm.baidu.com/hm.js?06602ae6f0b6b8e6deacdbd274f9e22a";
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(hm, s);
+            })();
+
+
+
+            $(function () {
+
+                var $inp = $('#formlogin input'); //所有的input元素
+
+                $inp.keypress(function (event) {
+                    var key = event.which;
+                    if (key == 13) {
+                        $("[id$=Logon]").click(); //支持firefox,IE武校
+                        //$('input:last').focus();
+                        $("[id$=Logon]").focus();  //支持IE，firefox无效。
+
+                        //以上两句实现既支持IE也支持 firefox
+                    }
+                });
+
+
+
+
+                $("#Logon").click(function () {
+                    var flag = 0;
+                    if ($.trim($("#userName").val()) == "") {
+
+                        $("#userNameError").css("display","block");
+                        $("#userNameError").val("账户不能为空！");
+                        flag = 1;
+                    }
+
+                    if ($.trim($("#userPwd").val()) == "") {
+
+                        $("#userPwdError").css("display", "block");
+                        $("#userPwdError").val("密码不能为空！");
+                        flag = 1;
+
+                    }
+                    if (flag == 1) {
+
+                        return false;
+                    }
+
+
+                    //验证
+                    $.ajax({
+                        type: "post",
+                        url: "@Url.Action("ValidateLogOn","Home")",
+                        data: { userName: $.trim($("#userName").val()), pwd: $.trim($("#userPwd").val()), remember: false },
+                        success: function (msg) {
+                            if (msg.Result) {
+                                window.location.href = window.location.href;
+                            } else {
+
+                                $("#userPwd").val("");
+                                $("#userName").val("");
+                                $("#errorMessage").text(msg.Message);
+                            }
+                        }
+                    });
+                });
+
+
+
+            });
+
+
+
+
+
+ </script>
+        
+    </head>
+    
+ <body>
+      
+ <div class="head">
+        <div class="conStr">
+             <div class="strIn">
+                 <div class="fix">
+                     <div class="l mt10 pt2"> 
+                         <a href="@Url.Action("Index","Home")">
+                             <img src="@Url.Content("~/images/logo1.png")"/>
+                         </a> 
+                         <span class="div_vm"></span>
+                     </div>
+                     <div class="l mt35 rel ml100">
+                         <div class="nav_position">
+                             <span  class="nav_bgI tdn"></span>  
+                         </div>
+                         <a href="@Url.Action("Index","Home")" class="nav_A tdn l nav_select" > 
+                             首页
+                         </a>  
+                         <span class="nav_A tdn l"> 
+                             产品服务
+                         </span> 
+                         <span class="nav_A tdn l"> 
+                             新闻中心
+                         </span>  
+                         <span class="nav_A tdn l"> 
+                             关于我们
+                         </span>    
+                         <span class="nav_A tdn l"> 
+                             帮助中心
+                         </span>   
+                     </div>
+
+                     <div class="r mt40">
+                         
+
+                         <span class="u2 u214 cpi mr2 head_Avtive" data="warp_weixin"></span>
+                         <span class="u2 u224 mr10 cpi"></span>
+
+                         <!--显示用户名-->
+                          @if (Request.IsAuthenticated)
+                          {
+                              var user = EngineContext.Current.Resolve<IWorkContext>();
+
+                              var url = Tools.GetAppSettings("UserCenter_Path");
+
+                          
+                              <div >
+                                  <span style="color: #fff; font-weight:bold;font-family: '微软雅黑';padding: 0 5px">欢迎你 @user.User.RealName </span>
+                                  <a href="@url" class="coff4">
+                                      <span style="color: #fff;font-weight:bold;font-family: '微软雅黑'">进入账户中心</span>
+                                  </a>
+                                  <a class="coff4"  href="@Url.Action("Logout", "Home")">
+                                      <span style="color: #fff;font-family: '微软雅黑';font-weight:bold;padding: 0 5px">退出</span>
+                                  </a>
+                              </div>
+ 
+                          }
+                          else
+                          {
+                             <span class="head_Avtive mr2 head_w" data="warp_login">
+                                 登陆
+                             </span>
+                             <a href="@Url.Action("AddUser", "User")" class="head_w">
+                                 注册
+                             </a>
+                              
+                          }
+                     </div>
+                 </div>
+             </div>
+         </div>
+ </div>  
+     
+     
+<!--登录弹出框-->
+ <div class="head_Warp warp_login" id="formlogin">
+	<div class="p15">
+        <div class="mb15">
+            账号：
+            <input type="text" id="userName" class="ist_s ist_l ist_f" />
+            <span id="userNameError" style="display:block; margin-left:45px;color:red"></span>
+        </div>
+	    <div class="mb15">
+	        密码：
+	        <input type="password" id="userPwd" class="ist_s ist_l ist_f" />
+	        <span id="userPwdError" style="display:block;margin-left:45px;color:red"></span>
+	    </div>
+	    <span id="errorMessage" style="display:none;color:red; margin-left:50px">dsds</span>
+        <div class="mb15">
+            &emsp;&emsp;&ensp;
+          
+            <input type="button" class="head_btn"  value=" 登陆" id="Logon"/>
+
+        </div>
+        <div class="tr">
+            <a href="@Url.Action("AddUser","User")">
+                创建账户
+            </a>
+        </div>
+    </div>
+</div>    
+     
+     
+<div class="head_Warp warp_weixin">
+	<div class="tc">
+    	扫描二维码<br/>
+		关注云途物流微信
+    </div>
+    <div>
+    	<img src="@Url.Content("~/images/weinxi_03.jpg")"/>
+    </div>
+</div>
+     
+<div class="conStr">
+	<div class="strIn">
+    	<div class="meu_area">
+	        <div>
+	            
+               @foreach (var item in Model.ShowCategoryListModel.ShippingMethodServices)
+               {
+                    <a href="@Url.Action("ProductServices", "Home", new { id = @item.CategoryID })" class="meu_w">@item.Name</a>
+               }
+                
+	        </div>
+	        <div>
+	             @foreach (var item in Model.ShowCategoryListModel.CategoryModelNews)
+	             {
+                    <a href="@Url.Action("NewList", "New", new {categoryID = @item.CategoryID})" class="meu_w">@item.Name</a>
+                 }
+	          
+	        </div>
+	        <div>
+             
+	            @foreach (var item in Model.ShowCategoryListModel.CategoryModelAbout)
+	            {
+	                <a href="@Url.Action("About", "Home", new { id = @item.CategoryID })" class="meu_w">@item.Name</a>
+	            }
+	         
+	        </div>
+	        <div>
+	             <a href="@Url.Action("Search","RemoteAddress")" class="meu_w">偏远地址查询</a>
+	            @foreach (var item in Model.ShowCategoryListModel.HelpCenterList)
+	            {
+	                <a href="@Url.Action("HelpCenter", "Home", new { id = @item.CategoryID })" class="meu_w">@item.Name</a>
+	            }
+
+	        </div>
+        </div>
+    </div>
+</div>    
+     
+
+
+     @*    <div class="top_area" >
+            <div class="head">
+                <div class="top">
+        
+                    <!--登录-->
+                    <div class="con">
+                        <div class="fix">
+                            <div class="r mt-2">
+                                <span class="lh_dib"></span>
+              
+      
+
+                                @if (Request.IsAuthenticated)
+                                {
+                                    var user = EngineContext.Current.Resolve<IWorkContext>();
+
+                                    var url = Tools.GetAppSettings("UserCenter_Path");
+                         
+                                    <div id="showLoginInfo">
+                                        <span style="color:white">欢迎你 @user.User.RealName </span>
+                                        <a href="@url" class="coff4">
+                                            <span style="color: white">进入账户中心</span>
+                                        </a>
+                                        <a style="color:white" href="@Url.Action("Logout", "Home")">退出</a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div id="formlogin">
+                                        <input class="top_ist g6" type="text" id="userName" onblur="if(this.value==''){this.value=' 账户...'}" onfocus="if(this.value==' 账户...'){this.value=''}" onkeydown="javascript:if(event.keyCode==13);" onkeyup="keys()" value=" 账户..."/>
+                                        <input  class="top_ist g6"  type="password"  id="userPwd"/>
+                                        <input  class="top_ist g6"   style="display :none" type="text" id="pwdHidden"/>
+                          
+                                        <a  id="Logon" class="btn-w" style="cursor: pointer">
+                                            登陆
+                                        </a>
+
+                                        <a href="@Url.Action("AddUser", "User")" class="btn-g" id="Register">
+                                            注册
+                                        </a>
+                                    </div>
+                                }
+      
+
+                            </div>
+                        </div>
+                    </div>
+    
+        
+                </div>
+   
+            
+                <div class="conStr">
+                    <div class="strIn">
+                        <div class="fix">
+                            <div class="l mt5"> <a href="@Url.Action("Index","Home")"> <img src="@Url.Content("~/images/logo4.png")" alt=""/> </a> </div>
+                            <div class="nsv_in r mt20">
+                                <div class="r nav_icon"></div>
+                                <div class="nav_active r"> 
+                                    <a href="@Url.Action("HelpCenter", "Home", new {id = Model.GetId})" class="nav_off nav_Warp"> 
+                                        帮助中心
+                                        <span style="font-size:10px; vertical-align:middle;">▼</span>
+                                    </a>
+                                    <div class="nav_Warp_" >
+                                        <div><a href="@Url.Action("Search","RemoteAddress")">偏远地址查询</a> </div>
+                                        @foreach (var row in Model.HelpCenterList)
+                                        {
+                                            <div> <a href="@Url.Action("HelpCenter", "Home", new { id = @row.CategoryID })">
+                                                      @if (row.Name != null && row.Name.Length > 10)
+                                                      {
+                                                          @row.Name.Substring(0, 10)
+                                                      }
+                                                      else
+                                                      {
+                                                          @row.Name
+                                                      }
+                                                  </a> 
+                                            </div>
+                                        }
+                 
+                                    </div>
+                                </div>
+                                <div class="r nav_icon"></div>
+                                <div class="nav_active r"> 
+                                    <a href="@Url.Action("About", "Home", new {id = 2})" class="nav_off nav_Warp"> 
+                                        关于我们
+                                        <span style="font-size:10px; vertical-align:middle;">▼</span> 
+                                    </a> 
+                                    <div class="nav_Warp_" >
+                                        @foreach (var item in Model.CategoryModelAbout)
+                                        {
+                                            <div> <a href="@Url.Action("About", "Home", new { id = @item.CategoryID })">  @item.Name  </a> </div>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="r nav_icon"></div>
+                                <div class="nav_active r"> 
+                                    <a href="@Url.Action("NewList", "New", new {CategoryId = 1})" class="nav_off nav_Warp"> 
+                                        新闻中心
+                                        <span style="font-size:10px; vertical-align:middle;">▼</span> 
+                                    </a> 
+                                    <div class="nav_Warp_" >
+                                        @foreach (var item in Model.CategoryModelNews)
+                                        {
+                                            <div> <a href="@Url.Action("NewList", "New", new {categoryID = @item.CategoryID, id = 0})"> @item.Name</a> </div>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="r nav_icon"></div>
+                                <div class="nav_active r"> 
+                                    <a href="@Url.Action("ProductServices", "Home", new { id = 3 })" class="nav_off nav_Warp"> 
+                                        产品服务   
+                                        <span style="font-size:10px; vertical-align:middle;">▼</span>
+                                    </a>
+                                    <div class="nav_Warp_" >
+                                        @foreach (var row in Model.ShippingMethodServices)
+                                        {
+                                            <div> <a href="@Url.Action("ProductServices", "Home", new { id = @row.CategoryID })">
+                                                      @if (row.Name != null && row.Name.Length > 10)
+                                                      {
+                                                          @row.Name.Substring(0, 10)
+                                                      }
+                                                      else
+                                                      {
+                                                          @row.Name
+                                                      }
+                                                  </a> </div>
+                                        }
+                                    </div>
+                                </div>
+            
+
+                                <div class="r w120"> <a href="@Url.Action("Index","Home")" class="nav_off" >首  页</a> </div>
+                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+   
+            </div>
+            
+
+        </div>*@
+        @RenderBody()
+
+
+        @*   <div style="background: ebebeb; border-top: 1px solid #f2f2f2; line-height: 50px; font-size: 14px; font-family: '微软雅黑'">
+            <div class="conStr">
+                <div class="strIn">
+                    <div class="fix">
+                        <div class="r">
+                            <span class="lh_dib"></span>
+                            <a href="javascript:">
+                                <img src="@Url.Content("~/images/share_1.jpg")" class="vm mr10" />
+                            </a>
+                            <a href="javascript:">
+                                <img src="@Url.Content("~/images/share_2.jpg")" class="vm mr10" />
+                            </a>
+                            <a href="javascript:">
+                                <img src="@Url.Content("~/images/share_3.jpg")" class="vm" />
+                            </a>
+                        </div>
+                        <div class="l g6">
+	                
+                            @foreach (var row in Model.ShippingMethodServices)
+                            {
+                                <a href="@Url.Action("ProductServices", "Home", new { id = @row.CategoryID })" class="tdn">
+                                    @row.Name 
+                                </a>
+
+                                <label>&nbsp;|&nbsp;</label>
+                            }
+                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        *@
+        
+        
+        
+        
+
+        @* <div class="foot">
+            <div class="conStr">
+                <div class="strIn">
+                    <div class="fix" style="color: #cfcfcf; padding: 20px 0 10px;">
+                        <div class="r">
+                            <img src="@Url.Content("~/images/yunpostBarCode.jpg")" width="100" height="100" />
+                        </div>
+                        <div class="l">
+                            <a href="javascript:" class="mr10">关于云途</a>
+                            <a href="javascript:" class="mr10">联系云途</a>
+                            <a href="javascript:" class="mr10">新闻中心</a>
+                            <a href="javascript:" class="mr10">常见问题</a>
+                            <a href="javascript:" class="mr10">工作机会</a>
+                            <a href="javascript:" class="mr10">建议反馈</a>       
+                            <div class="mt10">
+                                Copyright 2013, 版权所有深圳市云途物流有限公司 ICP/IP证：粤ICP备14056559号
+                            </div>    
+                            <div class="mt30 pt15">
+                                云途物流，亚太区15个始发地，送达全球220个国家和地区；全国服务热线：4000-2621-26，http://www.yunexpress.com/
+                            </div>             
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+     
+     
+
+
+<!--footer-->
+<!--合作伙伴-->
+<div class="bgf pt35 pb20">
+	<div class="conStr">
+		<div class="strIn">
+			<div id="solideAdBtn" class="solide_ad_btn mb15">
+			</div>
+			<div id="solideAdSlide" class="solide_ad_slide">
+			    <img src="@Url.Content("~/images/partner_26.jpg")" class="solide_ad_img"/>
+			    <img src="@Url.Content("~/images/partner_27.jpg")" class="solide_ad_img dn"/>
+			</div>
+		</div>
+	</div>
+</div>  
+
+ <div class="foot">
+	<div class="conStr">
+	    <div class="strIn">
+        	<div class="fix">
+            	<div class="r">
+               	  <img src="@Url.Content("~/images/weinxi_03.jpg")" height="90"/>
+                </div>
+                <div class="lh26 pt30">
+                	<a href="javascript:" class="A mr5">关于云图</a>
+                    <a href="javascript:" class="A mr5">联系云途</a>
+                    <a href="javascript:" class="A mr5">新闻中心</a>
+                    <a href="javascript:" class="A mr5">常见问题</a>
+                    <a href="javascript:" class="A mr5">工作机会</a>
+                    <a href="javascript:" class="A">建议反馈</a><br/>
+                    
+                    云途物流，亚太区15个始发地，送达全球220个国家和地区；全国服务热线：4000-2621-26
+                </div>
+            </div>
+    	</div>
+  </div>
+</div>
+<div class="foot_b" style="">
+	Copyright 2013, 版权所有深圳市云途物流有限公司 ICP/IP证：粤ICP备14056559号
+</div>
+<!--footer end-->
+     
+
+ <script type="text/javascript" src="@Url.Content("~/Scripts/client.js")"></script>
+  
+</body>
+</html>

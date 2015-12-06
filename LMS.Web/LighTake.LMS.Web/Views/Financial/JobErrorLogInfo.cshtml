@@ -1,0 +1,99 @@
+﻿
+@using System.Activities.Expressions
+@model LMS.Controllers.FinancialController.JobErrorLogs
+
+@{
+    ViewBag.Title = "错误日志信息";
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+}
+
+
+<div class="domebg" id="right_con">
+    @using (Html.BeginForm("JobErrorLogInfo", "Financial"))
+    {
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+       
+            <tr class="date_row_select">
+              
+                <td width="40%">
+                    <span class="info_box info_select">JOB类型:</span>
+                    @Html.DropDownListFor(o => o.FilterModel.JobType, Model.StatusList, new { @style = "width:100px;" })
+                        
+                        
+                    <span class="info_box info_select">运单号:</span>
+                    @Html.TextAreaFor(p => p.FilterModel.WayBillNumber, new { @style = "height:45px; width:150px;" })
+
+                </td>
+                
+                <td colspan="2">
+                    <span class="info_box info_select">创建日期:</span>
+           
+                    <input id="FilterModel_StartTime" name="FilterModel.StartTime" class="txt wdate" style="width:130px" type="text"  Value = "@String.Format("{0:yyyy-MM-dd}", Model.FilterModel.StartTime)" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'FilterModel_EndTime\',{M:-1});}',maxDate:'#F{$dp.$D(\'FilterModel_EndTime\',{d:0});}'})" />
+                    <span>至:</span>
+                    <input id="FilterModel_EndTime" name="FilterModel.EndTime" class="txt wdate" style="width:130px" type="text" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'FilterModel_StartTime\',{d:0});}',maxDate:'#F{$dp.$D(\'FilterModel_StartTime\',{M:1});}'})" Value = "@String.Format("{0:yyyy-MM-dd}", Model.FilterModel.EndTime)" />
+                     
+                    &nbsp;     &nbsp;     &nbsp;     &nbsp;
+                    <input type="submit" value="查询" id="Search" name="Search" class="btn"/>
+
+                </td>
+
+            </tr>
+        </table>
+        
+        
+        <div id="pm_dis_div">
+            <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr class="data_row_two">
+                        <th>运单号
+                        </th>
+                        <th>错误内容
+                        </th>
+                        <th>创建时间
+                        </th>
+                         <th>创建人
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    
+
+                    @{
+                        if (Model != null)
+                        {
+                            foreach (var row in Model.PagedList.InnerList)
+                            {
+                            
+                                <tr class="data_row_dan">
+    
+                                    <td style="text-align: center" width="20%">
+                                        @row.WayBillNumber
+                                    </td>
+                                    <td style="text-align: center" width="40%">
+                                        @row.ErrorBody
+                                    </td>
+                                    <td style="text-align: center" width="20">
+                                        @row.CreatedOn
+                                    </td>
+                                    <td style="text-align: center" width="20">
+                                        @row.CreatedBy
+                                    </td>
+                                    
+                                </tr>
+                              
+                            }
+                        }
+
+                    }
+                    <tr class="data_row_none">
+                        <td colspan="14">
+                            @Html.Pager(Model.PagedList,Model.FilterModel)
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

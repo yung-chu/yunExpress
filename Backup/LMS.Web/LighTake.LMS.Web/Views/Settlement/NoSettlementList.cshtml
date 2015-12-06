@@ -1,0 +1,213 @@
+﻿@using LMS.Data.Entity
+@model LMS.Controllers.SettlementController.NoSettlementListViewModel
+@{
+    ViewBag.Title = "生成结算单";
+}
+
+<div id="showCustomerList" tabindex="200" style="overflow: scroll; display: none; position: relative">
+</div>
+<style>
+    .ic{ color: blue;}
+    .ip{ color: red;}
+</style>
+<div class="domebg" id="right_con">
+    @using (Html.BeginForm())
+    {
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+                <td width="15%">
+                    <span class="info_box info_select">客户编码:</span>
+                    <input type="text" id="CustomerCode" value="@Model.CustomerCode" name="CustomerCode" readonly="readonly" class="txt txt_short" />
+                    <input type="text" id="nickName" class="txt txt_short" value="@Model.CustomerName"/>
+                    <a href="javascript:void(0)" id="selectCustomerbtn" class="btn_href">选择</a>
+                    <input type="submit" class="btn ml10" value="查询" id="btnSearch" name="btnSearch" />
+                    <input type="button" class="btn ml20" value="打印结算单" id="btnCreate" name="btnCreate" style="display: none;"/>
+                    <input type="hidden"  value="@string.Join(",",Model.InStorageInfos.Select(i=>i.InStorageID).ToList())"  name="InStorageIDs" id="InStorageIDs"/>
+                </td>
+            </tr>
+        </table>
+
+        <div id="pm_dis_div">
+            <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr class="data_row_two">
+                        <th>序号
+                        </th>
+                        <th>入仓单号
+                        </th>
+                        <th>客户名称
+                        </th>
+                        <th>客户编码
+                        </th>
+                        <th>运单总数
+                        </th>
+                        <th>货物总重量kg
+                        </th>
+                        <th>结算总重量kg
+                        </th>
+                        <th>入仓时间
+                        </th>
+                        <th>入仓人
+                        </th>
+                        <th>入仓状态
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int index = 1;
+                        foreach (var row in Model.InStorageInfos)
+                        {
+                            <tr class="data_row_dan" inStorageId="@row.InStorageID">
+                                 <td>
+                                    @(index++)
+                                </td>
+                                <td>
+                                    @row.InStorageID
+                                </td>
+                                <td >
+                                    @Model.CustomerName
+                                </td>
+                                <td>
+                                    @row.CustomerCode
+                                </td>
+                                <td>
+                                    @row.TotalQty
+                                </td>
+                                <td> @row.PhysicalTotalWeight
+                                </td>
+                                <td>
+                                    @row.TotalWeight
+                                </td>
+                                <td>
+                                    @row.CreatedOn
+                                </td>
+                                <td>
+                                    @row.CreatedBy
+                                </td>
+                                <td>
+                                    @{
+                                        var inStorageProcess = Model.InStorageProcesses.FirstOrDefault(p => p.InStorageID == row.InStorageID);
+                                        if (inStorageProcess.Completed == inStorageProcess.Total)
+                                        {
+                                            @Html.Raw("<p class=\"process ic\">完成</p>");
+                                        }
+                                        else
+                                        {
+                                            @Html.Raw("<p class=\"process ip\">入仓处理中</p>");
+                                        }
+                                    }
+                                </td>
+                            </tr>
+
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+</div>
+
+<script type="text/javascript">
+
+    function queryInStorageProcess() {
+        if ($("#InStorageIDs").val() == "") {
+            clearInterval(t);
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("QueryInStorageProcess")",
+            dataType: "JSON",
+            async: false,
+            data: {InStorageIDs: $("#InStorageIDs").val() },
+            success: function (data) {
+                for (var i in data) {
+                    var el = $("tr[instorageid='" + data[i].InStorageID + "']").find("p.process");
+                    if (data[i].Completed == data[i].Total) {
+                        $(el).html("完成").addClass("ic").removeClass("ip");
+                    } else {
+                        $(el).html("入仓处理中").addClass("ip").removeClass("ic");
+                    }
+                }
+            },
+            complete: function() {
+                if ($(".ic").length > 0 && $(".ip").length == 0) {
+                    $("#btnCreate").show();
+                    clearInterval(t);
+                }
+            }
+        });
+    }
+
+    var t = setInterval("queryInStorageProcess()", 2* 1000);
+    
+    $(function () {
+       
+        $("#btnSearch").click(function () {
+            if ($("#CustomerCode").val()=="") {
+                alert("请先选择一个客户！");
+                $("#selectCustomer").click();
+                return false;
+            }
+        });
+        
+
+        if ($(".ic").length > 0 && $(".ip").length == 0) {
+            $("#btnCreate").show();
+            clearInterval(t);
+        }
+
+        $("#btnCreate").click(function () {
+            if ($("#CustomerCode").val()=="") {
+                alert("请先选择一个客户！");
+            }
+            
+            $("#btnCreate").attr("disable", true);
+            
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("CreateSettlement")",
+                dataType: "JSON",
+                async: true,
+                data: { CustomerCode: $("#CustomerCode").val(),InStorageIDs:$("#InStorageIDs").val()},
+                success: function (data) {
+                    if (data.Result) {
+                        //window.location.href = "@Url.Action("SettlementDetail")" + "?settlementNumber=" + data.Message;
+                        window.open("@Url.Action("SettlementDetail")" + "?settlementNumber=" + data.Message);
+                        $("#btnSearch").click();
+                    } else {
+                        alert(data.Message);
+                    }
+                },
+                error: function () {
+                    alert("失败");
+                },
+                complete: function () {
+                    $("#btnCreate").attr("disable", false);
+                }
+            });
+        });
+        
+
+        //选择运输方式
+        $("#selectCustomerbtn").bind("click", function () {
+            $("#showCustomerList").showWindow("@Url.Action("SelectList", "Customer")?OnlyShowCash=true&ShowPaymentType=true", "选择现结客户");
+            var parentWindow = $("#showCustomerList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                    top: 120
+                }, {
+                    duration: 1000,
+                    step: function (now, fx) {
+                        $(".window").css("top", now);
+                    }
+                });
+            $("#showCustomerList").show();
+        });
+        
+    });
+
+</script>

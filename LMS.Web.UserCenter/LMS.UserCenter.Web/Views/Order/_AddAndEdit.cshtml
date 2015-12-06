@@ -1,0 +1,696 @@
+﻿@using LMS.Data.Entity
+@model LMS.UserCenter.Controllers.OrderController.Models.CustomerOrderInfoModel
+@{
+    var goodsTypeList = (List<SelectListItem>)ViewBag.GoodsTypeList;
+}
+<div class="p20">
+    @Html.Partial("_Notifications")
+    <ul class="fix mt20">
+        <li class="l">
+            <a href="@Url.Action("BatchAdd")" class="tab_a_off" style="">批量创建订单
+            </a>
+        </li>
+        <li class="l">
+            <a href="@Url.Action("Add")" class="tab_a">新建订单
+            </a>
+        </li>
+
+        <li class="l">
+            <a href="#ApplicationInfo" class="tab_a_off">申报信息
+            </a>
+        </li>
+
+    </ul>
+    <div class="top_solid">
+    </div>
+    @using (Html.BeginForm())
+    {            
+
+        <div class="tab_conStr">
+            <div class="from_box">
+                <div class="from_horizontal fix">
+                    <div class="l">
+                        <span class="info_box info_middle ">包裹类型：</span>
+                        @Html.DropDownListFormFor(p => Model.GoodsTypeID,goodsTypeList)
+
+                        <span class="mr20 ml10 txt_tip">*@Html.ValidationMessageFor(p => p.GoodsTypeID)</span>
+                    </div>
+                </div>
+                <div class="from_horizontal fix">
+                    <div class="l">
+                        <span class="info_box info_middle">客户订单号：</span>
+                        @if (Model != null && Model.CustomerOrderID > 0)
+                        {
+                            @Model.CustomerOrderNumber
+                            @Html.HiddenFor(p => Model.CustomerOrderNumber)
+                            @Html.HiddenFor(p => Model.CustomerOrderID)
+                        }
+                        else
+                        {
+                            
+                            @Html.TextBoxFormFor(p => p.CustomerOrderNumber, new Dictionary<string, object> { { "class", "txt txt_large" }, { "maxlength", "50" } })
+                            <span class="mr20 ml10 txt_tip">*@Html.ValidationMessageFor(p => p.CustomerOrderNumber)</span>
+                        }
+                    </div>
+                    <div class="l">
+                        <span class="info_box info_middle ">新跟踪号：</span>
+                        @Html.TextBoxFormFor(p => p.TrackingNumber)
+                        <span class="mr20 ml10 txt_tip">@Html.ValidationMessageFor(p => p.TrackingNumber)</span>
+                    </div> 
+                       <div class="l">
+                        <span class="info_box info_middle ">原跟踪号：</span>
+                        @Model.RawTrackingNumber
+                    </div>
+                    <div class="l">
+                        <span class="info_box info_middle ">转单时间：</span>
+                        @(Model.TransferOrderDate.HasValue ? Model.TransferOrderDate.Value.ToString("yyyy-MM-dd") : "")
+                    </div> 
+                </div>
+                <div class="from_horizontal fix">
+                    <div class="l">
+                        <span class="info_box info_middle">包裹重量：</span>
+                        @Html.TextBoxFormFor(p => p.Weight, new Dictionary<string, object> { { "class", "txt txt_short" } })kg
+                        <span class="mr20 ml10 txt_tip">*@Html.ValidationMessageFor(p => p.Weight)</span>
+                    </div>
+                    <div class="l">
+                        <span class="info_box info_middle ">体积：</span>
+                        长 @Html.TextBoxFormFor(p => p.Length, new Dictionary<string, object> { { "class", "txt txt_short" } })cm&nbsp;&nbsp;宽 @Html.TextBoxFormFor(p => p.Width, new Dictionary<string, object> { { "class", "txt txt_short" } })cm&nbsp;&nbsp;高 @Html.TextBoxFormFor(p => p.Height, new Dictionary<string, object> { { "class", "txt txt_short" } })cm
+                    </div>
+                    <div class="l">
+                        <span class="info_box info_middle">件数：</span>
+                        @Html.TextBoxFormFor(p => p.PackageNumberValue, new Dictionary<string, object> { { "class", "txt txt_short" } })
+                        <span class="mr20 ml10 txt_tip">@Html.ValidationMessageFor(p => p.PackageNumberValue)</span>
+                    </div>
+                </div>
+                <hr />
+                <div class="from_horizontal fix">
+                    <div class="f_w50">
+                        <div class="l">
+                            <h2>收件人信息</h2>
+                        </div>
+                    </div>
+                     <div class="f_w50">
+                        <div class="l">
+                            <h2>发件人信息</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="from_horizontal fix">
+                    <div class="f_w50">
+                        <div class="l">
+                            <span class="info_box info_middle ">收件人姓名：</span>
+                            @Html.TextBoxFormFor(p => p.ShippingFirstName, new Dictionary<string, object> { { "class", "txt txt_short" } })
+                            @Html.TextBoxFormFor(p => p.ShippingLastName, new Dictionary<string, object> { { "class", "txt txt_short" } })
+                            <span class="mr20 ml10 txt_tip">*@Html.ValidationMessageFor(p => p.ShippingFirstName)</span>
+
+                        </div>
+                    </div>
+                    <div class="f_w50">
+                        <div class="l">
+                            <span class="info_box info_middle ">发件人姓名：</span>
+                            @Html.TextBoxFormFor(p => p.SenderFirstName, new Dictionary<string, object> { { "class", "txt txt_short" } })
+                            @Html.TextBoxFormFor(p => p.SenderLastName, new Dictionary<string, object> { { "class", "txt txt_short" } })
+                            <span class="mr20 ml10 txt_tip">@Html.ValidationMessageFor(p => p.SenderFirstName)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="from_horizontal fix">
+                    <div class="f_w50">
+                        <div class="l">
+                            <span class="info_box info_middle">收件人公司：</span>
+                            @Html.TextBoxFormFor(p => p.ShippingCompany, new Dictionary<string, object> { { "class", "txt txt_large" } })
+                            <span class="mr20 ml10 txt_tip">@Html.ValidationMessageFor(p => p.ShippingCompany)</span>
+                        </div>
+                    </div>
+                    <div class="f_w50">
+                        <div class="l">
+                            <span class="info_box info_middle">发件人公司：</span>
+                            @Html.TextBoxFormFor(p => p.SenderCompany, new Dictionary<string, object> { { "class", "txt txt_large" } })
+                        </div>
+                    </div>
+                </div>
+                <div class="from_horizontal fix">
+                    <div class="f_w50">
+                        <span class="info_box info_middle">收件人国家：</span>
+                        @Html.DropDownListFormFor(p => Model.CountryCode, (List<SelectListItem>)ViewBag.CountryList, new Dictionary<string, object> { { "data-placeholder", "请选择..." }, { "style", " width:310px;" } })
+                        <span class="mr20 ml10 txt_tip">*@Html.ValidationMessageFor(p => p.CountryCode)</span>
+                    </div>
+                    <div class="f_w50">
+                        <span class="info_box info_middle">发件人地址：</span>
+                        @Html.TextBoxFormFor(p => p.SenderAddress, new Dictionary<string, object> { { "class", "txt txt_large" } })
+                        <span class="mr20 ml10 txt_tip">@Html.ValidationMessageFor(p => p.SenderAddress)</span>
+                    </div>
+                </div>
+
+                <div class="from_horizontal fix">
+                    <div class="f_w50">
+                        <div class="l">
+                            <span class="info_box info_middle">收件人地址1：</span>
+                            @Html.TextBoxFormFor(p => p.ShippingAddress, new Dictionary<string, object> { { "class", "txt txt_large" } })
+                            <span class="mr20 ml10 txt_tip">*@Html.ValidationMessageFor(p => p.ShippingAddress)</span>
+                        </div>
+                    </div>
+                    <div class="f_w50">
+                        <div class="l">
+                            <span class="info_box info_middle">省/州：</span>
+                            @Html.TextBoxFormFor(p => p.SenderState, new Dictionary<string, object> { { "class", "txt txt_large" } })
+                            <span class="mr20 ml10 txt_tip">@Html.ValidationMessageFor(p => p.SenderState)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="from_horizontal fix">
+                     <div class="f_w50">
+                        <div class="l">
+                            <span class="info_box info_middle">收件人地址2：</span>
+                            @Html.TextBoxFormFor(p => p.ShippingAddress1, new Dictionary<string, object> { { "class", "txt txt_large" } })
+                            <span class="mr20 ml10 txt_tip">@Html.ValidationMessageFor(p => p.ShippingAddress1)</span>
+                        </div>
+                    </div>                   
+                    <div class="f_w50">
+                        <div class="l">
+                            <span class="info_box info_middle">城市：</span>
+                            @Html.TextBoxFormFor(p => p.SenderCity, new Dictionary<string, object> { { "class", "txt txt_large" } })
+                            <span class="mr20 ml10 txt_tip">@Html.ValidationMessageFor(p => p.SenderCity)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="from_horizontal fix">
+                     <div class="f_w50">
+                        <div class="l">
+                            <span class="info_box info_middle">收件人地址3：</span>
+                            @Html.TextBoxFormFor(p => p.ShippingAddress2, new Dictionary<string, object> { { "class", "txt txt_large" } })
+                            <span class="mr20 ml10 txt_tip">@Html.ValidationMessageFor(p => p.ShippingAddress2)</span>
+                        </div>
+                    </div>
+                    <div class="f_w50">
+                        <div class="l">
+                            <span class="info_box info_middle">邮编：</span>
+                            @Html.TextBoxFormFor(p => p.SenderZip, new Dictionary<string, object> { { "class", "txt txt_large" } })
+                            <span class="mr20 ml10 txt_tip">@Html.ValidationMessageFor(p => p.SenderZip)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="from_horizontal fix">
+                    <div class="f_w50">
+                        <div class="l">
+                            <span class="info_box info_middle">省/州：</span>
+                            @Html.TextBoxFormFor(p => p.ShippingState, new Dictionary<string, object> { { "class", "txt txt_large" } })
+                            <span class="mr20 ml10 txt_tip">@Html.ValidationMessageFor(p => p.ShippingState)</span>
+                        </div>
+                    </div>
+                    <div class="f_w50">
+                        <div class="l">
+                            <span class="info_box info_middle">电话：</span>
+                            @Html.TextBoxFormFor(p => p.SenderPhone, new Dictionary<string, object> { { "class", "txt txt_large" } })
+                            <span class="mr20 ml10 txt_tip">@Html.ValidationMessageFor(p => p.SenderPhone)</span>
+                        </div>
+                    </div>
+                </div>
+                 <div class="from_horizontal fix">
+                        <div class="l">
+                            <span class="info_box info_middle">城市：</span>
+                            @Html.TextBoxFormFor(p => p.ShippingCity, new Dictionary<string, object> { { "class", "txt txt_large" } })
+                            <span class="mr20 ml10 txt_tip">*@Html.ValidationMessageFor(p => p.ShippingCity)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="from_horizontal fix">
+                        <div class="l">
+                            <span class="info_box info_middle">邮编：</span>
+                            @Html.TextBoxFormFor(p => p.ShippingZip, new Dictionary<string, object> { { "class", "txt txt_large" } })
+                            <span class="mr20 ml10 txt_tip">@Html.ValidationMessageFor(p => p.ShippingZip)</span>
+                        </div>
+                    </div>
+                <div class="from_horizontal fix">
+                    <div class="l">
+                        <span class="info_box info_middle">电话：</span>
+                        @Html.TextBoxFormFor(p => p.ShippingPhone, new Dictionary<string, object> { { "class", "txt txt_large" } })
+                        <span class="mr20 ml10 txt_tip">@Html.ValidationMessageFor(p => p.ShippingPhone)</span>
+                    </div>
+                </div>
+                <div class="from_horizontal fix">
+                    <div class="l">
+                        <span class="info_box info_middle">收件人税号：</span>
+                        @Html.TextBoxFormFor(p => p.ShippingTaxId, new Dictionary<string, object> { { "class", "txt txt_large" } })
+                        <span class="mr20 ml10 txt_tip">@Html.ValidationMessageFor(p => p.ShippingTaxId)</span>
+                    </div>
+                </div>
+               
+            </div>
+            <hr />
+            <div class="from_horizontal fix">
+                <div class="f_w50">
+                    <div class="l">
+                        <h2>承运信息</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="from_horizontal fix">
+                <div class="f_w50">
+                    <div class="l">
+                        <span class="info_box info_middle">运输方式</span>
+                        @Html.DropDownListFormFor(p => Model.ShippingMethodId, (List<SelectListItem>)ViewBag.ShippingMethods, new Dictionary<string, object> { { "data-placeholder", "请选择..." } })
+                        <span class="mr20 ml10 txt_tip">*@Html.ValidationMessageFor(p => p.ShippingMethodId)</span>
+                    </div>
+                </div>
+                <div class="f_w50">
+                    <div class="l">
+                        <span class="info_box info_middle">申报类型</span>
+                        @Html.DropDownListFormFor(p => Model.AppLicationTypeId, Model.AppLicationTypes)
+                    </div>
+               </div>
+            </div>
+            <div class="from_horizontal fix">
+                <span class="info_box info_middle l"></span>
+                    <ul class="l">
+                        <li style="height: 30px;">
+                            <label for="IsReturn">@Html.CheckBoxFor(p => p.IsReturn) 是否退件</label></li>
+                        <li style="; height: 30px;">
+                            <span class="l" style="width: 150px; display: block">
+                                <label for="IsInsured">@Html.CheckBoxFor(p => p.IsInsured) 是否保险</label></span>
+                            <div id="selInsured" style="display:inline-block">
+                                @*@Html.DropDownListFormFor(p => Model.InsuredID, (List<SelectListItem>)ViewBag.InsuredList, new Dictionary<string, object> { { "data-placeholder", "请选择..." }, { "class", "chzn-select-deselect select_middle r"},{"id","InsuredDop"} })*@
+                                @Html.DropDownListFor(p => Model.InsuredValue, (List<SelectListItem>)ViewBag.InsuredList, new Dictionary<string, object> { { "data-placeholder", "请选择..." }, { "id", "InsuredDop" },{ "class", "chzn-select-deselect select_middle r" } })
+                            </div>
+                        </li>
+                        <li style=" height: 30px;">
+                            <span class="l" style="width: 150px; display: block">
+                                <label for="IsBattery">@Html.CheckBoxFor(p => p.IsBattery) 是否含敏感货</label></span>
+                            <div id="selSensitive" style="display:inline-block">
+                                @Html.DropDownListFormFor(p => Model.SensitiveTypeID, (List<SelectListItem>)ViewBag.SensitiveType, new Dictionary<string, object> { { "data-placeholder", "请选择..." }, { "class", "chzn-select-deselect select_middle r" } })
+                            </div>
+                        </li>
+                        <li style=" height: 30px;">
+                            <span class="l" style="width: 150px; display: block">
+                                <label for="EnableTariffPrepay">@Html.CheckBoxFor(p => p.EnableTariffPrepay) 是否关税预付</label></span>
+                        </li>
+                    </ul>
+                    <ul class="l">
+                        <li style="height: 30px;"></li>
+                        <li>
+                            <div id="insureAmount" class="nowrap" style="display:none;">
+                                <span class="info_box info_middle">保险价值:</span>
+                                @Html.TextBoxFormFor(p => p.InsureAmountValue)
+                                <span class="mr20 ml10 txt_tip">*@Html.ValidationMessageFor(p => p.InsureAmountValue)</span>
+                            </div>
+                        </li>
+                        <li style="height: 30px;"></li>
+                    </ul>
+                
+            </div>
+            <div class="from_horizontal fix">
+                <span class="info_box info_middle"></span>
+
+                @Html.HiddenFor(p=>p.ReturnUrl,Model.ReturnUrl)
+                @if (!Model.ReturnUrl.IsNullOrWhiteSpace())
+                {
+                    
+                    <a href="@Model.ReturnUrl" class="btn btn_red">返回</a>
+                }
+                
+                <!--已提交已拦截，修改件数(其余不可编辑)-->
+                <input type="hidden" name="@Model.Status" id="getCurrentStatus"/>
+                <input type="hidden" name="@Model.IsHold" id="getCurrentIsHold"/>
+                @{
+                    bool iSUpdatePackNumber = false;
+                }
+                @if (Model.Status == (int) CustomerOrder.StatusEnum.Submitted && Model.IsHold)
+                {
+                     iSUpdatePackNumber = true;
+                }
+     
+
+                @if ((Request.RequestContext.RouteData.Values["action"].ToString().ToLowerInvariant() == "add") || (Model != null && (Model.Status == CustomerOrder.StatusEnum.None.GetStatusValue() || Model.Status == CustomerOrder.StatusEnum.OK.GetStatusValue() || Model.Status == CustomerOrder.StatusEnum.SubmitFail.GetStatusValue())))
+                {
+                    if (!(Request.RequestContext.RouteData.Values["action"].ToString().ToLowerInvariant() == "add"))
+                    {
+                    @Html.HiddenFor(p => p.Status)
+                    }
+
+                    <!--提交失败订单可编辑-->
+                    if (Model != null && Model.Status == CustomerOrder.StatusEnum.SubmitFail.GetStatusValue())
+                    {
+                        <input type="hidden" name="SubmitFailFlag" value="0"/>
+                    }
+
+                    <input type="submit" id="mysubmit" class="btn btn_green" onclick=" return IsCheckAll(); " value="提交" />
+                    
+                }
+                
+                
+                
+                @if (iSUpdatePackNumber)
+                {
+                     <input type="button" id="SubmitData" class="btn btn_green" value="提交" />
+                }
+
+            </div>
+
+        </div>
+        <a name="ApplicationInfo"></a>
+        <span class="info_box mt20 b"><h3>申报信息：<span class="mr20 ml10 txt_tip">*</span></h3></span>
+        <div class="top_solid"></div>
+        @Html.HiddenFor(p => p.ProductDetail)
+        <script type="text/template" id="jTemplateDemo">
+        <table class="data_table" id="" width="100%" border="1" cellpadding="0" cellspacing="0">
+
+            <tr class=" data_row_head">
+
+                <th width="10%">申报名称</th>            
+                <th width="10%">申报中文名称</th>
+                <th width="10%">海关编码</th>
+                <th width="10%">数量</th>
+                <th width="10%">重量kg</th>
+                <th width="10%">申报价值$</th>
+                <th width="10%">销售链接</th>
+                <th width="10%">备注</th>
+                <th width="18%">总额$</th>
+                <th width="9%">操作</th>
+            </tr>
+            <tr class="data_row_dan">
+                <td>
+                    <input class="txt txt_short" id="pname" /></td>
+                <td>
+                    <input class="txt txt_short" id="ppicking"/></td>
+                <td>
+                    <input class="txt txt_short" id="pcode"/></td>
+                <td>
+                    <input class="txt txt_short" id="pqty"/></td>
+                <td>
+                    <input class="txt txt_short" id="pweight"/></td>
+                <td>
+                    <input class="txt txt_short" id="pprice"/></td>                
+                <td>
+                    <input class="txt txt_short" id="pproducturl"/></td>                
+                <td>
+                    <input class="txt txt_short" id="premark"/></td>
+                <td>&nbsp;</td>
+                <td align="center">
+                    <input type="button" id="productAdd" class="btn btn_green" onclick="return Add();" value="添加" />
+                </td>
+            </tr>
+
+            {#foreach $T as record}    
+                <tr id="{$T.record.HSCode}" class="{#cycle values=['data_row_dan','data_row_shuang']}">
+                    <td>
+                        <input type="hidden" name="ApplicationName" value="{$T.record.ApplicationName}" />{$T.record.ApplicationName}</td>
+                    <td>
+                        <input type="hidden" name="PickingName" value="{$T.record.PickingName}" />{$T.record.PickingName}</td>
+                    <td>
+                        <input type="hidden" name="HSCode" value="{$T.record.HSCode}" />{$T.record.HSCode}</td>
+                    <td>
+                        <input type="hidden" name="Qty" value="{$T.record.Qty}" />{$T.record.Qty}</td>
+                    <td>
+                        <input type="hidden" name="UnitWeight" value="{$T.record.UnitWeight}" />{$T.record.UnitWeight}</td>
+                    <td>
+                        <input type="hidden" name="UnitPrice" value="{$T.record.UnitPrice}" />{$T.record.UnitPrice}</td>    
+                    <td>
+                        <input type="hidden" name="ProductUrl" value="{$T.record.ProductUrl}" />{$T.record.ProductUrl}</td>                   
+                    <td>
+                        <input type="hidden" name="Remark" value="{$T.record.Remark}" />{$T.record.Remark}</td>
+                    <td>
+                        <input type="hidden" name="Total" value="{$T.record.Total}" />{$T.record.Total}</td>
+                    <td>
+                        <div class="tc f0">
+                            
+                            <a href="javascript:;" class="data_btn btn_red" onclick='return Delete("{$T.record.HSCode}");' title="删除">
+                                <i class="icon-delete data_icon"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {#/for}  
+            </table>
+        </script>
+        <div id="foreachResult"></div>
+        
+        <div></div>
+        
+        
+        <script type="text/javascript">
+            $(document).ready(function () {
+                /*var arrayObj = [
+                    { ApplicationName: '1', HSCode: '0', Qty: '0', UnitWeight: '0', UnitPrice: '0', Total: '0' },
+                    { ApplicationName: '1', HSCode: '0', Qty: '0', UnitWeight: '0', UnitPrice: '0', Total: '0' }
+                ];
+                $('#foreachResult').setTemplate($('#jTemplateDemo').html()).processTemplate(arrayObj);*/
+                LoadDetail();
+
+                var Insuredid = $("#InsuredDop").val();
+                var count = Insuredid.split('_');
+                if (count.length == 2) {
+                    if ($.trim(count[1]) == "") {
+                        $("#insureAmount").css("display", "block");
+                    } else {
+                        $("#insureAmount").css("display", "none");
+                    }
+                } else {
+                    $("#insureAmount").css("display", "none");
+                }
+
+                $("#IsInsured").change(function () {
+                    if ($(this).attr("checked")) {
+                        $("#selInsured").show();
+                    } else {
+                        //$("#InsuredDop").eq(0).attr('selected', 'true');
+                        $("#InsuredDop").val('1_6');
+                        $("#selInsured").hide();
+                        $("#insureAmount").css("display", "none");
+                    }
+                    
+                   
+                });
+                $("#IsBattery").change(function () {
+                    if ($(this).attr("checked")) {
+                        $("#selSensitive").show();
+                    } else {
+                        $("#selSensitive").hide();
+                    }
+                });
+                
+
+
+                //已提交已拦截，修改件数(其余不可编辑)
+                updatePackageNumber();
+          
+                $("#SubmitData").click(function() {
+
+                    $.ajax({
+                        url:"@Url.Action("EditPackageNumber")",
+                        data: { customerOrderNumber: $("#CustomerOrderNumber").val(), packageNumber: $("#PackageNumberValue").val() },
+                        type: "get",
+                        success: function (data) {
+                            if (data.Result) {
+                                alert("保存成功");
+                            
+                                $("#PackageNumberValue").val(data.Message);
+                              
+                                updatePackageNumber();
+
+                                $("#SubmitData").css("display","none");
+
+                            } else {
+                                alert(data.Message);
+                                return false;
+                            }
+                        }
+                        
+                    });
+
+                });
+
+            });
+
+
+
+            function updatePackageNumber() {
+
+                if ("@iSUpdatePackNumber" == "True") {
+
+                    $(":input").not("#PackageNumberValue").not("#SubmitData").attr("readonly", "readonly");
+                    $(":input").not("#PackageNumberValue").not("#SubmitData").css("border-color", "red");
+
+                    //下拉框清空
+                    $("ul[class='chzn-results']").css("display", "none");
+
+
+                    $("input[type='checkbox']").attr("disabled", "disabled");
+
+                    //隐藏按钮  
+                    $("#productAdd").css("display", "none");
+                    $("a[class='data_btn btn_red']").css("display", "none");
+
+                }
+            }
+
+
+
+
+
+
+
+
+
+            $(function () {
+                if ($("#IsInsured").attr("checked")) {
+                    $("#selInsured").show();
+                } else {
+                    $("#selInsured").hide();
+                }
+                if ($("#IsBattery").attr("checked")) {
+                    $("#selSensitive").show();
+                } else {
+                    $("#selSensitive").hide();
+                }
+            });
+            
+
+
+
+
+
+
+
+
+
+            function GetProductDetail() {
+                var arrayObj = [];
+                var history = $("#ProductDetail").val();
+
+                if (history != "") {
+                    arrayObj = JSON.parse(history);
+                }
+
+                return arrayObj;
+            }
+            
+            $("#InsuredDop").bind("change", function () {
+                var Insuredid = $("#InsuredDop").val();
+                var count = Insuredid.split('_');
+                if (count.length == 2) {
+                    if ($.trim(count[1]) == "") {
+                        $("#insureAmount").css("display", "block");
+                    } else {
+                        $("#insureAmount").css("display", "none");
+                    }
+                } else {
+                    $("#insureAmount").css("display", "none");
+                }
+            });
+            function LoadDetail() {
+
+                var arrayObj = GetProductDetail();
+
+                $('#foreachResult').setTemplate($('#jTemplateDemo').html()).processTemplate(arrayObj);
+            }
+
+            function Add() {
+
+                var pname = $("#pname");
+
+                if (!IsEmpty(pname)) {
+                    alert("[申报名称]不能为空");
+                    return false;
+                }
+
+                var pcode = $("#pcode");
+
+                /*
+                if (!IsEmpty(pcode)) {
+                    alert("[海关编码]不能为空");
+                    return false;
+                }
+                */
+
+                var pqty = $("#pqty");
+                if (!IsEmpty(pqty) || !isUIntM(pqty)) {
+                    alert("[数量]必须为大于0的整数");
+                    return false;
+                }
+
+                var pweight = $("#pweight");
+                if (IsEmpty(pweight) && !IsUDecimalM(pweight)) {
+                    alert("[重量]必须为大于0的数字");
+                    return false;
+                }
+
+                var weight = pweight.val();
+                if (weight == "") weight = "0";
+
+                var pprice = $("#pprice");
+                if (!IsEmpty(pprice) || !IsUDecimalM(pprice)) {
+                    alert("[申报价值]必须为大于0的数字");
+                    return false;
+                }
+                var ppicking = $("#ppicking");
+                var pproducturl = $.trim($("#pproducturl").val());
+                var premark = $("#premark");
+                var name = $.trim(pname.val());
+                var code = $.trim(pcode.val());
+                var price = parseFloat(pprice.val()).toFixed(2);
+                var total = (price * parseInt(pqty.val())).toFixed(2);
+                var pickingname = $.trim(ppicking.val());
+                var remark = $.trim(premark.val());
+                var arrayObj = GetProductDetail();
+
+                if (!CheckRepeat("ApplicationName", name, "[申报名称]已经存在")) return false;
+                //if (!CheckRepeat("HSCode", code, "[海关编码]已经存在")) return false;
+
+                arrayObj.push(
+                    { ApplicationName: name, HSCode: code, Qty: pqty.val(), UnitWeight: weight, UnitPrice: price, PickingName: pickingname, ProductUrl: pproducturl, Remark: remark, Total: total }
+                );
+
+                $("#ProductDetail").val(JSON.stringify(arrayObj));
+
+                LoadDetail();
+
+                return true;
+            }
+
+            function Delete(code) {
+
+                if (confirm('确认删除吗?')) {
+                    var arrayObj = GetProductDetail();
+
+                    for (var i = 0; i < arrayObj.length; i++) {
+
+                        if (arrayObj[i]["HSCode"].toString() == code) {
+                            arrayObj.splice(i, 1);
+                            //alert(JSON.stringify(arrayObj));
+                            $("tr[id=" + code + "]").remove();
+                            $("#ProductDetail").val(JSON.stringify(arrayObj));
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+
+            function CheckRepeat(key, val, msg) {
+                var arrayObj = GetProductDetail();
+
+                for (var i = 0; i < arrayObj.length; i++) {
+                    if (arrayObj[i][key] == val) {
+                        alert(msg);
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            function IsCheckAll() {
+                var arrayObj = GetProductDetail();
+
+                if (arrayObj.length == 0) {
+                    $("#pname").focus();
+                    alert("请添加[申报信息]");
+                    return false;
+                }
+
+                return confirm("确定提交吗?");
+            }
+
+        </script>
+    }
+</div>

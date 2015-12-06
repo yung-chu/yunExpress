@@ -1,0 +1,141 @@
+﻿@model LMS.Controllers.WayBillController.InStorageListViewModel
+@{
+    ViewBag.Title = "InStorageList";
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+}
+<div id="showCustomerList" tabindex="200" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showShippingMethodList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div class="domebg" id="right_con">
+    @using (Html.BeginForm())
+    {
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr>
+                <td width="18%">
+                    <span class="info_box info_select">客户编码:</span>
+                    <input type="text" id="CustomerCode" value="@Model.FilterModel.CustomerCode" name="FilterModel.CustomerCode" readonly="readonly" class="txt txt_short" />
+                    <input type="hidden" id="nickName" />
+                    <input type="hidden" id="CustomerType" name="CustomerType" />
+                    <input type="hidden" id="CustomerID" class="txt txt_short" />
+                    <a href="javascript:void(0)" id="selectCustomer" class="btn_href">选择</a>
+                </td>
+                <td width="20%">
+                    <span class="vm">入仓运输方式:</span>
+                    <input type="text" id="ShippingName" value="@Model.FilterModel.ShippingMethodIdName" name="FilterModel.ShippingMethodIdName" readonly="readonly" class="txt txt_short"/>
+                    <input type="hidden" id="ShippingMethodId" name="FilterModel.ShippingMethodId" value="@Model.FilterModel.ShippingMethodId" />
+                    <input type="button" id="selectShippingMethod" class="btn" value="选择" />
+                </td>
+                <td width="15%">
+                    <span class="info_box info_select">入仓单号:</span>
+                    @Html.TextBoxFor(p=>p.FilterModel.InStorageID,new{@class="txt txt_short"})
+                </td>
+                <td width="35%">
+                    <span class="info_box info_select">入仓时间:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.InStartDate, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.InStartDate), @class = "txt wdate", @style = "width:130px;" })
+                    <span>至:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.InEndDate, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.InEndDate), @class = "txt wdate", @style = "width:130px;" })
+                </td>
+                <td width="20%">
+                    <div class="tl">
+                        <input type="submit" class="btn" value="搜索" id="btnSearch" name="btnSearch" />
+                        <a href="@Url.Action("FristInStorage")" class="btn_href">入仓扫描</a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div id="pm_dis_div">
+            <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr class="data_row_two">
+                        <th>序号
+                        </th>
+                        <th>入仓单号
+                        </th>
+                        <th>客户编码
+                        </th>
+                        <th>入仓运输方式
+                        </th>
+                        <th>入仓时间
+                        </th>
+                        <th>件数
+                        </th>
+                        <th>货物总重量(kg)
+                        </th>
+                        <th>结算总重量(kg)
+                        </th>
+                        <th>操作
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var index = 1;
+                        foreach (var row in Model.PagedList.InnerList)
+                        {
+
+                            <tr class="data_row_dan">
+                                <td>
+                                    @index
+                                </td>
+                                <td>
+                                    @row.InStorageID
+                                </td>
+                                <td>
+                                    @row.CustomerCode
+                                </td>
+                                <td>
+                                    @row.InShippingMethodName
+                                </td>
+                                <td>
+                                    @if (row.CreatedOn.HasValue)
+                                    {
+                                        @row.CreatedOn.Value.ToString("yyyy-MM-dd HH:mm")
+                                    }
+                                </td>
+                                <td>
+                                    @row.TotalQty
+                                </td>
+                                <td>
+                                    @(row.PhysicalTotalWeight.ToString("F3"))
+                                </td>
+                                <td>
+                                    @(row.TotalWeight.HasValue ? row.TotalWeight.Value.ToString("F3") : "")
+                                </td>
+                                <td>
+                                    @{
+                                        var url = Html.GetUrl("InStorageList", "WayBill", Model.FilterModel);
+                                    }
+                                    <a href="@Url.Action("InStorageDetail", "WayBill", new {@InStorageId = row.InStorageID, ReturnUrl = url})" class="btn_href">查看</a>
+                                </td>
+                            </tr>
+                            index++;
+                        }
+                    }
+                    <tr class="data_row_none">
+                        <td colspan="9">
+                            @Html.Pager(Model.PagedList, Model.FilterModel)
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+<script type="text/javascript">
+    $("#selectShippingMethod").bind("click", function () {
+        $("#showShippingMethodList").showWindow("@Url.Action("FilterShippingMethod", "WayBill")?customerId=" + $("#CustomerID").val() + "&customerTypeId=" + $("#CustomerType").val() + "&type=1", "选择运输方式");
+        var parentWindow = $("#showShippingMethodList").parent("div");
+        $(parentWindow).css("top", "0");
+        $(parentWindow).animate({
+            top: 120
+        }, {
+            duration: 1000,
+            step: function (now, fx) {
+                $(".window").css("top", now);
+            }
+        });
+        $("#showShippingMethodList").show();
+    });
+</script>
+

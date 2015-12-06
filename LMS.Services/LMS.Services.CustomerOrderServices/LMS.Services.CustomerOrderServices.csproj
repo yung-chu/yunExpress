@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E429C676-C67C-4403-9C94-CD5E73847861}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LMS.Services.CustomerOrderServices</RootNamespace>
+    <AssemblyName>LMS.Services.CustomerOrderServices</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Lightake.EUB.Common">
+      <HintPath>..\..\libs\Lightake.EUB.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Lightake.UEB.API, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\libs\Lightake.UEB.API.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CustomerOrderService.cs" />
+    <Compile Include="ICustomerOrderService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Common.Logging\LighTake.Infrastructure.Common.Logging.csproj">
+      <Project>{7A557DC4-3F10-4C27-B8F4-8D5F7F5D8B3C}</Project>
+      <Name>LighTake.Infrastructure.Common.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.CommonQueue\LighTake.Infrastructure.CommonQueue.csproj">
+      <Project>{f972d86d-f0c1-4d24-a66c-a0b6bf0f84ef}</Project>
+      <Name>LighTake.Infrastructure.CommonQueue</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Common\LighTake.Infrastructure.Common.csproj">
+      <Project>{EAC46871-3661-4D4E-8F6A-FE44593E1191}</Project>
+      <Name>LighTake.Infrastructure.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Seedwork\LighTake.Infrastructure.Seedwork.csproj">
+      <Project>{1B2A08A7-3BBD-4BC3-8014-D702E7DB9E2D}</Project>
+      <Name>LighTake.Infrastructure.Seedwork</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Core\LMS.Core\LMS.Core.csproj">
+      <Project>{336E1DCE-A844-4977-AA9A-8F6720C72F6D}</Project>
+      <Name>LMS.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Data\LMS.Data.Entity\LMS.Data.Entity.csproj">
+      <Project>{BE6FE0EF-6A3D-4628-803B-747FF0762FC3}</Project>
+      <Name>LMS.Data.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Data\LMS.Data.Repository\LMS.Data.Repository.csproj">
+      <Project>{4fc0106b-b57a-4f8e-a5b0-09f9f6a6aa02}</Project>
+      <Name>LMS.Data.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LMS.Services.FreightServices\LMS.Services.FreightServices.csproj">
+      <Project>{2F1482E7-E619-40FB-AF78-20B4487FDAE0}</Project>
+      <Name>LMS.Services.FreightServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LMS.Services.OrderServices\LMS.Services.OrderServices.csproj">
+      <Project>{E16476B7-020C-4F7C-B6BA-2EE32BDA7693}</Project>
+      <Name>LMS.Services.OrderServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LMS.Services.SequenceNumber\LMS.Services.SequenceNumber.csproj">
+      <Project>{0B3C6BB4-D4AC-49AC-AB08-FEB3C92D3822}</Project>
+      <Name>LMS.Services.SequenceNumber</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LMS.Services.TrackingNumberServices\LMS.Services.TrackingNumberServices.csproj">
+      <Project>{c085f29d-9bd1-4aa7-8376-0804bd0618fb}</Project>
+      <Name>LMS.Services.TrackingNumberServices</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

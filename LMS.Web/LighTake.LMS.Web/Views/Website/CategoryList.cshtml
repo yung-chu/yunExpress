@@ -1,0 +1,170 @@
+﻿@{
+    ViewBag.Title = "CategoryList";
+
+    Html.AddCssFileParts(Url.Content("~/Scripts/liger/liger/skins/Aqua/css/ligerui-all.css"));
+    Html.AddCssFileParts(Url.Content("~/Scripts/liger/liger/skins/Gray/css/all.css"));
+    Html.AddCssFileParts(Url.Content("~/Scripts/liger/liger/skins/Gray/css/dialog.css"));
+    Html.AddScriptParts(Url.Content("~/Scripts/liger/liger/js/core/base.js"));
+    Html.AddScriptParts(Url.Content("~/Scripts/liger/liger/js/plugins/ligerDialog.js"));
+    
+    Html.AddScriptParts(Url.Content("~/Scripts/kindeditor/kindeditor-min.js"));
+    Html.AddScriptParts(Url.Content("~/Scripts/kindeditor/lang/zh_CN.js"));
+}
+<style type="text/css">
+.l-dialog-cl {
+    background: none repeat scroll 0 0 black;
+  }
+
+  .l-dialog-tc {
+    background:#D6D6D6;border-bottom:1px solid #D6D6D6;
+  }
+    </style>
+<div class="domebg" id="right_con">
+    <form id="SearchFrom">
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+                <td width="50%">
+                    <span class="info_box info_select"></span>
+                    
+                </td>
+                <td width="50%">
+                    <div class="tl">
+                        <input type="button" class="btn" value="新增" id="btnAdd" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <div id="test" style="padding-left: 15px; padding-top: 10px;">
+    </div>
+    <table id="dataTable">
+    </table>
+</div>
+<script type="text/javascript">
+    var editWin;
+    
+    $(function() {
+        getcatelist();
+        $("#btnAdd").click(function () {
+            
+            editWin = $.ligerDialog.open({
+                width: 850,
+                height: 650,
+                title: "新增分类",
+                url: 'AddCategory'
+            });
+            
+            //$("#test").showWindow("AddCategory", "新增分类", 550, 500);
+        });
+    });
+
+    function getcatelist() {
+        var treeobj = $('#dataTable');
+        treeobj.treegrid({
+            left: 0,
+            animate: true,
+            collapsible: true,
+            fitColumns: true,
+            url: 'GetCategoryList?parentid=0',
+            idField: 'CategoryID',
+            rownumbers: true,
+            pagination: false,
+            pageNumber: 1,
+            pageList: [15, 30, 60],
+            pageSize: 15,
+            treeField: 'Name',
+            onBeforeLoad: function (row, param) {
+               
+            },
+            showFooter: true,
+            columns: [[
+                { title: '分类名称', field: 'Name', width: 200 },
+                { title: '分类ID', field: 'Level', width: 40, formatter: function (a, b) {
+                        return b["CategoryID"];
+                    }
+                },
+                {
+                    title: '状态', field: 'Status', width: 20, formatter: function (value) {
+                        if (value == "1")
+                            return "启用";
+                        else
+                            return "禁用";
+                    }
+                },
+                {
+                    title: '', field: 'IsFirst', width: 10, formatter: function (a, b) {
+                        if (a != "True") {
+                            return "<a href='javascript:SetCategorySort(" + b["CategoryID"] + ",1);' >上移</a>";
+                        }
+                        return "";
+                    }
+                },
+                {
+                    title: '', field: 'IsLast', width: 10, formatter: function (a, b) {
+                        if (a != "True") {
+                            return "<a href='javascript:SetCategorySort(" + b["CategoryID"] + ",2);'  >下移</a>";
+                        }
+                        return "";
+                    }
+                },
+                {
+                    field: 'CategoryID', title: '操作', width: 20,
+                    formatter: function (value, obj) {
+                        var html = "<a href='javascript:editData(" + value + ");' >编辑</a>";
+                        //if (obj.isLeaf) {
+                            html += "&nbsp;<a href='javascript:delCate(" + value + ")'>删除</a>";
+                        //}
+                        return html;
+                    }
+                }
+            ]]
+        });
+    }
+    
+
+    function editData(id) {
+        
+        editWin = $.ligerDialog.open({
+            width: 850,
+            height: 650,
+            title: "编辑分类",
+            url: 'EditCategory?CategoryID=' + id
+        });
+        
+        //$("#test").showWindow('EditCategory?CategoryID=' + id , "编辑分类", 550, 500);
+    }
+    function SetCategorySort(categoryid, type) {
+        $.ajax({
+            type: "GET",
+            url: "SetCategorySort",
+            dataType: "html",
+            data: "categoryId=" + categoryid+"&type="+type,
+            success: function (data) {
+                if (data == "1") {
+                    $('#dataTable').treegrid("reload");
+                } else {
+                    alert("操作失败！");
+                }
+            }
+        });
+    }
+
+    function delCate(catid) {
+        var options = {
+            type: "GET",
+            url: "DeleteCategory",
+            dataType: "html",
+            data: "categoryId=" + catid,
+            success: function (data) {
+                if (data == "0") {
+                    getcatelist();
+                } else if (data == "1") {
+                    alert("该分类有下级分类，不能删除");
+                } 
+            }
+        };
+        $.ajax(options);
+    }
+    
+</script>
+

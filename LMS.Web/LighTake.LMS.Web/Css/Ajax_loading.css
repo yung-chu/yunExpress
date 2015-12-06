@@ -1,0 +1,19 @@
+﻿    .loadingdiv
+    {
+        position:absolute;
+        text-align:center;
+        left:0px;
+        top:0px;
+        z-index:70;
+        background-color:#000000;
+        opacity: 0.2;/*透明#CCCCCC*/
+        display:none;
+    }   
+    /*加载中图片*/
+    .loadingdiv img
+    {
+        position:absolute;
+        left:0px;
+        top:0px;
+        z-index:80;
+    }

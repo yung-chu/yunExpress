@@ -1,0 +1,128 @@
+﻿@model LMS.UserCenter.Controllers.CustomerController.Models.CustomerViewModel
+@{
+     
+    Layout = null;
+}
+@using (Html.BeginForm())
+{
+            
+    <div class="cell pl10 mt30" id="right_con">
+        <div class="domebg">
+            <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <tr class="date_row_select">
+                    <td width="100%">
+                        <span class="info_box info_select">关键字:</span>
+                        <input type="text" id="keyword" class="txt txt_middle" />
+                        <input type="hidden" id="isAll" value="@Model.FilterModel.IsAll"/>
+                    </td>
+                </tr>
+                <tr class="date_row_select">
+                    <td colspan="4">
+                        <div class="tl">
+                            <input type="button" class="btn btn_blue" value="搜索" id="customerbtnSearch" />
+                            <input type="button" class="btn btn_blue" value="清空" id="customerbtnCancel" />
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <div id="im_dis_div">
+                <table class="data_table mt20" id="tb_cstmList" width="100%" border="0" cellpadding="0"
+                    cellspacing="0">
+                    <thead>
+                        <tr class="data_row_head">
+                            <th>客户编号
+                            </th>
+                            <th>客户名称
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.CustomerModels)
+                        {
+                            <tr class="data_row_dan" style="cursor:pointer;" title="双击可以选择一条信息">
+                                <td>@item.CustomerCode
+                                </td>
+                                <td>@item.Name
+                                    <input type="hidden" name="CustomerCode" value="@item.CustomerCode"/>
+                                    <input type="hidden" name="CustomerTypeID" value="@item.CustomerTypeID"/>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        $("#tb_cstmList > tbody > tr ").live("dblclick", (function () {
+            var tdOne = $($(this).children("td:nth-child(2)"));
+            var text = $.trim(tdOne.text());
+            var id = tdOne.find("input[name='CustomerCode']").val();
+            var userType = tdOne.find("input[name='CustomerTypeID']").val();
+
+            if ($("#nickName").length > 0) {
+                $("#nickName").val(text);
+            }
+            if ($("#customerID").length > 0) {
+                $("#customerID").val(id);
+            }
+            if ($("#CustomerCode").length > 0) {
+                $("#CustomerCode").val(id);
+            }
+            if ($("#CustomerType").length > 0) {
+                $("#CustomerType").val(userType);
+            }
+            if ($("#selectShippingMethod").length > 0 && $("#showShippingMethodList").attr("tabindex")==100) {
+                $("#selectShippingMethod").attr('disabled', false);
+                $("#ShippingMethodName").html("");
+                $("#ShippingMethodId").val("");
+            }
+            $("#showCustomerList").window("close");
+        }));
+
+        $("#customerbtnSearch").live("click", function () {
+
+            $.ajax({
+                url: '/Billing/GetSelectCustomerByParam',
+                type: 'GET',
+                data: { keyword: $("#keyword").val(),IsAll:$("#isAll").val()},
+                success: function (data) {
+                    $("#tb_cstmList > tbody").html("");
+                    var tr = "";
+                    for (var item in data) {
+                        tr += "<tr class=\"data_row_dan\" style=\"cursor:pointer;\" title=\"双击可以选择一条信息\"><td>" + data[item].CustomerCode + "</td><td>" + data[item].Name + "<input type='hidden' name='CustomerCode' value=\"" + data[item].CustomerCode + "\" /><input type='hidden' name='CustomerTypeID' value=\"" + data[item].CustomerTypeID + "\"/></td></tr>";
+                    }
+                    $("#tb_cstmList > tbody").append(tr);
+                }
+            });
+        });
+        $("#customerbtnCancel").live("click", function() {
+            if ($("#nickName").length > 0) {
+                $("#nickName").val("");
+            }
+            if ($("#customerID").length > 0) {
+                $("#customerID").val("");
+            }
+            if ($("#CustomerCode").length > 0) {
+                $("#CustomerCode").val("");
+            }
+            if ($("#CustomerType").length > 0) {
+                $("#CustomerType").val("");
+            }
+            if ($("#selectShippingMethod").length > 0 && $("#showShippingMethodList").attr("tabindex") == 100) {
+                $("#selectShippingMethod").attr('disabled', true);
+                $("#ShippingMethodName").html("");
+                $("#ShippingMethodId").val("");
+            }
+            $("#showCustomerList").window("close");
+        });
+        $("#keyword").bind("keydown", function(e) {
+            if (e.keyCode == 13) {
+                $("#customerbtnSearch").trigger("click");
+                return false;
+            }
+        });
+    });
+</script>

@@ -1,0 +1,77 @@
+﻿@model LMS.Controllers.WayBillController.WayBillTemplateInfoViewModel
+@{
+    ViewBag.Title = "AddWayBillTemplate";
+    Html.AddScriptParts(Url.Content("~/Scripts/kindeditor/kindeditor-min.js"));
+    Html.AddScriptParts(Url.Content("~/Scripts/kindeditor/lang/zh_CN.js"));
+    Html.AddScriptParts(Url.Content("~/Scripts/util.js"));
+}
+@Html.Partial("_ShowDialog")
+@using (Html.BeginForm())
+{
+    <div>
+        <ul>
+            <li>
+                <span>模板名称:</span>
+                <span>@Html.TextBoxFor(p=>p.WayBillTemplateInfo.TemplateName)</span>
+                <span style="color: red">*@Html.ValidationMessageFor(p=>p.WayBillTemplateInfo.TemplateName)</span>
+            </li>
+        </ul>
+        <br/>
+        <ul>
+            <li>
+                <span>模板类型:</span>
+                <span>@Html.DropDownListFor(p=>p.WayBillTemplateInfo.TemplateType,Model.TemplateTypeList,new Dictionary<string, object> {{ "style", " width:150px;" },{"class", "chzn-select select_middle" }})</span>
+            </li>
+        </ul>
+        <br/>
+
+        <ul>
+            <li>
+                <span>状态:</span>
+                <span>@Html.DropDownListFor(p=>p.WayBillTemplateInfo.Status,Model.StatusList,new Dictionary<string, object> {{ "style", " width:150px;" },{"class", "chzn-select select_middle" }})</span>
+            </li>
+        </ul>
+        <br/>
+        <ul>
+            <li><span>备注:</span></li>
+            <li>
+                <span>@Html.TextAreaFor(p=>p.WayBillTemplateInfo.Remarks,new{style="width: 189px; height: 88px;"})</span>
+            </li>
+        </ul>
+        <br/>
+        <ul>
+            <li>
+                <span><input type="submit" name="SaveTemplate" class="btn" value="保存"/></span>
+                @Html.HiddenFor(p=>p.WayBillTemplateInfo.TemplateModelId)
+                <span><a class="btn_href" href="@(!string.IsNullOrWhiteSpace(Request.QueryString["returnUrl"]) ? Request.QueryString["returnUrl"] : Url.Action("WayBillTemplateInfoList", "WayBill"))">返回</a></span>
+            </li>
+        </ul>
+        <br/>
+        <ul>
+            <li>
+                <span>模板内容:</span><span style="color: red">*@Html.ValidationMessageFor(p=>p.WayBillTemplateInfo.TemplateContent)</span>
+            </li>
+            <br/>
+            <li>
+                <textarea id="TemplateContent" name="WayBillTemplateInfo.TemplateContent" cols = "45" rows = "6" class = "area vt" maxlength="4000" style="width: 1000px;height:500px; ">@Model.WayBillTemplateInfo.TemplateContent</textarea>
+            </li>
+        </ul>
+    </div>
+}
+<script type="text/javascript">
+    var editor;
+    $(function () {
+        KindEditor.ready(function (K) {
+            editor = K.create('#TemplateContent', {
+                allowFileManager: true,
+                uploadJson: "/KindEditor/Upload",
+                filePostName: "imgFile",
+                urlType:'domain',
+                wellFormatMode:true,//美化html代码
+                filterMode: false //不会过滤HTML代码
+            });
+            editor.sync();
+        });
+    });
+    
+</script>

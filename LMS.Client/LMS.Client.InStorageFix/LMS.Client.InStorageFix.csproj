@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2AB30784-6859-488C-85D8-D98665B84D84}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LMS.Client.InStorage</RootNamespace>
+    <AssemblyName>LMS.Client.InStorage</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autofac, Version=2.6.3.862, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Autofac.2.6.3.862\lib\NET40\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Configuration">
+      <HintPath>..\..\packages\Autofac.2.6.3.862\lib\NET40\Autofac.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Common.Caching\LighTake.Infrastructure.Common.Caching.csproj">
+      <Project>{68565050-a073-4cbe-b241-e02b9b60a057}</Project>
+      <Name>LighTake.Infrastructure.Common.Caching</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Common.Configuration\LighTake.Infrastructure.Common.Configuration.csproj">
+      <Project>{64b2e267-d16d-43b4-8099-152d081c823b}</Project>
+      <Name>LighTake.Infrastructure.Common.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Common.Logging\LighTake.Infrastructure.Common.Logging.csproj">
+      <Project>{7a557dc4-3f10-4c27-b8f4-8d5f7f5d8b3c}</Project>
+      <Name>LighTake.Infrastructure.Common.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.CommonQueue\LighTake.Infrastructure.CommonQueue.csproj">
+      <Project>{f972d86d-f0c1-4d24-a66c-a0b6bf0f84ef}</Project>
+      <Name>LighTake.Infrastructure.CommonQueue</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Common\LighTake.Infrastructure.Common.csproj">
+      <Project>{eac46871-3661-4d4e-8f6a-fe44593e1191}</Project>
+      <Name>LighTake.Infrastructure.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Data\LighTake.Infrastructure.Data.csproj">
+      <Project>{98538619-903a-4d41-baa7-bf2d33467e9f}</Project>
+      <Name>LighTake.Infrastructure.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Seedwork.EF\LighTake.Infrastructure.Seedwork.EF.csproj">
+      <Project>{3fd348e3-2746-4bb4-82ff-90a9fb6cb2e6}</Project>
+      <Name>LighTake.Infrastructure.Seedwork.EF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Seedwork\LighTake.Infrastructure.Seedwork.csproj">
+      <Project>{1b2a08a7-3bbd-4bc3-8014-d702e7db9e2d}</Project>
+      <Name>LighTake.Infrastructure.Seedwork</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Data\LMS.Data.Entity\LMS.Data.Entity.csproj">
+      <Project>{be6fe0ef-6a3d-4628-803b-747ff0762fc3}</Project>
+      <Name>LMS.Data.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.InStorageService\LMS.Services.InStorageServices.csproj">
+      <Project>{c8893848-1e84-4c5d-afba-bb1d55a5e7b1}</Project>
+      <Name>LMS.Services.InStorageServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.UserServices\LMS.Services.UserServices.csproj">
+      <Project>{e2e1a4ee-662a-4176-a0bb-8d56a1bebbad}</Project>
+      <Name>LMS.Services.UserServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.WinForm.Framework\LMS.WinForm.Framework.csproj">
+      <Project>{b342a2d2-2d21-4007-b504-33ce53ebca19}</Project>
+      <Name>LMS.WinForm.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.WinForm\LMS.WinForm.InversionOfControl\LMS.WinForm.InversionOfControl.csproj">
+      <Project>{1925da3a-d6be-4957-801d-a8d0a67e34f3}</Project>
+      <Name>LMS.WinForm.InversionOfControl</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

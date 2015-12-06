@@ -1,0 +1,143 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+     @RenderSection("ExtraHeadContent", required: false)
+    <link href="@Url.Content("~/css/logistics.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/css/skin.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Scripts/qq/qq.css")" rel="stylesheet" type="text/css" />
+    <script src="@Url.Content("~/Scripts/jquery-1.7.1.min.js")"></script>
+    @*<script src="@Url.Content("http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js")" type="text/javascript"></script>*@
+    <script src="@Url.Content("~/Scripts/website/jquery.soChange.js")" type="text/javascript"></script>
+     
+</head>
+    <body>
+        <div class="top"></div>
+        <!--  *******head***********   -->
+        <div class="head">
+            <div class="constr">
+                <div class="constr_in">
+                    <div class="fix mt15 mb15">
+                        <div class="l">
+                            <a href="@Url.Action("index", "Home")">
+                                <img src="@Url.Content("~/images/logo.png")">
+                            </a>
+                        </div>
+                        <ul class="r nav mt30">
+                            @helper MenuActive(string actionNames, string controllerName)
+{
+                                string curController = ViewContext.RequestContext.RouteData.Values["controller"].ToString().ToLowerInvariant();
+                                string curAction = ViewContext.RequestContext.RouteData.Values["action"].ToString().ToLowerInvariant();
+                                if (curController.Equals(controllerName.ToLowerInvariant()) && actionNames.Contains(curAction.ToLower()))
+                                {
+                                    @Html.Raw("nav_on")
+                                }
+                                else
+                                {
+                                    @Html.Raw("nav_off")
+                                }
+                            }
+                            <li class="l">
+                                <a class="@MenuActive("index", "home")" href="@Url.Action("Index", "Home")">
+                                    首页
+                                </a>
+                                <a class="@MenuActive("productservices", "home")" href="@Url.Action("ProductServices", "Home", new { id = 3 })">
+                                    产品与服务 
+                                </a>
+                                <a class="@MenuActive("newlist,newdetailed", "new")" href="@Url.Action("NewList", "New", new { CategoryId = 1 })">
+                                    新闻中心 
+                                </a>
+                                <a class="@MenuActive("about", "home")" href="@Url.Action("About", "Home", new { id = 2 })">
+                                    关于我们
+                                </a>
+                            
+                                <a class="@MenuActive("contactus", "home")" href="@Url.Action("ContactUs", "Home", new { id = 4 })">
+                                    联系我们 
+                                </a>
+                                @{
+                                    string curAction = ViewContext.RequestContext.RouteData.Values["action"].ToString().ToLowerInvariant();
+                                }
+                                @if (curAction == "index")
+                                {
+                                    <span class="nav_off">
+                                          <a href="#login">
+                                            登陆 
+                                            </a>|
+                                            <a href="@Url.Action("AddUser", "User")">
+                                                注册 
+                                            </a>
+                                    </span>
+                              
+                                }
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+    	
+        </div>
+        <div class="oneSolid bdc4"></div>
+        <div class="oneSolid bdad"></div>
+
+        @RenderBody()
+    
+
+        <!--  *******foot***********   -->
+        <div class="foot tc gf">
+            <div class="mb40 pt50">
+                <img src="@Url.Content("~/images/logo_white.png")">
+            </div>
+            <p class="mb5">
+                <a href="@Url.Action("AddUser", "User")" class="gf">注册账号</a>
+                |
+                <a href="#" class="gf">在线寄件 </a>
+                |
+                <a href="#" class="gf">交寄货件 </a>
+                |
+                <a href="#" class="gf">充值付费 </a>
+                |
+                <a href="@Url.Action("contactus", "Home", new { id = 4 })" class="gf">联系我们 </a>
+                |
+                <a href="#" class="gf">加入我们 </a>
+                |
+                <a href="#" class="gf">合作伙伴</a>
+                |
+            </p>
+            <p>
+                Copyright© 2013, 版权所有深圳市速递有限公司  ICP/IP证：粤ICP备07502767号
+            </p>
+            <map name="rectmap">
+                <area shape="rect" coords="0,0,203,103" target="_blank" href ="http://www.paypal.com/" alt="PayPal" title="PayPal"/>
+                <area shape="rect" coords="410,0,614,103" target="_blank" href ="http://www.ebay.com/" alt="ebay" title="ebay"/>
+                <area shape="rect" coords="614,0,820,204" target="_blank" href ="http://www.google.com/" alt="google" title="google"/>
+                <area shape="rect" coords="0,205,203,306" target="_blank" href ="http://www.dhl.com/" alt="DHL" title="DHL"/>
+                <area shape="rect" coords="0,205,614,306" target="_blank" href ="http://www.EMS.com/" alt="EMS" title="EMS"/>
+            </map>
+        </div>
+    </body>
+    
+   <script src="@Url.Content("~/Scripts/qq/qqservice.js")" type="text/javascript"></script>
+    <script>
+        $(function () {
+            /*
+             * 皮肤编号 lrkf_blue1 无图版，lrkf_blue2 图片版
+             * 参数配置参考正文中的参数配置说明
+            */
+            $("#lrkfwarp").lrkf({
+                kftop: '140',
+                defshow: false,
+                qqs: [
+                    { 'name': '售前1号', 'qq': '526449838' },			//注意逗号是英文的逗号
+                    { 'name': '客服1号', 'qq': '191221838' }		//注意最后一个{}不要英文逗号
+                ],
+                tel: [
+                    { 'name': '售前', 'tel': '400-655-0888' },		//注意逗号是英文的逗号
+                    { 'name': '售后', 'tel': '15638527790' }
+                ],
+                more: "@Url.Action("ContactUs", "Home", new { id = 4 })"				//>>更多方式		
+            });
+
+        });
+</script>
+</html>

@@ -1,0 +1,348 @@
+﻿@using LMS.Data.Entity
+@model LMS.Controllers.WayBillController.ReturnAuditViewModel
+@{
+    ViewBag.Title = "ReturnAuditList";
+    <link href="/Scripts/artdialog/skins/default.css" type="text/css" rel="stylesheet" />
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+    Html.AddScriptParts("/Scripts/chosen/chosen.jquery.min.js");
+    Html.AddScriptParts("/Scripts/artdialog/jquery.artDialog.js");
+}
+@Html.Partial("_ShowDialog")
+<div id="showCustomerList"  tabindex="200" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showShippingMethodList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div>
+    @{
+        var ReturnReasons = new List<SelectListItem>()
+            {
+                new SelectListItem
+                    {
+                        Text = "全部",
+                        Value = "",
+
+                    },
+                new SelectListItem
+                    {
+                        Text = "海关未过",
+                        Value = "海关未过",
+
+                    },
+                new SelectListItem
+                    {
+                        Text = "无人签收",
+                        Value = "无人签收",
+
+                    },
+                new SelectListItem
+                    {
+                        Text = "客户要求",
+                        Value = "客户要求",
+
+                    },
+                new SelectListItem
+                    {
+                        Text = "海外退货",
+                        Value = "海外退货",
+
+                    },
+                new SelectListItem
+                    {
+                        Text = "操作错误",
+                        Value = "操作错误",
+
+                    },
+                new SelectListItem
+                    {
+                        Text = "其它原因",
+                        Value = "其它原因",
+
+                    },
+
+            };
+
+        var IsReturnShippings = new List<SelectListItem>()
+            {
+                new SelectListItem
+                    {
+                        Text = "全部",
+                        Value = "0",
+
+                    },
+                new SelectListItem
+                    {
+                        Text = "是",
+                        Value = "true",
+
+                    },
+                new SelectListItem
+                    {
+                        Text = "否",
+                        Value = "false",
+
+                    },
+
+            };
+    }
+    @using (Html.BeginForm())
+    {
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+                <td>
+                    <span class="info_box info_select">客户编码:</span>
+                    <input type="hidden" id="CustomerCode" value="@Model.FilterModel.CustomerCode" name="FilterModel.CustomerCode" readonly="readonly" class="txt txt_short" />
+                    <input type="text" id="nickName" value="@Model.FilterModel.CustomerName" name="FilterModel.CustomerName" class="txt txt_short" />
+                    <a href="javascript:void(0)" id="selectCustomer" class="btn_href">选择</a>
+                    <input type="hidden" id="CustomerType" name="CustomerType" />
+                    <input type="hidden" id="CustomerID" class="txt txt_short" />                </td>
+                <td width="25%">
+                    <span class="info_box info_select">运输方式:</span>
+                    <input type="text" id="ShippingName" value="@Model.FilterModel.ShippingMehtodName" name="FilterModel.ShippingMehtodName" readonly="readonly" class="txt txt_short"/>
+                    <input type="hidden" id="ShippingMethodId" name="FilterModel.ShippingMehtodId" value="@Model.FilterModel.ShippingMehtodId" />
+                    <input type="button" id="selectShippingMethod" class="btn" value="选择" />
+                </td>
+                <td>
+                    <span>退货时间</span>
+                    @Html.TextBoxFor(p => p.FilterModel.ReturnStartTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.ReturnStartTime), @class = "txt wdate", @style = "width:130px;" })
+                    <span>至:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.ReturnEndTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.ReturnEndTime), @class = "txt wdate", @style = "width:130px;" })
+                </td>
+                <td class="vm">
+                    @Html.DropDownListFor(p => p.FilterModel.SearchWhere, Model.SearchWheres)
+                    @Html.TextAreaFor(p => p.FilterModel.SearchContext,new{@style="height:80px; width:210px;"})
+                </td>
+            </tr>
+            <tr class="date_row_select">
+                <td style="width: 20%">
+                    <span>退货操作人:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.CreateBy)
+                </td>
+                <td style="width: 15%">
+                    <span>退货原因:</span>
+                    @Html.DropDownListFor(p => p.FilterModel.ReturnReason, ReturnReasons)
+                </td>
+                <td>
+                    <span>是否退运费:</span>
+                    @Html.DropDownListFor(p => p.FilterModel.IsReturnShipping, IsReturnShippings)
+                </td>
+                <td style="width: 20%">
+                    <input type="hidden" name="FilterModel.DateWhere" value="@Model.FilterModel.DateWhere"/>
+                    <input type="hidden" id="OrderNumber" name="OrderNumber" />
+                    <input type="submit" id="btnSelect" name="btnSelect" class="btn" value="搜索"/>
+                    <input type="submit" id="btnSave" name="btnSave" class="btn" value="批量审核通过"/>
+                    <input type="button" id="btnUpdate" name="btnUpdate" class="btn" value="批量审核修改" onclick="return Update();"/>
+                </td>
+            </tr>
+        </table>
+        
+    }
+
+    <hr/>
+    <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+        <tr class="data_row_two">
+            <th>
+                <input type="checkbox" class="checkbox" id="SelectAll" name="SelectAll" /><label for="SelectAll">全选</label>
+            </th>
+            <th>客户名称
+            </th>
+            <th>运单号
+            </th>
+            <th>订单号
+            </th>
+            <th>跟踪号
+            </th>
+            <th>入仓运输方式
+            </th>
+            <th>退货重量(kg)
+            </th>
+            <th>国家
+            </th>
+            <th>退货类型
+            </th>
+            <th>退货原因
+            </th>
+            <th>是否退运费
+            </th>
+            <th>发货时间
+            </th>
+            <th>退货时间
+            </th>
+            <th>退货操作人
+            </th>
+        </tr>
+        @foreach (var row in Model.PagedReturnAuditList)
+        {
+            <tr class="data_row_dan">
+                <td>
+                    <input type="checkbox" class="checkbox" name="WayBillNumbers" value="@row.WayBillNumber" />
+                </td>
+                @{
+                    var customer = Model.Customers.FirstOrDefault(p => p.Value == row.CustomerName);
+                }
+                <td>
+                    @if (customer != null)
+                    {
+                        @customer.Text
+                    }
+                </td>
+                <td>
+                    @row.WayBillNumber
+                </td>
+                <td>
+                    @row.CustomerOrderNumber
+                </td>
+                <td>
+                    @row.TrackingNumber
+                </td>
+                <td>
+                    @row.InShippingMehtodName
+                </td>
+                <td>
+                    @row.TotalWeight
+                </td>
+                <td>
+                    @row.CountryCode
+                </td>
+                <td>
+                    @WayBill.GetReturnGoodTypeDescription(row.Type)
+                </td>
+                <td>
+                    @row.Reason
+                </td>
+                @if (row.IsReturnShipping)
+                {
+                    <td>
+                        是
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        否
+                    </td>
+                }
+                <td>
+                    @row.OutCreatedOn
+                </td>
+                <td>
+                    @row.ReturnCreatedOn
+                </td>
+                <td>
+                    @row.CreatedBy
+                </td>
+            </tr>
+        }
+        <tr class="data_row_dan">
+            <td colspan="14">
+                @Html.Pager(Model.PagedReturnAuditList, Model.FilterModel)
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="test" style="padding-left: 15px; padding-top: 10px;">
+</div>
+<script type="text/javascript">
+    //选择运输方式
+    $("#selectShippingMethod").bind("click", function () {
+        $("#showShippingMethodList").showWindow("@Url.Action("SelectShippingMethod", "WayBill")?customerId=" + $("#CustomerID").val() + "&customerTypeId=" + $("#CustomerType").val() + "&type=1", "选择运输方式");
+            var parentWindow = $("#showShippingMethodList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                top: 120
+            }, {
+                duration: 1000,
+                step: function (now, fx) {
+                    $(".window").css("top", now);
+                }
+            });
+            $("#showShippingMethodList").show();
+    });
+    //全选
+    $("#SelectAll").click(function () {
+        if ($(this).attr("checked")) {
+            $(":checkbox[name='WayBillNumbers']").attr("checked", true);
+        } else {
+            $(":checkbox[name='WayBillNumbers']").attr("checked", false);
+        }
+    });
+
+    $("#btnSave").click(function () {
+        var selectwayBillNumber = [];
+        $("input[name='WayBillNumbers']:checked").each(function () {
+            selectwayBillNumber.push($(this).val());
+        });
+        $("#OrderNumber").val(selectwayBillNumber.join(','));
+    });
+
+  @*  function Update() {
+        var selectwayBillNumber = [];
+        $("input[name='WayBillNumbers']:checked").each(function () {
+            selectwayBillNumber.push($(this).val());
+        });
+        if (selectwayBillNumber.length <= 0) {
+            alert("请选择要修改的退货信息！");
+            return false;
+        }
+        art.dialog({
+            title: '退货审核修改',
+            content: document.getElementById('ModifyShippingMethodMsg'),
+            lock: true,
+            ok: function () {
+                $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("UpdateReturnAudit")",
+                    dataType: "json",
+                    data: { wayBillNumbers: selectwayBillNumber.join(','), type: $("#FilterModel_Type").val(), returnReason: $("#FilterModel_NewReturnReason").val(), isReturnShipping: $("#FilterModel_NewIsReturnShipping").val() },
+                    success: function (data) {
+                        if (data.Result) {
+                            alert("操作成功！");
+                            $("#btnSelect").click();
+                            return true;
+                        } else {
+                            alert(data.Message);
+                            return false;
+                        }
+                    }
+                });
+
+            },
+            cancelVal: '关闭',
+            cancel: true
+        });
+    }*@
+
+    function Update() {
+        var selectwayBillNumber = [];
+        $("input[name='WayBillNumbers']:checked").each(function () {
+            selectwayBillNumber.push($(this).val());
+        });
+        if (selectwayBillNumber.length <= 0) {
+            alert("请选择要修改的退货信息！");
+            return false;
+        }
+        $("#test").showWindow('UpdateReturnAudit?waybillList=' + selectwayBillNumber, "退货审核修改", 480, 400);
+        var parentWindow = $("#test").parent("div");
+        $(parentWindow).css("top", "0");
+        $(parentWindow).animate({
+            top: 120 + getScrollTop()
+        }, {
+            duration: 1000,
+            step: function (now, fx) {
+                $(".window").css("top", now);
+
+            }
+        });
+        $("#test").show();
+        return false;
+    }
+    function getScrollTop() {
+        var scrollTop = 0;
+        if (document.documentElement && document.documentElement.scrollTop) {
+            scrollTop = document.documentElement.scrollTop;
+        }
+        else if (document.body) {
+            scrollTop = document.body.scrollTop;
+        }
+        return scrollTop;
+    }
+</script>

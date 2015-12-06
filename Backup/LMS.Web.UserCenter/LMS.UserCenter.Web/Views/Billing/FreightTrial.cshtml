@@ -1,0 +1,157 @@
+﻿@{
+    ViewBag.Title = "FreightTrial";
+}
+@model LMS.UserCenter.Controllers.BillingController.Models.FreightTrialViewModels
+<div class="bd_b bread_box">
+    <a href="javascript:" class="icon-home bread_home"></a>
+    <strong class="gtlt bread_gtlt">&gt;&gt;</strong>
+    <a href="javascript:" class="bread_off">财务管理</a>
+    <strong class="gtlt bread_gtlt">&gt;&gt;</strong>
+    <a href="javascript:" class="bread_on">运费试算</a>
+</div>
+<div class="p20">
+    @Html.Partial("_Notifications")
+    @using (Html.BeginForm())
+    { 
+        
+        <div class="tab_conStr">
+            <div class="from_box">
+                <div class="fix from_horizontal">
+                    <div class="ww32 l">
+                        <div class=" fix">
+                            <span class="info_box info_middle">重量(kg)：</span>
+                            @Html.TextBoxFormFor(f => f.Filter.Weight)
+                        </div>
+                    </div>
+                    <div class="cell">
+                        <div class="fix">
+                            <div class="l ww49">
+                                <div class=" fix">
+                                    <span class="info_box info_middle">包裹类型：</span>
+                                    @Html.DropDownListFormFor(p => Model.Filter.PackageType, (List<SelectListItem>)ViewBag.GoodsTypeList, new Dictionary<string, object> { { "class", "chzn-select-deselect select_middle" }, { "data-placeholder", "全部" } })
+                                </div>
+                            </div>
+                            <div class="cell pl20  fix">
+                                <span class="info_box info_middle ">发货国家：</span>
+                                @Html.DropDownListFormFor(p => p.Filter.CountryCode, (List<SelectListItem>)ViewBag.CountryList, new Dictionary<string, object> { { "class", "chzn-select-deselect select_middle r" }, { "data-placeholder", "全部" } })
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="fix from_horizontal">
+
+                    <div class="ww32 l">
+                        <div class=" fix">
+                            <span class="info_box info_middle l">长(cm)：</span>
+                            @Html.TextBoxFormFor(f => f.Filter.Length)
+                        </div>
+                    </div>
+
+                    <div class="cell">
+                        <div class="fix">
+                            <div class="l ww49">
+                                <div class=" fix">
+                                    <span class="info_box info_middle ">宽(cm)：</span>
+                                    @Html.TextBoxFormFor(f => f.Filter.Width)
+
+                                </div>
+                            </div>
+
+
+                            <div class="cell pl20 fix">
+
+                                <span class="info_box info_middle">高(cm)：</span>
+
+                                @Html.TextBoxFormFor(f => f.Filter.Height)
+
+
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+                <div class="fix from_horizontal">
+
+                    <div class="ww32 l">
+                        <div class=" fix">
+                            <span class="info_box info_middle"></span>
+
+                            <input type="submit" name="Trial" class="btn btn_green" value="运费试算" />
+
+                            <input type="submit" name="Import" onclick="return confirm('确认导出记录?'); " class="btn btn_red" value="导出记录" />
+
+                        </div>
+                    </div>
+                    <div class="cell">
+                        <div class="fix">
+                            <div class="l ww49">
+                                <div class=" fix">
+                                    <span class="info_box info_middle"></span>
+
+                                </div>
+                            </div>
+
+
+                            <div class="cell pl20  fix">
+                                <span class="info_box info_middle"></span>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- 列表 Start -->
+    <div class="top_solid mt20"></div>
+    <table class="data_table " width="100%" border="1" cellpadding="0" cellspacing="0">
+        <tr class=" data_row_head">
+            <th valign="middle" width="4%">序号</th>
+            <th width="12%">运输方式</th>
+            <th width="7%">计算重量</th>
+            <th width="7%">运费</th>
+            <th width="7%">挂号费</th>
+            <th width="7%">燃油费</th>
+            <th width="7%">杂费</th>
+            <th width="10%">总费用</th>
+            <th width="10%">时效</th>
+            <th>备注</th>
+        </tr>
+        @{
+            
+            int i = 1;
+        }
+        @foreach (var item in Model.FreightList)
+        {
+
+            bool flag = i % 2 > 0;
+            <tr class="@(flag ? "data_row_dan" : "data_row_shuang")">
+                <td valign="middle">
+                    @(i)</td>
+                <td>@item.ShippingMethodName</td>
+                <td>@item.Weight</td>
+                <td>@item.ShippingFee</td>
+                <td>@item.RegistrationFee</td>
+                <td>@item.FuelFee</td>
+                <td>@(item.SundryFee)</td>
+                <td>@(item.TotalFee)</td>
+                <td>@item.DeliveryTime</td>
+                <td>@item.Remarks</td>
+            </tr>
+            {
+                i++;
+            }
+        }
+
+    </table>
+    <!-- 列表 End -->
+</div>

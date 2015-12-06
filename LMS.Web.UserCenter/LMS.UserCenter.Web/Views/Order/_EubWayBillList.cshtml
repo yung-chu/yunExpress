@@ -1,0 +1,69 @@
+﻿@using LMS.Data.Entity
+@model LMS.UserCenter.Controllers.OrderController.Models.EubWayBillViewModel
+<table class="data_table " width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class=" data_row_head">
+                <th valign="middle" width="3%">
+                    <input type="checkbox" id="selectAll" /></th>
+                <th valign="middle" width="4%">序号</th>
+                <th width="12%">客户订单号</th>
+                <th width="10%">运单号</th>
+                <th width="10%">跟踪号</th>
+                <th width="10%">批次号</th>
+                <th width="6%">收货国家</th>
+                <th>运输方式</th>
+                <th width="5%">状态</th>
+                <th width="10%">申请时间</th>
+                <th width="10%">创建时间</th>
+                <th width="8%">操作</th>
+            </tr>
+            @{
+            
+        int i = 1;
+            }
+            @foreach (var item in Model.PagedList.InnerList)
+            {
+
+                bool flag = i % 2 > 0;
+                <tr class="@(flag ? "data_row_dan" : "data_row_shuang")">
+                    <td valign="middle">
+                        @if (item.Status != (int) EubWayBillApplicationInfo.StatusEnum.Printer)
+                        {
+                            <input type="checkbox" name="selected" value="@item.WayBillNumber"/>
+                        }
+                    </td>
+                    <td valign="middle">
+                        @(i + (Model.Filter.Page - 1) * Model.Filter.PageSize)</td>
+                    <td valign="middle">@item.CustomerOrderNumber</td>
+                    <td>@item.WayBillNumber</td>
+                    <td id="@(item.TrackingNumber)_number">@item.TrackingNumber</td>
+                    <td>@item.BatchNumber</td>
+                    <td>@(item.CountryCode.IsNullOrWhiteSpace() ? "" : Model.CountryList.First(s => s.Value == item.CountryCode.ToUpperInvariant()).Text)</td>
+                    <td>@item.ShippingMethodName</td>
+                    <td id="@(item.WayBillNumber)_status">
+                        @{
+                            string statusDescription=string.Empty;
+                            statusDescription = item.Status.HasValue ? EubWayBillApplicationInfo.GetStatusDescription(item.Status.Value) : "未申请";
+                        }
+                        @statusDescription
+                    </td>
+                    <td>@(item.ApplyDate.HasValue?item.ApplyDate.Value.ToString("yyyy-MM-dd HH:mm"):"")</td>
+                    <td>@item.CreatedOn.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>
+                        @{
+                            var adress = string.IsNullOrWhiteSpace(item.LocalDownLoad) ? item.EubDownLoad : item.LocalDownLoad;
+                        }
+                        <a target="_blank" title="打印" class="data_btn btn_green" href="@adress"><i class="icon-edit data_icon"></i></a>
+                    </td>
+                </tr>
+                {
+                    i++;
+                }
+            }
+            <tr class="date_row_none">
+                <td colspan="12">
+                    <div class="fix">
+                        @Html.Pager(Model.PagedList, Url.MergeRouteValues(Model.Filter))
+                    </div>
+                </td>
+            </tr>
+        </table>

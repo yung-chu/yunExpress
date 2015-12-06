@@ -1,0 +1,25 @@
+body{line-height:1.4;color:#333}body,input,textarea,select{font-size:12px;font-family:Verdana, Geneva, sans-serif}body,h1,h2,h3,h4,h5,h6,p,ul,ol,dl,dd,form{margin:0}ul,ol{padding-left:0;list-style-type:none}h4,h5,h6{font-size:1em}img{border:none}
+body{ background-color:#f8f8f8; }
+.fix{*zoom:1;}.fix:after{display:block; content:"clear"; height:0; clear:both; overflow:hidden; visibility:hidden;}
+#login{ margin-left:auto; margin-right:auto; margin-top:7%; width:460px;  border:10px solid #4b4b4b; position:relative; background-color:#FFF;}
+.message{ height:48px; border:1px solid;}
+.message_error{  border-color:#fbc2c4; color:#860006;   background-position: 0 -50px; background-color:#fbe3e4;}
+.message_box{ margin: 20px 20px 0;}
+.error_inf_box{ display:inline-block; margin-left:50px; margin-top:8px;}
+.title_box{ text-align:center; margin-top:20px;}
+.title_text{  margin: 10px;padding: 0; color:#FFF; line-height:1; font-size:14px;}
+.btn{ display:inline-block;  padding:1px 10px; font-size:14px; vertical-align:middle; cursor:default;}
+
+#remember{ margin:0;}
+.inner{padding:20px;}
+.field{ padding-bottom:10px; }
+.inner_label{ width:150px; display:inline-block; text-align:right; font-weight:bold; margin-right:5px;}
+.inner_input_box{ width:178px; display:inline-block;  vertical-align:middle}
+.inner_input{ padding: 7px 7px 6px; border:1px solid #B3B3B3; width:210px; vertical-align:middle; border-color: #B3B3B3 #EAEAEA #EAEAEA #B3B3B3;}
+.buttons{border-color: #DDDDDD #DDDDDD #C6C6C6 #C6C6C6;border-style: solid; border-width: 1px;color: #515151; margin: 0; padding: 6px 12px;  font-weight:bold; float:right; cursor:pointer;}
+.buttons:hover{ cursor:pointer;}
+.div1px{ height:0; border-top:1px solid #CCC; margin-bottom:10px;}
+.links{color: #0066CC;    text-decoration: none;}
+.error_btn{float:right; height:16px; width:16px; margin-top:20px; margin-right:15px; position:relative;}
+
+

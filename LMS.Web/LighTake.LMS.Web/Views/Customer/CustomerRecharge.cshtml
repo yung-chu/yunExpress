@@ -1,0 +1,111 @@
+﻿@model LMS.Controllers.CustomerController.CustomerRechargeViewModel
+@{
+    ViewBag.Title = "CustomerRecharge";
+}
+<div id="showCustomerList" tabindex="200" style="overflow: scroll; display: none; position: relative">
+</div>
+<div class="domebg">
+    <form id="editfrom">
+        <div class="mt20 l">
+            <div class="ml20 mt20">
+                <span class="info_box info_middle">客户代码:</span>
+                <input type="text" id="CustomerCode" name="CustomerCode" readonly="readonly" class="txt txt_short" />
+                <a href="javascript:void(0)" id="selectCustomer" class="btn_href">选择</a>
+            </div>
+            <div class="ml20 mt20">
+                <span class="info_box info_middle">客户名称:</span>
+                <input type="text" id="nickName" name="Name" readonly="readonly" class="txt txt_middle" />
+            </div>
+            <div class="ml20 mt20">
+                <span class="info_box info_middle">费用操作:</span>
+                <select name="MoneyChangeTypeID" id="MoneyChangeTypeID" class="select select_middle">
+                    @foreach (var p in Model.MoneyChangeTypeList)
+                    {
+                        <option value="@p.SelectValue">@p.SelectName</option>
+                    }
+                </select>
+            </div>
+            <div class="ml20 mt20">
+                <span class="info_box info_middle">费用金额:</span>
+                <input type="text" id="Amount" name="Amount" class="txt txt_middle" />
+            </div>
+            <div class="ml20 mt20">
+                <span class="info_box info_middle">费用类型:</span>
+                <select name="FeeTypeID" id="FeeTypeID" class="select select_middle">
+                    @foreach (var p in Model.FeeTypeList)
+                    {
+                        <option value="@p.SelectValue">@p.SelectName</option>
+                    }
+                </select>
+            </div>
+            <div class="ml20 mt20">
+                <span class="info_box info_middle">
+                    <select name="SelectNumberTypeID" id="SelectNumberTypeID" class="select">
+                        <option value="">请选择</option>
+                        @foreach (var p in LMS.Data.Entity.Customer.GetNumberTypeList())
+                        {
+                            <option value="@p.ValueField">@p.TextField</option>
+                        }
+                    </select>:</span>
+                <input type="text" id="NumberValue" name="NumberValue" class="txt txt_middle" />
+            </div>
+            <div class="ml20 mt20">
+                <span class="info_box info_middle">备注:</span>
+                <textarea class="area vt" id="Remark" name="Remark" cols="45" rows="6"></textarea>
+            </div>
+            <div class="ml20 mt20">
+                <span class="info_box info_middle"></span>
+                <input type="button" class="btn" value="保存" id="Savebnt" onclick="Save();" />
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    function Save() {
+        if ($.trim($("#editfrom #CustomerCode").val()) == "") {
+            alert("客户编码不能为空！");
+            return false;
+        }
+        if ($.trim($("#editfrom #Remark").val()).length > 400) {
+            alert("备注不能超过400个字符！");
+            return false;
+        }
+        if ($.trim($("#Amount").val()) == "") {
+            alert("费用金额不能为空！");
+            return false;
+        }
+        var reg = /^\d+[\.]?\d{0,4}$/g;
+        if (!reg.test($("#Amount").val())) {
+            $("#Amount").val(0);
+            alert("费用金额请输入数值!");
+            return false;
+        }
+        var amount = parseFloat($("#Amount").val());
+        if (amount <= 0) {
+            alert("费用金额必须大于0！");
+            return false;
+        }
+        $("#editfrom #Savebnt").attr('disabled', true);
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("CreateCustomerRecharge")",
+            dataType: "json",
+            data: $("#editfrom").serialize(),
+            success: function (data) {
+                if (data == "1") {
+                    $("input[type='text']").val("");
+                    alert("保存成功！");
+                } else if (data == "0") {
+                    alert("保存失败!");
+                } else if (data == "2") {
+                    alert("交易号已经存在！");
+                } else {
+                    alert(data.Message);
+                }
+            },
+            complete: function (data) {
+                $("#editfrom #Savebnt").attr('disabled', false);
+            }
+        });
+    }
+</script>

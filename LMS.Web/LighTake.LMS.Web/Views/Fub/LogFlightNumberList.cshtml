@@ -1,0 +1,86 @@
+﻿@model LMS.Controllers.FubController.Models.LogFlightNumberListViewModel
+@{
+    ViewBag.Title = "LogFlightNumberList";
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+}
+<div id="showEditTime" style="overflow: scroll; display: none; position: relative">
+</div>
+<div class="domebg" id="right_con">
+    @using (Html.BeginForm())
+    {
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+                <td>
+                    <span class="info_box info_select">总包号:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.MailTotalPackageNumber, new { @style = "height:20px; width:120px;" })
+                </td>
+                <td>
+                    <span class="info_box info_select">扫描时间:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.StartTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.StartTime), @class = "txt wdate", @style = "width:130px;" })
+                    <span>至:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.EndTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.EndTime), @class = "txt wdate", @style = "width:130px;" })
+                </td>
+                <td>
+                    <div class="tl">
+                        <input type="submit" value="搜索" class="btn" id="btnSearch" name="btnSearch" />
+
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div id="pm_dis_div">
+            <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr class="data_row_two">
+                        <th>总包号</th>
+                        <th>扫描时间</th>
+                        <th>福州起航时间</th>
+                        <th>到达台湾时间</th>
+                        <th>台湾起航时间</th>
+                        <th>到达目的时间</th>
+                        <th>目的国家</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+        foreach (var row in Model.PagedList.InnerList)
+        {
+            <tr class="data_row_dan" id="tr_@(row.MailTotalPackageNumber)">
+                <td>@row.ShortNumber</td>
+                <td>@row.ScanTime.ToString("yyyy-MM-dd HH:mm")</td>
+                <td itemid="FuZhouDepartureTime">@(row.FuZhouDepartureTime.HasValue?string.Format("{0}  {1}", row.FZFlightNo,row.FuZhouDepartureTime.Value.ToString("yyyy-MM-dd HH:mm")):"")</td>
+                <td itemid="TaiWanArrivedTime">@(row.TaiWanArrivedTime.HasValue?row.TaiWanArrivedTime.Value.ToString("yyyy-MM-dd HH:mm"):"")</td>
+                <td itemid="TaiWanDepartureTime">@(row.TaiWanDepartureTime.HasValue?string.Format("{0}  {1}",row.TWFlightNo,row.TaiWanDepartureTime.Value.ToString("yyyy-MM-dd HH:mm")):"")</td>
+                <td itemid="ToArrivedTime">@(row.ToArrivedTime.HasValue?row.ToArrivedTime.Value.ToString("yyyy-MM-dd HH:mm"):"")</td>
+                <td itemid="CountryCode">@(row.CountryCode.IsNullOrWhiteSpace() ? "" : Model.CountryList.First(s => s.Value == row.CountryCode.Trim().ToUpperInvariant()).Text)</td>
+                <td><input type="button" class="btn" onclick="EditTime('@row.MailTotalPackageNumber');" value="编辑时间" /></td>
+            </tr>
+        }
+                    }
+                    <tr class="data_row_none">
+                        <td colspan="13">
+                            @Html.Pager(Model.PagedList, Model.FilterModel)
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+<script type="text/javascript">
+    function EditTime(numberstr) {
+        $("#showEditTime").showWindow("@Url.Action("EditTime","Fub")?totalPackageNumber="+numberstr, "录入航班号");
+        var parentWindow = $("#showEditTime").parent("div");
+        $(parentWindow).css("top", "0");
+        $(parentWindow).animate({
+            top: 120
+        }, {
+            duration: 1000,
+            step: function (now, fx) {
+                $(".window").css("top", now);
+            }
+        });
+        $("#showEditTime").show();
+    }
+</script>

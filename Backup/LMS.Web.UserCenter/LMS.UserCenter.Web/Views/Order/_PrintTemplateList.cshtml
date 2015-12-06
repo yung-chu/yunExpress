@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "_PrintTemplateList";
+    Layout = null;
+}
+@model LMS.UserCenter.Controllers.OrderController.Models.PrinterTemplateViewModel
+
+@{
+    int number = 0;
+    foreach (var orderModel in Model.CustomerOrderInfoModels)
+    {
+        string gift = orderModel.AppLicationType == 1 ? "checked='checked'" : "";
+        string commercial = orderModel.AppLicationType == 2 ? "checked='checked'" : "";
+        string documents = orderModel.AppLicationType == 3 ? "checked='checked'" : "";
+        string other = orderModel.AppLicationType == 4 ? "checked='checked'" : "";
+        if (number%(Model.RowNumber*Model.ColumnNumber) == 0)
+        {
+            @:<table style="page-break-after: always;"><tbody>
+        }
+        if (number%Model.ColumnNumber == 0)
+        {
+            @:<tr> 
+        }
+        <td>@(Model.TemplateHead + Model.TemplateBodyContent)</td>
+
+        if (number%Model.ColumnNumber == Model.ColumnNumber - 1)
+        {
+            @:</tr>
+        }
+        if (number%(Model.RowNumber*Model.ColumnNumber) == Model.RowNumber*Model.ColumnNumber - 1)
+        {
+
+            @:</tbody></table>
+
+        }
+        number++;
+    }
+    int moldValue = Model.CustomerOrderInfoModels.Count%(Model.RowNumber*Model.ColumnNumber);
+    if (moldValue != 0)
+    {
+        for (int i = 1; i <= Model.RowNumber*Model.ColumnNumber - moldValue; i++)
+        {
+            @:<td></td>
+        }
+        @:</tr></tbody></table>
+    }
+}
+
+
+
+
+
+
+

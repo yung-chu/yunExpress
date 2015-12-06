@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A5B365C9-BC87-432D-988B-09206A0DA924}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LMS.Controllers.WebsiteController</RootNamespace>
+    <AssemblyName>LMS.Controllers.WebsiteController</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebsiteController.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Common.BizLogging\LighTake.Infrastructure.Common.BizLogging.csproj">
+      <Project>{CB847282-7C7B-4232-89E9-4D7E88C03F33}</Project>
+      <Name>LighTake.Infrastructure.Common.BizLogging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Common.InversionOfControl\LighTake.Infrastructure.Common.InversionOfControl.csproj">
+      <Project>{50a03162-5eb6-4a1d-8e16-f6fa4ce7836c}</Project>
+      <Name>LighTake.Infrastructure.Common.InversionOfControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Common\LighTake.Infrastructure.Common.csproj">
+      <Project>{eac46871-3661-4d4e-8f6a-fe44593e1191}</Project>
+      <Name>LighTake.Infrastructure.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Data\LighTake.Infrastructure.Data.csproj">
+      <Project>{98538619-903a-4d41-baa7-bf2d33467e9f}</Project>
+      <Name>LighTake.Infrastructure.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Seedwork.EF\LighTake.Infrastructure.Seedwork.EF.csproj">
+      <Project>{3fd348e3-2746-4bb4-82ff-90a9fb6cb2e6}</Project>
+      <Name>LighTake.Infrastructure.Seedwork.EF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Seedwork\LighTake.Infrastructure.Seedwork.csproj">
+      <Project>{1b2a08a7-3bbd-4bc3-8014-d702e7db9e2d}</Project>
+      <Name>LighTake.Infrastructure.Seedwork</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Web\LighTake.Infrastructure.Web.csproj">
+      <Project>{977faf23-8a6b-4392-a877-59d9aa2efb99}</Project>
+      <Name>LighTake.Infrastructure.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Core\LMS.Core\LMS.Core.csproj">
+      <Project>{336e1dce-a844-4977-aa9a-8f6720c72f6d}</Project>
+      <Name>LMS.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Data\LMS.Data.Entity\LMS.Data.Entity.csproj">
+      <Project>{be6fe0ef-6a3d-4628-803b-747ff0762fc3}</Project>
+      <Name>LMS.Data.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.HomeServices\LMS.Services.HomeServices.csproj">
+      <Project>{97176e4b-7f08-45d0-9511-9adfaeef9885}</Project>
+      <Name>LMS.Services.HomeServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.NewServices\LMS.Services.NewServices.csproj">
+      <Project>{9f2985ee-9278-4f03-94e5-51972e7ab063}</Project>
+      <Name>LMS.Services.NewServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.OperateLogServices\LMS.Services.OperateLogServices\LMS.Services.OperateLogServices.csproj">
+      <Project>{B6D6A049-7D3C-4EEA-BC0E-1911DA5124A5}</Project>
+      <Name>LMS.Services.OperateLogServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Web\LMS.Models\LMS.Models.csproj">
+      <Project>{ffe21549-e8d0-4993-8a94-0946399016e4}</Project>
+      <Name>LMS.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

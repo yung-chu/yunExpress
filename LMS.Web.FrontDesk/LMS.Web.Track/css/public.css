@@ -1,0 +1,146 @@
+/**********结构UI**********/
+html{overflow:hidden;height:100%;}
+body{ height:100%;}
+.Constr{}
+.Top{}
+.Head{}
+.Nav{}
+.Meu{}
+.Sch{}
+.C{}
+.Bd{}
+.Sd{}
+.Bg{position:absolute; left:0; top:0; width:100%; height:100%;}
+.Main_scroll{height:100%; margin:0 auto; width:56%; background:#fff; *padding-right:16px; position:relative; font-size:12px; box-shadow:0 0 2px #cdcdcd; overflow-y:auto; overflow-x:hidden;}
+
+
+/**********公共类UI**********/
+/*选项卡--T(tab,简写成T)*/
+.T_pd{padding:50px 10px 0;}
+.T_area{font-family:'微软雅黑'; color:#000; letter-spacing:-4px;}
+.T{line-height:36px; width:13.2%; background:#eeeeee; vertical-align:top; font-size:12px; text-align:center; -webkit-transform:skew(-30deg); letter-spacing:0;}
+.T_on,.T_off:hover{ background:#245a5c; color:#fff;}
+.T_content{}
+
+/*按钮button--B*/
+.B_l,.B_m,.B_s{}
+.B_d,.B_f,.B_h{}
+
+/*列表list--L*/
+.L{}
+
+/*横向列表list vertical--Lve*/
+.Lve{}
+
+/*标题word--W*/
+.W{}
+
+/*标题title--Tt*/
+.Tt{}
+
+/*表格table--Tb/*/
+.Tb{}
+
+/*商品展示--I(product  Item，简写成I)*/
+.I{}
+
+/*标签A*/
+.C{ color:#245a5c;}
+
+/*背景色Bg*/
+.BgI{ background-color:#245a5c}
+
+/*星星评级Star*/
+.Star{}
+
+
+/***时间节点Tnode***/
+.Tnode_dot{width:6px; position:absolute; height:6px; left:-2px; top:5px; z-index:3; border-radius:3px; background:#27979b}
+.Tnode_v_line{position:absolute; height:8px; width:2px; overflow:hidden; background:#fff; z-index:2; left:0px; top:0;}
+.Tnode_vertical{height:100%; width:2px; overflow:hidden;  background:#e8e8e8; position:absolute; left:0; top:0;}
+.Tnode_new{line-height:20px; padding:0 0.5em; color:#fff; position:absolute; left:-45px; top:0; background:#27979b;}
+.Tnode_star{border-left:2px solid #fff; padding-left:28px; z-index:2;}
+.Tnode_star .Tnode_dot{left:-4px;}
+.Tnode_star .Tnode_v_line{ left:-2px; background:#e8e8e8;}
+
+/*翻页P(page,简写成P)*/
+.P{}
+
+/*小提示Tps(网站经常用到页面需要及时解释的贴士)*/
+.Tps{}
+
+/*弹出层popup，网站弹出层啦*/
+.Popup_area{position:absolute; width:270px; display:none; line-height:150px; height:150px; border:3px solid #245a5c; left:50%; top:50%; margin:-75px 0 0 -136px; background:#f9f9f9; z-index:20; text-align:center;}
+
+
+/*般透明层，一般是弹出层的父标签，一般也是黑色半透明Translucent，因为这个就只是一层，所以长点儿没关系*/
+.Translucent{}
+
+
+/**********系统自带UI**********/
+/*radio--Radio*/
+.Radio{}
+
+/*check--Check*/
+.Check{}
+
+/*text Insert简写成Ist*/
+.Ist_s,.Ist_m,.Ist_l,.Ist_ss{}
+.Ist_d{}
+.Ist_h{}
+.Ist_f{}
+
+/*Step*/
+.Step{}
+
+/*输入框前面的主题文字，Insert word 简写成 Istw*/
+.IstW{}
+
+/*textarea--Textarea*/
+.Textarea{}
+
+/*上传按钮fileField*/
+.fileField{}
+
+
+/**********自己挖掘的公共UI**********/
+/*Sw(shadow)--阴影*/
+.Sw{}
+
+/*Br(border-radius)--圆角*/
+.Br{}
+/*下拉菜单 active*/
+.active{vertical-align:middle; position:relative; z-index:2; cursor:pointer; display:inline-block; line-height:40px; z-index:4; background:#e1ab2d; }
+.warp{position:absolute; top:40px; left:0; width:100%; background:#FFF; display:none; line-height:30px; background-color:#e1ab2d}
+.active_{display:inline-block; vertical-align:middle; color:#444444; width:100%;}
+.active_ a{position:absolute; right:2px; top:2px; width:22px; height:24px; }
+.active_ .Trigon{margin-right: 7px; margin-top: 15px;float: right;}
+.active   .Trigon{ border-color:#545454 #e1ab2d #e1ab2d #e1ab2d; transition: all .3s ease;}
+.active:hover  .Trigon{-webkit-transform-origin: 50% 30%;transform-origin: 50% 30%;transition: all .3s ease;-webkit-transform: rotate(180deg)}
+/*Trigon--三角，经常是鼠标一经过，然后就180顺滑过度*/
+.Trigon{ width:0; height:0;  display:inline-block; overflow:hidden; border-style:solid; border-width: 5px ; position:relative;}
+
+/*Dmd（diamond单词解释是菱形)*/
+Dmd{}
+
+/*垂直对齐*/
+.Dib_vm{vertical-align:middle; height:100%; width:0; overflow:hidden; display:inline-block;}
+
+/*Part，段落*/
+Part{}
+
+/*Link：连接*/
+.db_Link{ display:block;}
+.db_Link:hover{ background:#f9f9f9;}
+
+/*Dib_vm 对齐*/
+.Dib_vm{}
+
+/*弹出层*/
+.Active{}
+.Active_{}
+.Warp{}
+
+/*两端自适应*/
+.D{}
+

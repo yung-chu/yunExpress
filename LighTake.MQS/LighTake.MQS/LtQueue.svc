@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="LighTake.MQS.LtQueue" CodeBehind="LtQueue.svc.cs" %>

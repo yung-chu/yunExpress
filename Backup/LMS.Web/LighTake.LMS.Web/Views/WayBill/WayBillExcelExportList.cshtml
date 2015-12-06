@@ -1,0 +1,263 @@
+﻿@using LMS.Data.Entity
+@model LMS.Controllers.WayBillController.WayBillListViewModel
+@{
+    ViewBag.Title = "WayBillExcelExportList";
+    <link href="/Scripts/artdialog/skins/default.css" type="text/css" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="@Url.Content("/Scripts/chosen/chosen.css")" />
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+    Html.AddScriptParts("/Scripts/chosen/chosen.jquery.min.js");
+    Html.AddScriptParts("/Scripts/artdialog/jquery.artDialog.js");
+}
+<div id="showCustomerList" tabindex="200" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showShippingMethodList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showCountryList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div class="domebg" id="right_con">
+    @using (Html.BeginForm())
+    {
+        var url = Html.GetUrl("WayBillExcelExportList", "WayBill", Model.FilterModel);
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+                <td width="20%">
+                    <span class="info_box info_select">客户编码:</span>
+                    <input type="text" id="CustomerCode" value="@Model.FilterModel.CustomerCode" name="FilterModel.CustomerCode" readonly="readonly" class="txt txt_short" />
+                    <a href="javascript:void(0)" id="selectCustomer" class="btn_href">选择</a>
+                </td>
+                <td width="20%">
+                    <span class="info_box info_select">运输方式:</span>
+                    <input type="text" id="ShippingName" value="@Model.FilterModel.ShippingName" name="FilterModel.ShippingName" readonly="readonly" class="txt txt_short"/>
+                    <input type="hidden" id="ShippingMethodId" name="FilterModel.ShippingMethodId" value="@Model.FilterModel.ShippingMethodId" />
+                    <input type="button" id="selectShippingMethod" class="btn" value="选择" />
+                </td>
+                <td rowspan="2" width="20%">
+                    <span class="info_box info_select">查询条件:</span>
+                    @Html.DropDownListFor(o => o.FilterModel.SearchWhere, Model.SearchWheres, new { @style = "width:100px;" })
+                </td>
+                <td rowspan="2" width="20%">
+                    <span class="info_box info_select">查询内容:</span>
+                    @Html.TextAreaFor(p => p.FilterModel.SearchContext, new { @style = "height:80px; width:200px;" })
+                </td>
+                <td rowspan="2" width="20%">
+                    <label>
+                        @Html.CheckBoxFor(p => p.FilterModel.IsHold)
+                        <span style = "height:60px;width:120px;" >排除异常单</span>
+                    </label>
+                </td>
+            </tr>
+            <tr class="date_row_select">
+                <td colspan="2">
+                    <span class="info_box info_select">@Html.DropDownListFor(o => o.FilterModel.DateWhere, Model.DateWheres)</span>
+                    @Html.TextBoxFor(p => p.FilterModel.StartTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.StartTime), @class = "txt wdate", @style = "width:130px;" })
+                    <span>至:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.EndTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.EndTime), @class = "txt wdate", @style = "width:130px;" })
+                </td>
+            </tr>
+            <tr class="date_row_select">
+                <td>
+                    <span class="info_box info_select">状态:</span>
+                    @Html.DropDownListFor(o => o.FilterModel.Status, Model.StatusList, new { @style = "width:100px;" })
+                </td>
+                <td>
+                    <span class="info_box info_select">发货国家:</span>
+                    <input type="text" id="_CountryCode" value="@Model.FilterModel.CountryCode" name="FilterModel.CountryCode" readonly="readonly" class="txt txt_short" />
+                    <input type="hidden" id="_CountryName" />
+                    <a href="javascript:void(0)" id="selectCountry" class="btn_href">选择</a>
+                </td>
+                <td colspan="3">
+                    <div class="tl">
+                        <input type="submit" class="btn" value="搜索" name="btnSearch" />
+                         <input type="hidden" value="@Model.FilterModel.Page" name="FilterModel.Page" />
+                        <input type="hidden" value="@Model.FilterModel.PageSize" name="FilterModel.PageSize" />
+                        <input type="submit" class="btn" value="导出中美专线模板" name="btnSinoUSExport" />
+                        <input type="submit" class="btn" value="导出欧洲专线模板" name="btnEuropeExport" />
+                        <input type="submit" class="btn" value="EUB条码预报模版" name="btnEUBExport" />
+                         <input type="submit" class="btn" value="导出运单" name="btnExport" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div id="pm_dis_div">
+            <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr class="data_row_two">
+                        <th>序号
+                        </th>
+                        <th>运单号
+                        </th>
+                        <th>客户订单号
+                        </th>
+                        <th>客户代码
+                        </th>
+                        <th>客户名称
+                        </th>
+                        <th>创建时间
+                        </th>
+                        <th>状态
+                        </th>
+                        <th>是否Hold
+                        </th>
+                        <th>是否关税预付</th>
+                        <th>跟踪号
+                        </th>
+                        <th>发货国家
+                        </th>
+                        <th>收货运输方式
+                        </th>
+                        <th>发货运输方式
+                        </th>
+                        <th>入仓操作人
+                        </th>
+                        <th>出仓操作人
+                        </th>
+                        <th>结算重量
+                        </th>
+                        <th>操作
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                         var index = 1;
+                         foreach (var row in Model.ExportPagedList.InnerList)
+                         {    
+                        <tr class="data_row_dan">
+                            <td>
+                                @index
+                            </td>
+                            <td>
+                                @row.WayBillNumber
+                            </td>
+                            <td>
+                                @row.CustomerOrderNumber
+                            </td>
+                            <td>
+                                @row.CustomerCode
+                            </td>
+                             @{
+                                 var customer = Model.CustomerList.FirstOrDefault(p => p.Value == row.CustomerCode);
+                             }
+                            <td>
+                                @if (customer != null)
+                                {
+                                    @customer.Text
+                                }
+                            </td>
+                            <td>
+                                @row.CreatedOn.ToString("yyyy-MM-dd HH:mm")
+                            </td>
+                            <td  name="Status">
+                                @WayBill.GetStatusDescription(row.Status)
+                            </td>
+                            <td id="@(row.WayBillNumber)_isHold"  name="IsHold">
+                                @if (row.IsHold)
+                                {
+                                    <text>是</text>
+                                }
+                                else
+                                {
+                                    <text>否</text>
+                                }
+                            </td>
+                            <td>
+                                @if (row.EnableTariffPrepay)
+                                {
+                                    <text>是</text>
+                                }
+                                else
+                                {
+                                    <text>否</text>
+                                }
+                            </td>
+                            <td>
+                                @row.TrackingNumber
+                            </td>
+                            <td>
+                                @row.CountryCode
+                            </td>
+                            <td>
+                                @row.InShippingName
+                            </td>
+                            <td>
+                                @row.OutShippingName
+                            </td>
+                            <td>
+                                @row.InCreatedBy
+                            </td>
+                            <td>
+                                @row.OutCreatedBy
+                            </td>
+                            <td>
+                                @row.SettleWeight
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Detail", "WayBill", new { WayBillNumber = row.WayBillNumber, ReturnUrl = url })" class="btn_href">查看</a>
+                            </td>
+                        </tr>
+                                index++;
+                         }
+                    }
+                    <tr class="data_row_none">
+                        <td colspan="19">
+                            @Html.Pager(Model.ExportPagedList, Model.FilterModel)
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+    <div id="ModifyShippingMethodMsg" class="dn">
+        <span class="info_box info_short ">运输方式：</span>
+        @Html.DropDownListFor(p => Model.FilterModel.ShippingMethodId, Model.ShippingMethodLists, new Dictionary<string, object> { { "class", "chzn-select-deselect select_middle" }, { "data-placeholder", "全部" } })
+        <span id="message_error" class="mr20 ml10 txt_tip"></span>
+    </div>
+</div>
+<script type="text/javascript">
+    var config = {
+        '.chzn-select': {},
+        '.chzn-select-deselect': { allow_single_deselect: true },
+        '.chzn-select-no-single': { disable_search_threshold: 10 },
+        '.chzn-select-no-results': { no_results_text: 'Oops, nothing found!' },
+        '.chzn-select-width': { width: "95%" }
+    };
+    for (var selector in config) {
+        $(selector).chosen(config[selector]);
+    }
+
+</script>
+<script type="text/javascript">
+    $(function() {
+        //选择运输方式
+        $("#selectShippingMethod").bind("click", function() {
+            $("#showShippingMethodList").showWindow("@Url.Action("SelectShippingMethod", "WayBill")?customerTypeId=" + $("#CustomerType").val() + "&type=1", "选择运输方式");
+            var parentWindow = $("#showShippingMethodList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                    top: 120
+                }, {
+                    duration: 1000,
+                    step: function(now, fx) {
+                        $(".window").css("top", now);
+                    }
+                });
+            $("#showShippingMethodList").show();
+        });
+        //选择国家
+        $("#selectCountry").bind("click", function() {
+            $("#showCountryList").showWindow("@Url.Action("SelectCountry", "Common")", "选择国家");
+            var parentWindow = $("#showCountryList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                    top: 120
+                }, {
+                    duration: 1000,
+                    step: function(now, fx) {
+                        $(".window").css("top", now);
+                    }
+                });
+            $("#showCountryList").show();
+        });
+    });
+</script>

@@ -1,0 +1,53 @@
+﻿@using LighTake.Infrastructure.Web.UI
+@model LMS.Controllers.UserController.LoginModel
+@{
+    Layout = null; 
+}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Login</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link type="text/css"  href="@Url.Content("~/css/login.css")" rel="stylesheet" />
+    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery-1.8.0.min.js")" ></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
+    <style type="text/css">
+        .validation-summary-errors li
+        {
+            list-style-type: none;
+        }
+    </style>
+</head>
+<body>
+    @{Html.BeginForm(); }
+    <div class="con">
+        <div class="login_logo">
+        </div>
+        <div class="logo_box">
+            <div class="logoin_input">
+                @Html.TextBoxFor(m => m.LoginName, new { @class = "logoin_input_name" })<br />
+                @Html.ValidationMessageFor(m => m.LoginName, "", new { @class = "coff" })
+            </div>
+            <div class="logoin_input2">
+                @Html.PasswordFor(m => m.Password, new { @class = "logoin_input_word" })<br />
+                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "coff" })
+            </div>
+            <div style="width: 450px">
+                @if (Model.DisplayValidationCode)
+                {              
+                    @Html.TextBoxFor(m => m.ValidationCode, new { @class = "logoin_input_word txt_short mr15" })
+             
+                    @Html.ValidationImageCode(Model.ValidationCodeTagId, Model.ValidationCodeController, Model.ValidationCodeAction)               
+                    <br />
+                }
+                @Html.ValidationSummary(true, null, new { @class = "coff" })
+            </div>
+            <div class="mt30">
+                <input type="submit" class="login_btn" value="" />
+            </div>
+        </div>
+    </div>
+    @{Html.EndForm();}
+</body>
+</html>

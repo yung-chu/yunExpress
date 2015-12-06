@@ -1,0 +1,485 @@
+﻿<table id="inStorageTable" class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+    <thead>
+        <tr class="data_row_two">
+            <th>运单号
+            </th>
+            <th>跟踪号
+            </th>
+            <th>客户订单号
+            </th>
+            <th>运输方式
+            </th>
+            <th>结算重量(kg)
+            </th>
+            <th>发货国家
+            </th>
+            <th>操作
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="data_row_dan">
+            <td>
+                <input type="text" id="searchWayBillNumber" class="txt txt_short"></td>
+            <td>
+                <input type="text" id="searchTrackingNumber" class="txt txt_short"></td>
+            <td>
+                <input type="text" id="searchOrderNumber" class="txt txt_short"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+                <input type="button" class="btn" value="查询" onclick="SearchScaned();"></td>
+        </tr>
+    </tbody>
+    <tr class="data_row_dan" id="GO131126010950">
+        <td>GO1311260109</td>
+        <td>RE648145629SE</td>
+        <td>RB267819720CN</td>
+        <td>瑞典小包</td>
+        <td>0.678</td>
+        <td>US</td>
+        <td><a href="javascript:cancelWayBill('GO131126010950');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260109" name="[50].WayBillNumber"><input type="hidden" value="58.17" name="[50].Freight"><input type="hidden" value="0" name="[50].FuelCharge"><input type="hidden" value="0" name="[50].Register"><input type="hidden" value="14.3" name="[50].Surcharge"><input type="hidden" value="" name="[50].Length"><input type="hidden" value="" name="[50].Width"><input type="hidden" value="" name="[50].Height"><input type="hidden" value="RE648145629SE" name="[50].TrackingNumber"><input type="hidden" value="0.678" name="[50].SettleWeight"><input type="hidden" value="0.678" name="[50].Weight"><input type="hidden" value="RB267819720CN" name="[50].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr1">
+        <td>GO1311260099</td>
+        <td>RE648146045SE</td>
+        <td>RB267814387CN</td>
+        <td>瑞典小包</td>
+        <td>0.074</td>
+        <td>US</td>
+        <td><a href="javascript:cancelWayBill('GO131126009949');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260099" name="[49].WayBillNumber"><input type="hidden" value="6.35" name="[49].Freight"><input type="hidden" value="0" name="[49].FuelCharge"><input type="hidden" value="0" name="[49].Register"><input type="hidden" value="14.3" name="[49].Surcharge"><input type="hidden" value="" name="[49].Length"><input type="hidden" value="" name="[49].Width"><input type="hidden" value="" name="[49].Height"><input type="hidden" value="RE648146045SE" name="[49].TrackingNumber"><input type="hidden" value="0.074" name="[49].SettleWeight"><input type="hidden" value="0.074" name="[49].Weight"><input type="hidden" value="RB267814387CN" name="[49].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr2">
+        <td>GO1311260129</td>
+        <td>RE648146054SE</td>
+        <td>RB267819438CN</td>
+        <td>瑞典小包</td>
+        <td>0.154</td>
+        <td>US</td>
+        <td><a href="javascript:cancelWayBill('GO131126012948');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260129" name="[48].WayBillNumber"><input type="hidden" value="13.21" name="[48].Freight"><input type="hidden" value="0" name="[48].FuelCharge"><input type="hidden" value="0" name="[48].Register"><input type="hidden" value="14.3" name="[48].Surcharge"><input type="hidden" value="" name="[48].Length"><input type="hidden" value="" name="[48].Width"><input type="hidden" value="" name="[48].Height"><input type="hidden" value="RE648146054SE" name="[48].TrackingNumber"><input type="hidden" value="0.154" name="[48].SettleWeight"><input type="hidden" value="0.154" name="[48].Weight"><input type="hidden" value="RB267819438CN" name="[48].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr3">
+        <td>GO1311260143</td>
+        <td>RE648146451SE</td>
+        <td>RB267819185CN</td>
+        <td>瑞典小包</td>
+        <td>0.704</td>
+        <td>US</td>
+        <td><a href="javascript:cancelWayBill('GO131126014347');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260143" name="[47].WayBillNumber"><input type="hidden" value="60.4" name="[47].Freight"><input type="hidden" value="0" name="[47].FuelCharge"><input type="hidden" value="0" name="[47].Register"><input type="hidden" value="14.3" name="[47].Surcharge"><input type="hidden" value="" name="[47].Length"><input type="hidden" value="" name="[47].Width"><input type="hidden" value="" name="[47].Height"><input type="hidden" value="RE648146451SE" name="[47].TrackingNumber"><input type="hidden" value="0.704" name="[47].SettleWeight"><input type="hidden" value="0.704" name="[47].Weight"><input type="hidden" value="RB267819185CN" name="[47].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr4">
+        <td>GO1311260054</td>
+        <td>RE648146505SE</td>
+        <td>RB267816330CN</td>
+        <td>瑞典小包</td>
+        <td>1.784</td>
+        <td>DE</td>
+        <td><a href="javascript:cancelWayBill('GO131126005446');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260054" name="[46].WayBillNumber"><input type="hidden" value="141.29" name="[46].Freight"><input type="hidden" value="0" name="[46].FuelCharge"><input type="hidden" value="0" name="[46].Register"><input type="hidden" value="13.2" name="[46].Surcharge"><input type="hidden" value="" name="[46].Length"><input type="hidden" value="" name="[46].Width"><input type="hidden" value="" name="[46].Height"><input type="hidden" value="RE648146505SE" name="[46].TrackingNumber"><input type="hidden" value="1.784" name="[46].SettleWeight"><input type="hidden" value="1.784" name="[46].Weight"><input type="hidden" value="RB267816330CN" name="[46].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr5">
+        <td>GO1311260063</td>
+        <td>RE648145836SE</td>
+        <td>RB267819319CN</td>
+        <td>瑞典小包</td>
+        <td>1.1</td>
+        <td>FR</td>
+        <td><a href="javascript:cancelWayBill('GO131126006345');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260063" name="[45].WayBillNumber"><input type="hidden" value="87.12" name="[45].Freight"><input type="hidden" value="0" name="[45].FuelCharge"><input type="hidden" value="0" name="[45].Register"><input type="hidden" value="13.2" name="[45].Surcharge"><input type="hidden" value="" name="[45].Length"><input type="hidden" value="" name="[45].Width"><input type="hidden" value="" name="[45].Height"><input type="hidden" value="RE648145836SE" name="[45].TrackingNumber"><input type="hidden" value="1.1" name="[45].SettleWeight"><input type="hidden" value="1.1" name="[45].Weight"><input type="hidden" value="RB267819319CN" name="[45].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr6">
+        <td>GO1311260005</td>
+        <td>RE648146479SE</td>
+        <td>RB267855378CN</td>
+        <td>瑞典小包</td>
+        <td>1.692</td>
+        <td>AU</td>
+        <td><a href="javascript:cancelWayBill('GO131126000544');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260005" name="[44].WayBillNumber"><input type="hidden" value="163.79" name="[44].Freight"><input type="hidden" value="0" name="[44].FuelCharge"><input type="hidden" value="0" name="[44].Register"><input type="hidden" value="14.3" name="[44].Surcharge"><input type="hidden" value="" name="[44].Length"><input type="hidden" value="" name="[44].Width"><input type="hidden" value="" name="[44].Height"><input type="hidden" value="RE648146479SE" name="[44].TrackingNumber"><input type="hidden" value="1.692" name="[44].SettleWeight"><input type="hidden" value="1.692" name="[44].Weight"><input type="hidden" value="RB267855378CN" name="[44].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr7">
+        <td>GO1311260161</td>
+        <td>RE648146377SE</td>
+        <td>RB267816516CN</td>
+        <td>瑞典小包</td>
+        <td>0.112</td>
+        <td>US</td>
+        <td><a href="javascript:cancelWayBill('GO131126016143');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260161" name="[43].WayBillNumber"><input type="hidden" value="9.61" name="[43].Freight"><input type="hidden" value="0" name="[43].FuelCharge"><input type="hidden" value="0" name="[43].Register"><input type="hidden" value="14.3" name="[43].Surcharge"><input type="hidden" value="" name="[43].Length"><input type="hidden" value="" name="[43].Width"><input type="hidden" value="" name="[43].Height"><input type="hidden" value="RE648146377SE" name="[43].TrackingNumber"><input type="hidden" value="0.112" name="[43].SettleWeight"><input type="hidden" value="0.112" name="[43].Weight"><input type="hidden" value="RB267816516CN" name="[43].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr8">
+        <td>GO1311260087</td>
+        <td>RE648146346SE</td>
+        <td>RB267816462CN</td>
+        <td>瑞典小包</td>
+        <td>0.072</td>
+        <td>IT</td>
+        <td><a href="javascript:cancelWayBill('GO131126008742');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260087" name="[42].WayBillNumber"><input type="hidden" value="0.87" name="[42].Freight"><input type="hidden" value="0" name="[42].FuelCharge"><input type="hidden" value="0" name="[42].Register"><input type="hidden" value="14.3" name="[42].Surcharge"><input type="hidden" value="" name="[42].Length"><input type="hidden" value="" name="[42].Width"><input type="hidden" value="" name="[42].Height"><input type="hidden" value="RE648146346SE" name="[42].TrackingNumber"><input type="hidden" value="0.072" name="[42].SettleWeight"><input type="hidden" value="0.072" name="[42].Weight"><input type="hidden" value="RB267816462CN" name="[42].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr9">
+        <td>GO1311260137</td>
+        <td>RE648146085SE</td>
+        <td>RB267819217CN</td>
+        <td>瑞典小包</td>
+        <td>0.204</td>
+        <td>US</td>
+        <td><a href="javascript:cancelWayBill('GO131126013741');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260137" name="[41].WayBillNumber"><input type="hidden" value="17.5" name="[41].Freight"><input type="hidden" value="0" name="[41].FuelCharge"><input type="hidden" value="0" name="[41].Register"><input type="hidden" value="14.3" name="[41].Surcharge"><input type="hidden" value="" name="[41].Length"><input type="hidden" value="" name="[41].Width"><input type="hidden" value="" name="[41].Height"><input type="hidden" value="RE648146085SE" name="[41].TrackingNumber"><input type="hidden" value="0.204" name="[41].SettleWeight"><input type="hidden" value="0.204" name="[41].Weight"><input type="hidden" value="RB267819217CN" name="[41].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr10">
+        <td>GO1311260111</td>
+        <td>RE648146425SE</td>
+        <td>RB267855280CN</td>
+        <td>瑞典小包</td>
+        <td>1.01</td>
+        <td>US</td>
+        <td><a href="javascript:cancelWayBill('GO131126011140');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260111" name="[40].WayBillNumber"><input type="hidden" value="86.66" name="[40].Freight"><input type="hidden" value="0" name="[40].FuelCharge"><input type="hidden" value="0" name="[40].Register"><input type="hidden" value="14.3" name="[40].Surcharge"><input type="hidden" value="" name="[40].Length"><input type="hidden" value="" name="[40].Width"><input type="hidden" value="" name="[40].Height"><input type="hidden" value="RE648146425SE" name="[40].TrackingNumber"><input type="hidden" value="1.01" name="[40].SettleWeight"><input type="hidden" value="1.01" name="[40].Weight"><input type="hidden" value="RB267855280CN" name="[40].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr11">
+        <td>GO1311260043</td>
+        <td>RE648146448SE</td>
+        <td>RB267816649CN</td>
+        <td>瑞典小包</td>
+        <td>0.87</td>
+        <td>CA</td>
+        <td><a href="javascript:cancelWayBill('GO131126004339');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260043" name="[39].WayBillNumber"><input type="hidden" value="79.43" name="[39].Freight"><input type="hidden" value="0" name="[39].FuelCharge"><input type="hidden" value="0" name="[39].Register"><input type="hidden" value="14.3" name="[39].Surcharge"><input type="hidden" value="" name="[39].Length"><input type="hidden" value="" name="[39].Width"><input type="hidden" value="" name="[39].Height"><input type="hidden" value="RE648146448SE" name="[39].TrackingNumber"><input type="hidden" value="0.87" name="[39].SettleWeight"><input type="hidden" value="0.87" name="[39].Weight"><input type="hidden" value="RB267816649CN" name="[39].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr12">
+        <td>GO1311260159</td>
+        <td>RE648146465SE</td>
+        <td>RB267816581CN</td>
+        <td>瑞典小包</td>
+        <td>1.298</td>
+        <td>US</td>
+        <td><a href="javascript:cancelWayBill('GO131126015938');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260159" name="[38].WayBillNumber"><input type="hidden" value="111.37" name="[38].Freight"><input type="hidden" value="0" name="[38].FuelCharge"><input type="hidden" value="0" name="[38].Register"><input type="hidden" value="14.3" name="[38].Surcharge"><input type="hidden" value="" name="[38].Length"><input type="hidden" value="" name="[38].Width"><input type="hidden" value="" name="[38].Height"><input type="hidden" value="RE648146465SE" name="[38].TrackingNumber"><input type="hidden" value="1.298" name="[38].SettleWeight"><input type="hidden" value="1.298" name="[38].Weight"><input type="hidden" value="RB267816581CN" name="[38].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr13">
+        <td>GO1311260127</td>
+        <td>RE648146655SE</td>
+        <td>RB267819490CN</td>
+        <td>瑞典小包</td>
+        <td>1.328</td>
+        <td>US</td>
+        <td><a href="javascript:cancelWayBill('GO131126012737');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260127" name="[37].WayBillNumber"><input type="hidden" value="113.94" name="[37].Freight"><input type="hidden" value="0" name="[37].FuelCharge"><input type="hidden" value="0" name="[37].Register"><input type="hidden" value="14.3" name="[37].Surcharge"><input type="hidden" value="" name="[37].Length"><input type="hidden" value="" name="[37].Width"><input type="hidden" value="" name="[37].Height"><input type="hidden" value="RE648146655SE" name="[37].TrackingNumber"><input type="hidden" value="1.328" name="[37].SettleWeight"><input type="hidden" value="1.328" name="[37].Weight"><input type="hidden" value="RB267819490CN" name="[37].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr14">
+        <td>GO1311260153</td>
+        <td>RE648146893SE</td>
+        <td>RB267816175CN</td>
+        <td>瑞典小包</td>
+        <td>0.426</td>
+        <td>US</td>
+        <td><a href="javascript:cancelWayBill('GO131126015336');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260153" name="[36].WayBillNumber"><input type="hidden" value="36.55" name="[36].Freight"><input type="hidden" value="0" name="[36].FuelCharge"><input type="hidden" value="0" name="[36].Register"><input type="hidden" value="14.3" name="[36].Surcharge"><input type="hidden" value="" name="[36].Length"><input type="hidden" value="" name="[36].Width"><input type="hidden" value="" name="[36].Height"><input type="hidden" value="RE648146893SE" name="[36].TrackingNumber"><input type="hidden" value="0.426" name="[36].SettleWeight"><input type="hidden" value="0.426" name="[36].Weight"><input type="hidden" value="RB267816175CN" name="[36].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr15">
+        <td>GO1311260131</td>
+        <td>RE648146669SE</td>
+        <td>RB267819375CN</td>
+        <td>瑞典小包</td>
+        <td>0.534</td>
+        <td>US</td>
+        <td><a href="javascript:cancelWayBill('GO131126013135');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260131" name="[35].WayBillNumber"><input type="hidden" value="45.82" name="[35].Freight"><input type="hidden" value="0" name="[35].FuelCharge"><input type="hidden" value="0" name="[35].Register"><input type="hidden" value="14.3" name="[35].Surcharge"><input type="hidden" value="" name="[35].Length"><input type="hidden" value="" name="[35].Width"><input type="hidden" value="" name="[35].Height"><input type="hidden" value="RE648146669SE" name="[35].TrackingNumber"><input type="hidden" value="0.534" name="[35].SettleWeight"><input type="hidden" value="0.534" name="[35].Weight"><input type="hidden" value="RB267819375CN" name="[35].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr16">
+        <td>GO1311260163</td>
+        <td>RE648145646SE</td>
+        <td>RB267816480CN</td>
+        <td>瑞典小包</td>
+        <td>0.074</td>
+        <td>US</td>
+        <td><a href="javascript:cancelWayBill('GO131126016334');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260163" name="[34].WayBillNumber"><input type="hidden" value="6.35" name="[34].Freight"><input type="hidden" value="0" name="[34].FuelCharge"><input type="hidden" value="0" name="[34].Register"><input type="hidden" value="14.3" name="[34].Surcharge"><input type="hidden" value="" name="[34].Length"><input type="hidden" value="" name="[34].Width"><input type="hidden" value="" name="[34].Height"><input type="hidden" value="RE648145646SE" name="[34].TrackingNumber"><input type="hidden" value="0.074" name="[34].SettleWeight"><input type="hidden" value="0.074" name="[34].Weight"><input type="hidden" value="RB267816480CN" name="[34].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr17">
+        <td>GO1311260103</td>
+        <td>RE648146363SE</td>
+        <td>RB267855435CN</td>
+        <td>瑞典小包</td>
+        <td>0.108</td>
+        <td>US</td>
+        <td><a href="javascript:cancelWayBill('GO131126010333');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260103" name="[33].WayBillNumber"><input type="hidden" value="9.27" name="[33].Freight"><input type="hidden" value="0" name="[33].FuelCharge"><input type="hidden" value="0" name="[33].Register"><input type="hidden" value="14.3" name="[33].Surcharge"><input type="hidden" value="" name="[33].Length"><input type="hidden" value="" name="[33].Width"><input type="hidden" value="" name="[33].Height"><input type="hidden" value="RE648146363SE" name="[33].TrackingNumber"><input type="hidden" value="0.108" name="[33].SettleWeight"><input type="hidden" value="0.108" name="[33].Weight"><input type="hidden" value="RB267855435CN" name="[33].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr18">
+        <td>GO1311260055</td>
+        <td>RE648145938SE</td>
+        <td>RB267819702CN</td>
+        <td>瑞典小包</td>
+        <td>0.2</td>
+        <td>ES</td>
+        <td><a href="javascript:cancelWayBill('GO131126005532');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260055" name="[32].WayBillNumber"><input type="hidden" value="15.84" name="[32].Freight"><input type="hidden" value="0" name="[32].FuelCharge"><input type="hidden" value="0" name="[32].Register"><input type="hidden" value="13.2" name="[32].Surcharge"><input type="hidden" value="" name="[32].Length"><input type="hidden" value="" name="[32].Width"><input type="hidden" value="" name="[32].Height"><input type="hidden" value="RE648145938SE" name="[32].TrackingNumber"><input type="hidden" value="0.2" name="[32].SettleWeight"><input type="hidden" value="0.2" name="[32].Weight"><input type="hidden" value="RB267819702CN" name="[32].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr19">
+        <td>GO1311260158</td>
+        <td>RE648146831SE</td>
+        <td>RB267816618CN</td>
+        <td>瑞典小包</td>
+        <td>0.236</td>
+        <td>US</td>
+        <td><a href="javascript:cancelWayBill('GO131126015831');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260158" name="[31].WayBillNumber"><input type="hidden" value="20.25" name="[31].Freight"><input type="hidden" value="0" name="[31].FuelCharge"><input type="hidden" value="0" name="[31].Register"><input type="hidden" value="14.3" name="[31].Surcharge"><input type="hidden" value="" name="[31].Length"><input type="hidden" value="" name="[31].Width"><input type="hidden" value="" name="[31].Height"><input type="hidden" value="RE648146831SE" name="[31].TrackingNumber"><input type="hidden" value="0.236" name="[31].SettleWeight"><input type="hidden" value="0.236" name="[31].Weight"><input type="hidden" value="RB267816618CN" name="[31].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr20">
+        <td>GO1311260008</td>
+        <td>RE648145898SE</td>
+        <td>RB267819676CN</td>
+        <td>瑞典小包</td>
+        <td>0.218</td>
+        <td>AU</td>
+        <td><a href="javascript:cancelWayBill('GO131126000830');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260008" name="[30].WayBillNumber"><input type="hidden" value="21.1" name="[30].Freight"><input type="hidden" value="0" name="[30].FuelCharge"><input type="hidden" value="0" name="[30].Register"><input type="hidden" value="14.3" name="[30].Surcharge"><input type="hidden" value="" name="[30].Length"><input type="hidden" value="" name="[30].Width"><input type="hidden" value="" name="[30].Height"><input type="hidden" value="RE648145898SE" name="[30].TrackingNumber"><input type="hidden" value="0.218" name="[30].SettleWeight"><input type="hidden" value="0.218" name="[30].Weight"><input type="hidden" value="RB267819676CN" name="[30].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr21">
+        <td>GO1311260172</td>
+        <td>RE648146301SE</td>
+        <td>RB267816697CN</td>
+        <td>瑞典小包</td>
+        <td>0.074</td>
+        <td>US</td>
+        <td><a href="javascript:cancelWayBill('GO131126017229');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260172" name="[29].WayBillNumber"><input type="hidden" value="6.35" name="[29].Freight"><input type="hidden" value="0" name="[29].FuelCharge"><input type="hidden" value="0" name="[29].Register"><input type="hidden" value="14.3" name="[29].Surcharge"><input type="hidden" value="" name="[29].Length"><input type="hidden" value="" name="[29].Width"><input type="hidden" value="" name="[29].Height"><input type="hidden" value="RE648146301SE" name="[29].TrackingNumber"><input type="hidden" value="0.074" name="[29].SettleWeight"><input type="hidden" value="0.074" name="[29].Weight"><input type="hidden" value="RB267816697CN" name="[29].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr22">
+        <td>GO1311260072</td>
+        <td>RE648145822SE</td>
+        <td>RB267819565CN</td>
+        <td>瑞典小包</td>
+        <td>1.21</td>
+        <td>GB</td>
+        <td><a href="javascript:cancelWayBill('GO131126007228');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260072" name="[28].WayBillNumber"><input type="hidden" value="110.47" name="[28].Freight"><input type="hidden" value="0" name="[28].FuelCharge"><input type="hidden" value="0" name="[28].Register"><input type="hidden" value="14.3" name="[28].Surcharge"><input type="hidden" value="" name="[28].Length"><input type="hidden" value="" name="[28].Width"><input type="hidden" value="" name="[28].Height"><input type="hidden" value="RE648145822SE" name="[28].TrackingNumber"><input type="hidden" value="1.21" name="[28].SettleWeight"><input type="hidden" value="1.21" name="[28].Weight"><input type="hidden" value="RB267819565CN" name="[28].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr23">
+        <td>GO1311260022</td>
+        <td>RE648145589SE</td>
+        <td>RB267855316CN</td>
+        <td>瑞典小包</td>
+        <td>0.162</td>
+        <td>CA</td>
+        <td><a href="javascript:cancelWayBill('GO131126002227');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260022" name="[27].WayBillNumber"><input type="hidden" value="14.79" name="[27].Freight"><input type="hidden" value="0" name="[27].FuelCharge"><input type="hidden" value="0" name="[27].Register"><input type="hidden" value="14.3" name="[27].Surcharge"><input type="hidden" value="" name="[27].Length"><input type="hidden" value="" name="[27].Width"><input type="hidden" value="" name="[27].Height"><input type="hidden" value="RE648145589SE" name="[27].TrackingNumber"><input type="hidden" value="0.162" name="[27].SettleWeight"><input type="hidden" value="0.162" name="[27].Weight"><input type="hidden" value="RB267855316CN" name="[27].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr24">
+        <td>GO1311260001</td>
+        <td>RE648146385SE</td>
+        <td>RB267814838CN</td>
+        <td>瑞典小包</td>
+        <td>0.13</td>
+        <td>AU</td>
+        <td><a href="javascript:cancelWayBill('GO131126000126');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260001" name="[26].WayBillNumber"><input type="hidden" value="12.58" name="[26].Freight"><input type="hidden" value="0" name="[26].FuelCharge"><input type="hidden" value="0" name="[26].Register"><input type="hidden" value="14.3" name="[26].Surcharge"><input type="hidden" value="" name="[26].Length"><input type="hidden" value="" name="[26].Width"><input type="hidden" value="" name="[26].Height"><input type="hidden" value="RE648146385SE" name="[26].TrackingNumber"><input type="hidden" value="0.13" name="[26].SettleWeight"><input type="hidden" value="0.13" name="[26].Weight"><input type="hidden" value="RB267814838CN" name="[26].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr25">
+        <td>GO1311260007</td>
+        <td>RE648146071SE</td>
+        <td>RB267855214CN</td>
+        <td>瑞典小包</td>
+        <td>0.07</td>
+        <td>AU</td>
+        <td><a href="javascript:cancelWayBill('GO131126000725');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260007" name="[25].WayBillNumber"><input type="hidden" value="6.78" name="[25].Freight"><input type="hidden" value="0" name="[25].FuelCharge"><input type="hidden" value="0" name="[25].Register"><input type="hidden" value="14.3" name="[25].Surcharge"><input type="hidden" value="" name="[25].Length"><input type="hidden" value="" name="[25].Width"><input type="hidden" value="" name="[25].Height"><input type="hidden" value="RE648146071SE" name="[25].TrackingNumber"><input type="hidden" value="0.07" name="[25].SettleWeight"><input type="hidden" value="0.07" name="[25].Weight"><input type="hidden" value="RB267855214CN" name="[25].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr26">
+        <td>GO1311240041</td>
+        <td>RE648146037SE</td>
+        <td>RB267851668CN</td>
+        <td>瑞典小包</td>
+        <td>1.76</td>
+        <td>FR</td>
+        <td><a href="javascript:cancelWayBill('GO131124004124');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311240041" name="[24].WayBillNumber"><input type="hidden" value="139.39" name="[24].Freight"><input type="hidden" value="0" name="[24].FuelCharge"><input type="hidden" value="0" name="[24].Register"><input type="hidden" value="13.2" name="[24].Surcharge"><input type="hidden" value="" name="[24].Length"><input type="hidden" value="" name="[24].Width"><input type="hidden" value="" name="[24].Height"><input type="hidden" value="RE648146037SE" name="[24].TrackingNumber"><input type="hidden" value="1.76" name="[24].SettleWeight"><input type="hidden" value="1.76" name="[24].Weight"><input type="hidden" value="RB267851668CN" name="[24].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr27">
+        <td>GO1311260024</td>
+        <td>RE648145990SE</td>
+        <td>RB267855347CN</td>
+        <td>瑞典小包</td>
+        <td>0.32</td>
+        <td>CA</td>
+        <td><a href="javascript:cancelWayBill('GO131126002423');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260024" name="[23].WayBillNumber"><input type="hidden" value="29.22" name="[23].Freight"><input type="hidden" value="0" name="[23].FuelCharge"><input type="hidden" value="0" name="[23].Register"><input type="hidden" value="14.3" name="[23].Surcharge"><input type="hidden" value="" name="[23].Length"><input type="hidden" value="" name="[23].Width"><input type="hidden" value="" name="[23].Height"><input type="hidden" value="RE648145990SE" name="[23].TrackingNumber"><input type="hidden" value="0.32" name="[23].SettleWeight"><input type="hidden" value="0.32" name="[23].Weight"><input type="hidden" value="RB267855347CN" name="[23].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr28">
+        <td>GO1311260040</td>
+        <td>RE648145323SE</td>
+        <td>RB267816082CN</td>
+        <td>瑞典小包</td>
+        <td>0.796</td>
+        <td>CA</td>
+        <td><a href="javascript:cancelWayBill('GO131126004022');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260040" name="[22].WayBillNumber"><input type="hidden" value="72.67" name="[22].Freight"><input type="hidden" value="0" name="[22].FuelCharge"><input type="hidden" value="0" name="[22].Register"><input type="hidden" value="14.3" name="[22].Surcharge"><input type="hidden" value="" name="[22].Length"><input type="hidden" value="" name="[22].Width"><input type="hidden" value="" name="[22].Height"><input type="hidden" value="RE648145323SE" name="[22].TrackingNumber"><input type="hidden" value="0.796" name="[22].SettleWeight"><input type="hidden" value="0.796" name="[22].Weight"><input type="hidden" value="RB267816082CN" name="[22].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr29">
+        <td>GO1311260071</td>
+        <td>RE648146010SE</td>
+        <td>RB267855191CN</td>
+        <td>瑞典小包</td>
+        <td>0.712</td>
+        <td>GB</td>
+        <td><a href="javascript:cancelWayBill('GO131126007121');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260071" name="[21].WayBillNumber"><input type="hidden" value="65.01" name="[21].Freight"><input type="hidden" value="0" name="[21].FuelCharge"><input type="hidden" value="0" name="[21].Register"><input type="hidden" value="14.3" name="[21].Surcharge"><input type="hidden" value="" name="[21].Length"><input type="hidden" value="" name="[21].Width"><input type="hidden" value="" name="[21].Height"><input type="hidden" value="RE648146010SE" name="[21].TrackingNumber"><input type="hidden" value="0.712" name="[21].SettleWeight"><input type="hidden" value="0.712" name="[21].Weight"><input type="hidden" value="RB267855191CN" name="[21].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr30">
+        <td>GO1311260101</td>
+        <td>RE648144929SE</td>
+        <td>RB267855506CN</td>
+        <td>瑞典小包</td>
+        <td>0.254</td>
+        <td>US</td>
+        <td><a href="javascript:cancelWayBill('GO131126010120');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260101" name="[20].WayBillNumber"><input type="hidden" value="21.79" name="[20].Freight"><input type="hidden" value="0" name="[20].FuelCharge"><input type="hidden" value="0" name="[20].Register"><input type="hidden" value="14.3" name="[20].Surcharge"><input type="hidden" value="" name="[20].Length"><input type="hidden" value="" name="[20].Width"><input type="hidden" value="" name="[20].Height"><input type="hidden" value="RE648144929SE" name="[20].TrackingNumber"><input type="hidden" value="0.254" name="[20].SettleWeight"><input type="hidden" value="0.254" name="[20].Weight"><input type="hidden" value="RB267855506CN" name="[20].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr31">
+        <td>GO1311260095</td>
+        <td>RE648145337SE</td>
+        <td>RB267814311CN</td>
+        <td>瑞典小包</td>
+        <td>0.384</td>
+        <td>US</td>
+        <td><a href="javascript:cancelWayBill('GO131126009519');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260095" name="[19].WayBillNumber"><input type="hidden" value="32.95" name="[19].Freight"><input type="hidden" value="0" name="[19].FuelCharge"><input type="hidden" value="0" name="[19].Register"><input type="hidden" value="14.3" name="[19].Surcharge"><input type="hidden" value="" name="[19].Length"><input type="hidden" value="" name="[19].Width"><input type="hidden" value="" name="[19].Height"><input type="hidden" value="RE648145337SE" name="[19].TrackingNumber"><input type="hidden" value="0.384" name="[19].SettleWeight"><input type="hidden" value="0.384" name="[19].Weight"><input type="hidden" value="RB267814311CN" name="[19].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr32">
+        <td>GO1311240015</td>
+        <td>RE648144402SE</td>
+        <td>RB267854338CN</td>
+        <td>瑞典小包</td>
+        <td>0.41</td>
+        <td>CA</td>
+        <td><a href="javascript:cancelWayBill('GO131124001518');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311240015" name="[18].WayBillNumber"><input type="hidden" value="37.43" name="[18].Freight"><input type="hidden" value="0" name="[18].FuelCharge"><input type="hidden" value="0" name="[18].Register"><input type="hidden" value="14.3" name="[18].Surcharge"><input type="hidden" value="" name="[18].Length"><input type="hidden" value="" name="[18].Width"><input type="hidden" value="" name="[18].Height"><input type="hidden" value="RE648144402SE" name="[18].TrackingNumber"><input type="hidden" value="0.41" name="[18].SettleWeight"><input type="hidden" value="0.41" name="[18].Weight"><input type="hidden" value="RB267854338CN" name="[18].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr33">
+        <td>GO1311240014</td>
+        <td>RE648145120SE</td>
+        <td>RB267854837CN</td>
+        <td>瑞典小包</td>
+        <td>0.916</td>
+        <td>CA</td>
+        <td><a href="javascript:cancelWayBill('GO131124001417');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311240014" name="[17].WayBillNumber"><input type="hidden" value="83.63" name="[17].Freight"><input type="hidden" value="0" name="[17].FuelCharge"><input type="hidden" value="0" name="[17].Register"><input type="hidden" value="14.3" name="[17].Surcharge"><input type="hidden" value="" name="[17].Length"><input type="hidden" value="" name="[17].Width"><input type="hidden" value="" name="[17].Height"><input type="hidden" value="RE648145120SE" name="[17].TrackingNumber"><input type="hidden" value="0.916" name="[17].SettleWeight"><input type="hidden" value="0.916" name="[17].Weight"><input type="hidden" value="RB267854837CN" name="[17].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr34">
+        <td>GO1311240028</td>
+        <td>RE648144504SE</td>
+        <td>RB267856585CN</td>
+        <td>瑞典小包</td>
+        <td>0.266</td>
+        <td>CA</td>
+        <td><a href="javascript:cancelWayBill('GO131124002816');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311240028" name="[16].WayBillNumber"><input type="hidden" value="24.29" name="[16].Freight"><input type="hidden" value="0" name="[16].FuelCharge"><input type="hidden" value="0" name="[16].Register"><input type="hidden" value="14.3" name="[16].Surcharge"><input type="hidden" value="" name="[16].Length"><input type="hidden" value="" name="[16].Width"><input type="hidden" value="" name="[16].Height"><input type="hidden" value="RE648144504SE" name="[16].TrackingNumber"><input type="hidden" value="0.266" name="[16].SettleWeight"><input type="hidden" value="0.266" name="[16].Weight"><input type="hidden" value="RB267856585CN" name="[16].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr35">
+        <td>GO1311260156</td>
+        <td>RE648145371SE</td>
+        <td>RB267816025CN</td>
+        <td>瑞典小包</td>
+        <td>0.588</td>
+        <td>US</td>
+        <td><a href="javascript:cancelWayBill('GO131126015615');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260156" name="[15].WayBillNumber"><input type="hidden" value="50.45" name="[15].Freight"><input type="hidden" value="0" name="[15].FuelCharge"><input type="hidden" value="0" name="[15].Register"><input type="hidden" value="14.3" name="[15].Surcharge"><input type="hidden" value="" name="[15].Length"><input type="hidden" value="" name="[15].Width"><input type="hidden" value="" name="[15].Height"><input type="hidden" value="RE648145371SE" name="[15].TrackingNumber"><input type="hidden" value="0.588" name="[15].SettleWeight"><input type="hidden" value="0.588" name="[15].Weight"><input type="hidden" value="RB267816025CN" name="[15].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr36">
+        <td>GO1311260068</td>
+        <td>RE648144861SE</td>
+        <td>RB267814550CN</td>
+        <td>瑞典小包</td>
+        <td>0.58</td>
+        <td>GB</td>
+        <td><a href="javascript:cancelWayBill('GO131126006814');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260068" name="[14].WayBillNumber"><input type="hidden" value="52.95" name="[14].Freight"><input type="hidden" value="0" name="[14].FuelCharge"><input type="hidden" value="0" name="[14].Register"><input type="hidden" value="14.3" name="[14].Surcharge"><input type="hidden" value="" name="[14].Length"><input type="hidden" value="" name="[14].Width"><input type="hidden" value="" name="[14].Height"><input type="hidden" value="RE648144861SE" name="[14].TrackingNumber"><input type="hidden" value="0.58" name="[14].SettleWeight"><input type="hidden" value="0.58" name="[14].Weight"><input type="hidden" value="RB267814550CN" name="[14].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr37">
+        <td>GO1311260148</td>
+        <td>RE648144858SE</td>
+        <td>RB267816286CN</td>
+        <td>瑞典小包</td>
+        <td>0.184</td>
+        <td>US</td>
+        <td><a href="javascript:cancelWayBill('GO131126014813');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260148" name="[13].WayBillNumber"><input type="hidden" value="15.79" name="[13].Freight"><input type="hidden" value="0" name="[13].FuelCharge"><input type="hidden" value="0" name="[13].Register"><input type="hidden" value="14.3" name="[13].Surcharge"><input type="hidden" value="" name="[13].Length"><input type="hidden" value="" name="[13].Width"><input type="hidden" value="" name="[13].Height"><input type="hidden" value="RE648144858SE" name="[13].TrackingNumber"><input type="hidden" value="0.184" name="[13].SettleWeight"><input type="hidden" value="0.184" name="[13].Weight"><input type="hidden" value="RB267816286CN" name="[13].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr38">
+        <td>GO1311260067</td>
+        <td>RE648145354SE</td>
+        <td>RB267814648CN</td>
+        <td>瑞典小包</td>
+        <td>0.116</td>
+        <td>GB</td>
+        <td><a href="javascript:cancelWayBill('GO131126006712');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260067" name="[12].WayBillNumber"><input type="hidden" value="10.59" name="[12].Freight"><input type="hidden" value="0" name="[12].FuelCharge"><input type="hidden" value="0" name="[12].Register"><input type="hidden" value="14.3" name="[12].Surcharge"><input type="hidden" value="" name="[12].Length"><input type="hidden" value="" name="[12].Width"><input type="hidden" value="" name="[12].Height"><input type="hidden" value="RE648145354SE" name="[12].TrackingNumber"><input type="hidden" value="0.116" name="[12].SettleWeight"><input type="hidden" value="0.116" name="[12].Weight"><input type="hidden" value="RB267814648CN" name="[12].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr39">
+        <td>GO1311260142</td>
+        <td>RE648145368SE</td>
+        <td>RB267819177CN</td>
+        <td>瑞典小包</td>
+        <td>0.73</td>
+        <td>US</td>
+        <td><a href="javascript:cancelWayBill('GO131126014210');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260142" name="[10].WayBillNumber"><input type="hidden" value="62.63" name="[10].Freight"><input type="hidden" value="0" name="[10].FuelCharge"><input type="hidden" value="0" name="[10].Register"><input type="hidden" value="14.3" name="[10].Surcharge"><input type="hidden" value="" name="[10].Length"><input type="hidden" value="" name="[10].Width"><input type="hidden" value="" name="[10].Height"><input type="hidden" value="RE648145368SE" name="[10].TrackingNumber"><input type="hidden" value="0.73" name="[10].SettleWeight"><input type="hidden" value="0.73" name="[10].Weight"><input type="hidden" value="RB267819177CN" name="[10].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr40">
+        <td>GO1311260060</td>
+        <td>RE648145425SE</td>
+        <td>RB267819631CN</td>
+        <td>瑞典小包</td>
+        <td>0.42</td>
+        <td>FR</td>
+        <td><a href="javascript:cancelWayBill('GO13112600609');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260060" name="[9].WayBillNumber"><input type="hidden" value="33.26" name="[9].Freight"><input type="hidden" value="0" name="[9].FuelCharge"><input type="hidden" value="0" name="[9].Register"><input type="hidden" value="13.2" name="[9].Surcharge"><input type="hidden" value="" name="[9].Length"><input type="hidden" value="" name="[9].Width"><input type="hidden" value="" name="[9].Height"><input type="hidden" value="RE648145425SE" name="[9].TrackingNumber"><input type="hidden" value="0.42" name="[9].SettleWeight"><input type="hidden" value="0.42" name="[9].Weight"><input type="hidden" value="RB267819631CN" name="[9].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr41">
+        <td>GO1311260075</td>
+        <td>RE648145527SE</td>
+        <td>RB267816017CN</td>
+        <td>瑞典小包</td>
+        <td>0.518</td>
+        <td>GB</td>
+        <td><a href="javascript:cancelWayBill('GO13112600758');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260075" name="[8].WayBillNumber"><input type="hidden" value="47.29" name="[8].Freight"><input type="hidden" value="0" name="[8].FuelCharge"><input type="hidden" value="0" name="[8].Register"><input type="hidden" value="14.3" name="[8].Surcharge"><input type="hidden" value="" name="[8].Length"><input type="hidden" value="" name="[8].Width"><input type="hidden" value="" name="[8].Height"><input type="hidden" value="RE648145527SE" name="[8].TrackingNumber"><input type="hidden" value="0.518" name="[8].SettleWeight"><input type="hidden" value="0.518" name="[8].Weight"><input type="hidden" value="RB267816017CN" name="[8].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr42">
+        <td>GO1311240001</td>
+        <td>RE648145059SE</td>
+        <td>RB267814679CN</td>
+        <td>瑞典小包</td>
+        <td>1.748</td>
+        <td>AU</td>
+        <td><a href="javascript:cancelWayBill('GO13112400017');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311240001" name="[7].WayBillNumber"><input type="hidden" value="169.21" name="[7].Freight"><input type="hidden" value="0" name="[7].FuelCharge"><input type="hidden" value="0" name="[7].Register"><input type="hidden" value="14.3" name="[7].Surcharge"><input type="hidden" value="" name="[7].Length"><input type="hidden" value="" name="[7].Width"><input type="hidden" value="" name="[7].Height"><input type="hidden" value="RE648145059SE" name="[7].TrackingNumber"><input type="hidden" value="1.748" name="[7].SettleWeight"><input type="hidden" value="1.748" name="[7].Weight"><input type="hidden" value="RB267814679CN" name="[7].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr43">
+        <td>GO1311260152</td>
+        <td>RE648145439SE</td>
+        <td>RB267816405CN</td>
+        <td>瑞典小包</td>
+        <td>0.88</td>
+        <td>US</td>
+        <td><a href="javascript:cancelWayBill('GO13112601526');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260152" name="[6].WayBillNumber"><input type="hidden" value="75.5" name="[6].Freight"><input type="hidden" value="0" name="[6].FuelCharge"><input type="hidden" value="0" name="[6].Register"><input type="hidden" value="14.3" name="[6].Surcharge"><input type="hidden" value="" name="[6].Length"><input type="hidden" value="" name="[6].Width"><input type="hidden" value="" name="[6].Height"><input type="hidden" value="RE648145439SE" name="[6].TrackingNumber"><input type="hidden" value="0.88" name="[6].SettleWeight"><input type="hidden" value="0.88" name="[6].Weight"><input type="hidden" value="RB267816405CN" name="[6].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr44">
+        <td>GO1311260107</td>
+        <td>RE648145385SE</td>
+        <td>RB267855333CN</td>
+        <td>瑞典小包</td>
+        <td>0.28</td>
+        <td>US</td>
+        <td><a href="javascript:cancelWayBill('GO13112601075');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260107" name="[5].WayBillNumber"><input type="hidden" value="24.02" name="[5].Freight"><input type="hidden" value="0" name="[5].FuelCharge"><input type="hidden" value="0" name="[5].Register"><input type="hidden" value="14.3" name="[5].Surcharge"><input type="hidden" value="" name="[5].Length"><input type="hidden" value="" name="[5].Width"><input type="hidden" value="" name="[5].Height"><input type="hidden" value="RE648145385SE" name="[5].TrackingNumber"><input type="hidden" value="0.28" name="[5].SettleWeight"><input type="hidden" value="0.28" name="[5].Weight"><input type="hidden" value="RB267855333CN" name="[5].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr45">
+        <td>GO1311240013</td>
+        <td>RE648144654SE</td>
+        <td>RB267853981CN</td>
+        <td>瑞典小包</td>
+        <td>1.452</td>
+        <td>CA</td>
+        <td><a href="javascript:cancelWayBill('GO13112400134');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311240013" name="[4].WayBillNumber"><input type="hidden" value="132.57" name="[4].Freight"><input type="hidden" value="0" name="[4].FuelCharge"><input type="hidden" value="0" name="[4].Register"><input type="hidden" value="14.3" name="[4].Surcharge"><input type="hidden" value="" name="[4].Length"><input type="hidden" value="" name="[4].Width"><input type="hidden" value="" name="[4].Height"><input type="hidden" value="RE648144654SE" name="[4].TrackingNumber"><input type="hidden" value="1.452" name="[4].SettleWeight"><input type="hidden" value="1.452" name="[4].Weight"><input type="hidden" value="RB267853981CN" name="[4].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr46">
+        <td>GO1311240012</td>
+        <td>RE648145028SE</td>
+        <td>RB267853947CN</td>
+        <td>瑞典小包</td>
+        <td>0.188</td>
+        <td>CA</td>
+        <td><a href="javascript:cancelWayBill('GO13112400123');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311240012" name="[3].WayBillNumber"><input type="hidden" value="17.16" name="[3].Freight"><input type="hidden" value="0" name="[3].FuelCharge"><input type="hidden" value="0" name="[3].Register"><input type="hidden" value="14.3" name="[3].Surcharge"><input type="hidden" value="" name="[3].Length"><input type="hidden" value="" name="[3].Width"><input type="hidden" value="" name="[3].Height"><input type="hidden" value="RE648145028SE" name="[3].TrackingNumber"><input type="hidden" value="0.188" name="[3].SettleWeight"><input type="hidden" value="0.188" name="[3].Weight"><input type="hidden" value="RB267853947CN" name="[3].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr47">
+        <td>GO1311240023</td>
+        <td>RE648144901SE</td>
+        <td>RB267850044CN</td>
+        <td>瑞典小包</td>
+        <td>1.182</td>
+        <td>CA</td>
+        <td><a href="javascript:cancelWayBill('GO13112400232');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311240023" name="[2].WayBillNumber"><input type="hidden" value="107.92" name="[2].Freight"><input type="hidden" value="0" name="[2].FuelCharge"><input type="hidden" value="0" name="[2].Register"><input type="hidden" value="14.3" name="[2].Surcharge"><input type="hidden" value="" name="[2].Length"><input type="hidden" value="" name="[2].Width"><input type="hidden" value="" name="[2].Height"><input type="hidden" value="RE648144901SE" name="[2].TrackingNumber"><input type="hidden" value="1.182" name="[2].SettleWeight"><input type="hidden" value="1.182" name="[2].Weight"><input type="hidden" value="RB267850044CN" name="[2].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr48">
+        <td>GO1311260077</td>
+        <td>RE648145535SE</td>
+        <td>RB267816652CN</td>
+        <td>瑞典小包</td>
+        <td>0.106</td>
+        <td>GB</td>
+        <td><a href="javascript:cancelWayBill('GO13112600771');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260077" name="[1].WayBillNumber"><input type="hidden" value="9.68" name="[1].Freight"><input type="hidden" value="0" name="[1].FuelCharge"><input type="hidden" value="0" name="[1].Register"><input type="hidden" value="14.3" name="[1].Surcharge"><input type="hidden" value="" name="[1].Length"><input type="hidden" value="" name="[1].Width"><input type="hidden" value="" name="[1].Height"><input type="hidden" value="RE648145535SE" name="[1].TrackingNumber"><input type="hidden" value="0.106" name="[1].SettleWeight"><input type="hidden" value="0.106" name="[1].Weight"><input type="hidden" value="RB267816652CN" name="[1].CustomerOrderNumber"></tr>
+    <tr class="data_row_dan" id="Tr49">
+        <td>GO1311260141</td>
+        <td>RE648145561SE</td>
+        <td>RB267819251CN</td>
+        <td>瑞典小包</td>
+        <td>0.268</td>
+        <td>US</td>
+        <td><a href="javascript:cancelWayBill('GO13112601410');" class="btn_href">取消</a></td>
+        <input type="hidden" value="GO1311260141" name="[0].WayBillNumber"><input type="hidden" value="22.99" name="[0].Freight"><input type="hidden" value="0" name="[0].FuelCharge"><input type="hidden" value="0" name="[0].Register"><input type="hidden" value="14.3" name="[0].Surcharge"><input type="hidden" value="" name="[0].Length"><input type="hidden" value="" name="[0].Width"><input type="hidden" value="" name="[0].Height"><input type="hidden" value="RE648145561SE" name="[0].TrackingNumber"><input type="hidden" value="0.268" name="[0].SettleWeight"><input type="hidden" value="0.268" name="[0].Weight"><input type="hidden" value="RB267819251CN" name="[0].CustomerOrderNumber"></tr>
+</table>

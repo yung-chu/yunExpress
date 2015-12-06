@@ -1,0 +1,283 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>@ViewBag.Title</title>
+    <link href="@Url.Content("~/css/res.css")" type="text/css" rel="stylesheet" />
+    <link href="@Url.Content("~/css/mool.css")" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/js/chosen/chosen.css")" />
+    <script src="@Url.Content("~/js/jquery-1.7.1.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/js/chosen/chosen.jquery.js")" type="text/javascript"></script>
+    <link href="@Url.Content("~/js/artdialog/skins/default.css")" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="@Url.Content("~/js/artdialog/jquery.artDialog.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/js/kindeditor/kindeditor-min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/js/kindeditor/lang/zh_CN.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/js/cookie.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/js/common.js")"></script>
+    @RenderSection("Scripts", false)
+    <!--[if lte IE 7]><script src="@Url.Content("~/js/lte-ie7.js")"></script><![endif]-->
+        @StackExchange.Profiling.MiniProfiler.RenderIncludes()
+    
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?fbb29e001ea4e6a93c63bba9eb038b06";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+   
+</head>
+<body class="" id="bar_stats">
+    <a href="javascript:" class="dis_bar" onclick="btnClick_Handler();">
+        <span class="dis_off"></span>
+        <span class="dis_on"></span>
+    </a>
+    <div class="top_box">
+        <div class="fix top_box">
+            <ul class="r">
+                <li class="top_vertical"></li>
+                <li class="topUser_li first1">&nbsp;<a href="javascript:" class="icon-twitter topUser_item"></a>&nbsp;
+                </li>
+                <li class="top_vertical"></li>
+                <li class="topUser_li">&nbsp;<a href="javascript:" class="icon-message topUser_item"></a>&nbsp;
+                </li>
+                <li class="top_vertical"></li>
+                <li class="topUser_li">&nbsp;<a href="javascript:" class="icon-users topUser_item"></a>&nbsp;
+                </li>
+                @if (Request.IsAuthenticated)
+                {
+                    <li class="top_vertical"></li>
+                    <li class="topUser_li">&nbsp;<a href="@Url.Action("Logout", "Account")" class="topUser_item" style="font-size: 12px;">登出</a>&nbsp;
+                    </li>
+                }
+            </ul>
+            <div class="l mb10">
+                <a href="http://www.lightake.com"></a>
+            </div>
+
+        </div>
+        <div class="top_solid"></div>
+
+    </div>
+    <div class="leftbar">
+        @{
+            string curController = ViewContext.RequestContext.RouteData.Values["controller"].ToString().ToLowerInvariant();
+            string curAction = ViewContext.RequestContext.RouteData.Values["action"].ToString().ToLowerInvariant();
+            
+        }
+
+        @helper DisplayMenuActive(string[] actionNames, string controllerName)
+{
+    string curController = ViewContext.RequestContext.RouteData.Values["controller"].ToString().ToLowerInvariant();
+    string curAction = ViewContext.RequestContext.RouteData.Values["action"].ToString().ToLowerInvariant();
+    if (curController.Equals(controllerName.ToLowerInvariant()) && actionNames.Contains(curAction))
+    { 
+            @Html.Raw("l_list_a_on")
+    }
+    else
+    {
+            @Html.Raw("l_list_a")
+    }
+        }
+
+        <div class="bd_r">
+            @if (curController == "order" || curController == "account")
+            {
+                @Html.Action("OrderMenu", "Account");
+@*<h3 class="f16 p10">
+                    <span class="icon-truck l_icon_anther" style=""></span><strong>订单管理</strong>
+                </h3>
+                <dl>
+                    <dd>
+                        <a class="@DisplayMenuActive(new[] { "add" }, "order")" href="@Url.Action("add", "order")">创建订单</a>
+                    </dd>
+                    <dd>
+                        <a class="@DisplayMenuActive(new[] { "batchadd" }, "order")" href="@Url.Action("batchadd", "order")">批量创建订单</a>
+                    </dd>
+                    <dd>
+                        <a class="@DisplayMenuActive(new[] { "unconfirmed" }, "order")" href="@Url.Action("unconfirmed", "order")">未确认订单</a>
+                    </dd>
+                    <dd>
+                        <a class="@DisplayMenuActive(new[] { "confirmed" }, "order")" href="@Url.Action("confirmed", "order")">已确认订单</a>
+                    </dd>
+                    <dd>
+                        <a class="@DisplayMenuActive(new[] { "submitted" }, "order")" href="@Url.Action("submitted", "order")">已提交订单</a>
+                    </dd>
+                    <dd>
+                        <a class="@DisplayMenuActive(new[] { "received" }, "order")" href="@Url.Action("received", "order")">已收货订单</a>
+                    </dd>
+                    <dd>
+                        <a class="@DisplayMenuActive(new[] { "blocked" }, "order")" href="@Url.Action("blocked", "order")">已拦截订单</a>
+                    </dd>
+                </dl>*@
+            }
+            @if (curController == "billing" || curController == "account")
+            {
+                <h3 class="f16 p10">
+                    <span class="icon-money  l_icon_anther" style=""></span><strong>费用管理</strong>
+                </h3>
+                <dl>
+                    <dd>
+                        <a class="@DisplayMenuActive(new[] { "freighttrial" }, "billing")" href="@Url.Action("freighttrial", "billing")">运费试算</a>
+                    </dd>
+                    <dd>
+                        <a class="@DisplayMenuActive(new[] { "chargebackdetail" }, "billing")" href="@Url.Action("chargebackdetail", "billing")">订单扣费明细</a>
+                    </dd>
+                    <dd>
+                        <a class="@DisplayMenuActive(new[] { "changerecords" }, "billing")" href="@Url.Action("changerecords", "billing")">帐户异动记录</a>
+                    </dd>
+                    <dd>
+                        <a class="@DisplayMenuActive(new[] { "Recharge" }, "billing")" href="@Url.Action("Recharge", "billing")">帐户充值</a>
+                    </dd>
+                    <dd>
+                        <a class="@DisplayMenuActive(new[] { "Recharge" }, "billing")" href="@Url.Action("ModifyPassword", "billing")">修改密码</a>
+                    </dd>
+                </dl>
+            }
+        </div>
+    </div>
+
+    <div class="main">
+        @*<img src="../../images/loader.gif" />*@
+        <div class="conStr">
+            <div class="nav_box bd_b">
+                <div class="fix">
+                    <a href="@Url.Action("index", "Account")" class="u1 @(curController == "account" && curAction == "index" ? "" : "u112")">
+                        <div class="icon-home mt25 fe42"></div>
+                        <p class="mt5 text_sd1">
+                            帐户首页
+                        </p>
+                    </a>
+                    <a href="@Url.Action("Add", "order")" class="u1 @(curController == "order" ? "" : "u112")">
+                        <div class="icon-nav_truck_service mt25 fe42"></div>
+                        <p class="mt5 text_sd1">
+                            订单管理
+                        </p>
+                    </a>
+                    <a href="@Url.Action("FreightTrial", "Billing")" class="u1 @(curController == "billing" ? "" : "u112")">
+                        <div class="icon-money mt25 fe42"></div>
+                        <p class="mt5 text_sd1">
+                            费用管理
+                        </p>
+                    </a>
+                    <a href="#" title="暂未开放,敬请期待!" class="u1 @(curController == "account" && curAction != "index" ? "" : "u112")">
+                        <div class="icon-cogs mt25 fe42"></div>
+                        <p class="mt5 text_sd1">
+                            信息管理  
+                        </p>
+                    </a>
+                    <a href="#" title="暂未开放,敬请期待!" class="u1 u112">
+                        <div class="icon-nav_truck_ques mt25 fe42"></div>
+                        <p class="mt5 text_sd1">
+                            运输问题 
+                        </p>
+                    </a>
+                    <a href="#" title="暂未开放,敬请期待!" class="u1 u112" style="display: none">
+                        <div class="icon-storage mt25 fe42"></div>
+                        <p class="mt5 text_sd1">
+                            仓储（旧）
+                        </p>
+                    </a>
+                    <a href="#" title="暂未开放,敬请期待!" class="u1 u112">
+                        <div class="icon-nav_storage_service mt25 fe42"></div>
+                        <p class="mt5 text_sd1">
+                            仓储服务
+                        </p>
+                    </a>
+                    <div style="margin-top:10px;right:20px; background-color: #fff; border:1px solid #eaeaea; padding: 10px; position: absolute; top: 40px; color: #FFF; text-align: justify;">
+                        <a href="https://shangdai.yixin.com/partner/yun" target="_blank" class="cpi" style="cursor:pointer;">
+                            <img src="/images/shangdai_ad.png">
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            @RenderBody()
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            if ($({}).chosen) {
+                $("select").chosen();
+            }
+
+            $(":submit").live("click", function () {
+                window.LastClickButton = this;
+            });
+
+
+            $("form").submit(function () {
+                if (window.LastClickButton) {
+                    var $this = $(window.LastClickButton);
+                    window.LastClickButton = null;
+                    if (!$this.hasClass("btnDownLoad")) {
+                        $.us.mask.load();
+                    }
+                } else {
+
+                    $.us.mask.load();
+                }
+            });
+        });
+
+        var config = {
+            '.chzn-select': {},
+            '.chzn-select-deselect': { allow_single_deselect: true },
+            '.chzn-select-no-single': { disable_search_threshold: 10 },
+            '.chzn-select-no-results': { no_results_text: 'Oops, nothing found!' },
+            '.chzn-select-width': { width: "95%" }
+        };
+        for (var selector in config) {
+            $(selector).chosen(config[selector]);
+        }
+
+    </script>
+    <script type="text/javascript">
+        var dis = document.getElementById("bar_stats");
+
+        var tmpCookie = cookieUtil.get("stats");
+
+        if (tmpCookie == "close") {
+            dis.className = "close";
+        }
+        else if (tmpCookie == "") {
+            dis.className = "";
+        }
+        function btnClick_Handler() {
+
+            if (dis.className == "") {
+                dis.className = "close";
+                cookieUtil.set("stats", "close", 0, "/");
+            }
+            else if (dis.className == "close") {
+                dis.className = "";
+                cookieUtil.set("stats", "", 0, "/");
+            }
+        }
+    </script>
+
+    @RenderSection("BootScripts", false)
+    @*   @StackExchange.Profiling.MiniProfiler.RenderIncludes()*@
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

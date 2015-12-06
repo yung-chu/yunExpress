@@ -1,0 +1,281 @@
+﻿@model LMS.Controllers.FinancialController.ViewModels.ReceivingExpensesEditViewModel
+@{
+    Layout = null;
+}
+<style>
+    .domebg table td {
+        padding: 3px;
+    }
+</style>
+<div id="showCustomerMultipleList" style="overflow: scroll; display: none; position: relative"></div>
+<form id="editfrom">
+    <div  id="right_con" >
+        <input type="hidden" name="WayBillNumber" id="WayBillNumber" value="@Model.WayBillNumber"/>
+        <ul>
+            <li class="mt20"><span class="info_box info_middle">订单号 : </span> @Model.CustomerOrderNumber
+                <span class="info_box info_middle">客户名称: </span> @Model.CustomerName
+            </li>
+            <li class="mt20" id="liCustomerNames"><span class="info_box info_middle">备注信息 ：</span>
+                @Html.TextAreaFor(p=>p.FinancialNote,new{@class="area vt txt_long", @rows="3",@readonly="readonly"})
+            </li>
+@*            <li class="mt20"><span class="info_box info_middle"></span>
+            <input type="button" class="btn" value="重新计算运费" id="CalFeebnt" onclick="CalFee();" />*@
+        </ul>
+    </div>
+    
+    <div class="domebg">
+        <table class="data_table mt10 ml10" id="tb_cstmList" width="95%" border="0" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr class="data_row_two">
+                    <th>更改项
+                    </th>
+                    <th>更改前
+                    </th>
+                    <th>更改后
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr class="data_row_dan">
+                    <td>运费
+                    </td>
+                    <td>@Model.FreightOriginal
+                        <input type="hidden" id="FreightOriginal" value="@Model.FreightOriginal" />
+                    </td>
+                    <td><input type="text" name="FreightFinal" id="FreightFinal"  class="txt_short" value="@(!Model.FreightFinal.HasValue?"":Model.FreightFinal.Value.ToString("#0.00"))" onchange="CheckFee(this,'运费')"/>
+                    </td>
+                </tr>
+                <tr class="data_row_dan">
+                    <td>挂号费
+                    </td>
+                    <td>@Model.RegisterOriginal
+                        <input type="hidden" id="RegisterOriginal" value="@Model.RegisterOriginal" />
+                    </td>
+                    <td><input type="text" name="RegisterFinal" id="RegisterFinal" class="txt_short" value="@(!Model.RegisterFinal.HasValue?"":Model.RegisterFinal.Value.ToString("#0.00"))" onchange="CheckFee(this,'挂号费')"/>
+                    </td>
+                </tr>
+                <tr class="data_row_dan">
+                    <td>燃油费
+                    </td>
+                    <td>@Model.FuelChargeOriginal
+                        <input type="hidden" id="FuelChargeOriginal" value="@Model.FuelChargeOriginal" />
+                    </td>
+                    <td><input type="text" name="FuelChargeFinal" id="FuelChargeFinal" class="txt_short" value="@(!Model.FuelChargeFinal.HasValue?"":Model.FuelChargeFinal.Value.ToString("#0.00"))" onchange="CheckFee(this,'燃油费')"/>
+                    </td>
+                </tr>
+                <tr class="data_row_dan">
+                    <td>附加费
+                    </td>
+                    <td>@Model.SurchargeOriginal
+                        <input type="hidden" id="SurchargeOriginal" value="@Model.SurchargeOriginal" />
+                    </td>
+                    <td><input type="text" name="SurchargeFinal" id="SurchargeFinal" class="txt_short" value="@(!Model.SurchargeFinal.HasValue?"":Model.SurchargeFinal.Value.ToString("#0.00"))" onchange="CheckFee(this,'附加费')"/>
+                    </td>
+                </tr>
+                <tr class="data_row_dan">
+                    <td>关税预付服务费
+                    </td>
+                    <td>@Model.TariffPrepayFeeOriginal
+                        <input type="hidden" id="TariffPrepayFeeOriginal" value="@Model.TariffPrepayFeeOriginal" />
+                    </td>
+                    <td><input type="text" name="TariffPrepayFeeFinal" id="TariffPrepayFeeFinal" class="txt_short" value="@(!Model.TariffPrepayFeeFinal.HasValue?"":Model.TariffPrepayFeeFinal.Value.ToString("#0.00"))" onchange="CheckFee(this,'关税预付服务费')"/>
+                    </td>
+                </tr>
+                <tr class="data_row_dan">
+                    <td>偏远附加费
+                    </td>
+                    <td>@Model.RemoteAreaFeeOriginal
+                        <input type="hidden" id="RemoteAreaFeeOriginal" value="@Model.RemoteAreaFeeOriginal" />
+                    </td>
+                    <td><input type="text" name="RemoteAreaFeeFinal" id="RemoteAreaFeeFinal" class="txt_short" value="@(!Model.RemoteAreaFeeFinal.HasValue?"":Model.RemoteAreaFeeFinal.Value.ToString("#0.00"))" onchange="CheckFee(this,'偏远附加费')"/>
+                    </td>
+                </tr>
+                <tr class="data_row_dan">
+                    <td>总费用
+                    </td>
+                    <td>@Model.TotalFeeOriginal
+                        <input type="hidden" id="TotalFeeOriginal" value="@Model.TotalFeeOriginal" />
+                    </td>
+                    <td><input type="text" name="TotalFeeFinal" id="TotalFeeFinal" class="txt_short" value="@(!Model.TotalFeeFinal.HasValue?"":Model.TotalFeeFinal.Value.ToString("#0.00"))" onchange="CheckFee(this,'总费用',true)"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
+    <div >
+        <ul>
+            <li class="mt20"><span class="info_box info_middle"></span>    
+            <input type="button" class="btn" value="保存提交到财务" id="Savebnt" onclick="Save();" />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="button" class="btn" value="重新计算运费" id="CalFeebnt" onclick="CalFee();" />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="button" class="btn" value="取消" id="Closebnt" onclick="Close();" />
+        </ul>
+    </div>
+
+
+<script type="text/javascript">
+
+    var allPase = true;//是否费用格式全部正确
+    
+    function CheckFee(obj, name, notCalcTotalFee) {
+        var reg = /^(-?\d+)(\.\d{1,3})?$/;
+        if ($(obj).val() != "" && (!reg.test($(obj).val()) || $(obj).val() < 0)) {
+            allPase = false;
+            alert(name + "格式不正确！");
+            $(obj).focus();
+        } else {
+            allPase = true;
+            if (!notCalcTotalFee)
+                CalcTotalFee();
+            DisabledTotalFeeFinal();
+        }
+    }
+    
+    function DisabledTotalFeeFinal() {
+        if ($.trim($("#FreightFinal").val()) == "" &&
+            $.trim($("#RegisterFinal").val()) == "" &&
+            $.trim($("#SurchargeFinal").val()) == "" &&
+            $.trim($("#TariffPrepayFeeFinal").val()) == ""&&
+            $.trim($("#RemoteAreaFeeFinal").val()) == "") {
+            $("#TotalFeeFinal").attr('disabled', false);
+        } else {
+            $("#TotalFeeFinal").attr('disabled', true);
+        }
+    }
+    
+    function CalcTotalFee() {
+        debugger;
+        var freight = 0;
+        if ($.trim($("#FreightFinal").val()) == "") {
+            freight = $("#FreightOriginal").val();
+        } else {
+            freight = $.trim($("#FreightFinal").val());
+        }
+        
+        var register = 0;
+        if ($.trim($("#RegisterFinal").val()) == "") {
+            register = $("#RegisterOriginal").val();
+        } else {
+            register = $.trim($("#RegisterFinal").val());
+        }
+        
+        var fuelCharge = 0;
+        if ($.trim($("#FuelChargeFinal").val()) == "") {
+            fuelCharge = $("#FuelChargeOriginal").val();
+        } else {
+            fuelCharge = $.trim($("#FuelChargeFinal").val());
+        }
+        
+        var surcharge = 0;
+        if ($.trim($("#SurchargeFinal").val()) == "") {
+            surcharge = $("#SurchargeOriginal").val();
+        } else {
+            surcharge = $.trim($("#SurchargeFinal").val());
+        }
+        
+        var tariffPrepayFee = 0;
+        if ($.trim($("#TariffPrepayFeeFinal").val()) == "") {
+            tariffPrepayFee =$("#TariffPrepayFeeOriginal").val();
+        } else {
+            tariffPrepayFee =$.trim($("#TariffPrepayFeeFinal").val());
+        }
+
+        var remoteAreaFee = 0;
+        if ($.trim($("#RemoteAreaFeeFinal").val()) == "") {
+            remoteAreaFee = $("#RemoteAreaFeeOriginal").val();
+        } else {
+            remoteAreaFee = $.trim($("#RemoteAreaFeeFinal").val());
+        }
+
+        var sum = (parseFloat(freight) + parseFloat(register) + parseFloat(fuelCharge) + parseFloat(surcharge) + parseFloat(tariffPrepayFee) + parseFloat(remoteAreaFee)).toFixed(2);
+        
+        $("#TotalFeeFinal").val(sum);
+
+    }
+
+    function CalFee() {
+        
+        $("#editfrom #CalFeebnt").attr('disabled', true);
+
+        $.ajax({
+            type: "POST",
+            url: "GetWayBillPrice?wayBillNumber=" + $("#WayBillNumber").val(),
+            dataType: "json",
+            success: function (data) {
+                if (data.Success) {
+                    $("#FreightFinal").val(data.ReceivingExpenseExt.Freight.toFixed(2));
+                    $("#RegisterFinal").val(data.ReceivingExpenseExt.Register.toFixed(2));
+                    $("#FuelChargeFinal").val(data.ReceivingExpenseExt.FuelCharge.toFixed(2));
+                    $("#SurchargeFinal").val(data.ReceivingExpenseExt.Surcharge.toFixed(2));
+                    $("#TariffPrepayFeeFinal").val(data.ReceivingExpenseExt.TariffPrepayFee.toFixed(2));
+                    $("#RemoteAreaFeeFinal").val(data.ReceivingExpenseExt.RemoteAreaFee.toFixed(2));
+                    $("#TotalFeeFinal").val(data.ReceivingExpenseExt.TotalFee.toFixed(2));
+                } else {
+                    alert("重新计算运费失败：" + data.Message);
+                }
+            },
+            complete: function (data) {
+                $("#editfrom #CalFeebnt").attr('disabled', false);
+                DisabledTotalFeeFinal();
+            }
+        });
+    }
+
+    function CheckFeeEmpty() {
+        var isAllEmpty = true;
+        $("#editfrom").find("input.txt_short").each(function () {
+            if ($.trim($(this).val()) != "") {
+                isAllEmpty = false;
+                return false;
+            }
+        });
+        return isAllEmpty;
+    }
+    
+    function Save() {
+        
+        if (!allPase) {
+            alert("费用格式不正确，请检查");
+            return false;
+        }
+        
+        if (CheckFeeEmpty()) {
+            alert("费用不能全部为空，请检查");
+            return false;
+        }
+
+        $("#editfrom #Savebnt").attr('disabled', true);
+
+        $.ajax({
+            type: "POST",
+            url: "ReceivingExpensesEditSave",
+            dataType: "json",
+            data: $("#editfrom").serialize(),
+            success: function(data) {
+                if (data.Success) {
+                    alert("保存成功！");
+                    $("#showReceivingExpensesEdit").window("close");
+                    location.reload();
+                } else {
+                    alert(data.Message);
+                }
+            },
+            complete: function (data) {
+                $("#editfrom #Savebnt").attr('disabled', false);
+            }
+        });
+        return true;
+    }
+
+    function Close() {
+        $("#showReceivingExpensesEdit").window("close");
+    }
+
+    
+    $(function () {
+        DisabledTotalFeeFinal();
+    });
+</script>

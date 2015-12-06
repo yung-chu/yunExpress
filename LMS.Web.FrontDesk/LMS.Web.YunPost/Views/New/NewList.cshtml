@@ -1,0 +1,346 @@
+﻿@using System.Collections
+@using System.Text
+@using LMS.FrontDesk.Controllers.NewController.Models
+@using LMS.FrontDesk.Framework
+@using LighTake.Infrastructure.Web
+@using LMS.FrontDesk.Controllers.NewController
+@model LMS.FrontDesk.Controllers.NewController.Models.NewListModel
+@{
+    if (Model.CategoryInfo != null)
+    {
+        ViewBag.Title = string.IsNullOrWhiteSpace(Model.CategoryInfo.SeoTitle) ? "云途物流" : Model.CategoryInfo.SeoTitle;
+    }
+    else
+    {
+        ViewBag.Title = "云途物流";
+    }
+
+}
+@section ExtraHeadContent {
+    @if (Model.CategoryInfo != null)
+    {
+        <meta name="description" content="@Model.CategoryInfo.SeoDescription"/>
+        <meta name="Keywords" content="@Model.CategoryInfo.SeoKeywords"/>
+    }
+    else
+    {
+        <meta name="description" content=""/>
+        <meta name="Keywords" content=""/>
+    }
+  
+}
+
+
+
+<!--bn-->
+
+<!--<div class="bn_area" style="height:300px;box-shadow:0 0 3px #b1b1b1; position:relative;" id="inx_AdSlide">
+  @* // @Url.Content(string.IsNullOrWhiteSpace(Model.CategoryModel.Pic) ? "~/images/banner/bn7.jpg" : Model.PicPath + Model.CategoryModel.Pic)*@
+    <div style=" background:url(@Url.Content( "~/images/banner/bn7.jpg")) no-repeat center #f0f0f0; height:300px;">
+        
+    </div>
+</div>-->
+@*<div class="conStr">
+	<div class="strIn">
+    	<div class="tr pt20 lh20">
+                    <div class="bread_area">
+                                <span class="vm">
+                                    <a href="@Url.Action("Index","Home")" class="tdn" title="回到首页">首页</a>
+                                    &gt;
+                                    <span href="@Url.Action("NewList", "New", new { CategoryId = 1 })" class="bread_on">
+                                        新闻中心
+                                    </span>
+                                </span>
+                                
+                            </div>
+                    
+                </div>
+		<div class="fix pl10 mt10">
+		    <div class="l w220">
+		        <ul class="mul_box">
+		            <li class="mul_tt">
+		                新闻中心 
+		                <img src="@Url.Content("~/images/mul_ll_03.jpg")" style="position:absolute; right:-7px; top:0;"  />
+		            </li>
+ 
+                        <!--新闻类别-->
+                        @if (Model.CategoryModelNews.Count > 0)
+                        {
+
+                                 foreach (var row in Model.CategoryModelNews)
+                                  {
+                                      string css = Model.CategoryId == row.CategoryID ? "mul_a on" : "mul_a";
+                                      <li class="rel">
+                                          <a href="@Url.Action("NewList", "New", new {categoryID = @row.CategoryID, id = 0})" class="@css">
+		                                     @row.Name
+                                              <span class="mul_trigon">
+                                              </span>
+                                          </a>
+                                      </li>
+                                  }
+                        }
+                    
+		        </ul>
+		    </div>
+            
+            
+		    @{
+                CheckHtml ch = new CheckHtml();
+            }
+		
+		    <!--新闻列表-->
+		    <div class="cell pl30">
+		        
+		        <div class="cn_area">
+		            
+		            <!--遍历-->
+                    @foreach (var rows in Model.PagedList.InnerList.OrderByDescending(a => a.CreatedOn).Take(6))
+                    {
+                         
+                     <div class="cn_box">
+                         <h3 class="It">
+                             @if (!string.IsNullOrEmpty(rows.Title) && rows.Title.Length > 30)
+                             {
+                                 @rows.Title.Substring(0, 30);
+                             }
+                             else
+                             {
+                                 @rows.Title;
+                             }
+                            
+                         </h3>
+                         
+                         
+                          @{
+                                string getCss="";
+                                if (rows.ArticleID == Model.ArticleId)
+                                {
+                                    getCss = "display: none;";
+                                }
+
+                           }
+                         
+
+                         <div class="cn_control" style="@getCss">
+                             <div class="cn_pd">
+                                 <div class="mb10 f14 fw">
+                                     @rows.CreatedOn.Value.ToString("yyyy-MM-dd")
+ 
+                                 </div>
+                                 <div class="mt10 pct60">
+                                     <!--ParseTags 去除HTML标签方法-->
+                                     @if (!String.IsNullOrEmpty(rows.Detail) && ch.ParseTags(rows.Detail).Length > 250)
+                                     {
+                                         @Html.Raw(ch.ParseTags(rows.Detail).Substring(0, 250))  
+                                     }
+                                     else
+                                     {
+                                         @Html.Raw(ch.ParseTags(rows.Detail))   
+                                     }
+                   
+                                 </div>
+                                
+
+                                 @if (!String.IsNullOrEmpty(rows.Pic))
+                                 {
+                                     string imgurl = Model.PicPath + rows.Pic;
+                                     <img src="@imgurl" width="70%"/> 
+                              
+                                 }
+                                
+                                 <div class="mt10 fix">
+                                     <span class="cpi">
+                                         <strong class="co009">	
+                                             查看更多
+                                         </strong>
+                                     </span>
+                                 </div>
+                                 <span class="cn_trigon"></span>
+                             </div>
+                         </div>
+                         
+                         
+                            @{
+
+                                string css="";
+                                if (rows.ArticleID == Model.ArticleId )
+                                {
+                                    css = "display: block;";
+                                }
+                            }
+
+                         <div class="cn_Warp" style="@css">
+		                    <!--展开详细信息-->
+                            
+		                    <div class="cn_pd">
+		                        
+                                @if (!String.IsNullOrEmpty(rows.Pic))
+                                {
+                                    string imgurl = Model.PicPath + rows.Pic;
+                                    <img src="@imgurl" width="70%"/> 
+                                }
+                               
+
+		                        @Html.Raw(rows.Detail)
+		                   
+                                 <div class="mb10 f14 fw">
+                                     @rows.CreatedOn.Value.ToString("yyyy-MM-dd")
+ 
+                                 </div>
+
+		                        <div class="fix">
+		                            <span class="cpi co009">
+		                                <strong class="f14 vm dib">收起</strong> <span class="f20 vm">×</span>
+		                            </span>
+		                        </div>
+		                        <span class="cn_trigon"></span>
+		                    </div>
+		                    <!--展开详细信息 end-->
+		                </div>
+
+		            </div>
+                   }
+
+                   <!--遍历 end-->
+		        </div>
+
+		    </div>
+            <!--新闻列表 end-->
+
+		</div>
+	</div>
+</div>*@
+
+
+@*<script type="text/javascript">
+$(".cn_control").click(function(){
+				var a = $(this).next().find('.cpi');
+				$(this).fadeOut('fast');
+				$(this).next().slideDown('fast');
+			})
+		$(".cn_Warp .cpi").click(function(){
+				$(this).parents('.cn_Warp').fadeOut('fast');
+				$('.cn_control').fadeIn('fast');
+			});
+</script>*@
+
+
+<div class="conStr up_warp">
+	<div class="strIn ">
+    	<div class="fix mt30">
+            <div class="l w220 bgf mb30">
+                <div class="mul_Tt fw rel">
+                    <span class="vm dib f44">
+                        N
+                    </span>
+                    <span class="vm dib f16 lh18">
+                        新闻中心
+                    <br/>
+                        EWS
+                    </span>
+                    <div class="mul_positon">
+                    </div>
+                </div>
+                <ul class="Fixed fix pb20 pt20">
+                    
+                    @foreach (var item in Model.ShowCategoryListModel.CategoryModelNews)
+                    {
+                       string classAttr = Model.GetId == item.CategoryID ? "r pct70 pl30 mul_on" : "r pct70 pl30";
+                        
+                      <li>
+                        <a href="@Url.Action("NewList", "New", new {categoryID = @item.CategoryID})" class="@classAttr">
+                                @item.Name
+                        </a>
+                     </li>
+                    }
+
+                </ul>
+            </div>
+            <div class="ml220">
+                <div class="bdd bgf p20 mb30">
+                    <div class="bread_area tr">
+                        <a href="@Url.Action("Index","Home")" class="A" title="回到首页">首页</a>
+                        &gt;
+                        <span href="#" class="bread_on">新闻中心</span>
+                    </div>
+                    <div class="mt10 mb40">
+                        <img src="@Url.Content("~/images/banner/banner_07.png") " width="99%" />
+                    </div>
+                    <div class="mt30 ml30 zx2">
+                        
+                        <!--新闻列表-->
+
+             @*           <div class="rel">
+                            <ul class="Tnode_box">
+                                <li class="mb10">
+                                    <div class="vm pl30 rel cell_bk">
+                                        <a href="New_detail.html" class="A_select db  ell">
+                                            深圳市云途通运物流有限公司（简称云途物
+                                        </a>
+                                        <div class="Tnode_dot">
+                                        </div>
+                                        <span class="abs_r pr30">2014-10-10</span>
+                                    </div>
+                                </li>
+                                
+                            </ul>
+                            
+                            <div class="Tnode_vertical">
+                            </div>
+
+                            <div class="Tnode_new">
+                                2014-5月
+                            </div>
+                        </div>*@
+                        
+                        
+                        
+                        @foreach (var item in Model.GetArticleList.ToLookup(a => a.CreatedOn.Value.Month))
+                        {
+                            CheckHtml checkHtml = new CheckHtml();
+                            
+                            int monthKey=   item.Key;
+                     
+                              <div class="rel">
+                                  <ul class="Tnode_box">
+                                      @foreach (var articleModel in item)
+                                       {
+                                           <li class="mb10">
+                                                  <div class="vm pl30 rel cell_bk">
+                                               
+                                                      <a href="@Url.Action("NewDetailed", "New", new {id = articleModel.ArticleID})" class="A db  ell">
+                                                          @{
+                                                              string detail = articleModel.Detail != null ? checkHtml.ParseTags(articleModel.Detail).Length > 40 ? checkHtml.ParseTags(articleModel.Detail).Substring(0, 40) : checkHtml.ParseTags(articleModel.Detail) : "";
+                                                          }
+
+                                                          @detail
+                                                      </a>
+                                                      <div class="Tnode_dot">
+                                                      </div>
+                                                      <span class="abs_r pr30">@articleModel.CreatedOn.Value.ToString("yyyy-MM-dd")</span>
+                                                      <span class="Tnode_v_line"></span>
+                                            
+                                                  </div>
+                                           </li>
+                                       }
+                                  </ul>
+
+                                    <div class="Tnode_vertical">
+                                    </div>
+                                    <div class="Tnode_moth">
+                                       @item.First().CreatedOn.Value.Year-@monthKey
+                                    </div>
+                              </div>
+                          
+
+                        }
+
+                         <!--新闻列表 end-->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+</div>
+

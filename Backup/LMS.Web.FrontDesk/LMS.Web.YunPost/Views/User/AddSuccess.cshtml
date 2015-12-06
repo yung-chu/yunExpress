@@ -1,0 +1,36 @@
+﻿@model LMS.FrontDesk.Controllers.UserController.Models.AddCustomerModel
+@{
+    ViewBag.Title = "云途物流";
+}
+
+<div class="bgf6">
+  <div class="conStr">
+    <div class="strIn" >
+      <div class="shadow">
+        <div class="fix ">
+          <div class="min_minBox bgwh">
+                	<div class="pl45">
+                        <div class="pt35 mb40">
+                            <span class="co009 f36 fw vb">信息提示</span>
+                        </div>
+                        <div class="pl170 pt80 fix">
+                        	<div class="l">
+                            	<img src="@Url.Content("~/images/rgst_07.jpg")">
+                            </div>
+                        	<div class="cell pl20">
+                            	<div class="fw mt40"> 
+                                  <span style="font-size:20px">@Model.Name，恭喜您注册成功，您的客户编号是：@Model.CustomerCode，请牢记并联系业务经理审核及报价！</span>
+                                    <div class="mt20">
+                                        <a href="@Url.Action("index", "Home")" class="tdn f20 co009 vm" title="返回首页">返回首页</a>
+                                    </div>
+                                </div>
+                            </div>
+                    	</div>
+                </div>
+             </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

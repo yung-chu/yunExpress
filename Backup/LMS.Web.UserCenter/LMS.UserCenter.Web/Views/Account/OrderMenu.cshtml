@@ -1,0 +1,72 @@
+﻿@helper DisplayMenuActive(string[] actionNames, string controllerName)
+{
+    string curController = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString().ToLowerInvariant();
+    string curAction = HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString().ToLowerInvariant();
+    if (curController.Equals(controllerName.ToLowerInvariant()) && actionNames.Contains(curAction))
+    { 
+    @Html.Raw("l_list_a_on")
+    
+    }
+    else
+    {
+    @Html.Raw("l_list_a")
+    }
+}
+@{
+    Layout = null;
+}
+@using LMS.Core
+@model LMS.UserCenter.Controllers.AccountController.CustomerStatisticsModel
+<h3 class="f16 p10">
+    <span class="icon-truck l_icon_anther" style=""></span><strong>订单管理</strong>
+</h3>
+<dl>
+    <dd>
+        <a class="@DisplayMenuActive(new[] { "add" }, "order")" href="@Url.Action("add", "order")">创建订单</a>
+    </dd>
+    <dd>
+        <a class="@DisplayMenuActive(new[] { "batchadd" }, "order")" href="@Url.Action("batchadd", "order")">批量创建订单</a>
+    </dd>
+    <dd>
+        <a class="@DisplayMenuActive(new[] { "batchaddpackage" }, "order")" href="@Url.Action("batchaddpackage", "order")">小包批量创建订单</a>
+    </dd>
+    <dd>
+        <a class="@DisplayMenuActive(new[] { "BatchAddSinoUS" }, "order")" href="@Url.Action("BatchAddSinoUS", "order")">中美专线订单上传</a>
+    </dd>
+    <dd>
+        <a class="@DisplayMenuActive(new[] { "unconfirmed" }, "order")" href="@Url.Action("unconfirmed", "order")">未确认订单<span style="color: red">(@Model.UnconfirmOrder)</span></a>
+    <dd>
+        <a class="@DisplayMenuActive(new[] { "confirmed" }, "order")" href="@Url.Action("confirmed", "order")">已确认订单<span style="color: red">(@Model.ConfirmOrder)</span></a>
+    </dd>
+    @*<dd>
+        <a class="@DisplayMenuActive(new[] { "submitted" }, "order")" href="#">提交中订单<span style="color: red">(@Model.SubmitingOrder)</span></a>
+    </dd>*@
+    <dd>
+        <a class="@DisplayMenuActive(new[] { "submitted" }, "order")" href="@Url.Action("SubmitFail", "order")">提交失败订单<span style="color: red">(@Model.SubmitFailOrder)</span></a>
+    </dd>
+    <dd>
+        <a class="@DisplayMenuActive(new[] { "submitted" }, "order")" href="@Url.Action("submitted", "order")">已提交订单<span style="color: red">(@Model.SubmitOrder)</span></a>
+    </dd>
+
+    <dd>
+        <a class="@DisplayMenuActive(new[] { "received" }, "order")" href="@Url.Action("received", "order")">已收货订单<span style="color: red">(@Model.HaveOrder)</span></a>
+    </dd>
+    <dd>
+        <a class="@DisplayMenuActive(new[] { "send" }, "order")" href="@Url.Action("Send", "order")">已发货订单<span style="color: red">(@Model.SendOrder)</span></a>
+    </dd>
+    <dd>
+        <a class="@DisplayMenuActive(new[] { "eubWayBillList" }, "order")" href="@Url.Action("EubWayBillList", "order")">Eub运单管理<span style="color: red">(@Model.EubWayBillCount)</span></a>
+    </dd>
+    @if (sysConfig.CompanyType.ToLower().Equals("lightake"))
+    {
+        <dd>
+            <a class="@DisplayMenuActive(new[] { "blocked" }, "order")" href="@Url.Action("blocked", "order")">已拦截订单<span style="color: red">(@Model.HoldOrder)</span></a>
+        </dd>
+                    }
+    <dd>
+        <a class="@DisplayMenuActive(new[] { "all" }, "order")" href="@Url.Action("All", "order")">所有订单(@Model.TotalOrder)</a>
+    </dd>
+    <dd>
+        <a class="@DisplayMenuActive(new[] { "ScanPrintLabel" }, "order")" href="@Url.Action("ScanPrintLabel", "order")">扫描打印地址标签</a>
+    </dd>
+</dl>

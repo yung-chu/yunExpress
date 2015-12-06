@@ -1,0 +1,214 @@
+﻿@using LMS.Core
+@using LMS.Data.Entity
+@model LMS.Data.Entity.Category
+
+@{
+    Html.AddScriptParts(Url.Content("~/Scripts/kindeditor/kindeditor-min.js"));
+    Html.AddScriptParts(Url.Content("~/Scripts/kindeditor/lang/zh_CN.js"));
+    Html.AddScriptParts(Url.Content("~/Scripts/util.js"));
+
+}
+
+@{
+    var selectItemList = new List<SelectListItem>();
+    selectItemList.Add(new SelectListItem{Text = "启用",Value = "1"});
+    selectItemList.Add(new SelectListItem { Text = "禁用", Value = "2" });
+    
+}
+
+@using (Html.BeginForm("EditNewCategory", "Website", FormMethod.Post, new { @id = "editform", enctype = "multipart/form-data" }))
+{
+    <div  id="right_con"  >
+        <ul>
+            <li class="mt20"><span class="info_box info_middle">上级分类 : </span>
+               <select id="addcc" class="easyui-combotree" style="width: 300px;"></select>
+            </li>
+            <li class="mt20"><span class="info_box info_middle">分类名称 : </span>
+                @Html.TextBoxFor(p => p.Name, new {@class = "txt txt_long", @maxlength = "50"})
+            </li>
+            <li class="mt20"><span class="info_box info_middle">英文分类名称 : </span>
+                @Html.TextBoxFor(p => p.EnglishName, new {@class = "txt txt_long", @maxlength = "50"})
+            </li>
+            <li class="mt20"><span class="info_box info_middle">SEO标题 : </span>
+                @Html.TextBoxFor(p => p.SeoTitle, new {@class = "txt txt_long", @maxlength = "300"})
+            </li>
+            <li class="mt20"><span class="info_box info_middle">SEO关键字 : </span>
+                @Html.TextBoxFor(p => p.SeoKeywords, new {@class = "txt txt_long", @maxlength = "300"})
+            </li>
+            <li class="mt20"><span class="info_box info_middle">SEO描述 : </span>
+                @Html.TextBoxFor(p => p.SeoDescription, new {@class = "txt txt_long", @maxlength = "300"})
+            </li>
+            <li class="mt20"><span class="info_box info_middle">状态 : </span>
+                @Html.DropDownListFor(p => p.Status, selectItemList, new {@class = "select select_short"})
+            </li>
+            <li class="mt20"><span class="info_box info_middle">上传图片:</span>
+                <input type="file" id="flUploadAddress" onchange="SelectImg(this); " name="flUploadAddress" title="请选择图片" value="Select file" />
+                <input type="hidden" id="Pic" name="Pic" value="@Html.Raw(Model.Pic)" />
+                <br/>
+                @if (!string.IsNullOrWhiteSpace(Model.Pic))
+                {
+                    <img id="imgUrl" src="@(sysConfig.UploadWebPath + Model.Pic)" style="width: 60px; height: 60px; margin-left: 130px;" />
+                    <br/>
+                }
+                else
+                {
+                <img id="imgUrl" style="width: 32px; height: 32px; margin-left: 130px; display: none" />    
+                }
+                
+            </li>
+            <li class="mt20"><span class="info_box info_middle" style="float: left;">描述说明 : </span>
+                <textarea id="Description" name="Description" cols = "45" rows = "6" class = "area vt" maxlength="4000" style="width: 700px;">@Model.Description</textarea>
+            </li>
+            <li class="mt20"><span class="info_box info_middle"></span>
+                @Html.HiddenFor(p => p.CategoryID)
+                @Html.HiddenFor(p => p.ParentID)
+                <input type="button" class="btn" value="保存" id="btnsave" name="btnsave" onclick="return Save();" />
+
+            </li>
+        </ul>
+    </div>
+}
+
+
+<script type="text/javascript">
+
+
+    var editor;
+    $(function () {
+        KindEditor.ready(function (K) {
+            editor = K.create('#Description', {
+                allowFileManager: true,
+                uploadJson: "/KindEditor/Upload",
+                filePostName: "imgFile",
+                filterMode: false, //不会过滤HTML代码
+                urlType : "domain",
+            });
+            editor.sync();
+        });
+    });
+    
+    //图片预览
+    function SelectImg(input) {
+
+        try {
+  
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#imgUrl')
+                    .attr('src', e.target.result)
+                    .width(60)
+                    .height(60).show();
+                    $("#Pic").val();
+
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+            
+        } catch(e) {
+
+        } 
+
+    };
+
+    $(function () {
+        $('#addcc').combotree({
+            url: 'GetAllCategorySelect',
+            onLoadSuccess: function (data) {
+                $('#addcc').combotree('setValue', '@Model.ParentID');
+            }
+        });
+    });
+    function Save() {
+        
+        editor.sync();
+        
+        var nameobj = $("#Name");
+        if ($.trim(nameobj.val()) == "") {
+            alert("分类名称不能为空！");
+            nameobj.focus();
+            return false;
+        }
+        $("#ParentID").val($('#addcc').combotree('getValue'));
+        $('#btnsave').removeAttr("disabled");
+        
+        var postdata = new FormData();
+        var filesList = document.getElementById('flUploadAddress');
+        for (var i = 0; i < filesList.files.length; i++) {
+            postdata.append('file', filesList.files[i]);
+        }
+
+        try {
+            var formdata = $("#editform").serialize();
+            var datalst = formdata.split("&");
+            var count = datalst.length;
+            for (i = 0; i < count; i++) {
+                var dd = datalst[i].split("=");
+                postdata.append(HttpUtility.urlDecode((dd[0])), HttpUtility.urlDecode(dd[1]));
+            }
+        } catch (e) {
+
+        }
+
+        var isDisabled = "@Model.Status" != "@((int)EnableStatus.Disabled)" && $("#Status").val() == "@((int)EnableStatus.Disabled)";
+        
+        if (isDisabled) {
+            
+            var catId = $("#CategoryID").val();
+            var update = true;
+            $.ajax({
+                type: "POST",
+                url: "HasEnableChild",
+                dataType: "json",
+                data: { categoryid: catId },
+                async: false,
+                success: function (data) {
+                    if (data == "1") {
+                        update = false;
+                    }
+                },
+                error: function () {
+
+                }
+            });
+
+            var confirmUpdate = true;
+
+            if (!update) {
+                if (!confirm('分类禁用后其他下属分类及新闻通知将无法正常显示，确认是否禁用？')) {
+                    confirmUpdate = false;
+                }
+            }
+
+            if (!confirmUpdate) {
+                return false;
+            }
+            
+        }
+       
+        $.ajax({
+            contentType: false,
+            processData: false,
+            type: "POST",
+            url: "EditNewCategory",
+            dataType: "json",
+            data: postdata,
+            success: function (data) {
+                if (data == "1") {
+                    alert("保存成功！");
+                    parent.window.location.reload();
+                } else {
+                    alert("保存失败！");
+                }
+            },
+            error: function (data) {
+                alert("保存失败！");
+            },
+            complete: function (data) {
+                $("#btnsave").attr('disabled', false);
+            }
+        });
+
+        return false;
+    }
+</script>

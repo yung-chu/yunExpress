@@ -1,0 +1,263 @@
+﻿@using LMS.UserCenter.Web.Framework.Extension
+@using NPOI.SS.Formula.Functions
+@model LMS.UserCenter.Controllers.BillingController.Models.InFeeInfoListViewModel
+@{
+    ViewBag.Title = "订单扣费明细";
+    var shippingMethods = (List<SelectListItem>)ViewBag.ShippingMethods;
+    var countryList = (List<SelectListItem>)ViewBag.CountryList;
+    var searchWhere = (List<SelectListItem>)ViewBag.SearchWhere;
+}
+@section Scripts{
+    <link href="@Url.Content("~/css/pager.css")" type="text/css" rel="stylesheet" />
+    <link href="@Url.Content("~/js/jquery-easyui-1.3.1/themes/default/easyui.css")" type="text/css" rel="stylesheet" />
+    <link href="@Url.Content("~/js/jquery-easyui-1.3.1/themes/icon.css")" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="@Url.Content("~/js/jquery-easyui-1.3.1/jquery.easyui.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/js/easyui-public.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/js/My97DatePicker/WdatePicker.js")"></script>
+}
+<div id="showVenderList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showShippingMethodList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showCountryList" style="overflow: scroll; display: none; position: relative">
+</div>
+<!-- 面包屑 Start -->
+<div class="bd_b bread_box">
+    <a href="javascript:" class="icon-home bread_home"></a>
+    <strong class="gtlt bread_gtlt">&gt;&gt;</strong>
+    <a href="javascript:" class="bread_off">财务管理</a>
+    <strong class="gtlt bread_gtlt">&gt;&gt;</strong>
+    <a href="javascript:" class="bread_on">订单扣费明细</a>
+</div>
+
+<div class="p20">
+<div class="domebg" id="right_con">
+    @using (Html.BeginForm())
+    {
+        <div class="tab_conStr">
+            <div class="from_box">
+                <div class="fix from_horizontal">
+                    <div class="ww32 l">
+                        <div class=" fix">
+                            <span class="info_box info_middle">运输方式：</span>
+
+                            @Html.DropDownListFormFor(p => Model.FilterModel.ShippingMethodId, shippingMethods, new Dictionary<string, object> { { "class", "chzn-select-deselect select_middle" }, { "data-placeholder", "全部" } })
+                        </div>
+                    </div>
+                    <div class="cell">
+                        <div class="fix">
+                            <div class="l ww49">
+                                <div class=" fix">
+                                    <span class="info_box info_middle">交货时间：</span>
+
+                                    @Html.DateFormFor(p => Model.FilterModel.StartTime)
+                                    到:
+                                    @Html.DateFormFor(p => Model.FilterModel.EndTime)
+
+                                </div>
+                            </div>
+                            <div class="cell pl20  fix">
+                                <span class="info_box info_middle ">发货国家：</span>
+                                @Html.DropDownListFormFor(p => p.FilterModel.CountryCode, countryList, new Dictionary<string, object> { { "class", "chzn-select-deselect select_middle r" }, { "data-placeholder", "全部" } })
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="fix from_horizontal">
+
+                    <div class="ww32 l">
+                        <div class=" fix">
+                            <span class="info_box info_middle l">查询条件：</span>
+                            @Html.DropDownListFormFor(p => Model.FilterModel.SearchWhere, (List<SelectListItem>)ViewBag.SearchWhere, new Dictionary<string, object> { { "class", "chzn-select-deselect select_middle" }, { "data-placeholder", "全部" } })
+                        </div>
+                    </div>
+
+                    <div class="cell">
+                        <div class="fix">
+                            <div class="l ww49">
+                                <div class=" fix">
+                                    <span class="info_box info_middle ">查询内容：</span>
+                                    @Html.TextAreaFor(f => f.FilterModel.SearchContext, new { @class = "area area_short" })
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+                <div class="fix from_horizontal">
+
+                    <div class="ww32 l">
+                        <div class=" fix">
+                            <span class="info_box info_middle"></span>
+                            <input type="submit" class="btn btn_red" value="搜索" name="btnSearch"/>
+                            <input type="submit" class="btn btn_green" value="导出" name="btnToExcel" />
+                        </div>
+                    </div>
+                    <div class="cell">
+                        <div class="fix">
+                            <div class="l ww49">
+                                <div class=" fix">
+                                    <span class="info_box info_middle"></span>
+
+                                </div>
+                            </div>
+
+
+                            <div class="cell pl20  fix">
+                                <span class="info_box info_middle"></span>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        
+        <div id="pm_dis_div">
+            <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr class="data_row_head">
+                        <th width="3%">序号
+                        </th>
+                        <th width="8%">运单号
+                        </th>
+                        <th width="9%">客户订单号
+                        </th>
+                        <th width="10%">扣款时间
+                        </th>
+                        <th width="9%">跟踪号
+                        </th>
+                        <th width="5%">发货国家
+                        </th>
+                        <th width="9%">运输方式
+                        </th>
+                        <th width="5%">计费重量
+                        </th>
+                        <th width="4.5%">运费
+                        </th>
+                        <th width="4.5%">挂号费
+                        </th>
+                        <th width="4.5%">燃油费</th>
+                        <th width="4.5%">附加费</th>
+                        <th width="4.5%">总费用</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                            var index = 1;
+                            foreach (var row in Model.PagedList.InnerList)
+                            {
+                            
+                        <tr class="data_row_dan">
+                            <td>
+                                @index
+                            </td>
+                            <td>
+                                @row.WayBillNumber
+                            </td>
+                            <td>
+                                @row.CustomerOrderNumber
+                            </td>
+                            <td>
+                                @row.InDateTime.ToString("yyyy-MM-dd HH:mm")
+                            </td>
+                            <td>
+                                @row.TrackingNumber
+                            </td>
+                            <td>
+                                @row.ChineseName
+                            </td>
+                            <td>
+                                @row.InShippingName
+                            </td>
+                            <td>
+                               @(row.SettleWeight.HasValue?row.SettleWeight.Value.ToString("F3"):"0")
+                            </td>
+                            <td>
+                               @(row.Freight.HasValue?row.Freight.Value.ToString("F2"):"0")
+                            </td>
+                            <td>
+                               @(row.Register.HasValue?row.Register.Value.ToString("F2"):  "0")
+                            </td>
+                            <td>
+                               @(row.FuelCharge.HasValue?row.FuelCharge.Value.ToString("F2"):  "0")
+                            </td>
+                            <td>
+                               @(row.Surcharge.HasValue?row.Surcharge.Value.ToString("F2"):  "0")
+                            </td>
+                            <td>
+                               @(row.TotalFee.HasValue?row.TotalFee.Value.ToString("F2"):  "0")
+                            </td>
+                        </tr>
+                                index++;
+                            }
+                    }
+                    <tr class="data_row_none">
+                        <td colspan="14">
+                            @Html.Pager(Model.PagedList, Model.FilterModel)
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+</div>
+<script type="text/javascript">
+    $(function () {
+       @* //选择服务商
+        $("#selectVender").bind("click", function () {
+            $("#showVenderList").showWindow("@Url.Action("SelectVender", "Billing")", "选择服务商");
+            var parentWindow = $("#showVenderList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                top: 120
+            }, {
+                duration: 1000,
+                step: function (now, fx) {
+                    $(".window").css("top", now);
+                }
+            });
+            $("#showVenderList").show();
+        });
+        //选择运输方式
+        $("#selectShippingMethod").bind("click", function () {
+            $("#showShippingMethodList").showWindow("@Url.Action("SelectShippingMethod", "Billing")?venderCode=" + $("#_VenderCode").val()+"&type=2", "选择运输方式");
+            var parentWindow = $("#showShippingMethodList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                top: 120
+            }, {
+                duration: 1000,
+                step: function (now, fx) {
+                    $(".window").css("top", now);
+                }
+            });
+            $("#showShippingMethodList").show();
+        });
+        //选择国家
+        $("#selectCountry").bind("click", function () {
+            $("#showCountryList").showWindow("@Url.Action("SelectCountry", "Billing")", "选择国家");
+            var parentWindow = $("#showCountryList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                top: 120
+            }, {
+                duration: 1000,
+                step: function (now, fx) {
+                    $(".window").css("top", now);
+                }
+            });
+            $("#showCountryList").show();
+        });*@
+    });
+</script>

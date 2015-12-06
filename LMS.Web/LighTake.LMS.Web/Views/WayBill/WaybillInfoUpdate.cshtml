@@ -1,0 +1,432 @@
+﻿@using LMS.Data.Entity
+@model LMS.Controllers.WayBillController.WaybillInfoUpdateViewModel
+@{
+    ViewBag.Title = "WaybillInfoUpdate";
+    <link href="/Scripts/artdialog/skins/default.css" type="text/css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("/Scripts/chosen/chosen.css")" />
+    
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+    Html.AddScriptParts("/Scripts/chosen/chosen.jquery.min.js");
+    Html.AddScriptParts("/Scripts/artdialog/jquery.artDialog.js");
+}
+
+       
+<div id="showCustomerList" tabindex="200" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showShippingMethodList" style="overflow: scroll; display: none; position: relative">
+</div>
+
+
+<div class="domebg" id="right_con">
+    @using (Html.BeginForm())
+    {
+
+        var url = Html.GetUrl("WaybillInfoUpdate", "WayBill", Model.FilterModel);
+        
+        <input type="hidden" value="@url" id="retUrl"  name="retUrl"/>
+        <input type="hidden" value="@Model.FilterModel.IsFirstIn" name="FilterModel.IsFirstIn" id="IsFirstIn"/>
+        
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+                <td width="20%">
+                    <span class="info_box info_select">客户编码:</span>
+                    <input type="text" id="CustomerCode" value="@Model.FilterModel.CustomerCode" name="FilterModel.CustomerCode" readonly="readonly" class="txt txt_short" />
+                    <a href="javascript:void(0)" id="selectCustomer" class="btn_href">选择</a>
+                    <input type="hidden" id="CustomerID"/>
+                    <input type="hidden" id="CustomerType"/>
+                </td>
+
+                <td width="20%">
+                    <span class="info_box info_select">运输方式:</span>
+                    <input type="text" id="ShippingName" value="@Model.FilterModel.ShippingName" name="FilterModel.ShippingName" readonly="readonly" class="txt txt_short"/>
+                    <input type="hidden" id="ShippingMethodId" name="FilterModel.ShippingMethodId" value="@Model.FilterModel.ShippingMethodId" />
+                    <input type="button" id="selectShippingMethod" class="btn" value="选择" />
+                </td>
+
+                <td width="10%">
+                    <span class="info_box info_select">查询条件:</span>
+                    @Html.DropDownListFor(o => o.FilterModel.SearchWhere, Model.SearchWheres, new { @style = "width:100px;" })
+             
+                </td>
+                
+                <td width="20%">
+                    @Html.TextAreaFor(p => p.FilterModel.SearchContext, new { @style = "height:80px; width:210px;"})
+                </td>
+           
+            </tr>
+        
+
+
+            <tr class="date_row_select">
+            
+                <td>
+                    
+                     <span class="info_box info_select">创建时间 :</span>
+                    @Html.TextBoxFor(p => p.FilterModel.StartTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.StartTime), @class = "txt wdate", @style = "width:130px;" })
+                    <span>至:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.EndTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.EndTime), @class = "txt wdate", @style = "width:130px;" })
+                </td>
+                
+
+                <td>
+                    <span class="info_box info_select">状态:</span>
+                    @Html.DropDownListFor(o => o.FilterModel.Status, Model.StatusList, new { @style = "width:100px;" })
+                </td>
+
+                <td colspan="2">
+                    <div class="tl">
+                        <input type="submit" class="btn" value="查询" id="btnSearch" name="btnSearch" />
+                 
+                        @if (Model.DisplayBatchHold)
+                        {
+                            <input type="button" class="btn" value="批量拦截" onclick=" return BatchHoldOn(); " /> 
+                        }
+                        @if (Model.DisplayCancelHold)
+                        {
+                            <input type="button" class="btn" value="批量取消拦截" onclick=" return BatchCancelHoldOn(); " />
+                        }
+                       
+                        @if (Model.DisPlayModifyShippingMethod)
+                        {
+                            <input type="button" class="btn" value="修改运输方式" onclick=" return BatchModifyShippingMethod(); " />
+                        }
+                      
+                 
+                    </div>
+                </td>
+                
+            </tr>
+        </table>
+        
+        
+        <div id="pm_dis_div">
+            <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr class="data_row_two">
+
+                        <th>
+                            <input type="checkbox" class="checkbox" id="SelectAll" name="SelectAll" /><label for="SelectAll">全选</label>
+                        </th>
+                        <th>新运单号
+                        </th>
+                        <th>原运单号
+                        </th>
+                        <th>客户订单号
+                        </th>
+                        <th>跟踪号
+                        </th>
+                        <th>客户名称
+                        </th>
+                        <th>运输方式
+                        </th>
+                         <th>发货国家
+                        </th>
+                        <th>状态
+                        </th>
+                         <th>创建时间
+                        </th>
+                        <th>是否拦截
+                        </th>
+                        <th>操作
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                    
+                         foreach (var row in Model.PagedList.InnerList)
+                         {    
+                           <tr class="data_row_dan" id="tr_@(row.WayBillNumber)">
+                           <td>
+                              <input type="checkbox" class="checkbox" name="WayBillNumbers" value="@row.WayBillNumber" />     
+                           </td>
+                                  
+                            <td name="WayBillNumber">
+                                @row.WayBillNumber
+                            </td>
+                            <td name="RawWayBillNumber">
+                               @(row.RawWayBillNumber!=row.WayBillNumber?row.RawWayBillNumber:"")
+                            </td>
+                            <td>
+                                @row.CustomerOrderNumber
+                            </td>
+                               
+                            <td>
+                                @row.TrackingNumber
+                            </td>
+                             <td>
+                                @row.CustomerName
+                            </td>
+                               
+                            <td inshippingid="@row.InShippingMethodID" name="InShippingMethodID">
+                                @row.InShippingMethodName
+                            </td>
+                               
+                            <td>
+                                @row.CountryCode
+                            </td>
+
+                     
+                               <td  name="Status">
+                                   @WayBill.GetStatusDescription(row.Status) 
+                               </td>
+                               
+                               <td>
+                                   @row.CreatedOn
+                               </td>
+                               
+
+                               <td id="@(row.WayBillNumber)_isHold"  name="IsHold">
+                                @if (row.IsHold)
+                                {
+                                    <text>是</text>
+                                }
+                                else
+                                {
+                                    <text>否</text>
+                                }
+                            </td>
+
+                               <td id="@(row.WayBillNumber)_IsShowAddress">
+
+                                  @if (row.IsHold)
+                                   {
+                                        <a class="btn_href" href='@Url.Action("ModifWayBillDetail","WayBill",new{wayBillNumber=row.WayBillNumber,retUrl=Server.UrlEncode(url) })' >地址改发</a>
+                                        @*<input type="button" class="btn" value="地址改发" onclick="javascript:openIFrame('地址改发','WayBill/ModifWayBillDetail', '{wayBillNumber:@row.WayBillNumber,retUrl:@Server.UrlEncode(url),flag:add}') "/>*@
+                                   }
+                                   else
+                                   {
+                                        <input type="button" class="btn" value="地址改发" style="display: none" onclick="javascript:openIFrame('地址改发','WayBill/ModifWayBillDetail', '{wayBillNumber:@row.WayBillNumber,retUrl:@Server.UrlEncode(url),flag:add}') "/>
+                                   }
+                               </td>
+                             
+                            </tr>
+                             
+                         }
+                    }
+                    <tr class="data_row_none">
+                        <td colspan="20">
+                            @Html.Pager(Model.PagedList, Model.FilterModel)
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+
+ <div id="ModifyShippingMethodMsg" class="dn">
+    <span class="info_box info_short ">运输方式：</span>
+    @Html.DropDownListFor(p => Model.FilterModel.ShippingMethodId, Model.ShippingMethodLists, new Dictionary<string, object> { { "class", "chzn-select-deselect select_middle" }, { "data-placeholder", "全部" } })
+    <span id="message_error" class="mr20 ml10 txt_tip"></span>
+</div>   
+    
+
+</div>
+
+
+
+<script type="text/javascript">
+    //修改运输方式样式
+    var config = {
+        '.chzn-select': {},
+        '.chzn-select-deselect': { allow_single_deselect: true },
+        '.chzn-select-no-single': { disable_search_threshold: 10 },
+        '.chzn-select-no-results': { no_results_text: 'Oops, nothing found!' },
+        '.chzn-select-width': { width: "95%" }
+    };
+    for (var selector in config) {
+        $(selector).chosen(config[selector]);
+    }
+
+
+
+
+
+
+    $(function () {
+        
+        //选择运输方式
+        $("#selectShippingMethod").bind("click", function() {
+            $("#showShippingMethodList").showWindow("@Url.Action("FilterShippingMethod", "WayBill")?customerId=" + $("#CustomerID").val() + "&customerTypeId=" + $("#CustomerType").val() + "&type=1", "选择运输方式");
+            var parentWindow = $("#showShippingMethodList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                    top: 120
+                }, {
+                    duration: 1000,
+                    step: function(now, fx) {
+                        $(".window").css("top", now);
+                    }
+                });
+            $("#showShippingMethodList").show();
+        });
+
+
+        //全选
+        $("#SelectAll").click(function() {
+            if ($(this).attr("checked")) {
+                $(":checkbox[name='WayBillNumbers']").attr("checked", true);
+            } else {
+                $(":checkbox[name='WayBillNumbers']").attr("checked", false);
+            }
+        });
+
+    });
+
+
+
+    //批量拦截
+    function BatchHoldOn() {
+        var wayBillNumbers = [];
+        var orders = [];
+        $("input[name='WayBillNumbers']").each(function() {
+            if ($(this).attr("checked")) {
+                var statuText = $.trim($(this).parents("tr").children("[name='Status']").text());
+                var hold = $.trim($(this).parents("tr").children("[name='IsHold']").text());
+
+                if ((statuText == "已提交" || statuText == "已收货") && hold == "否") {
+                    wayBillNumbers.push($(this).val());
+                } else {
+                    var order = $.trim($(this).parents("tr").children("[name='WayBillNumber']").text());
+                    orders.push(order);
+                }
+            }
+        });
+        if (orders.length != 0) {
+            alert("" + orders.join(',') + "运单号不是已提交和已收货的运单或者拦截为是的运单不能拦截");
+            return false;
+        }
+        if (wayBillNumbers.length == 0) {
+            alert("请选择要拦截的运单");
+            return false;
+        }
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("BatchInterceptWayBill")",
+            dataType: "json",
+            data: { wayBillNumbers: wayBillNumbers.join(',') },
+            success: function(data) {
+                if (data.Result) {
+                    for (var i = 0; i < wayBillNumbers.length; i++) {
+                        $("input[type='button'][name='" + wayBillNumbers[i] + "']").hide();
+                        $("#" + wayBillNumbers[i] + "_isHold").html("是");
+
+                        //显示地址改发
+                        $("#" + wayBillNumbers[i] + "_IsShowAddress input").css("display", "block");
+                    }
+                    
+                    alert("拦截成功！");
+                    return true;
+                } else {
+                    alert(data.Message);
+                    return false;
+                }
+            }
+        });
+        return false;
+    }
+    //批量取消拦截
+    function BatchCancelHoldOn() {
+        var wayBillNumbers = [];
+        $("input[name='WayBillNumbers']").each(function () {
+            if ($(this).attr("checked")) {
+                wayBillNumbers.push($(this).val());
+            }
+        });
+
+        if (wayBillNumbers.length == 0) {
+            alert("请选择要取消拦截的订单");
+            return false;
+        }
+
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("BatchCancelAbnormalWayBill")",
+            dataType: "json",
+            data: { wayBillNumbers: wayBillNumbers.join(',') },
+            success: function(data) {
+                if (data.Result) {
+                    for (var i = 0; i < wayBillNumbers.length; i++) {
+                        $("input[type='button'][name='" + wayBillNumbers[i] + "']").hide();
+                        $("#" + wayBillNumbers[i] + "_isHold").html("否");
+                        
+                        //hide地址改发
+                        $("#" + wayBillNumbers[i] + "_IsShowAddress input").hide();
+
+                    }
+                    alert("操作成功！");
+                    return true;
+                } else {
+                    alert(data.Message);
+                    return false;
+                }
+            }
+        });
+    }
+    
+
+    //批量修改运输方式
+    function BatchModifyShippingMethod() {
+        var wayBillNumbers = [];
+        var orders = [];
+        $("input[name='WayBillNumbers']").each(function () {
+            if ($(this).attr("checked")) {
+                var statuText = $(this).parents("tr").children("[name='IsHold']").text().trim();
+                if (statuText == "是") {
+                    wayBillNumbers.push($(this).val());
+                } else {
+                    var order = $(this).parents("tr").children("[name='WayBillNumber']").text().trim();
+                    orders.push(order);
+                }
+            }
+        });
+        if (orders.length != 0) {
+            alert("" + orders.join(',') + " 修改前请先拦截运单，以免运单被继续出库!");
+            return false;
+        }
+        if (wayBillNumbers.length == 0) {
+            alert("请选择要修改运单方式的运单");
+            return false;
+        }
+        art.dialog({
+            title: '请选择要修改的运输方式',
+            content: document.getElementById('ModifyShippingMethodMsg'),
+            lock: true,
+            ok: function () {
+                $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("BatchModifyShippingMethodByStatus")",
+                    dataType: "json",
+                    data: { wayBillNumbers: wayBillNumbers.join(','), shippingMethodId: $("#FilterModel_ShippingMethodId").val(), shippingMethodName: $("#FilterModel_ShippingMethodId").find("option:selected").text().trim() },
+                    success: function (data) {
+                        if (data.Result) {
+                            //for (var i = 0; i < wayBillNumbers.length; i++) {
+                            //    var tdInShippingMethodId = $("#tr_" + wayBillNumbers[i] + "").children("[name='InShippingMethodID']");
+                            //    tdInShippingMethodId.html($("#FilterModel_ShippingMethodId").find("option:selected").text().trim());
+                            //    tdInShippingMethodId.attr("inshippingid", $("#FilterModel_ShippingMethodId").find("option:selected").val().trim());
+                            //    $("#" + wayBillNumbers[i] + "_isHold").html("否");
+
+                            //}
+                            ////alert("操作成功！");
+                            // return true;
+
+                            location.href = $("#retUrl").val();
+
+                        } else {
+                            alert(data.Message);
+                            return false;
+                        }
+                    }
+                });
+
+            },
+            cancelVal: '关闭',
+            cancel: true
+        });
+        return false;
+    }
+
+
+
+
+</script>

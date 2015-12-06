@@ -1,0 +1,151 @@
+﻿@{
+    ViewBag.Title = "包裹异常拦截";
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+}
+
+@model LMS.Controllers.FubController.Models.HoldLogModel    
+
+<link href="@Url.Content("~/Css/ajax_loading.css")" rel="stylesheet" type="text/css" />   
+<script src="@Url.Content("~/Scripts/ajax_loading.js")"  type="text/javascript"></script>
+
+@using (Html.BeginForm())
+{
+    <div>
+        <h2>包裹异常拦截</h2>
+        <hr style="width: 100%" align="left"/>
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select"  style="width:50%">
+                <td>
+                    <span class="info_box info_select">包裹单号:</span>
+                    <br/>
+                    @Html.TextAreaFor(p => p.FilterModel.TrackNumbers, new { @style = "height:80px; width:210px;" })
+                </td>
+                
+                
+                <td>
+                     <span class="info_box info_select">拦截日期:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.StartTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm',isShowClear:false})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.StartTime), @class = "txt wdate", @style = "width:130px;" })
+                    <span>至:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.EndTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm',isShowClear:false})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.EndTime), @class = "txt wdate", @style = "width:130px;" })
+                </td>
+
+            </tr>
+            
+            
+
+            <tr class="date_row_select" style="width:50%">
+                <td>
+                    <input type="submit" name="Search" id="btnSearch" value="查 询" class="btn"/>
+                    <input type="button" name="btnHold" id="btnHold" value="批量拦截" class="btn ml20"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+}
+
+
+
+
+
+
+<div>
+    <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr class="data_row_two">
+                <th>
+                    <input type="checkbox" class="checkbox" id="SelectAll" name="SelectAll" /><label for="SelectAll">全选</label>
+                </th>
+                <th>包裹单号
+                </th>
+                <th>目的国家
+                </th>
+                <th>重量kg
+                </th>
+                <th>客户袋牌号
+                </th>
+                <th>是否拦截
+                </th>
+                <th>拦截时间
+                </th>
+                <th>拦截操作人
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var item in Model.PagedList.InnerList)
+                {
+
+                    <tr class="data_row_dan" style="text-align: center">
+                        <td>
+                            @if (string.IsNullOrWhiteSpace(item.HoldBy))
+                            {
+                                <input type="checkbox" class="checkbox" name="Numbers" value="@item.TrackNumber" />
+                            }
+                        </td>
+                        <td>@item.TrackNumber</td>
+                        <td>@item.CountryName</td>
+                        <td>@item.Weight</td>
+                        <td>@item.PostBagNumber</td>
+                        <td>@(string.IsNullOrWhiteSpace(item.HoldBy)?"否":"是")</td>
+                        <td>@item.HoldOn</td>
+                        <td>@item.HoldBy</td>
+                    </tr>
+                }
+
+            }
+                
+
+            <tr class="data_row_none">
+                <td colspan="10">
+                    @Html.Pager(Model.PagedList, Model.FilterModel)
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    $(function() {
+        //全选
+        $("#SelectAll").click(function() {
+            if ($(this).attr("checked")) {
+                $(":checkbox[name='Numbers']").attr("checked", true);
+            } else {
+                $(":checkbox[name='Numbers']").attr("checked", false);
+            }
+        });
+        
+        $("#btnHold").click(function () {
+            if (!confirm("你确认拦截吗？")) return false;
+            
+            var numbers = [];
+            var checkRow = $(":checkbox[name='Numbers']:checked");
+            checkRow.each(function () {
+                numbers.push($(this).val());
+            });
+
+            if (numbers.length < 1) {
+                alert("请先选择！");
+                return false;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Hold")",
+                dataType: "JSON",
+                async: true,
+                data: { trackNumbers: numbers.join(",") },
+                success: function (data) {
+                    if (data.Result) {
+                        alert("拦截成功");
+                        $("#btnSearch").click();
+                    } else {
+                        alert(data.Message);
+                    }
+                },
+                error: function () {
+                    alert("失败");
+                }
+            });
+        });
+    });
+</script>

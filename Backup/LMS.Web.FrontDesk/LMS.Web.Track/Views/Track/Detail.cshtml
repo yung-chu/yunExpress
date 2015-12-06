@@ -1,0 +1,977 @@
+﻿@{
+    ViewBag.Title = "轨迹详细信息";
+    
+}
+
+@using LMS.Data.Entity
+@using LMS.FrontDesk.Controllers.TrackController.Models
+
+@model LMS.FrontDesk.Controllers.TrackController.Models.TrackModel
+
+<div class="Main_scroll">
+     <!--状态-->
+    <div class="T_pd">
+        <div class="T_area tj" date="T_one"> 
+            <span class="T_on T dib cpi" date="all"><span class="wf_w">所有订单(@Model.ListContactTable.Count())</span></span>
+                
+            <span class="T_off T dib cpi" date="handleing"><span class="wf_w">处理中(@Model.ListHandleing.Count())</span></span>
+
+            <span class="T_off T dib cpi" date="transportation"><span class="wf_w">运输中(@Model.ListSendPackage.Count())</span></span>
+                
+            <span class="T_off T dib cpi" date="sign"><span class="wf_w">成功签收(@Model.ListSuccessSign.Count())</span></span>
+                
+            <span class="T_off T dib cpi" date="anomaly"><span class="wf_w">可能异常(@Model.ListIsHold.Count())</span></span>
+            
+            <span class="T_off T dib cpi" date="query"><span class="wf_w">查询不到(@Model.NoQueryWaybillnumbers.Count())</span></span>
+
+            <span class="dib_fix" style="width:13.2%"></span><span class="dib_fix" style="width:13.2%"></span><span class="dib_fix" style="
+              width:13.2%"></span>
+            
+
+        </div>
+    </div>
+    
+    <!--表头-->
+    <table class="wf_Tb" cellpadding="0">
+        <tr>
+@*            <td width="8%">
+                状态
+            </td>*@
+            <td width="14%">
+                订单号
+            </td>
+            <td width="14%">
+                跟踪号
+            </td>
+            <td width="14%">
+               引用单号
+            </td>
+            <td width="12%">
+                运输方式
+            </td>
+            <td width="12%">
+                发件/目的国家
+            </td>
+            <td width="15%">
+                事件
+            </td>
+            
+
+            
+            <!--复制信息-->
+        @*    <td class="BgI" valign="top">
+                <span class="active pct100 vt">
+                    <span class="active_">
+                        <span class="db pl5 pr5">
+                            <span>
+                                <i class="u1 u119"></i>
+                                <span class="dib vm"></span>复制
+                            </span>
+                            <a href="javascript:">
+                                <i class="Trigon">
+                                </i>
+                            </a>
+                        </span>
+                    </span>
+
+                    <div class="warp lh28 dn">
+                        <ul class="mt-1 bdd">
+                            <li>
+                              <span style="cursor:default">复制详细</span>
+                                <object id='clipboard' codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0' width='16' height='16' align='middle'>
+                                    <param name='allowScriptAccess' value='always' />
+                                    <param name='allowFullScreen' value='false' />
+                                    <param name='movie' value='../../js/clipboard.swf' />
+                                    <param name='quality' value='high' />
+                                    <param name='bgcolor' value='#ffffff' />
+                                    <param name='wmode' value='transparent' />
+                                    <param name='flashvars' value='callback=CopyAllInfo' />
+                                    <embed src='../../js/clipboard.swf' flashvars='callback=CopyAllInfo' quality='high' bgcolor='#ffffff' width='16' height='16' wmode='transparent' name='clipboard' align='middle' allowscriptaccess='always' allowfullscreen='false' type='application/x-shockwave-flash' pluginspage='http://www.adobe.com/go/getflashplayer' />
+                                </object>
+                            </li>
+                            <li>
+                                <span style="cursor:default">复制概要</span>
+                                <object id='clipboard' codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0' width='16' height='16' align='middle'>
+                                    <param name='allowScriptAccess' value='always' />
+                                    <param name='allowFullScreen' value='false' />
+                                    <param name='movie' value='../../js/clipboard.swf' />
+                                    <param name='quality' value='high' />
+                                    <param name='bgcolor' value='#ffffff' />
+                                    <param name='wmode' value='transparent' />
+                                    <param name='flashvars' value='callback=CopyAllSimpleInfo' />
+                                    <embed src='../../js/clipboard.swf' flashvars='callback=CopyAllSimpleInfo' quality='high' bgcolor='#ffffff' width='16' height='16' wmode='transparent' name='clipboard' align='middle' allowscriptaccess='always' allowfullscreen='false' type='application/x-shockwave-flash' pluginspage='http://www.adobe.com/go/getflashplayer' />
+                                </object>
+                            </li>
+                        </ul>
+                    </div>
+                    </span>
+            </td>*@
+
+        </tr>
+    </table>
+    <!--表头 end-->
+    
+    <!--状态对应的轨迹信息-->
+    <div class="T_content" date="T_content_one">
+     
+         <!--处理中-->
+        <div class="T_item" date="handleing">
+            
+            @foreach (var item in Model.ListHandleing)
+            {
+
+               <table class="wd_Tb" cellpadding="5">
+                <tr>
+                     @* <td width="8%" align="center">
+                      <i class="u1 u113"></i>
+                    </td>*@
+                    <td width="12%" align="center">
+                        <div class="cell_bk lh14">
+                          @item.CustomerOrderNumber
+                        </div>
+                        @*<span class="Dib_vm"></span>*@
+                    </td>
+                    <td width="25%" align="center">
+                         <div class="cell_bk lh14">@item.FalseTrackNumber</div>
+                    </td>
+                    <td width="12%" align="center">
+                        <div class="cell_bk lh14">@item.WaybillNumber</div>
+                    </td>
+                    <td width="20%" align="center">
+                         <span class="lhh">@item.InShippingMethodName</span>
+                    </td>
+                    <td width="12%" align="center">
+                        <span class="lhh">@item.CurrentLocation,@item.Destination</span>
+                    </td>
+                    <td align="left">
+                        <span class="lhh pl10 pr10 dib">
+                           @item.LastEventDate,@item.LastEventContent
+                        </span>
+                    </td>
+                </tr>
+            </table>
+            
+               <div class="p30 dn">
+                  @*  <div class="Step_line pct80">
+                      <div class="Step_line_in"></div>
+                   </div>*@
+                   
+                   <!--运输路线配置-->
+         @*          <div class="tj rel pct80 auto zx2 Step_area">
+                        <span class="Step_l rel Step_Dib">
+                            <span class="Step_color"></span>
+                            <span class="Dib_vm"></span>
+                            <span class=" A db lh24">Read as</span></span>
+                    
+                        <span class="Step_Dib">
+                            <span class="Step_color"></span>
+                            <span class="Dib_vm"></span>
+                            <span class=" A db lh24">Read Policy</span></span>
+                    
+                        <span class="Step_Dib">
+                            <i class="u1 u117"></i>
+                            <span class="db lh24">Get asd Icon</span></span>
+                    
+                        <span class="Step_Dib">
+                            <i class="u1 u117"></i>
+                            <span class=" db lh24">Icon</span></span>
+                    
+                    
+                        <span class="Step_Dib Step_r rel">
+                            <span class="Step_black"></span>
+                            <span class="Dib_vm"></span>
+                            <span class=" A db lh24" >Read Policy</span></span>
+                    
+                        <span class="inline_fix"></span>
+                    </div>    *@
+                
+                   <div>
+                       <!--轨迹-->
+                       <div class="mt30 rel ml30 zx1">
+                           <ul name="hidden_ul">
+                               @{ var count = item.OrderTrackingDetailModelInfo.Count + 1;}
+                               @foreach (var info in item.OrderTrackingDetailModelInfo)
+                               {
+                                   count--;
+                                   <li class="mb10">
+                                       <div class="vm pl30 rel">
+                                           @info.ProcessDate,@info.ProcessContent,@info.ProcessLocation
+                                           <div class="Tnode_dot">
+                                                <span style="padding-left:8px">@count</span>
+                                           </div>
+                                        
+                                           <span class="Tnode_v_line"></span>
+                                       </div>
+                                   </li>
+
+                               }
+
+                           </ul>
+                           
+                           <!--复制文本时显示-->
+                           <textarea style="vertical-align: top; margin: 0px; height: 86px; width: 740px;display:none" name="currentShowDiv" >
+                                  @foreach (var info in item.OrderTrackingDetailModelInfo)
+                                  {<text>@info.ProcessDate,@info.ProcessContent,@info.ProcessLocation</text>
+                                  }
+                            </textarea>
+                           <div  name="showCopyTips" style="display:none;background-color:#d0d0d0;width:750px"> &nbsp;&nbsp;请用Ctrl+C复制</div>
+                           <!--复制文本时显示 end-->
+                           
+                           <div class="Tnode_vertical"></div>
+                           <div class="Tnode_new">New</div>
+                       </div>
+                       <!--轨迹end-->
+
+                       <!--复制文本、链接-->
+                       <div class="mt30 auto pt10 wd_dasher">
+                           @* <span class="cpi mr20 copy_wd_area">
+                              <i class="u1 u119"></i>
+                               <span  onclick="HandingCopyText(this)">复制文本</span>
+
+                           </span>*@
+                            @{
+                                    var currentUrl = HttpContext.Current.Request.Url;
+                                    var copyLink = currentUrl + "?WayBillNumber=" + item.WaybillNumber;
+                            }
+                           <input type="hidden"  id="HandingLink" value="@copyLink"/>
+              @*             <span class="cpi copy_wd_area" data-clipboard-target="HandingLink" id="CopyHandingLink">
+                               <i class="u1 u129"></i>
+                               <span style=" cursor:pointer">复制链接 </span> 
+                           </span>*@
+                       </div>
+
+                   </div>
+               </div>
+      
+            }
+
+        </div>
+        
+
+        <!--运输中-->
+        <div class="T_item" date="transportation">
+            
+            @foreach (var item in Model.ListSendPackage)
+            {
+
+               <table class="wd_Tb" cellpadding="5">
+                <tr>
+                    @*<td width="8%" align="center">
+                        <i class="u1 u113"></i>
+                    </td>*@
+                    <td width="12%" align="center">
+                        <div class="cell_bk lh14">
+                          @item.CustomerOrderNumber
+                        </div>
+                        @*<span class="Dib_vm"></span>*@
+                    </td>
+                    <td width="25%" align="center">
+                         <div class="cell_bk lh14">@item.FalseTrackNumber</div>
+                    </td>
+                    <td width="12%" align="center">
+                        <div class="cell_bk lh14">@item.WaybillNumber</div>
+                    </td>
+                    <td width="20%" align="center">
+                         <span class="lhh">@item.InShippingMethodName</span>
+                    </td>
+                    <td width="12%" align="center">
+                        <span class="lhh">@item.CurrentLocation,@item.Destination</span>
+                    </td>
+                    <td align="left">
+                        <span class="lhh pl10 pr10 dib">
+                           @item.LastEventDate,@item.LastEventContent
+                        </span>
+                    </td>
+                </tr>
+            </table>
+            
+               <div class="p30 dn">
+                  @*  <div class="Step_line pct80">
+                      <div class="Step_line_in"></div>
+                   </div>*@
+                   
+                   <!--运输路线配置-->
+         @*          <div class="tj rel pct80 auto zx2 Step_area">
+                        <span class="Step_l rel Step_Dib">
+                            <span class="Step_color"></span>
+                            <span class="Dib_vm"></span>
+                            <span class=" A db lh24">Read as</span></span>
+                    
+                        <span class="Step_Dib">
+                            <span class="Step_color"></span>
+                            <span class="Dib_vm"></span>
+                            <span class=" A db lh24">Read Policy</span></span>
+                    
+                        <span class="Step_Dib">
+                            <i class="u1 u117"></i>
+                            <span class="db lh24">Get asd Icon</span></span>
+                    
+                        <span class="Step_Dib">
+                            <i class="u1 u117"></i>
+                            <span class=" db lh24">Icon</span></span>
+                    
+                    
+                        <span class="Step_Dib Step_r rel">
+                            <span class="Step_black"></span>
+                            <span class="Dib_vm"></span>
+                            <span class=" A db lh24" >Read Policy</span></span>
+                    
+                        <span class="inline_fix"></span>
+                    </div>    *@
+                
+                   <div>
+                       <!--轨迹-->
+                       <div class="mt30 rel ml30 zx1">
+                           <ul name="hidden_ul">
+                               @{ var count = item.OrderTrackingDetailModelInfo.Count + 1;}
+                               @foreach (var info in item.OrderTrackingDetailModelInfo)
+                               {
+                                   count--;
+                                   <li class="mb10">
+                                       <div class="vm pl30 rel">
+                                           @info.ProcessDate,@info.ProcessContent,@info.ProcessLocation
+                                           <div class="Tnode_dot">
+                                                <span style="padding-left:8px">@count</span>
+                                           </div>
+                                        
+                                           <span class="Tnode_v_line"></span>
+                                       </div>
+                                   </li>
+
+                               }
+
+                           </ul>
+                           
+                           
+                           <!--复制文本时显示-->
+                             <textarea style="vertical-align: top; margin: 0px; height: 86px; width: 740px;display:none" name="currentShowDiv" >
+                                  @foreach (var info in item.OrderTrackingDetailModelInfo)
+                                  {<text>@info.ProcessDate,@info.ProcessContent,@info.ProcessLocation</text>
+                                  }
+                            </textarea>
+                           <div  name="showCopyTips" style="display:none;background-color:#d0d0d0;width:750px"> &nbsp;&nbsp;请用Ctrl+C复制</div>
+                           <!--复制文本时显示 end-->
+                           
+
+                           <div class="Tnode_vertical"></div>
+                           <div class="Tnode_new">New</div>
+                       </div>
+                       <!--轨迹end-->
+
+                       <!--复制文本,链接-->
+                       <div class="mt30 auto pt10 wd_dasher">
+               @*            <span class="cpi mr20 copy_wd_area">
+                               <i class="u1 u119"></i>
+                               <span  onclick="SendCopyText(this)">复制文本</span>
+
+                           </span>*@
+                            @{
+                                    var currentUrl = HttpContext.Current.Request.Url;
+                                    var copyLink = currentUrl + "?WayBillNumber=" + item.WaybillNumber;
+                            }
+                           <input type="hidden"  id="transportationLink" value="@copyLink"/>
+                           @*<span class="cpi copy_wd_area" data-clipboard-target="transportationLink" id="CopySendLink">
+                               <i class="u1 u129"></i>
+                               <span style=" cursor:pointer " >复制链接
+                                <object id='clipboard' codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0' width='16' height='16' align='middle'>
+	                                <param name='allowScriptAccess' value='always' />
+	                                <param name='allowFullScreen' value='false' />
+	                                <param name='movie' value='../../js/clipboard.swf' />
+	                                <param name='quality' value='high' />
+	                                <param name='bgcolor' value='#ffffff' />
+	                                <param name='wmode' value='transparent' />
+	                                <param name='flashvars' value='callback=CopySendLink&callbackArg=@copyLink' />
+	                                <embed src='../../js/clipboard.swf' flashvars='callback=CopySendLink&callbackArg=@copyLink' quality='high' bgcolor='#ffffff' width='16' height='16' wmode='transparent' name='clipboard' align='middle' allowscriptaccess='always' allowfullscreen='false' type='application/x-shockwave-flash' pluginspage='http://www.adobe.com/go/getflashplayer' />
+                                </object>
+                              </span> 
+
+                           </span>*@
+                       </div>
+
+                   </div>
+               </div>
+      
+            }
+
+        </div>
+        
+
+         <!--成功签收-->
+        <div class="T_item" date="sign">
+            
+            @foreach (var item in Model.ListSuccessSign)
+            {
+                <table class="wd_Tb" cellpadding="5">
+                    <tr>
+                         @* <td width="8%" align="center">
+                          <i class="u1 u113"></i>
+                        </td>*@
+                        <td width="12%" align="center">
+                            <div class="cell_bk lh14">
+                                @item.CustomerOrderNumber
+                            </div>
+                     
+                        </td>
+                        <td width="25%" align="center">
+                            <div class="cell_bk lh14">@item.FalseTrackNumber</div>
+                        </td>
+                        <td width="12%" align="center">
+                            <div class="cell_bk lh14">
+                                @item.WaybillNumber
+                            </div>
+                        </td>
+                        <td width="20%" align="center">
+                            <span class="lhh">@item.InShippingMethodName</span>
+                        </td>
+                        <td width="12%" align="center">
+                            <span class="lhh">@item.CurrentLocation/@item.Destination</span>
+                        </td>
+                        <td align="left">
+                            <span class="lhh pl10 pr10 dib">
+                                @item.LastEventDate,@item.LastEventContent
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="p30 dn">
+                    @*       <div class="Step_line pct80">
+                      <div class="Step_line_in"></div>
+                   </div>*@
+
+                    <!--运输路线配置-->
+                    @*    <div class="tj rel pct80 auto zx2 Step_area">
+                    <span class="Step_l rel Step_Dib">
+                        <span class="Step_color"></span>
+                        <span class="Dib_vm"></span>
+                        <span class=" A db lh24">Read as</span></span>
+                    
+                    <span class="Step_Dib">
+                        <span class="Step_color"></span>
+                        <span class="Dib_vm"></span>
+                        <span class=" A db lh24">Read Policy</span></span>
+                    
+                    <span class="Step_Dib">
+                        <i class="u1 u117"></i>
+                        <span class="db lh24">Get asd Icon</span></span>
+                    
+                    <span class="Step_Dib">
+                        <i class="u1 u117"></i>
+                        <span class=" db lh24">Icon</span></span>
+                    
+                    
+                    <span class="Step_Dib Step_r rel">
+                        <span class="Step_black"></span>
+                        <span class="Dib_vm"></span>
+                        <span class=" A db lh24" >Read Policy</span></span>
+                    
+                    <span class="inline_fix"></span>
+                </div>    *@
+                
+                    <div>
+                        <!--轨迹-->
+                        <div class="mt30 rel ml30 zx1">
+                            <ul name="hidden_ul">
+                                @{ var count = item.OrderTrackingDetailModelInfo.Count + 1;}
+                                @foreach (var info in item.OrderTrackingDetailModelInfo)
+                                {
+                                    count--;
+                                    <li class="mb10">
+                                        <div class="vm pl30 rel">
+                                            <span  name="deliveredTracking">@info.ProcessDate,@info.ProcessContent,@info.ProcessLocation</span>   
+                                            <div class="Tnode_dot">
+                                                <span style="padding-left:8px">@count</span>
+                                            </div>
+                                            <span class="Tnode_v_line"></span>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                           
+                            <!--复制文本时显示-->
+                               <textarea style="vertical-align: top; margin: 0px; height: 86px; width: 740px;display:none" name="currentShowDiv" >
+                                  @foreach (var info in item.OrderTrackingDetailModelInfo)
+                                  {<text>@info.ProcessDate,@info.ProcessContent,@info.ProcessLocation</text>
+                                  }
+                            </textarea>
+                            <div  name="showCopyTips" style="display:none;background-color:#d0d0d0;width:750px"> &nbsp;&nbsp;请用Ctrl+C复制</div>
+                            <!--复制文本时显示 end-->
+
+                            <div class="Tnode_vertical"></div>
+                            <div class="Tnode_new">New</div>
+                        </div>
+                        <!--轨迹 end-->
+                  
+                        <!--复制链接-->
+                        <div class="mt30 auto pt10 wd_dasher">
+                          @*  <span class="cpi mr20 copy_wd_area">
+                                <i class="u1 u119"></i>
+                                <span  onclick="DeliveredCopyText(this)">复制文本</span>
+
+                            </span>*@
+                            @{
+                                var currentUrl = HttpContext.Current.Request.Url;
+                                var copyLink = currentUrl + "?WayBillNumber=" + item.WaybillNumber;
+                            }
+                            <input type="hidden"  id="DeliveredLink" value="@copyLink"/>
+                     @*       <span class="cpi copy_wd_area" id="CopyDeliveredLink" data-clipboard-target="DeliveredLink">
+                                <i class="u1 u129"></i>
+                                <span style=" cursor:pointer " >复制链接</span> 
+                            </span>*@
+
+                        </div>
+                         
+                    </div>
+                </div>
+            }
+        </div>
+        
+        
+         <!--可能异常-->
+        <div class="T_item" date="anomaly">
+            
+            @foreach (var item in Model.ListIsHold)
+            {
+                
+                <table class="wd_Tb" cellpadding="5">
+                    <tr>
+                        @*<td width="8%" align="center">
+                            <i class="u1 u113"></i>
+                        </td>*@
+                        <td width="12%" align="center">
+                            <div class="cell_bk lh14">
+                                @item.CustomerOrderNumber
+                            </div>
+
+                        </td>
+                        <td width="25%" align="center">
+                            <div class="cell_bk lh14">@item.FalseTrackNumber</div>
+                        </td>
+                        <td width="12%" align="center">
+                            <div class="cell_bk lh14">
+                                @item.WaybillNumber
+                            </div>
+                        </td>
+                        <td width="20%" align="center">
+                            <span class="lhh">@item.InShippingMethodName</span>
+                        </td>
+                        <td width="12%" align="center">
+                            <span class="lhh">@item.CurrentLocation/@item.Destination</span>
+                        </td>
+                        <td align="left">
+                            <span class="lhh pl10 pr10 dib">
+                                @item.LastEventDate,@item.LastEventContent
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            
+                <div class="p30 dn">
+                    @*<div class="Step_line pct80">
+                      <div class="Step_line_in"></div>
+                  </div>*@
+
+                    <!--路线配置-->
+                    @*          <div class="tj rel pct80 auto zx2 Step_area">
+                    <span class="Step_l rel Step_Dib">
+                        <span class="Step_color"></span>
+                        <span class="Dib_vm"></span>
+                        <span class=" A db lh24">Read as</span></span>
+                    
+                    <span class="Step_Dib">
+                        <span class="Step_color"></span>
+                        <span class="Dib_vm"></span>
+                        <span class=" A db lh24">Read Policy</span></span>
+                    
+                    <span class="Step_Dib">
+                        <i class="u1 u117"></i>
+                        <span class="db lh24">Get asd Icon</span></span>
+                    
+                    <span class="Step_Dib">
+                        <i class="u1 u117"></i>
+                        <span class=" db lh24">Icon</span></span>
+                    
+                    
+                    <span class="Step_Dib Step_r rel">
+                        <span class="Step_black"></span>
+                        <span class="Dib_vm"></span>
+                        <span class=" A db lh24" >Read Policy</span></span>
+                    
+                    <span class="inline_fix"></span>
+                </div>    *@
+                
+                    <div>
+                      
+                        <!--轨迹-->
+                        <div class="mt30 rel ml30 zx1">
+                            <ul name="hidden_ul">
+                                @{ var count = item.OrderTrackingDetailModelInfo.Count + 1;}
+                                @foreach (var info in item.OrderTrackingDetailModelInfo)
+                                {
+                                    count--;
+                                    <li class="mb10">
+                                        <div class="vm pl30 rel">
+                                            @info.ProcessDate,@info.ProcessContent,@info.ProcessLocation
+                                            <div class="Tnode_dot">
+                                                <span style="padding-left:8px">@count</span>
+                                            </div>
+                                      
+                                            <span class="Tnode_v_line"></span>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                          
+                          
+                            <!--显示文本--> 
+                             <textarea style="vertical-align: top; margin: 0px; height: 86px; width: 740px;display:none" name="currentShowDiv" >
+                                  @foreach (var info in item.OrderTrackingDetailModelInfo)
+                                  {<text>@info.ProcessDate,@info.ProcessContent,@info.ProcessLocation</text>
+                                  }
+                            </textarea>
+                            <div  name="showCopyTips" style="display:none;background-color:#d0d0d0;width:750px"> &nbsp;&nbsp;请用Ctrl+C复制</div>
+                            <!--显示文本 end -->
+
+                            <div class="Tnode_vertical"></div>
+                            <div class="Tnode_new">New</div>
+                        </div>
+                        <!--轨迹end-->
+                    
+
+                        <!--复制链接-->
+                        <div class="mt30 auto pt10 wd_dasher">
+                   @*         <span class="cpi mr20 copy_wd_area">
+                                <i class="u1 u119"></i>
+                                <span onclick="IsHoldCopyText(this)">复制文本</span>
+                            </span>*@
+                            @{
+                                var currentUrl = HttpContext.Current.Request.Url;
+                                var copyLink = currentUrl + "?WayBillNumber=" + item.WaybillNumber;
+                            }
+                            <input type="hidden" id="IsHoldLink" value="@copyLink" />
+                @*            <span class="cpi copy_wd_area"  data-clipboard-target="IsHoldLink" id="CopyIsHoldLink">
+                                 <i class="u1 u129"></i>
+                                <span style=" cursor:default " >复制链接</span> 
+                            </span>*@
+                        </div>
+                        <!--复制链接 end-->
+
+                    </div>
+                </div>
+  
+            }
+            
+        </div>
+        
+        
+        <!--查询不到-->
+        <div class="T_item" date="query">
+
+            @foreach (var item in Model.NoQueryWaybillnumbers)
+            {
+                  <table class="wd_Tb" cellpadding="5">
+                    <tr>
+                         @*<td width="8%" align="center">
+                            <i class="u1 u113"></i>
+                        </td>*@
+                        
+                          <td width="12%" align="center">
+                            <div class="cell_bk lh14">
+                                @item
+                            </div>
+
+                        </td>
+
+                        <td width="12%" align="center">
+                            <span class="lhh">
+
+                            </span>
+                        </td>
+                        <td width="12%" align="center">
+                            <span class="lhh">
+
+                            </span>
+                        </td>
+                        <td width="12%" align="center">
+                            <span class="lhh">
+                            </span>
+                        </td>
+                        <td width="12%" align="center">
+                            <span class="lhh">
+                            </span>
+                        </td>
+                        <td align="left">
+                            <span class="lhh pl10 pr10 dib">
+                       
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            }
+
+        </div>
+
+    </div>  
+
+    
+    
+
+    <!--搜索-->
+    @using (Html.BeginForm())
+    {
+     <div class="mwd_area">
+        <div class="mwd_ovh">
+            @Html.TextAreaFor(p => p.WayBillNumber, new { @cols = 50, @rows = 12, @class = "mwd_Testarea" })
+            <ul class="mwd_L trans">
+            </ul>
+        </div>
+        <div class="mt1 lh32 gf">
+            <table cellpadding="0" width="100%">
+                <tr>
+                    <td  width="33%" class="brf">
+                            <input type="submit" value="查询" name="btnSearch"  style="background:#245a5c; cursor:pointer;  text-align:center; border:none;width:80px; height:32px"/> 
+                       @* <div class="mwd_search">
+                         
+                        </div>*@
+                    </td>
+                    <td width="33%" class="brf"><div class="mwd_detele">清空</div></td>
+                    <td><div class="mwd_close" id="sb">关闭</div></td>
+                </tr>
+            </table>
+        </div>
+      </div>
+    }
+    <!--搜索 end-->
+
+</div>
+
+
+<div class="mwd_opsition">
+	<a href="javascript:" class="mwd_area_control">
+         <img src="@Url.Content("~/images/search_btnI.jpg")"/>
+    </a>
+</div>
+
+<div class="Popup_area">
+    <span class="Dib_vm"></span>
+    <span class="vm dib lh14">
+        <i class="u1 u131"></i><br><br><br>
+        已经复制到剪贴板
+    </span>
+</div>
+
+
+<!--复制全部详细信息-->
+<div style="display:none" id="copyAllDetailInfo">
+  <pre>
+    <ul>
+        @foreach (var item in Model.ListContactTable)
+        {
+
+            <li style="list-style-type:none">
+            单号:@item.WaybillNumber
+            包裹状态:@item.EnumStingStatus
+            目的国家:@item.Destination
+            发件国家:中国
+             </li>  
+            <li>
+                  @foreach (var info in item.OrderTrackingDetailModelInfo)
+                  {
+                      <text>@info.ProcessDate,@info.ProcessContent,@info.ProcessLocation</text>
+                       <br />
+                  }
+            </li> 
+        
+                  if (Model.ListContactTable.IndexOf(item) > 0)
+                  {
+                      <text>======================================</text>
+                  }
+        }
+          <br />
+        <span>======================================</span>
+        <span> Powered by @HttpContext.Current.Request.Url </span> 
+    </ul>
+  </pre>
+</div>
+
+
+<!--复制全部概要信息-->
+<div style="display:none" id="copyAllSimpleInfo">
+   <pre>
+    <ul>
+        @foreach (var item in Model.ListContactTable)
+        {
+            var info = item.OrderTrackingDetailModelInfo != null ? item.OrderTrackingDetailModelInfo.FirstOrDefault() : null; 
+        
+     
+            <li style="list-style-type:none">
+                @item.WaybillNumber         中国           @item.Destination        
+                 @if (info != null)
+                 {
+                     <text> @info.ProcessDate ,@info.ProcessContent , @info.ProcessLocation</text>
+                 }
+            </li>  
+          
+
+          if (Model.ListContactTable.IndexOf(item) > 0)
+          {
+                <text>======================================</text>
+           }
+        }
+        <br />
+        <span>======================================</span>
+        <span> Powered by @HttpContext.Current.Request.Url </span> 
+    </ul>
+  </pre>
+</div>
+
+
+
+
+<script type="text/javascript" src="../../js/ZeroClipboard.js"></script>
+<script type="text/javascript">
+    
+
+
+
+
+    ////复制全部详细信息
+    //function CopyAllInfo() {
+    //    var copyLink = $("#copyAllDetailInfo").text();
+    //    if (copyLink == "") {
+    //        return false;
+    //    }
+    //    if (copyLink != "") {
+    //        //弹框样式提示
+    //        copy();
+    //    }
+
+    //    if (window.clipboardData)
+    //        window.clipboardData.setData('text', copyLink);
+    //    else
+    //        return (copyLink);
+    //}
+
+
+    ////复制全部概要信息
+    //function CopyAllSimpleInfo()
+    //{
+        
+    //    var copyLink = $("#copyAllSimpleInfo").text();
+    //    if (copyLink == "") {
+    //        return false;
+    //    }
+
+    //    if (copyLink != "") {
+    //        //弹框样式提示
+    //        copy();
+    //    }
+
+    //    if (window.clipboardData)
+    //        window.clipboardData.setData('text', copyLink);
+    //    else
+    //        return (copyLink);
+    //}
+
+
+
+
+    //点击复制文本（公用）
+    function PublicShow(obj) {
+
+        var positionHidenTracking = $(obj).find("ul[name='hidden_ul']");
+        $(positionHidenTracking).css("display", "none");
+
+        var positionShowCopy = $(obj).find("textarea[name='currentShowDiv']");
+        var positionShowTips = $(obj).find("div[name='showCopyTips']");
+        //选中
+        $(positionShowCopy).trigger("select");
+        $(positionShowCopy).css("display", "block");
+        $(positionShowTips).css("display", "block");
+    }
+
+
+
+
+
+
+
+    //已签收
+    function DeliveredCopyText(obj) {
+
+        var position = $(obj).parent().parent().parent();
+        PublicShow(position);
+    }
+
+    //已签收复制链接
+    var clip2 = new ZeroClipboard(document.getElementById("CopyDeliveredLink"), {
+        moviePath: "../../js/ZeroClipboard.swf"
+    });
+    clip2.on('complete', function (client, args) {
+        //弹框样式提示
+        copy();
+    });
+    
+
+
+    //异常
+    function IsHoldCopyText(obj) {
+        var position = $(obj).parent().parent().parent();
+        PublicShow(position);
+    }
+
+    //运输中复制链接
+    var clip3 = new ZeroClipboard(document.getElementById("CopyIsHoldLink"), {
+        moviePath: "../../js/ZeroClipboard.swf"
+    });
+
+    clip3.on('complete', function (client, args) {
+        //弹框样式提示
+        copy();
+    });
+
+
+
+
+    //运输中
+    function SendCopyText(obj) {
+
+        var position = $(obj).parent().parent().parent();
+
+        PublicShow(position);
+    }
+
+    //运输中复制链接
+    var clip1 = new ZeroClipboard(document.getElementById("CopySendLink"), {
+        moviePath: "../../js/ZeroClipboard.swf"
+    });
+
+    clip1.on('complete', function (client, args) {
+        //弹框样式提示
+        copy();
+    });
+
+
+
+
+    //处理中
+    function HandingCopyText(obj) {
+
+        var position = $(obj).parent().parent().parent();
+
+        PublicShow(position);
+    }
+
+
+    //处理中复制链接
+    var clip = new ZeroClipboard(document.getElementById("CopyHandingLink"), {
+        moviePath: "../../js/ZeroClipboard.swf"
+    });
+
+    clip.on('complete', function (client, args) {
+        //弹框样式提示
+        copy();
+        //alert("复制成功，复制内容为：" + args.text);
+    });
+
+</script>

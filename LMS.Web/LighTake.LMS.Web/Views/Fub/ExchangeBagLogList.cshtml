@@ -1,0 +1,89 @@
+﻿@{
+    ViewBag.Title = "换袋记录查询";
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+}
+
+@model LMS.Controllers.FubController.Models.ExchangeBagLogModel
+
+@using (Html.BeginForm())
+{
+    <div>
+        <h2>换袋记录查询</h2>
+        <hr style="width: 100%" align="left"/>
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select"  style="width:50%">
+                <td>
+                    <span class="info_box info_select">包裹单号:</span>
+                    <br/>
+                    @Html.TextAreaFor(p => p.FilterModel.TrackNumber, new { @style = "height:80px; width:210px;" })
+                </td>
+                
+                
+                <td>
+                     <span class="info_box info_select">换袋日期:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.StartTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm',isShowClear:false})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.StartTime), @class = "txt wdate", @style = "width:130px;" })
+                    <span>至:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.EndTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm',isShowClear:false})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.EndTime), @class = "txt wdate", @style = "width:130px;" })
+                </td>
+
+            </tr>
+            
+            
+
+            <tr class="date_row_select" style="width:50%">
+                <td>
+                    <input type="submit" name="Search" value="查 询" class="btn"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+}
+
+
+
+
+
+
+<div>
+    <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr class="data_row_two">
+                    <th>包裹单号
+                    </th>
+                    <th>发货国家
+                    </th>
+                    <th>原客户袋牌号 
+                    </th>
+                    <th>现客户带牌号 
+                    </th>
+                    <th>换袋日期
+                    </th>
+                    <th>换袋操作人
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var item in Model.PagedList.InnerList)
+                    {
+  
+                        <tr class="data_row_dan" style="text-align: center">
+                            <td>@item.TrackNumber</td>
+                            <td>@item.CountryCode</td>
+                            <td>@item.PostBagNumber</td>
+                            <td>@item.NewPostBagNumber</td>
+                            <td>@item.ExchangeTime</td>
+                            <td>@item.RecordBy</td>
+                        </tr>
+                    }
+
+                }
+                
+
+                <tr class="data_row_none">
+                    <td colspan="10">
+                    @Html.Pager(Model.PagedList, Model.FilterModel)
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</div>

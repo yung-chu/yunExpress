@@ -1,0 +1,286 @@
+﻿@*@model LMS.FrontDesk.Controllers.UserController.Models.AddCustomerModel
+@{
+    ViewBag.Title = "用户注册";
+}
+@using (Html.BeginForm())
+{
+    <div class="main_in">
+        <div class="constr">
+            <div class="constr_in">
+                <div class="min_minBox">
+                    <div class="pl45">
+                        <div class="pt35 mb40">
+                            <span class="u u14 mr10"></span>
+                            <span class="co01 f20 fw vb">会员注册</span>
+                        </div>
+                        <div class="pl45 ml30">
+                        	<div class="mb10">
+                                <i class="coe5 vm mr5">*</i>
+                                &nbsp;&nbsp;&nbsp;用户名 :
+                                @Html.TextBoxFor(p => p.AccountID, new { @class = "txt size_middle",id="accountid"})
+                                @Html.ValidationMessageFor(p=>p.AccountID,"",new{@style="color:red",id="user_tip"})
+                            </div>
+                            <div class="mb10">
+                                <i class="coe5 vm mr5">*</i>
+                                密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码 :
+                                @Html.PasswordFor(p => p.Password, new { @class = "txt size_middle"})
+                                @Html.ValidationMessageFor(p=>p.Password,"",new{@style="color:red"})
+                            </div>
+                            <div class="mb10">
+                                <i class="coe5 vm mr5">*</i>
+                                确认密码 :
+                                @Html.PasswordFor(p => p.NextPassword, new { @class = "txt size_middle"})
+                                @Html.ValidationMessageFor(p=>p.NextPassword,"",new{@style="color:red"})
+                            </div>
+                            <div class="mb10">
+                                <i class="coe5 vm mr5">&nbsp;&nbsp;</i>
+                                客户名称 :
+                                @Html.TextBoxFor(p => p.Name, new { @class = "txt size_middle"})
+                            </div>
+                            <div class="mb10">
+                                <i class="coe5 vm mr5">*</i>
+                                &nbsp;&nbsp;&nbsp;联系人 :
+                                @Html.TextBoxFor(p => p.LinkMan, new { @class = "txt size_middle"})
+                                @Html.ValidationMessageFor(p=>p.LinkMan,"",new{@style="color:red"})
+                            </div>
+                            <div class="mb10">
+                                <i class="coe5 vm mr5">*</i>
+                                联系电话 :
+                                @Html.TextBoxFor(p => p.Tele, new { @class = "txt size_middle"})
+                                @Html.ValidationMessageFor(m=>m.Tele,"",new{@style="color:red"})
+                            </div>
+                            <div class="mb10">
+                                <i class="coe5 vm mr5">*</i>
+                                详细地址 :
+                                @Html.TextBoxFor(p => p.Address, new { @class = "txt size_long"})
+                                @Html.ValidationMessageFor(p=>p.Address,"",new{@style="color:red"})
+                            </div>
+                            <div class="mb10">
+                                <i class="coe5 vm mr5">*</i>
+                                &nbsp;&nbsp;&nbsp;&nbsp;Email :
+                                @Html.TextBoxFor(p => p.Email, new { @class = "txt size_middle"})
+                                @Html.ValidationMessageFor(p=>p.Email,"",new{@style="color:red"})
+                            </div>
+                             <div class="mb10">
+                                 <i class="coe5 vm mr5">&nbsp;&nbsp;</i>
+                                &nbsp;&nbsp;&nbsp;&nbsp;QQ :
+                                @Html.TextBoxFor(p => p.QQ, new { @class = "txt size_middle"})
+                            </div>
+                            <div>
+                            	       
+                            	<input type="checkbox" id="Checked" class="check">
+                                同意 Lightake速递物流条款内容
+                            </div>
+                            <div class="mt10">
+                            	<textarea class="area_big_box" disabled="disabled">                                	本服务条款自寄件人签署之日订立，订约双方为Lightake速递及寄件人，订约双方均须遵守本服务条款。本条款所称"货件"，是指已抵达我公司或由我公司工作人员签收的货物，每一货件运输都将适用本条款中关于责任限制的规定。如寄件人要求更大程度的保护，可另行购买保险。
+一、限寄和禁寄的货件
+寄件人同意其交运的货件都是可运输的。以下货件不予收寄：
+1）属于国际航空货运协会（IATA）、国际民用航空组织（ICAO）及其他相关政府部门或组织所规定的有害物品、危险物品，以及属于禁运或限运的物品 （限制投寄的物品：电池、含电池的物品、紧急用于医疗或科研的药品、体育用的枪支、活动物、未超标准的磁性物品、易腐品、放射性物品、疫苗、私章或公章 等）。
+
+                                </textarea>
+                            </div>
+                            <div class="mt30 mb40">
+                            	<input type="submit" name="Addbtn" value="" id="Addbtn" onclick="return AddUser();"/>
+                            </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    
+    //注册按钮的禁用
+    $(function () {
+        $("#Addbtn").attr("disabled", "disabled");
+        $("#Addbtn").addClass("u u18");
+        $("#Checked").change(function () {
+            if ($("#Checked").get(0).checked) {
+                $("#Addbtn").removeClass("u u18");
+                $("#Addbtn").addClass("u u15");
+                $("#Addbtn").attr("disabled", false);
+            } else {
+                $("#Addbtn").removeClass("u u15");
+                $("#Addbtn").addClass("u u18");
+                $("#Addbtn").attr("disabled", true);
+            }
+        });
+    });
+    
+    //调用Ajax判断用户名是否存在
+
+    function AddUser() {
+        var mysubmit = true;
+        var accountId = $("#accountid").val();
+        $.ajax({
+            async: false,
+            url: '@Url.Action("SelectAccountId","User")',
+        data: {
+            AccountId: accountId
+        },
+        success: function (data, textStatus) {
+            if (data.result) {
+                $("#user_tip").css("display", "block");
+                mysubmit = false;
+            }
+        }
+        });
+        return mysubmit;
+    }
+    
+</script>*@
+
+
+@model LMS.FrontDesk.Controllers.UserController.Models.AddCustomerModel
+
+@{
+    ViewBag.Title = "用户注册";
+}
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+
+@using (Html.BeginForm())
+{
+  <div class="bgf6">
+  <div class="conStr">
+    <div class="strIn" >
+      <div class="shadow">
+        <div class="fix ">
+          <div class="res_pd bgwh">
+          		<h3 class="IIItt">会员注册</h3>
+                <div class="mt20 mb15">
+                    &emsp;<span class="coff4 mr5">*</span>用户名
+                                                                     
+                    @Html.TextBoxFor(p => p.AccountID, new { @class = "ist_Il ist_h",id="accountid"})
+                    <span class="ml10 dib0 coff4">
+                           @Html.ValidationMessageFor(p=>p.AccountID,"",new{@style="color:red",id="user_tip"})
+                    </span>
+                </div>
+                <div class="mb15">
+                    &emsp;&emsp;<span class="coff4 mr5">*</span>密码
+
+                    @Html.PasswordFor(p => p.Password, new { @class = "ist_Il ist_h"})
+                    <span class="ml10 dib0 coff4">
+                            @Html.ValidationMessageFor(p=>p.Password,"",new{@style="color:red"})
+                    </span>
+                </div>
+                <div class="mb15">
+                	<span class="coff4 mr5">*</span>确认密码
+
+                       @Html.PasswordFor(p => p.NextPassword, new { @class = "ist_Il ist_h"})
+                      <span class="ml10 dib0 coff4">
+                             @Html.ValidationMessageFor(p=>p.NextPassword,"",new{@style="color:red"})
+                      </span>
+                </div>
+                <div class="mb15">
+                	&emsp;&emsp;<span class="coff4 mr5">*</span>手机
+
+                                                          
+                     @Html.TextBoxFor(p => p.Tele, new { @class = "ist_Il ist_h"})
+                       <span class="ml10 dib0 coff4">
+                             @Html.ValidationMessageFor(m=>m.Tele,"",new{@style="color:red"})
+                       </span>
+                </div>
+                <div class="mb15">
+                	&emsp;<span class="coff4 mr5">*</span>联系人
+
+                       @Html.TextBoxFor(p => p.LinkMan, new { @class = "ist_Il ist_h"})
+                       <span class="ml10 dib0 coff4">
+                             @Html.ValidationMessageFor(p=>p.LinkMan,"",new{@style="color:red"})
+                      </span>
+                </div>
+                <div class="mb15">
+                	&emsp;&ensp;<span class="coff4 mr5">*</span>Email
+                    
+                      @Html.TextBoxFor(p => p.Email, new { @class = "ist_Il ist_h"})
+                      <span class="ml10 dib0 coff4">
+                             @Html.ValidationMessageFor(p=>p.Email,"",new{@style="color:red"})
+                      </span>
+
+                </div>
+   
+              <div class="mb15">
+                  <span class="coff4 mr5">*</span>详细地址
+                  <span class="vt dib">
+
+                      @Html.TextAreaFor(p => p.Address, new { @class = "textarea w300 p5", rows="8"})
+                      <span class="ml10 dib0 coff4">
+                          @Html.ValidationMessageFor(p=>p.Address,"",new{@style="color:red"})
+                      </span>
+                  </span>
+              </div>
+
+
+                <div class="mb15">
+                	&emsp;&emsp;&emsp;&emsp;&emsp;<label for="res_check" class="cpi vm">同意云途物流条款内容</label>
+                    <input type="checkbox" class="vm" id="Checked"><!--res_check-->
+                </div>
+                <div class="mb15">
+                	&emsp;&emsp;&emsp;&emsp;&emsp;
+                    <textarea class="textarea pct70 p10" rows="8">
+                    	本服务条款自寄件人签署之日订立，订约双方为Lightake速递及寄件人，订约双方均须遵守本服务条款。本条款所称"货件"，是指已抵达我公司或由我公司工作人员签收的货物，每一货件运输都将适用本条款中关于责任限制的规定。如寄件人要求更大程度的保护，可另行购买保险。
+一、限寄和禁寄的货件
+寄件人同意其交运的货件都是可运输的。以下货件不予收寄：
+1）属于国际航空货运协会（IATA）、国际民用航空组织（ICAO）及其他相关政府部门或组织所规定的有害物品、危险物品，以及属于禁运或限运的物品 （限制投寄的物品：电池、含电池的物品、紧急用于医疗或科研的药品、体育用的枪支、活动物、未超标准的磁性物品、易腐品、放射性物品、疫苗、私章或公章 等）。
+
+                    </textarea>
+                </div>
+                <div class="mb15">
+                    &emsp;&emsp;&emsp;&emsp;&emsp;<input type="submit" id="Addbtn" value=""  class="btn_y"  onclick="return AddUser();"/>
+                    	                          
+                </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+
+
+
+<script type="text/javascript">
+    
+    //注册按钮的禁用
+    $(function () {
+        $("#Addbtn").attr("disabled", "disabled");
+        $("#Addbtn").addClass("u u18");
+        $("#Checked").change(function () {
+            if ($("#Checked").get(0).checked) {
+                $("#Addbtn").removeClass("u u18");
+                $("#Addbtn").addClass("u u15");
+                $("#Addbtn").attr("disabled", false);
+            } else {
+                $("#Addbtn").removeClass("u u15");
+                $("#Addbtn").addClass("u u18");
+                $("#Addbtn").attr("disabled", true);
+            }
+        });
+    });
+    
+    //调用Ajax判断用户名是否存在
+    function AddUser() {
+        var mysubmit = true;
+        var accountId = $("#accountid").val();
+        $.ajax({
+            async: false,
+            url: '@Url.Action("SelectAccountId","User")',
+        data: {
+            AccountId: accountId
+        },
+        success: function (data, textStatus) {
+            if (data.result) {
+                $("#user_tip").css("display", "block");
+                mysubmit = false;
+            }
+        }
+        });
+        return mysubmit;
+    }
+    
+</script>
+

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="88e68e24-01b4-4143-a05e-965526e9c607" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:25058/LtQueue.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="LtQueue.xsd" MetadataType="Schema" ID="7f0e6ca5-face-45e0-8cfb-214b7f9a33bf" SourceId="1" SourceUrl="http://localhost:25058/LtQueue.svc?xsd=xsd0" />
+    <MetadataFile FileName="LtQueue.wsdl" MetadataType="Wsdl" ID="3ea52bbc-a059-4100-8951-c4037637b029" SourceId="1" SourceUrl="http://localhost:25058/LtQueue.svc?wsdl" />
+    <MetadataFile FileName="LtQueue1.xsd" MetadataType="Schema" ID="aa0f829b-dc49-4cf4-b812-164ae8335dad" SourceId="1" SourceUrl="http://localhost:25058/LtQueue.svc?xsd=xsd3" />
+    <MetadataFile FileName="LtQueue.disco" MetadataType="Disco" ID="1fd48c45-3e63-49ea-b61d-cd2e0912807f" SourceId="1" SourceUrl="http://localhost:25058/LtQueue.svc?disco" />
+    <MetadataFile FileName="LtQueue2.xsd" MetadataType="Schema" ID="27b66659-2633-4b64-bf21-c5da08f15a67" SourceId="1" SourceUrl="http://localhost:25058/LtQueue.svc?xsd=xsd1" />
+    <MetadataFile FileName="LtQueue3.xsd" MetadataType="Schema" ID="1abe31f8-961b-405b-a0db-76c4ff365641" SourceId="1" SourceUrl="http://localhost:25058/LtQueue.svc?xsd=xsd2" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

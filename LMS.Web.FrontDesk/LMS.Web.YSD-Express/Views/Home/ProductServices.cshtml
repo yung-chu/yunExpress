@@ -1,0 +1,114 @@
+﻿
+
+@model LMS.FrontDesk.Controllers.HomeController.Models.HomeListModel
+@{
+    if (Model.CategoryModel != null)
+    {
+        ViewBag.Title = string.IsNullOrWhiteSpace(Model.CategoryModel.SeoTitle) ? "产品与服务" : Model.CategoryModel.SeoTitle;
+    }
+    else
+    {
+        ViewBag.Title = "产品与服务";
+    }
+    
+}
+
+@section ExtraHeadContent {
+    <meta name="description" content="@ViewBag.Description">
+    <meta name="Keywords" content="@ViewBag.SeoKey">
+}
+
+
+<div class="bn_area" style="height:300px;box-shadow:0 0 3px #b1b1b1; position:relative;" id="inx_AdSlide">
+  <div style="background:#446087; height:100%">
+    <div class="conStr">
+      <div class="strIn">
+          <div class="tr">
+               <a href="javascript:">
+                    <img src="@Url.Content(string.IsNullOrWhiteSpace(Model.CategoryModel.Pic)?"~/images/banner/bn5.jpg":Model.PicPath+Model.CategoryModel.Pic)"  height="300">
+               </a> 
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="bgf6">
+<div class="conStr">
+  <div class="strIn">
+  	<div class="bgf shadow">
+	    <div class="tr pt20 mr20 lh20">
+        	<div class="bread_area mb15">  
+                    	<a href="#" class="dib vm" title="回到首页"><img src="@Url.Content("~/images/house.jpg")" /></a>
+                        <span class="vm">
+                            <a href="@Url.Action("Index", "Home")" class="tdn" title="回到首页">首页</a>
+                            --&gt;
+                            <span href="@Url.Action("ProductServices", "Home", new { id = 3 })" class="bread_on">
+                            	产品服务
+                            </span>
+                        </span>
+                        
+                    </div>
+        </div>
+        <div class="fix mt-20 pl10">
+            <div class="l w250">
+                <div>
+                    <span class="tt">产品服务</span>
+                    <span class="fa">Services</span>
+                </div>
+                <!--新闻类别源自 新闻中心-->
+                @if (Model.CategoryModels.Count > 0)
+                {
+                    <ul class="Inav_box mt10">
+                        @foreach (var row in Model.ShippingMethodServices)
+                        {
+                            string css = Model.CategoryId == row.CategoryID ? "Inav_on" : "Inav_off";
+                            <li>
+                                <a style="overflow: hidden" class="@css" href="@Url.Action("ProductServices", "Home", new { id = @row.CategoryID })">
+                                    @row.Name
+                                </a>
+                            </li>
+                        }
+                    </ul> 
+                }
+            </div>
+            
+             <!--新闻内容-->
+            <div class="cell pl20">
+                <div class="mt40">
+                	<div class="pack_area">
+	                    <div class="pack_in">
+	                        @Html.Raw(Model.CategoryModel.Description) 
+	                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+  </div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

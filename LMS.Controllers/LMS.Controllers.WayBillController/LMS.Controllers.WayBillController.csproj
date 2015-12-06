@@ -1,0 +1,223 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{71A17E98-53EE-445F-ACCC-D646F17B0E77}</ProjectGuid>
+    <ProjectTypeGuids>{E53F8FEA-EAE0-44A6-8774-FFD645390401};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LMS.Controllers.WayBillController</RootNamespace>
+    <AssemblyName>LMS.Controllers.WayBillController</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Aspose.BarCode">
+      <HintPath>..\..\libs\Aspose.BarCode.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper">
+      <HintPath>..\..\LighTake.Infrastructure\packages\AutoMapper.2.0.0\lib\net40-client\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="RazorEngine">
+      <HintPath>..\..\libs\RazorEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AutoMapperProfile.cs" />
+    <Compile Include="B2CPreAlterViewModel.cs" />
+    <Compile Include="DHLPrintViewModel.cs" />
+    <Compile Include="ExpressPrintWayBillViewModel.cs" />
+    <Compile Include="InvoivePrinterViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SelectTrackingNumberModel.cs" />
+    <Compile Include="TrackingNumberModel.cs" />
+    <Compile Include="WayBillController.B2C.cs" />
+    <Compile Include="WayBillController.cs" />
+    <Compile Include="FilterModel.cs" />
+    <Compile Include="Model.cs" />
+    <Compile Include="ViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Common.BizLogging\LighTake.Infrastructure.Common.BizLogging.csproj">
+      <Project>{cb847282-7c7b-4232-89e9-4d7e88c03f33}</Project>
+      <Name>LighTake.Infrastructure.Common.BizLogging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Common.Caching\LighTake.Infrastructure.Common.Caching.csproj">
+      <Project>{68565050-a073-4cbe-b241-e02b9b60a057}</Project>
+      <Name>LighTake.Infrastructure.Common.Caching</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Common.Excel\LighTake.Infrastructure.Common.Excel.csproj">
+      <Project>{856F0234-A722-4AC2-9477-C3B44C060485}</Project>
+      <Name>LighTake.Infrastructure.Common.Excel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Common.InversionOfControl\LighTake.Infrastructure.Common.InversionOfControl.csproj">
+      <Project>{50A03162-5EB6-4A1D-8E16-F6FA4CE7836C}</Project>
+      <Name>LighTake.Infrastructure.Common.InversionOfControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Common.Logging\LighTake.Infrastructure.Common.Logging.csproj">
+      <Project>{7a557dc4-3f10-4c27-b8f4-8d5f7f5d8b3c}</Project>
+      <Name>LighTake.Infrastructure.Common.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Common.TypeAdapter\LighTake.Infrastructure.Common.TypeAdapter.csproj">
+      <Project>{c31e2df3-cad6-4005-afa4-0b68ab5f5642}</Project>
+      <Name>LighTake.Infrastructure.Common.TypeAdapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Common\LighTake.Infrastructure.Common.csproj">
+      <Project>{eac46871-3661-4d4e-8f6a-fe44593e1191}</Project>
+      <Name>LighTake.Infrastructure.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Seedwork\LighTake.Infrastructure.Seedwork.csproj">
+      <Project>{1b2a08a7-3bbd-4bc3-8014-d702e7db9e2d}</Project>
+      <Name>LighTake.Infrastructure.Seedwork</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Web\LighTake.Infrastructure.Web.csproj">
+      <Project>{977FAF23-8A6B-4392-A877-59D9AA2EFB99}</Project>
+      <Name>LighTake.Infrastructure.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Core\LMS.Core\LMS.Core.csproj">
+      <Project>{336E1DCE-A844-4977-AA9A-8F6720C72F6D}</Project>
+      <Name>LMS.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Data\LMS.Data.Entity\LMS.Data.Entity.csproj">
+      <Project>{be6fe0ef-6a3d-4628-803b-747ff0762fc3}</Project>
+      <Name>LMS.Data.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Data\LMS.Data.Express\LMS.Data.Express.csproj">
+      <Project>{DB156DE8-4793-4096-A885-5FE0848E7369}</Project>
+      <Name>LMS.Data.Express</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Data\LMS.Data.Repository\LMS.Data.Repository.csproj">
+      <Project>{4FC0106B-B57A-4F8E-A5B0-09F9F6A6AA02}</Project>
+      <Name>LMS.Data.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.CommonServices\LMS.Services.CommonServices.csproj">
+      <Project>{ED994EB6-0DA2-47C8-8830-3E33A1A607D0}</Project>
+      <Name>LMS.Services.CommonServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.CountryServices\LMS.Services.CountryServices.csproj">
+      <Project>{58F65865-B443-4CFB-BFAE-F04D43719C58}</Project>
+      <Name>LMS.Services.CountryServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.Customer.Services\LMS.Services.CustomerServices.csproj">
+      <Project>{B785CFB6-619E-4A4D-A842-73EAAF38F37B}</Project>
+      <Name>LMS.Services.CustomerServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.CustomerOrderServices\LMS.Services.CustomerOrderServices.csproj">
+      <Project>{E429C676-C67C-4403-9C94-CD5E73847861}</Project>
+      <Name>LMS.Services.CustomerOrderServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.DictionaryTypeServices\LMS.Services.DictionaryTypeServices.csproj">
+      <Project>{f504afbd-bf69-4567-8efa-babd1f2d1dc3}</Project>
+      <Name>LMS.Services.DictionaryTypeServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.EubWayBillServices\LMS.Services.EubWayBillServices.csproj">
+      <Project>{C2E1589A-C020-46BD-AE66-21F33E722AB2}</Project>
+      <Name>LMS.Services.EubWayBillServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.ExpressServices\LMS.Services.ExpressServices.csproj">
+      <Project>{16BF7688-C20F-406E-9242-BCD7D9B8B35C}</Project>
+      <Name>LMS.Services.ExpressServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.FeeManageServices\LMS.Services.FeeManageServices.csproj">
+      <Project>{5BF6C304-0415-4924-BF17-6F60CCD3B6D1}</Project>
+      <Name>LMS.Services.FeeManageServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.FreightServices\LMS.Services.FreightServices.csproj">
+      <Project>{2F1482E7-E619-40FB-AF78-20B4487FDAE0}</Project>
+      <Name>LMS.Services.FreightServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.InStorageService\LMS.Services.InStorageServices.csproj">
+      <Project>{c8893848-1e84-4c5d-afba-bb1d55a5e7b1}</Project>
+      <Name>LMS.Services.InStorageServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.OperateLogServices\LMS.Services.OperateLogServices\LMS.Services.OperateLogServices.csproj">
+      <Project>{b6d6a049-7d3c-4eea-bc0e-1911da5124a5}</Project>
+      <Name>LMS.Services.OperateLogServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.OrderServices\LMS.Services.OrderServices.csproj">
+      <Project>{e16476b7-020c-4f7c-b6ba-2ee32bda7693}</Project>
+      <Name>LMS.Services.OrderServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.OutStorageServices\LMS.Services.OutStorageServices.csproj">
+      <Project>{2bbc0a1b-778e-44c2-9ee2-b6bb1d5d8172}</Project>
+      <Name>LMS.Services.OutStorageServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.ReturnGoodsServices\LMS.Services.ReturnGoodsServices.csproj">
+      <Project>{2CFD4016-ED42-4D61-92AA-F720157EA4E5}</Project>
+      <Name>LMS.Services.ReturnGoodsServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.SequenceNumber\LMS.Services.SequenceNumber.csproj">
+      <Project>{0B3C6BB4-D4AC-49AC-AB08-FEB3C92D3822}</Project>
+      <Name>LMS.Services.SequenceNumber</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.SF\LMS.Services.SF.csproj">
+      <Project>{cef498f5-a311-4529-bb05-abbd75fdccbb}</Project>
+      <Name>LMS.Services.SF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.TrackingNumberServices\LMS.Services.TrackingNumberServices.csproj">
+      <Project>{C085F29D-9BD1-4AA7-8376-0804BD0618FB}</Project>
+      <Name>LMS.Services.TrackingNumberServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.UserServices\LMS.Services.UserServices.csproj">
+      <Project>{E2E1A4EE-662A-4176-A0BB-8D56A1BEBBAD}</Project>
+      <Name>LMS.Services.UserServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.WayBillTemplateServices\LMS.Services.WayBillTemplateServices.csproj">
+      <Project>{F8F68F5E-F32D-48D5-AD9C-7B3B9FF085FD}</Project>
+      <Name>LMS.Services.WayBillTemplateServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Web\LighTake.LMS.Web.Framework\LighTake.LMS.Web.Framework.csproj">
+      <Project>{351C6D92-0143-417B-98F5-9CA2D84BDE98}</Project>
+      <Name>LighTake.LMS.Web.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Web\LMS.Models\LMS.Models.csproj">
+      <Project>{FFE21549-E8D0-4993-8A94-0946399016E4}</Project>
+      <Name>LMS.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

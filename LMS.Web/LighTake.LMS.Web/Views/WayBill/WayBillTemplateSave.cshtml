@@ -1,0 +1,183 @@
+﻿@{
+    Html.AddScriptParts(Url.Content("~/Scripts/kindeditor/kindeditor-min.js"));
+    Html.AddScriptParts(Url.Content("~/Scripts/kindeditor/lang/zh_CN.js"));
+    Html.AddScriptParts(Url.Content("~/Scripts/util.js"));
+    <script src="@Url.Content("~/Scripts/artdialog/jquery.artDialog.js?skin=default")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/artdialog/plugins/iframeTools.js")" type="text/javascript"></script>
+    <script  type="text/javascript" src="@Url.Content("~/scripts/chosen/chosen.jquery.min.js")"></script>
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/scripts/chosen/chosen.css")" />
+}
+@model LMS.Controllers.WayBillController.WayBillTemplateViewModel
+<div class="domebg" id="right_con">
+    @Html.Partial("_ShowDialog")
+    @using (Html.BeginForm("WayBillTemplateSave", "WayBill", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        if (!string.IsNullOrWhiteSpace(Model.FilterModel.WayBillTemplateId.ToString()))
+        {
+            <input type="hidden" id="txtCodes" name="txtCodes" value="@Model.FilterModel.Countries" />
+        }
+        else
+        {
+            <input type="hidden" id="txtCodes" name="txtCodes" value="" />
+        }
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select data_row_dan">
+                <td>
+                    <span>模板名称:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.TemplateName)
+                    @Html.HiddenFor(p => p.FilterModel.WayBillTemplateId)
+                    <span style="color: red">*@Html.ValidationMessageFor(p=>p.FilterModel.TemplateName)</span>
+                </td>
+               <td >
+                    <span>模板头:</span>
+                    @Html.DropDownListFor(p => p.FilterModel.TemplateHeadId, Model.WayBillTemplateHead,new{id="WayBillTemplateHead",onchange="SelectTemplateModel(this,'1')"})
+                    <span style="color: red">*@Html.ValidationMessageFor(p=>p.FilterModel.TemplateHeadId)</span>
+                </td>
+                <td >
+                    <span>类型:</span>
+                    @Html.DropDownListFor(p => p.FilterModel.TemplateTypeId, Model.WayBillTemplateTypes)
+                </td>
+               
+            </tr>
+            <tr class="date_row_select data_row_dan">
+                  <td >
+                    <span>运输方式:</span>
+                    @Html.DropDownListFor(p => p.FilterModel.ShippingMethodId, Model.ShippingMethods)
+                </td>
+              
+                <td >
+                    <span>模板体:</span>
+                    @Html.DropDownListFor(p => p.FilterModel.TemplateContentId, Model.WayBillTemplateBody, new {onchange="SelectTemplateModel(this,'2')"})
+                    <span style="color: red">*@Html.ValidationMessageFor(p=>p.FilterModel.TemplateContentId)</span>
+                </td>
+                 <td>
+                    <span>状态:</span>
+                    @Html.DropDownListFor(p => p.FilterModel.Status, Model.WayBillTemplateStatus,new { @class = "select select_short" })
+                </td>
+                
+              
+            </tr>
+            <tr class="date_row_select data_row_dan">
+                <td >
+                    <span>每页行数:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.RowNumber, Model.RowNumber)
+                </td>
+                <td>
+                    <span>每页列数:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.ColumnNumber, Model.RowNumber)
+                </td>
+                <td>
+                    <span>备注:</span>
+                    @Html.TextAreaFor(p => p.FilterModel.Remark)
+                </td>
+            </tr>
+            <tr class="date_row_select data_row_dan">
+                <td>
+                    <span>适用国家:</span>
+                    @Html.TextAreaFor(p => p.FilterModel.Countries, new { @readonly = "readonly" })
+                    <input type="button" value="选择" title="选择国家" class="btn" onclick="AddCountries();">
+                </td>
+                <td colspan="2">
+                       
+                </td>
+            </tr>
+            <tr class="date_row_select data_row_dan">
+                <td colspan="5">
+                    <span class="info_box info_select">模板内容:</span><span style="color: red">*@Html.ValidationMessageFor(p=>p.FilterModel.TemplateContent)</span>
+                    <span>
+                      
+                        <input type="submit" class="btn" value="保存" id="btnSave" name="btnSave" onclick="return funSave();" />
+                        <a href="@(!string.IsNullOrWhiteSpace(Request.QueryString["ReturnUrl"]) ? Request.QueryString["ReturnUrl"] : Url.Action("WayBillTemplateList"))" class="btn_href">返回</a>
+                        @Html.HiddenFor(p=>p.FilterModel.LinkMode,Model.FilterModel.LinkMode)
+                        <input type="hidden" id="HeadContent" value=""/>
+                        <input type="hidden" id="BodyContent" value=""/>
+                    </span>
+                    <textarea id="TemplateContent" name="FilterModel.TemplateContent" cols = "45" rows = "6" class = "area vt" maxlength="4000" style="width: 1000px;height:500px; ">@Model.FilterModel.TemplateContent</textarea>
+                </td>
+                
+            </tr>
+           
+        </table>
+    }
+</div>
+
+<script type="text/javascript">
+    var editor;
+    $(function () {
+        KindEditor.ready(function (K) {
+            editor = K.create('#TemplateContent', {
+                allowFileManager: true,
+                uploadJson: "/KindEditor/Upload",
+                filePostName: "imgFile",
+                urlType:'domain',
+                wellFormatMode:true,//美化html代码
+                filterMode: false //不会过滤HTML代码
+            });
+            editor.sync();
+        });
+    });
+    
+    function funSave() {
+        var mysubmit = true;
+        var country = $("#FilterModel_Countries").val();
+        if (country == "") {
+            alert("国家不能为空");
+            mysubmit = false;
+        }
+        return mysubmit;
+    }
+    
+    function AddCountries() {
+        if (!$("#divCountry").hasClass("dn")) {
+            $("#divCountry").addClass("dn");
+        }
+        var url = "@Url.Action("CountryList","WayBill")" + "?" +
+            $.param({
+                Codes: $("#FilterModel_Countries").val(),
+                SiteId: 1
+            });
+        $.dialog.open(url, {
+            title: "选择国家",
+            lock: true,
+            width: 578,
+            padding: "0",
+            show: true,
+            button: [{
+                name: '确定',
+                callback: function () {
+                    var iframe = this.iframe.contentWindow;
+                    var Codes = $(iframe.document).find("#Codes");
+                    $("#txtCodes").val(Codes.val());
+                    $("#FilterModel_Countries").val(Codes.val());
+
+                }
+            }, {
+                name: '取消'
+            }]
+        });
+    }
+
+   function SelectTemplateModel(obj,w) {
+        var Contents;
+        var TemplateModelId = obj.options[obj.options.selectedIndex].value;
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("SelectWayBillTemplateModel")",
+            dataType: "json",
+            data: { templateModelId: TemplateModelId },
+            success: function (data) {
+                if (data.Result) {
+                    if (w == 1) {
+                        $("#HeadContent").val(data.Message);
+                    }else if (w == 2) {
+                        $("#BodyContent").val(data.Message);
+                    }
+                    Contents = $("#HeadContent").val() + $("#BodyContent").val();
+                    $("#TemplateContent").text(Contents);
+                    $("iframe").contents().find("body").html(Contents);
+                }
+            }
+        });
+    }
+
+</script>

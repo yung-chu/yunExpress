@@ -1,0 +1,51 @@
+﻿@model LMS.FrontDesk.Controllers.HomeController.Models.HomeListModel
+<div class="main_4">
+    <div class="constr">
+        <div class="constr_in">
+            <div class="r w383">
+                <div class="icon_2">
+                </div>
+            </div>
+            <div class="cell gf">
+                <div class="fix mt105">
+                    <div class="tt_box l fw">
+                        关于我们<br>
+                            <span class="f14 lt0">About Me</span>
+                    </div>
+                    <div class="cell">
+                        <div class="rel">
+                            @foreach(var item in Model.CategoryModels)
+                            {
+                            <div class="fix mb12">
+                                <div class="mb10">
+                                    <a href="@Url.Action("About","Home",new {id=@item.CategoryID})" class="gf" target="_blank">
+                                        <strong>@item.Name</strong>
+                                    </a>
+                                </div>
+                                <div class="ovh h70" style="text-indent: 25px;">
+                                    @Html.Raw(item.Description)
+                                </div>
+                            </div>
+                            }
+                           @* <div class="fix mb12">
+                                <div class="mb10">
+                                    <a href="关于我们.html" class="gf" target="_blank">
+                                        <strong>企业文化</strong>
+                                    </a>
+                                </div>
+                                <div class="ovh h50">
+                                    @Model.CompanyCulture
+                                </div>
+                            </div>*@
+                            <a href="@Url.Action("About","Home",new{id=2})" target="_blank" class="btn_more1" title="更多通知">
+                                <img src="images/more_07.jpg" alt="更多通知" class="vt">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>	
+</div>
+<div class="oneSolid bd5c"></div>
+<div class="oneSolid bd90"></div>

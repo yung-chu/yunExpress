@@ -1,0 +1,185 @@
+﻿@model LMS.Controllers.OrderController.OrderViewModel
+<div id="showCustomerList" tabindex="200" style="overflow: scroll; display: none; position: relative">
+</div>
+<div class="domebg">
+    @Html.Partial("_ShowDialog")
+    @using (Html.BeginForm("Upload", "Order", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    { 
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tbody>
+                <tr class="date_row_select data_row_dan">
+
+                    <td width="25%">
+                        <span class="info_box info_select">客户: </span>
+                        <input type="text" id="nickName" value="@Model.FilterModel.NickName" name="NickName" readonly="readonly" class="txt txt_short" />
+                        <input type="hidden" id="CustomerCode" value="@Model.FilterModel.CustomerCode" class="txt txt_long" name="CustomerID" />
+                        <a href="javascript:void(0)" id="selectCustomer" class="btn_href">选择</a>
+                    </td>
+                    <td width="50%" colspan="2">
+                        <span class="info_box info_select">请选择文件</span>
+                        <input type="file" id="flUploadAddress" name="flUploadAddress" title="Select file"
+                            value="Select file" class="groupon_btn mr10" />
+                        @Html.HiddenFor(p => p.FilterModel.FilePath)
+
+                        <a href="@(LMS.Core.sysConfig.ExcelTemplateWebPath + LMS.Core.sysConfig.LMSOrderUploadTemplate)">下载模板</a>
+                    </td>
+                </tr>
+                <tr class="date_row_select data_row_shuang">
+                    <td colspan="5">
+                        <div class="tl">
+                            <input type="submit" class="btn" name="btnUpload" value="上传" />
+
+                            <input type="hidden" name="selectRows" id="selectRows" />
+
+                            @{
+        if (Model.Error != null)
+        {
+            if (Model.Error.Value == false)
+            {
+                                <input type="submit" class="btn" name="btnConfirm" value="确认上传" />
+            }
+
+        }
+                            }
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="divProductList" style="overflow-x: scroll; width: 2000px;">
+            <table class="data_table mt20" id="bat" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr class="data_row_two">
+                        <th>Excel行号</th>
+                        <th>客户订单号</th>
+                        <th>运输方式</th>
+                        <th>跟踪号</th>
+                        <th>件数</th>
+                        <th>收件人国家简码</th>
+                        <th>收件人姓</th>
+                        <th>收件人名字 </th>
+                        <th>收件人公司</th>
+                        <th>收货地址</th>
+                        <th>收件人城市</th>
+                        <th>收件人省州</th>
+                        <th>收件人邮编</th>
+                        <th>收件人电话</th>
+@*                      <th>收件人税号</th>
+                        <th>发件人姓</th>
+                        <th>发件人名字</th>
+                        <th>发件人公司</th>
+                        <th>发货地址</th>
+                        <th>发件人城市</th>
+                        <th>发件人省州</th>
+                        <th>发件人邮编</th>
+                        <th>发件人电话</th>*@
+                        <th>是否退回</th>
+                        <th>保险类型</th>
+                        <th>保险价值RMB</th>
+                        <th>敏感货品</th>
+                        <th>申报类型</th>
+                        @*                      <th>包裹单边长</th>
+                        <th>包裹单边宽</th>
+                        <th>包裹单边高</th>
+                        <th>包裹总重量</th>*@
+                        <th>是否关税预付</th>
+                        <th>申报名称1</th>
+                        <th>数量1</th>
+                        <th>海关编码1</th>
+                        <th>价格1</th>
+                        <th>销售链接1</th>
+                      @*<th>净重量1(kg)</th>
+                        <th>配货信息1</th>
+                        <th>备注1</th>*@
+                        @{
+                            int columns = Model.ProductColumnsCount;
+                        }
+                        @for (var i = 1; i < Model.ProductColumnsCount; i++)
+                        {
+                            <th>申报名称@(i + 1)</th>
+                            <th>数量@(i + 1)</th>
+                            <th>海关编码@(i + 1)</th>
+                            <th>价格@(i + 1)</th>
+                            <th>销售链接@(i + 1)</th>
+                            @*
+                            <th>净重量@(i + 1)(kg)</th>
+                            <th>配货信息@(i + 1)</th>
+                            <th>备注@(i + 1)</th>*@
+                        }
+                        <td style="width: 25px;">结果</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.OrderModels)
+                    {
+                        <tr class="data_row_dan">
+                            <td width="10px">@item.Number</td>
+                            <td width="20px">@item.CustomerOrderID</td>
+                            <td width="20px">@item.ShippingMethodName</td>
+                            <td width="20px">@item.TrackingNumber</td>
+                            <td width="10px">@item.PackageNumber</td>
+                            <td width="10px">@item.ShippingInfoModel.CountryCode</td>
+                            <td width="10px">@item.ShippingInfoModel.ShippingFirstName</td>
+                            <td width="15px">@item.ShippingInfoModel.ShippingLastName</td>
+                            <td width="25px">@item.ShippingInfoModel.ShippingCompany</td>
+                            <td width="25px">@item.ShippingInfoModel.ShippingAddress</td>
+                            <td width="10px">@item.ShippingInfoModel.ShippingCity</td>
+                            <td width="15px">@item.ShippingInfoModel.ShippingState</td>
+                            <td width="10px">@item.ShippingInfoModel.ShippingZip</td>
+                            <td width="15px">@item.ShippingInfoModel.ShippingPhone</td>
+@*                          <td width="15px">@item.ShippingInfoModel.ShippingTaxId</td>*@
+@*                          <td width="10px">@item.SenderInfoModel.SenderFirstName</td>
+                            <td width="15px">@item.SenderInfoModel.SenderLastName</td>
+                            <td width="25px">@item.SenderInfoModel.SenderCompany</td>
+                            <td width="25px">@item.SenderInfoModel.SenderAddress</td>
+                            <td width="10px">@item.SenderInfoModel.SenderCity</td>
+                            <td width="15px">@item.SenderInfoModel.SenderState</td>
+                            <td width="10px">@item.SenderInfoModel.SenderZip</td>
+                            <td width="15px">@item.SenderInfoModel.SenderPhone</td>*@
+                            <td width="10px">@(item.IsReturn? "是" : "否")</td>
+                            <td width="10px">@item.InsuredID</td>
+                            <td width="10px">@item.InsureAmountNumber</td>
+                            <td width="10px">@item.SensitiveTypeID</td>
+                            <td width="10px">@item.AppLicationType</td>
+                            @*                          <td width="10px">@item.Length</td>
+                            <td width="10px">@item.Width</td>
+                            <td width="10px">@item.Height</td>
+                            <td width="10px">@item.Weight</td>*@
+                            <td width="10px">@(item.EnableTariffPrepay?"是":"否")</td>
+                            @foreach (var detail in item.ProductDetailModels)
+                            {
+                                <td width="30px">@detail.ApplicationName</td>           
+                                <td width="10px">@detail.Quantity</td>           
+                                <td width="15px">@detail.HSCode</td>           
+                                <td width="10px">@detail.UnitPrice</td>
+                                <td width="20px">@detail.ProductUrl</td>
+                                @*
+                                <td width="10px">@detail.UnitWeight</td> 
+                                <td width="10px">@detail.PickingName</td> 
+                                <td width="10px">@detail.Remark</td>*@         
+                            }
+                            @for (var i = 0; i < columns - item.ProductDetailModels.Count; i++)
+                            {
+                                <td width="30px"></td>           
+                                <td width="10px"></td>           
+                                <td width="15px"></td>           
+                                <td width="10px"></td>
+                                <td width="20px"></td>
+                            }
+                            @{
+                            if (!string.IsNullOrWhiteSpace(item.Message))
+                            {
+                                <td style="color: red">@Html.Raw(item.Message)</td>
+                            }
+                            else
+                            {
+                                <td style="color: green">检测成功</td>
+                            }
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

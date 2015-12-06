@@ -1,0 +1,110 @@
+﻿@using LMS.Data.Entity
+@model LMS.Controllers.WayBillController.SelectTrackingNumberModel
+@{
+    ViewBag.Title = "SelectTrackingNumber";
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+}
+
+   <div class="domebg" id="right_con">
+        @Html.Partial("_ShowDialog")
+        @using (Html.BeginForm())
+        {
+            <table>
+                <tr>
+                    <td>
+                        <span class="info_box info_select">运输方式:</span>
+                        @Html.DropDownListFor(p => p.FilterModel.ShippingMethodId, Model.ShippingMethods, "请选择")
+                    </td>
+                    <td>
+                        <span class="info_box info_select">生成日期起:</span>
+                    
+                        @Html.TextBoxFor(p => p.FilterModel.StartTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd'})", @class = "txt wdate", @style = "width:130px;", value = Model.StartTime })
+                        止:
+                        @Html.TextBoxFor(p => p.FilterModel.EndTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd'})", @class = "txt wdate", @style = "width:130px;", value = Model.EndTime })
+                    
+                    </td>
+                    <td>
+                        <input type="submit" class="btn" value="搜索" name="btnSelect" />
+                    </td>
+                    <td>
+                        <a class="btn_href" href="@Url.Action("TrackingNumberList", "WayBill")">增加</a>
+                    </td>
+                </tr>
+            </table>
+        }
+            <table class="data_table mt20" width="70%" border="1" cellpadding="0" cellspacing="0">
+                <tr class="data_row_two">
+                    <th width="10%">ID</th>
+                    <th width="15%">运输方式</th>
+                    <th width="10%">已用号码数</th>
+                    <th width="10%">可用号码数</th>
+                    <th width="15%">状态</th>
+                    <th width="10%">生成日期</th>
+                    <th width="15%">使用国家</th>
+                    <th width="15%">操作</th>
+                </tr>
+              @{
+                  int n = 1;
+                  foreach (var row in Model.PagedList)
+                  {
+                        <tr style="text-align: center">
+                            <td>
+                                @n
+                            </td>
+                            <td>
+                                @row.ShippingMethodName
+                            </td>
+                            <td>
+                                @row.Used
+                            </td>
+                            <td>
+                                @row.NotUsed
+                            </td>
+                            <td>
+                                @TrackingNumberInfo.GetStatusDescription(row.Status)
+                            </td>
+                            <td>
+                                @row.CreatedNo.ToString("yyyy-MM-dd")
+                            </td>
+                            <td>
+                                @if (row.ApplianceCountry.Length > 10)
+                                {
+                                    @(row.ApplianceCountry.Substring(0, 10) + "...")
+                                }
+                                else
+                                {
+                                    @row.ApplianceCountry
+                                }
+                            
+                            </td>
+                            <td>
+                        
+                            @if (row.Status == 1)
+                            {
+                                using (Html.BeginForm())
+                                {
+                                    var url = Html.GetUrl("SelectTrackingNumber", "WayBill", Model.FilterModel);
+                                    <input type="submit" id="btnDisable" onclick=" return confirm('确认要禁用'); " class="btn" value="禁用" name="btnDisable" />
+                                    @Html.HiddenFor(o => row.TrackingNumberId, new { @id = "TrackingNumberId" })
+                                <a class="btn_href" href="@Url.Action("TrackingNumberDetail", "WayBill", new { id = row.TrackingNumberId, ReturnUrl = url })">查看</a>
+                                 
+                                }
+                            } 
+                        
+                            </td>
+                        </tr>
+                            n++;
+                  }
+                }
+               
+            </table>
+        
+</div>
+@*<script type="text/javascript">
+    $(
+        $("#btnDisable").bind("click", function () {
+            alert("是否禁用该批跟踪号！");
+        })
+    );
+</script>*@
+

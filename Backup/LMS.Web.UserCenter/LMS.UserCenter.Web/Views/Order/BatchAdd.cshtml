@@ -1,0 +1,84 @@
+﻿@{
+    ViewBag.Title = "BatchAdd";
+}
+@using System.Globalization
+@using LMS.Core
+@using LMS.Data.Entity
+@using LMS.UserCenter.Controllers.OrderController.Models
+@model LMS.UserCenter.Controllers.OrderController.Models.BatchAddViewModels
+@{
+    var goodsTypeList = (List<SelectListItem>)ViewBag.GoodsTypeList;
+    
+}
+<div class="bd_b bread_box">
+    <a href="javascript:" class="icon-home bread_home"></a>
+    <strong class="gtlt bread_gtlt">&gt;&gt;</strong>
+    <a href="javascript:" class="bread_off">运输服务</a>
+    <strong class="gtlt bread_gtlt">&gt;&gt;</strong>
+    <a href="javascript:" class="bread_on">批量创建订单</a>
+</div>
+<div class="p20">
+    @Html.Partial("_Notifications")
+
+    @using (Html.BeginForm("BatchAdd", "Order", FormMethod.Post, new {enctype = "multipart/form-data"}))
+    {
+        <div class="tab_conStr">
+            <div class="from_box">
+                <div class="fix from_horizontal">
+                    <div class="ww32 l">
+                        <div class="fix">
+                            <span class="info_box info_middle">请选择上传文件：</span>
+                            <input name="file" id="file" type="file" style="width: 200px;" />
+
+                        </div>
+                    </div>
+                    <div class="cell">
+                        <div class="fix">
+                            <div class="l ww49">
+                                <div class="fix">
+                                    <span class="info_box info_middle">包裹类型：</span>
+                                    @Html.DropDownListFormFor(p => Model.GoodsTypeID, goodsTypeList)
+                                </div>
+                            </div>
+                            @* <div class="cell pl20 fix">
+                                <span class="info_box info_middle"></span>
+                                <input type="submit" name="Upload" class="btn btn_green" value="提交"/>
+                                @Html.HiddenFor(m => m.FilePath)
+                                @if (Model.OrderList.Count > 0 && Model.OrderList.All(l => l.IsValid))
+                                {
+                                    <input type="submit" name="Save" class="btn btn_red" value="保存" />
+                                }
+                            </div>*@
+                            <div class="cell pl20 fix">
+                                <span class="info_box info_middle"></span>
+                                @* <a href="@(sysConfig.ExcelTemplateWebPath.TrimEnd('\\') + sysConfig.LMSCustomerOrderUploadTemplate)" target="_blank" class="tdl" title="点击下载">下载订单上传模板</a>*@
+                                <a href="@Url.Action("DownloadExcelTemplate")" target="_blank" class="tdl" title="点击下载">下载标准模板</a><br />
+                                <label>"订单上传模板格式于 <label style="font-size:14px;color:red">@Model.FilePathDate</label> 时间已更新，请注意下载！"</label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+               @* <div class="fix from_horizontal">
+                 
+                    <div class="cell">
+                        <div class="fix">
+                           
+                            <div class="cell pl20 fix">
+                                <span class="info_box info_middle"></span>
+                                <a href="@Url.Action("DownloadExcelTemplate")" target="_blank" class="tdl" title="点击下载">下载订单上传模板</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>*@
+            </div>
+        </div>
+
+        <!-- 列表 Start -->
+        <div id="divBatch">
+            @Html.Partial("_BatchAddList",Model)
+            </div>
+        <!-- 列表 End -->
+    }
+</div>

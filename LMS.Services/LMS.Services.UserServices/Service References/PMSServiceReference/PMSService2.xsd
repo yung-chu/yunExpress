@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/PMS.WcfService.Common" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/PMS.WcfService.Common" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://192.168.5.186:901/PMS.WcfService/PMSService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/PMS.WcfService" />
+  <xs:complexType name="PermissionsResponse">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/PMS.WcfService" base="q1:Response">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Permissions" nillable="true" type="q1:ArrayOfPermissionModule" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="PermissionsResponse" nillable="true" type="tns:PermissionsResponse" />
+</xs:schema>

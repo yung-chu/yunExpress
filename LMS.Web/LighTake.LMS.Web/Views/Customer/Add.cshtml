@@ -1,0 +1,150 @@
+﻿@model LMS.Controllers.CustomerController.CustomerAddViewModel
+@{
+    Layout = null;
+}
+
+<form id="addfrom">
+    <div id="right_con">
+        <ul>
+            <li class="mt20"><span class="info_box info_middle">登录帐号 : </span>
+                <input type="text" id="AccountID" name="AccountID" class="txt txt_middle" maxlength="50" />
+            </li>
+            @*<li class="mt20"><span class="info_box info_middle">客户编号 : </span>
+                <input type="text" id="CustomerCode" name="CustomerCode" class="txt txt_middle" maxlength="20" />
+            </li>*@
+            <li class="mt20"><span class="info_box info_middle">客户类型 : </span>
+                <select name="CustomerTypeID" id="CustomerTypeID" class="select select_middle">
+                    @foreach (var p in Model.CustomerTypeList)
+                    {
+                        <option value="@p.SelectValue">@p.SelectName</option>
+                    }
+                </select>
+            </li>
+             
+            <li class="mt20"><span class="info_box info_middle">结算类型 : </span>
+                <select name="PaymentTypeID" id="PaymentTypeID" class="select select_middle">
+                    @foreach (var p in Model.PaymentTypeList)
+                    {
+                        <option value="@p.SelectValue">@p.SelectName</option>
+                    }
+                </select>
+            </li>
+            <li class="mt20"><span class="info_box info_middle">是否启用信用度管控 : </span>
+                <input type="checkbox" id="EnableCredit" name="EnableCredit" value="true" checked="checked"/>启用
+            </li>
+            <li class="mt20" id="MaxDel"><span class="info_box info_middle">信用度 : </span>
+                <input type="text" id="MaxDelinquentAmounts" name="MaxDelinquentAmounts" class="txt txt_middle" maxlength="50" value="2000"/>
+            </li>
+            <li class="mt20"><span class="info_box info_middle">客户名称 : </span>
+                <input type="text" id="Name" name="Name" class="txt txt_middle" maxlength="50" />
+            </li>
+            <li class="mt20"><span class="info_box info_middle">联系人 : </span>
+                <input type="text" id="LinkMan" name="LinkMan" class="txt txt_middle" maxlength="50" />
+            </li>
+            <li class="mt20"><span class="info_box info_middle">电话 : </span>
+                <input type="text" id="Tele" name="Tele" class="txt txt_middle" maxlength="50" />
+            </li>
+            <li class="mt20"><span class="info_box info_middle">网址 : </span>
+                <input type="text" id="WebSite" name="WebSite" class="txt txt_long" maxlength="200" />
+            </li>
+            <li class="mt20"><span class="info_box info_middle">地址 : </span>
+                <input type="text" id="Address" name="Address" class="txt txt_long" maxlength="128" />
+            </li>
+            
+             <li class="mt20"><span class="info_box info_middle">业务经理 : </span>
+                   @Html.DropDownListFor(p => p.CustomerManager, Model.CustomerManagerList, new Dictionary<string, object> { { "class", "chzn-select-deselect select_middle" }, { "data-placeholder", "全部" } })
+             </li>
+
+
+            <li class="mt20"><span class="info_box info_middle">状态 : </span>
+                 <select name="Status" id="Status" class="select select_middle">
+                    @foreach (var p in Model.CustomerStatus)
+                    {
+                        <option value="@p.Value">@p.Text</option>
+                    }
+                </select>
+                @*<input type="checkbox" id="Status" name="Status" value="1" checked="checked" />启用*@
+            </li>
+            <li class="mt20"><span class="info_box info_middle">备注 : </span>
+                <textarea class="area vt" id="Remark" name="Remark" cols="45" rows="6"></textarea>
+            </li>
+            <li class="mt20"><span class="info_box info_middle"></span>
+                <input type="button" class="btn" value="保存" id="Savebnt" onclick="Save();" />
+            </li>
+        </ul>
+    </div>
+</form>
+<script type="text/javascript">
+    
+    var config = {
+        '.chzn-select': {},
+        '.chzn-select-deselect': { allow_single_deselect: true },
+        '.chzn-select-no-single': { disable_search_threshold: 10 },
+        '.chzn-select-no-results': { no_results_text: 'Oops, nothing found!' },
+        '.chzn-select-width': { width: "95%" }
+    };
+    for (var selector in config) {
+        $(selector).chosen(config[selector]);
+    }
+
+
+    function Save() {
+        if ($.trim($("#addfrom #AccountID").val()) == "") {
+            alert("登录帐号不能为空！");
+            return false;
+        }
+        if ($.trim($("#Name").val()) == "") {
+            alert("客户名称不能为空！");
+            return false;
+        }
+
+        //if ($.trim($("#addfrom #CustomerCode").val()) == "") {
+        //    alert("客户编号不能为空！");
+        //    return false;
+        //} else {
+        //    var re = /^[A-Za-z0-9]*$/;
+        //    if (re.test($.trim($("#addfrom #CustomerCode").val())) == false) {
+        //        alert("客户编号只能输入字母和数字！");
+        //        return false;
+        //    }
+        //}
+        if ($.trim($("#addfrom #ApiKey").val()) != "" && $.trim($("#addfrom #ApiKey").val()).length < 8) {
+            alert("ApiKey不能小于8个字符！");
+            return false;
+        }
+        if ($.trim($("#addfrom #Remark").val()).length > 500) {
+            alert("备注不能超过500个字符！");
+            return false;
+        }
+        $("#addfrom #Savebnt").attr('disabled', true);
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("CreateCustomer")",
+            dataType: "json",
+            data: $("#addfrom").serialize(),
+            success: function (data) {
+                if (data.Result) {
+                    alert("保存成功！初始密码：123456");
+                    location.href = "@Url.Action("List", "Customer")";
+                 
+                } else {
+                    alert(data.Message);
+                }
+            },
+            complete: function (data) {
+                $("#addfrom #Savebnt").attr('disabled', false);
+            }
+        });
+    }
+
+    $(function() {
+        $("#EnableCredit").change(function () {
+            if (!$("#EnableCredit").get(0).checked) {
+                $("#MaxDel").addClass("dn");
+                $("#MaxDelinquentAmounts").val("0");
+            } else {
+                $("#MaxDel").removeClass("dn");
+            }
+        });
+    });
+</script>

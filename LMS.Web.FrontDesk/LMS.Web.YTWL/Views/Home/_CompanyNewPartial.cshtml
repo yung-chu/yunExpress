@@ -1,0 +1,188 @@
+﻿@using System.CodeDom
+@using Castle.Core.Internal
+@using LighTake.Infrastructure.Common
+@model LMS.FrontDesk.Controllers.HomeController.Models.HomeListModel
+<div class="bgf6" style="background:#ededed">
+    <div class="conStr">
+        <div class="strIn" >
+            <div class="fix p20">
+                <div class="l pct50">
+                    <img src="@Url.Content("~/images/idxC_bg_07.jpg")" />
+                </div>  
+
+                <div class="cell pl20 pt30 lh26">
+                    
+@*                    @if (Model.ArticleModels.Count > 0)
+                    {
+                        int n = 0;
+                        foreach (var row in Model.ArticleModels.OrderByDescending(a=>a.CreatedOn))
+                        {
+                            <div class="idxC_article">
+                                <h4 class="mb10">
+                                    <a href="@Url.Action("NewList", "New", new {id = @row.ArticleID})" class="IIItt">
+                                        @row.Title
+                                        <img src="@Url.Content("~/images/index_06.png")" class="idxC_abs"/>
+                                    </a>
+                                </h4>
+                                
+                                
+                                <!--第一条展开-->
+                                @{
+                                    string getClass = n == 0 ? "display:block" : "display:none";
+                                }
+                                <div class="idxC_box dn" style="@getClass">
+                                    <div class="p10">
+                                        <div class="mb10 ti25 ovh h80">
+                                            @if (!row.Detail.IsNullOrWhiteSpace() && row.Detail.Length > 250)
+                                            {
+                                               
+                                                @Html.Raw(@row.Detail.Substring(0, 250))
+                                            }
+                                            else
+                                            {  
+                                                
+                                                @Html.Raw(@row.Detail)
+                                            }
+                                        </div>
+                                        <div class="fix">
+                                            <a href="@Url.Action("NewList", "New", new {id = @row.ArticleID})" class="cof5 l">查看详情222</a>
+                                            <p class="r">
+                                                <img src="@Url.Content("~/images/clock_1.jpg")" class="vm"> 
+                                                <span class="vm">
+                                                    @{
+                                                        if (row.CreatedOn.HasValue)
+                                                        {
+                                                            @row.CreatedOn.Value.ToString("yyyy-MM-dd")
+                                                        }
+                                                    }
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <span class="diamond_top">◆</span>
+                                    <span class="diamond">◆</span>
+                                </div>
+                            </div>
+                            n++;
+                            if (n > 3)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <div class="tt_box l fw">
+                            <span class="f14 lt0">暂无类容，敬请期待。。。</span>
+                        </div>
+                    }
+                    *@
+                    
+                    
+                            @if (Model.ArticleModels.Count > 0)
+                            {
+                               
+                                foreach (var row in Model.ArticleModels.Take(4).OrderByDescending(a => a.CreatedOn))
+                                {
+       
+                                    <div class="idxC_article">
+                                        <h4 class="mb10">
+                                            <a href="@Url.Action("NewList", "New", new {id = @row.ArticleID})" class="IIItt">
+                                               @row.Title
+                                                <img src="@Url.Content("~/images/index_06.png")" class="idxC_abs"/>
+                                            </a>
+                                        </h4>
+                                        
+                                        <!--第一条展开-->
+                                        @{
+                                            string getClass = string.Empty;
+                           
+                                            switch (Model.ArticleModels.Count)
+                                            {
+                                                case 1:
+                                                    getClass = "display:block";
+                                                   break;
+                                                case 2:
+                                                   getClass = Model.ArticleModels.IndexOf(row) == 1 ? "display:block" : "display:none";
+                                                   break;
+                                                case 3:
+                                                   getClass = Model.ArticleModels.IndexOf(row) == 2 ? "display:block" : "display:none";
+                                                   break;
+                                                case 4:
+                                                   getClass = Model.ArticleModels.IndexOf(row) == 3 ? "display:block" : "display:none";
+                                                   break;
+                                            }
+                                            
+                                        }
+                                     
+
+                                        <div class="idxC_box dn" style="@getClass">
+                                            <div class="idxC_box">
+                                                <div class="p10">
+                                                    <div class="mb10 ti25 ovh h80">
+                                                        @if (!row.Detail.IsNullOrWhiteSpace() && row.Detail.Length > 250)
+                                                        {
+
+                                                            @Html.Raw(@row.Detail.Substring(0, 250))
+                                                        }
+                                                        else
+                                                        {
+
+                                                            @Html.Raw(@row.Detail)
+                                                        }
+                                                    </div>
+                                                    <div class="fix">
+                                                        <a href="@Url.Action("NewList", "New", new {id = @row.ArticleID})" class="cof5 l">查看详情</a>
+                                                        <p class="r">
+                                                            <img src="@Url.Content("~/images/clock_1.jpg")" class="vm"> 
+                                                            <span class="vm">
+                                                                @{
+                                                                    if (row.CreatedOn.HasValue)
+                                                                    {
+                                                                        @row.CreatedOn.Value.ToString("yyyy-MM-dd")
+                                                                    }
+                                                                }
+                                                            </span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <span class="diamond_top">◆</span>
+                                                <span class="diamond">◆</span>
+                                            </div>
+                                            <span class="diamond_top">◆</span>
+                                            <span class="diamond">◆</span>
+                                        </div>
+                                    </div>
+
+
+
+
+                                }
+                            }
+                    
+                           else
+                          {
+                            <div class="tt_box l fw">
+                                <span class="f14 lt0">暂无类容，敬请期待。。。</span>
+                            </div>
+                           }
+
+                      </div>
+                       
+            </div>
+        </div>
+    </div>
+</div>
+<div class="oneSolid bd43"></div>
+<div class="oneSolid bd5c"></div>
+<script type="text/javascript">
+    $(".idxC_article").hover(
+                function () {
+                    $(this).parent('div').find('.idxC_box').css("display", "none");
+                    $(this).find('.idxC_box').css("display", "block");
+                },
+                function () {
+                    $(this).removeClass("hover");
+                }
+            );
+</script>

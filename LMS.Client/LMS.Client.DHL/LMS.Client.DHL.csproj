@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{968CA265-EBCE-4877-8CF0-9E9F6A34AE70}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LMS.Client.DHL</RootNamespace>
+    <AssemblyName>LMS.Client.DHL</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="LMS.Data.Express">
+      <HintPath>..\..\LMS.Data\LMS.Data.Express\bin\Debug\LMS.Data.Express.dll</HintPath>
+    </Reference>
+    <Reference Include="LMS.Services.CustomerServices">
+      <HintPath>..\..\LMS.Web.UserCenter\LMS.UserCenter.Web\Bin\LMS.Services.CustomerServices.dll</HintPath>
+    </Reference>
+    <Reference Include="LMS.Services.FreightServices">
+      <HintPath>..\..\LMS.Web.UserCenter\LMS.UserCenter.Web\Bin\LMS.Services.FreightServices.dll</HintPath>
+    </Reference>
+    <Reference Include="LMS.Services.OrderServices">
+      <HintPath>..\..\LMS.Web.UserCenter\LMS.UserCenter.Web\Bin\LMS.Services.OrderServices.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DHLForecast\Forecast.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Common.Logging\LighTake.Infrastructure.Common.Logging.csproj">
+      <Project>{7A557DC4-3F10-4C27-B8F4-8D5F7F5D8B3C}</Project>
+      <Name>LighTake.Infrastructure.Common.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Common.TypeAdapter\LighTake.Infrastructure.Common.TypeAdapter.csproj">
+      <Project>{C31E2DF3-CAD6-4005-AFA4-0B68AB5F5642}</Project>
+      <Name>LighTake.Infrastructure.Common.TypeAdapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Common\LighTake.Infrastructure.Common.csproj">
+      <Project>{EAC46871-3661-4D4E-8F6A-FE44593E1191}</Project>
+      <Name>LighTake.Infrastructure.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Seedwork\LighTake.Infrastructure.Seedwork.csproj">
+      <Project>{1B2A08A7-3BBD-4BC3-8014-D702E7DB9E2D}</Project>
+      <Name>LighTake.Infrastructure.Seedwork</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Data\LMS.Data.Entity\LMS.Data.Entity.csproj">
+      <Project>{BE6FE0EF-6A3D-4628-803B-747FF0762FC3}</Project>
+      <Name>LMS.Data.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.CountryServices\LMS.Services.CountryServices.csproj">
+      <Project>{58F65865-B443-4CFB-BFAE-F04D43719C58}</Project>
+      <Name>LMS.Services.CountryServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.CustomerOrderServices\LMS.Services.CustomerOrderServices.csproj">
+      <Project>{E429C676-C67C-4403-9C94-CD5E73847861}</Project>
+      <Name>LMS.Services.CustomerOrderServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.ExpressServices\LMS.Services.ExpressServices.csproj">
+      <Project>{16BF7688-C20F-406E-9242-BCD7D9B8B35C}</Project>
+      <Name>LMS.Services.ExpressServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Services\LMS.Services.UserServices\LMS.Services.UserServices.csproj">
+      <Project>{E2E1A4EE-662A-4176-A0BB-8D56A1BEBBAD}</Project>
+      <Name>LMS.Services.UserServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.WinForm.Framework\LMS.WinForm.Framework.csproj">
+      <Project>{b342a2d2-2d21-4007-b504-33ce53ebca19}</Project>
+      <Name>LMS.WinForm.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.WinForm\LMS.WinForm.InversionOfControl\LMS.WinForm.InversionOfControl.csproj">
+      <Project>{1925DA3A-D6BE-4957-801D-A8D0A67E34F3}</Project>
+      <Name>LMS.WinForm.InversionOfControl</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

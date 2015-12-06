@@ -1,0 +1,44 @@
+﻿@model LMS.FrontDesk.Controllers.HomeController.Models.HomeListModel 
+<div class="main_4">
+    	<div class="constr">
+        	<div class="constr_in">
+				<div class="r w383">
+                    <div class="icon_2">
+                    </div>
+                </div>
+                <div class="cell gf">
+                	<div class="fix mt105">
+                    	<div class="tt_box l fw">
+                        	最新通知<br>
+                            <span class="f14 lt0">Company News</span>
+                        </div>
+                        <div class="cell">
+                            <div class="rel">
+                                @foreach (var row in Model.NewsPartialModels)
+                                {
+                                    <div class="fix mb12">
+                                    <div class="l ell w250">
+                                        <a href="@Url.Action("NewDetailed","New",new{id=@row.ArticleID})" class="gf" target="_blank">
+                                            @row.Title
+                                        </a>
+                                    </div>
+                                    <div class="r mr10">
+                                        @if (row.PublishedTime.HasValue)
+                                        {
+                                            @row.PublishedTime.Value.ToString("yyyy-MM-dd")
+                                        }
+                                    </div>
+                                </div>
+                                }
+                                <a href="@Url.Action("NewList", "New", new { CategoryID = Model.NewsPartialModels[0].CategoryID})" target="_blank" class="btn_more1" title="更多通知">
+                                    <img src="images/more_07.jpg" alt="更多通知"  class="vt"/>
+                                </a>
+                            </div>
+                       </div>
+                    </div>
+                </div>
+            </div>
+        </div>	
+    </div>
+    <div class="oneSolid bd5c"></div>
+    <div class="oneSolid bd90"></div>

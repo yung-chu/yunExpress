@@ -1,0 +1,140 @@
+﻿@model LMS.Controllers.WayBillController.CountryListModel
+@{
+    ViewBag.Title = "CountryList";
+}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <title>CountryList</title>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+        <link rel="stylesheet" href="@Url.Content("~/css/buy-sale-base.css")" />
+        <style type="text/css">
+            .field-validation-error
+            {
+                padding-left: 5px;
+                color: #F00;
+            }
+        </style>
+        <!-- scripts (jquery) -->
+        <script src="@Url.Content("~/Scripts/jquery-1.4.2.min.js")" type="text/javascript"></script>
+        <script src="@Url.Content("~/Scripts/artDialog/plugins/iframeTools.js")" type="text/javascript"></script>
+        <script type="text/javascript">
+
+            $(document).ready(function () {
+
+                var $divMain = $("#divMain");
+                if ($divMain) {
+                    $divMain.removeClass("domebg");
+                }
+
+                $("#selAll").bind("change", function () {
+                    if (this.checked == true) {
+
+                        $("input#isChecked").each(function (index, chk) {
+                            $(chk).attr("checked", true);
+                            $(chk).change();
+                        });
+                    } else {
+                        $("input#isChecked").each(function (index, chk) {
+                            $(chk).attr("checked", false);
+                            $("#Codes").val("");
+                            $("#chineseName").val("");
+                            //$(chk).change();
+                        });
+                    }
+                });
+
+                $(":checkbox[isDelete='false']").bind("change", function () {
+                    var code = this.attributes["code"].value + ",";
+                    var chineseName = this.attributes["chineseName"].value + ",";
+                    if (this.checked == true) {
+                        //先清除
+                        $("#Codes").val($("#Codes").val().replace(code, ""));
+                        $("#chineseName").val($("#chineseName").val().replace(chineseName, ""));
+                        //再添加
+                        $("#Codes").val($("#Codes").val() + code);
+                        $("#chineseName").val($("#chineseName").val() + chineseName);
+                    } else {
+                        $("#Codes").val($("#Codes").val().replace(code, ""));
+                        $("#chineseName").val($("#chineseName").val().replace(chineseName, ""));
+                    }
+                });
+
+            });
+
+        </script>
+
+    </head>
+   
+<body>
+    <div style="background-color: #FFF;">
+        @using (Html.BeginForm())
+        {
+            <input type="hidden" id="chineseName" name="FilterModel.ChineseNameList" value="@Model.FilterModel.ChineseNameList"/>
+            <input type="hidden" id="selectValue" name="FilterModel.SelectValue" value="@Model.FilterModel.SelectValue"/>
+            <input type="hidden" id="Codes" name="FilterModel.Codes" value="@Model.FilterModel.Codes"/>
+            <input type="hidden" name="FilterModel.TrackingNumberID" value="@Model.FilterModel.TrackingNumberID"/>
+            <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <tbody>
+                    <tr class="date_row_select data_row_dan">
+                        <td style="width: 70px; border-right: none">
+                            @Html.DropDownListFor(m => m.FilterModel.SelectedField,new[]{new SelectListItem(){Text = "编码",Value = "CountryCode"},
+                                new SelectListItem(){Text = "中文名",Value = "ChineseName"}
+                            })
+                        </td>
+                        <td style="border-left: none">
+                            @Html.TextBoxFor(m => m.FilterModel.SeekValue)
+                            <input type="submit" value="搜索" name="btnAdd" class="btn" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div id="qi_dis_div" style="height: 420px; width: 578px; overflow: auto;">
+                <table class="data_table" style="width: 560px;" border="1" cellpadding="0" cellspacing="0">
+                    <tr class="data_row_two">
+                        <th style="width: 40px">
+                            <input id="selAll" type="checkbox" name="">
+                        </th>
+                        <th style="width: 40px">编号</th>
+                        <th>中文名</th>
+                    
+                    </tr>
+                    @{
+                        int intIndex = 0;
+                    }
+                    @foreach (var row in Model.CountryModels.InnerList.OrderByDescending(p=>p.TypeCHK))
+                    {
+                        intIndex++;
+                        <tr @{
+                                if (row.TypeCHK == 1)
+                                {
+                                    @:style="color: red"
+                                }
+                                else 
+                                {
+                                    @:style="color: black"
+                                }
+                         
+                            }  class="@if (intIndex.IsEven())
+                                      {<text>data_row_dan</text>}
+                                      else
+                                      {<text>data_row_dan</text>}">
+                            @if (row.TypeCHK == 1)
+                            {
+                                <td style="text-align: center">@Html.CheckBox("isChecked", new { value = "[" + row.CountryCode + "," + row.ChineseName + "]", @checked = "checked", @isDelete = "false", @chineseName = row.ChineseName,@code=row.CountryCode })</td>
+                            }
+                            else
+                            {
+                                <td style="text-align: center">@Html.CheckBox("isChecked", new { value = "[" + row.CountryCode + "," + row.ChineseName + "]", @isDelete = "false", @chineseName = row.ChineseName,@code=row.CountryCode })</td>
+                            }
+                            <td>@row.CountryCode</td>
+                            <td>@row.ChineseName</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        }
+    </div>
+</body>
+    </html>
+

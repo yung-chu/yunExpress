@@ -1,0 +1,178 @@
+﻿@using LMS.Data.Entity
+@model LMS.Controllers.SettlementController.SettlementSummaryModelViewModel
+@{
+    ViewBag.Title = "查看现结客户发货情况";
+}
+
+<div id="showCustomerList" tabindex="200" style="overflow: scroll; display: none; position: relative">
+</div>
+<style type="text/css">
+    #tb tr.even td
+    {
+        cursor: pointer;
+    }
+</style>
+<div class="domebg" id="right_con">
+    @using (Html.BeginForm())
+    {
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+                <td width="10%">
+                    <span class="info_box info_select">客户编码:</span>
+                    <input type="text" id="CustomerCode" value="@Model.FilterModel.CustomerCode" name="FilterModel.CustomerCode" readonly="readonly" class="txt txt_short" />
+                    <input type="text" id="nickName" class="txt txt_short" value="@Model.FilterModel.CustomerName" name="FilterModel.CustomerName" />
+                    <a href="javascript:void(0)" id="selectCustomerbtn" class="btn_href">选择</a>
+                </td>
+                <td width="5%">
+                    <span class="info_box info_select">状态:</span>
+                    @Html.DropDownListFor(o => o.FilterModel.Status, Model.StatusList)
+                </td>
+                <td width="20%">
+                    <input type="submit" class="btn ml10" value="查询" id="btnSearch" name="btnSearch" />
+                </td>
+            </tr>
+        </table>
+        <div id="pm_dis_div">
+            <table id="tb" class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr class="data_row_two">
+                        <th>序号
+                        </th>
+                        <th>客户名称
+                        </th>
+                        <th>客户编码
+                        </th>
+                        <th>未发货运单数
+                        </th>
+                        <th>是否已结清货款
+                        </th>
+                        <th>欠款金额
+                        </th>
+                        <th>业务经理
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int index = 1;
+                        foreach (var row in Model.PagedList)
+                        {
+                            <tr class="data_row_dan">
+                                <td>
+                                    @(index++)
+                                </td>
+                                <td>
+                                    @row.CustomerName
+                                </td>
+                                <td >
+                                    @row.CustomerCode
+                                </td>
+                                <td>
+                                    @row.HaveWaybillCount
+                                </td>
+                                <td>
+                                    @{
+                                        if (@row.Balance >= 0)
+                                        {
+                                            @Html.Raw("已结清")
+                                        }
+                                        else
+                                        {
+                                            @Html.Raw("未结清")
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @(-row.Balance)
+                                </td>
+                                <td>
+                                    @row.SalesMan
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="7" style="padding: 0px;">
+                                    <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0" style="margin: 0 auto;">
+                                        <tr class="data_row_dan">
+                                            <td width="20%">
+                                                入仓渠道
+                                            </td>
+                                            <td width="20%">
+                                                未发货运单数
+                                            </td>
+                                            <td width="20%">
+                                                货物总重量kg
+                                            </td>
+                                            <td width="20%">
+                                                结算总重量kg
+                                            </td>
+                                            <td width="20%">
+                                                总金额
+                                            </td>
+                                        </tr>
+                                        @foreach (var s in row.SettlementShippingMethodSummaryExts)
+                                        {
+                                            <tr class="data_row_dan">
+                                                <td>
+                                                    @s.ShippingMethodName
+                                                </td>
+                                                <td>
+                                                    @s.HaveWaybillCount
+                                                </td>
+                                                <td >
+                                                    @s.TotalWeight
+                                                </td>
+                                                <td>
+                                                    @s.TotalSettleWeight
+                                                </td>
+                                                <td>
+                                                    @s.TotalFee
+                                                </td>
+                                            </tr>
+                                        }
+                                    </table>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    <tr class="data_row_none">
+                        <td colspan="20">
+                            @Html.Pager(Model.PagedList, Model.FilterModel)
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+
+</div>
+
+<script type="text/javascript">
+
+    $(function () {
+      
+
+        //选择运输方式
+        $("#selectCustomerbtn").bind("click", function () {
+            $("#showCustomerList").showWindow("@Url.Action("SelectList", "Customer")?OnlyShowCash=true&ShowPaymentType=true", "选择现结客户");
+            var parentWindow = $("#showCustomerList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                    top: 120
+                }, {
+                    duration: 1000,
+                    step: function (now, fx) {
+                        $(".window").css("top", now);
+                    }
+                });
+            $("#showCustomerList").show();
+        });
+        
+        $("#tb").children("tbody").children("tr:even").addClass("even");
+        $("#tb").children("tbody").children("tr:not(.even)").hide();
+        $("#tb").children("tbody").children("tr:first-child").show();
+        $("#tb").children("tbody").children("tr:even").click(function () {
+            $(this).next("tr").toggle();
+        });
+       
+    });
+
+</script>

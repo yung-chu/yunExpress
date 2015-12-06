@@ -1,0 +1,134 @@
+﻿@using LMS.Data.Entity
+@model LMS.Controllers.CustomerController.CustomerRechargeListViewModel
+@{
+    ViewBag.Title = "CustomerRechargeList";
+}
+<div id="showCustomerList" tabindex="200" style="overflow: scroll; display: none; position: relative">
+</div>
+<div class="domebg" id="right_con">
+    @using (Html.BeginForm())
+    {
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+                <td width="40%">
+                    <span class="info_box info_select">客户编码:</span>
+                    <input type="text" id="CustomerCode" value="@Model.FilterModel.CustomerCode" name="FilterModel.CustomerCode" readonly="readonly" class="txt txt_short" />
+                    <input type="hidden" id="nickName" class="txt txt_long" />
+                    <a href="javascript:void(0)" id="selectCustomer" class="btn_href">选择</a>
+                </td>
+                <td width="40%">
+                    <span class="info_box info_select">审核状态:</span>
+                    @Html.DropDownListFor(o => o.FilterModel.Status, Model.StatusModels, new { @style = "width:80px;" })
+                </td>
+                <td width="30%">
+                    <div class="tl">
+                        <input type="submit" class="btn" value="搜索" id="btnSearch" name="btnSearch" />
+                        <a href="@Html.GetUrl("CustomerRecharge")" class="btn_href">维护费用</a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div>
+            <table id="tb_cstmList" class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr class="data_row_two">
+                        <th>序号
+                        </th>
+                        <th>客户编码
+                        </th>
+                        <th>充值时间
+                        </th>
+                        <th>审核状态
+                        </th>
+                        <th>金额
+                        </th>
+                        <th>交易号
+                        </th>
+                        <th>凭证
+                        </th>
+                        <th>备注
+                        </th>
+                        <th>操作
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+        var index = 1;
+        foreach (var row in Model.PagedList.InnerList)
+        {
+                            
+                        <tr class="data_row_dan">
+                            <td>
+                                @index
+                            </td>
+                            <td>
+                                @row.CustomerCode
+                            </td>
+                            <td>
+                                @row.CreatedOn.ToString("yyyy-MM-dd HH:mm:ss")
+                            </td>
+                            <td>
+                                @CustomerCreditInfo.GetStatusDescription(row.Status)
+                            </td>
+                            <td>
+                                @row.Amount.Value.ToString("F2")
+                            </td>
+                            <td>
+                                @row.TransactionNo
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrWhiteSpace(row.VoucherPath))
+                                {
+                                    <a href="@(LMS.Core.sysConfig.ClientVoucherPath + row.CustomerCode + "/" + row.VoucherPath)" target="_blank">查看</a>
+                                }
+                            </td>
+                            <td>
+                                @row.Remark
+                            </td>
+                            <td>
+                                @if (row.Status != 2)
+                                {
+                                    <input type="button" class="btn" value="审核" onclick="customercheckOn(@row.ID,@index); " />
+                                }
+                            </td>
+                        </tr>
+                                index++;
+        }
+                    }
+                    <tr class="data_row_none">
+                        <td colspan="9">
+                            @Html.Pager(Model.PagedList, Model.FilterModel)
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+<script type="text/javascript">
+    function customercheckOn(id,index) {
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("CheckCustomerCreditInfo")",
+            dataType: "json",
+            data: {id:id},
+            success: function (data) {
+                if (data=="1") {
+                    index = index - 1;
+                    var td = $("#tb_cstmList > tbody > tr:eq(" + index + ")").children("td:nth-child(4)");
+                    td.text("@CustomerCreditInfo.GetStatusDescription(CustomerCreditInfo.StatusToValue(CustomerCreditInfo.StatusEnum.Checked))");
+                    var bnt=$("#tb_cstmList > tbody > tr:eq(" + index + ")").children("td:nth-child(9)");
+                    bnt.html("");
+                }else if (data == "0") {
+                    alert("审核失败！");
+                } else {
+                    alert(data.Message);
+                }
+            },
+            complete: function (data) {
+                $("#addfrom #Savebnt").attr('disabled', false);
+            }
+        });
+    }
+</script>

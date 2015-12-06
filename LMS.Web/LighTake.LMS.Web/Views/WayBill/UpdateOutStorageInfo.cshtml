@@ -1,0 +1,136 @@
+﻿@model LMS.Controllers.WayBillController.UpdateOutStorageViewModel
+@{
+    Layout = null;
+}
+<div>
+    <ul>
+        <li>
+            <span class="info_box info_select">服务商:</span>
+            <input type="text" id="_NewVenderName" class="txt txt_short" />
+            <input type="button" id="SelectsNewVender" class="btn" value="选择" />
+        </li>
+        <li>
+            <span class="info_box info_select">发货渠道:</span>
+            <input type="text" id="FilterOutShippingMethodName" class="txt txt_short" />
+            <input type="hidden" id="OutWeightOrVolume" />
+            <input type="button" id="SelectShippingMethod" class="btn" value="选择" />
+        </li>
+        <li>
+            <span class="info_box info_middle">备注 : </span>
+            @Html.TextAreaFor(p=>p.Remark,new{@class="area vt",@cols="45", @rows="6"})
+        </li>
+        <li>
+            <input type="hidden" id="type" value="@Model.Type" />
+            <input type="hidden" id="_NewVenderId" value="" />
+            <input type="hidden" id="_NewVenderCode" value="" />
+            <input type="hidden" id="FilterOutShippingMethodId" value="" />
+            <input type="button" class="btn" value="确认" id="Savebnt" onclick="Save();" />
+        </li>
+    </ul>
+</div>
+<div id="showNewVenderList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="FilterOutShippingMethodList" style="overflow: scroll; display: none; position: relative">
+</div>
+<script type="text/javascript">
+        //选择服务商
+        $("#SelectsNewVender").bind('click', function () {
+            $("#showNewVenderList").show();
+            $("#showNewVenderList").showWindow("@Url.Action("NewSelectVender", "WayBill")", "选择服务商");
+            var parentWindow = $("#showNewVenderList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                    top: 120
+                }, {
+                    duration: 1000,
+                    step: function(now, fx) {
+                        $(".window").css("top", now);
+                    }
+                });
+            $("#showNewVenderList").show();
+        });
+
+    $(".panel-tool-close").bind("click", function () {
+        $("#showNewVenderList").html("").remove();
+        $("#FilterOutShippingMethodList").html("").remove();
+    });
+    
+        //选择运输方式
+        $("#SelectShippingMethod").bind("click", function() {
+            $("#FilterOutShippingMethodList").show();
+            var venderIdval = $("#_NewVenderId").val();
+            if (venderIdval == "") {
+                alert("请先选择服务商");
+            } else {
+                $("#FilterOutShippingMethodList").showWindow("@Url.Action("FilterOutShippingMethod", "WayBill")?venderId=" + venderIdval, "选择运输方式");
+                var parentWindow = $("#FilterOutShippingMethodList").parent("div");
+                $(parentWindow).css("top", "0");
+                $(parentWindow).animate({
+                        top: 120
+                    }, {
+                        duration: 1000,
+                        step: function(now, fx) {
+                            $(".window").css("top", now);
+                        }
+                    });
+                $("#FilterOutShippingMethodList").show();
+            }
+        });
+    function Save() {
+        var outStorageIdval = $("#outStorageID").val();
+        var typeval = $("#type").val();
+        var venderIdval = $("#_NewVenderId").val();
+        var shippingMethodIdval = $("#FilterOutShippingMethodId").val();
+        var outshippingMethodNameval = $("#FilterOutShippingMethodName").val();
+        if (venderIdval == "") {
+            alert("请先选择服务商");
+            return false;
+        }
+        if (shippingMethodIdval == "") {
+            alert("请先选择出仓渠道");
+            return false;
+        }
+        if ($("input[name='SelectTotal']:checked").length > 0) {
+            $.ajax({
+                type: "POST",
+                url: "JsonUpdateOutStorageInfo",
+                dataType: "json",
+                data: { outStorageId: "", outshippingMethodId: shippingMethodIdval, outshippingMethodName: outshippingMethodNameval, outvenderCode: $("#_NewVenderCode").val(), remark: $("#Remark").val(), type: "3", filterModel: $("input[name='FilterModel.Filter']").val() },
+                success: function (data) {
+                    if (data.Result) {
+                        alert("修改成功！");
+                        $('#test').window("close");
+                        //location.reload();
+                        $("#btnSearch").click();
+                    } else {
+                        alert(data.Message);
+                    }
+                },
+                complete: function (data) {
+                    $("#editfrom #Savebnt").attr('disabled', false);
+                }
+            });
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "JsonUpdateOutStorageInfo",
+                dataType: "json",
+                data: { outStorageId: outStorageIdval, outshippingMethodId: shippingMethodIdval, outshippingMethodName: outshippingMethodNameval, outvenderCode: $("#_NewVenderCode").val(), remark: $("#Remark").val(), type: typeval },
+                success: function (data) {
+                    if (data.Result) {
+                        alert("修改成功！");
+                        $('#test').window("close");
+                        //location.reload();
+                        $("#btnSearch").click();
+                    } else {
+                        alert(data.Message);
+                    }
+                },
+                complete: function (data) {
+                    $("#editfrom #Savebnt").attr('disabled', false);
+                }
+            });
+        }
+        return true;
+    }
+</script>

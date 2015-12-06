@@ -1,0 +1,784 @@
+﻿@using System.Globalization
+@using LMS.Core
+@using LMS.Data.Entity
+@model LMS.UserCenter.Controllers.OrderController.Models.CustomerOrderViewModels
+@{
+    var shippingMethods = (List<SelectListItem>)ViewBag.ShippingMethods;
+    var countryList = (List<SelectListItem>)ViewBag.CountryList;
+
+    var currentAction = Request.RequestContext.RouteData.Values["action"].ToString();
+    var currentUrl = Html.GetUrl(currentAction, Model.Filter);
+    bool isBlocked = currentAction.ToLowerInvariant() == "blocked";
+
+    bool showRemark = currentAction.ToLowerInvariant() == "submitfail";
+
+    bool isAllOrderPage = currentAction.ToLowerInvariant() == "all";
+}
+<div class="p20">
+
+    @Html.Partial("_Notifications")
+
+    <!-- 高级搜索 Start -->
+        <form method="POST" id="form">
+            <div class="tab_conStr">
+                <div class="from_box">
+                    <div class="fix from_horizontal">
+                        <div class="ww32 l">
+                            <div class=" fix">
+                                <span class="info_box info_middle">运输方式：</span>
+
+                                @Html.DropDownListFormFor(p => Model.Filter.ShippingMethodId, shippingMethods, new Dictionary<string, object> { { "class", "chzn-select-deselect select_middle" }, { "data-placeholder", "全部" } })
+                            </div>
+                        </div>
+                        <div class="cell">
+                            <div class="fix">
+                                <div class="l ww49">
+                                    <div class=" fix">
+                                        @if (Model.Filter.IsReceived)
+                                        {
+                                            <span class="info_box info_middle">收货时间:
+                                            </span>
+                                        }
+                                        else if (Model.Filter.IsDeliver)
+                                        {
+                                            <span class="info_box info_middle">发货时间:
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="info_box info_middle">创建时间:
+                                            </span>
+                                        }
+
+                                        @Html.DateFormFor(p => Model.Filter.CreatedOnFrom)
+                                        到:
+                                        @Html.DateFormFor(p => Model.Filter.CreatedOnTo)
+
+                                    </div>
+                                </div>
+                                <div class="cell pl20  fix">
+                                    <span class="info_box info_middle ">发货国家：</span>
+                                    @Html.DropDownListFormFor(p => p.Filter.CountryCode, countryList, new Dictionary<string, object> { { "class", "chzn-select-deselect select_middle r" }, { "data-placeholder", "全部" } })
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="fix from_horizontal">
+                        @if (Model.Filter.Status != CustomerOrder.StatusEnum.None.GetStatusValue() && Model.Filter.Status != CustomerOrder.StatusEnum.OK.GetStatusValue()
+                             && Model.Filter.Status != CustomerOrder.StatusEnum.SubmitFail.GetStatusValue())
+                        {
+                            <div class="ww32 l">
+                                <div class=" fix">
+                                    <span class="info_box info_middle ">查询条件：</span>
+                                    @Html.DropDownListFor(f => f.Filter.SearchWhere, Model.SearchWheres, new { @style = "width:100px;" })
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="ww32 l">
+                                <div class=" fix">
+                                    <span class="info_box info_middle l">@*@Html.DropDownListFormFor(p => p.Filter.CustomerOrderNumber, new []
+                                                                   {
+                                                                       new SelectListItem{Text ="订单号",Value = "1" },
+                                                                       new SelectListItem{Text ="运单号",Value = "2" }, 
+                                                                   }, new Dictionary<string, object> { { "class", "chzn-select-deselect select_middle " }, { "style", " width:120px" } })*@订单号：</span>
+
+                                    @Html.TextAreaFor(f => f.Filter.CustomerOrderNumber, new { @class = "area area_short" })
+                                </div>
+                            </div>
+                        }
+                        <div class="cell">
+                            <div class="fix">
+                                @if (Model.Filter.Status != CustomerOrder.StatusEnum.None.GetStatusValue() && Model.Filter.Status != CustomerOrder.StatusEnum.OK.GetStatusValue()
+                                     && Model.Filter.Status != CustomerOrder.StatusEnum.SubmitFail.GetStatusValue())
+                                {
+                                    <div class="l ww49">
+                                        <div class=" fix">
+                                            <span class="info_box info_middle ">查询类容：</span>
+                                            @Html.TextAreaFor(p => p.Filter.SearchContext, new { @style = "height:50px; width:200px;", @class = "vt" })
+                                        </div>
+                                    </div>
+                                }
+                                <div class="cell pl20 fix">
+                                    @if (Model.Filter.IsAll)
+                                    {
+                                        <span class="info_box info_middle">状态：</span>
+
+                                        @Html.DropDownListFormFor(p => Model.Filter.Status, (List<SelectListItem>)ViewBag.WaybillStatusList, new Dictionary<string, object> { { "class", "chzn-select-deselect select_middle" }, { "data-placeholder", "全部" } })
+
+                                    }
+                                    else if (Model.Filter.IsSubmitted && !Model.Filter.IsAll)
+                                    {
+                                        <span class="info_box info_middle">打印状态：</span>
+
+                                        @Html.DropDownListFormFor(p => Model.Filter.IsPrinted, new[]
+                                            {
+                                                new SelectListItem{ Text = "",Value = ""},
+                                                new SelectListItem{ Text = "未打印",Value = "false"},
+                                                new SelectListItem{ Text = "已打印",Value = "true"}, 
+                                            }, new Dictionary<string, object> { { "class", "chzn-select-deselect select_middle" }, { "data-placeholder", "全部" } })
+
+                                    }
+                                    else
+                                    {
+                                        @Html.HiddenFor(f => f.Filter.Status)
+                                    }
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="fix from_horizontal">
+
+                        <div class="">
+                            <div class=" fix">
+                                <span class="info_box info_middle"></span>
+                                <input type="submit" class="btn btn_red" id="SelectBtn" value="搜索" />
+                                <input type="hidden" value="@Model.Filter.Page" name="Filter.Page" />
+                                <input type="hidden" value="@Model.Filter.PageSize" name="Filter.PageSize" />
+                                @if (Model.Filter.Status != CustomerOrder.StatusEnum.None.GetStatusValue() && Model.Filter.Status != CustomerOrder.StatusEnum.OK.GetStatusValue() && Model.Filter.Status != CustomerOrder.StatusEnum.SubmitFail.GetStatusValue() && !Model.Filter.IsHold)
+                                {
+                                    <input type="submit" class="btn btn_green" value="批量导出" onclick=" return BatchExportExcel(); " />
+                                    <input type="hidden" value="" id="BatchExport" name="BatchExport" />
+                                    <input type="hidden" value="" id="Filter_FieldIds" name="Filter.FieldIds" />
+                                }
+
+                                @if (Model.Filter.Status == CustomerOrder.StatusEnum.None.GetStatusValue() && !Model.Filter.IsAll)
+                                {
+                                @*<input type="submit" name="Confirmed" onclick="return confirm('确认提交订单?');" class="btn btn_green" value="确认订单" />*@
+                                    <input type="submit" name="BatchConfirmed" onclick="return confirm('确认批量确认订单?');" class="btn btn_green" value="批量确认订单" />
+                                    <input type="submit" name="BatchDeletess" onclick="return confirm('确认批量删除订单?');" class="btn btn_red" value="批量删除订单" />
+                                }
+                                @if ((Model.Filter.Status == CustomerOrder.StatusEnum.OK.GetStatusValue() || Model.Filter.Status == CustomerOrder.StatusEnum.SubmitFail.GetStatusValue()) && !Model.Filter.IsAll)
+                                {
+                                @*<input type="submit" name="Submitted" onclick=" return confirm('确认提交订单?'); " class="btn btn_green" value="提交订单" />*@
+                                    <input type="button" id="BatchSubmittedbtn" name="BatchSubmittedbtn" class="btn btn_green" value="批量提交订单" />
+                                    <input type="submit" id="BatchSubmitted" name="BatchSubmitted" class="btn btn_green" value="批量提交订单" style="display: none" />@*
+                                <input type="submit" name="BatchCancelOrder" onclick=" return confirm('确认批量取消确认订单?'); " class="btn btn_green" value="批量取消确认订单" />*@
+                                    <input type="submit" name="BatchDeleteOrder" onclick=" return confirm('确认批量删除订单?'); " class="btn btn_red" value="批量删除订单" />
+                                    <div>
+                                        <span class="info_box info_middle"></span><span style="color: red">注意:订单提交之后无法修改,请确保提交资料无误!</span>
+                                        <br>
+                                        <span class="info_box info_middle"></span><span style="color: red">为加速订单提交速度，订单提交流程已改为异步提交，手动批量提交订单后，系统后台处理提交动作，有可能会存在提交失败的订单，请在提交失败的订单页面查看原因！</span>
+                                    </div>
+
+                                
+                                }
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+
+                                @if (Model.Filter.Status == CustomerOrder.StatusEnum.Submitted.GetStatusValue() || Model.Filter.IsAll)
+                                {
+                                    if (Model.Filter.Status == CustomerOrder.StatusEnum.Submitted.GetStatusValue() && sysConfig.CompanyType.ToLower().Equals("lightake"))
+                                    {
+                                        <input type="button" id="Batchholdon" name="Batchholdon" onclick=" return batchHoldon(); " class="btn btn_green" value="批量拦截订单" />
+                                    }
+
+                                    if (sysConfig.CompanyType.ToLower().Equals("lightake") && !isAllOrderPage)
+                                    {
+                                        <input type="submit" name="BatchDelete" onclick="return confirm('确认批量删除订单?');" class="btn btn_red" value="批量删除订单" />
+                                    }
+                                
+
+@*<input type="button" id="PrintLable" onclick=" return PrintLable(); " class="btn btn_green" value="打印地址标签" />
+                                <span>打印模板类型: @Html.DropDownListFor(p => p.Filter.AddressLabelId, Model.AddressLabel, "请选择", new { id = "printType1" })</span>*@
+                                    <span>打印模板类型(new): @Html.DropDownListFor(p => p.Filter.PrintTypeId, Model.PrintTemplate, "请选择")</span>
+                                
+@*<span>打印模板类型: @Html.DropDownListFor(p => p.Filter.AddressLabelId, Model.AddressLabel,"请选择")</span>*@
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- 高级搜索 End -->
+    
+        
+            <!-- 列表 Start -->
+            <div class="top_solid mt20"></div>
+            <table class="data_table " width="100%" border="1" cellpadding="0" cellspacing="0">
+                <tr class=" data_row_head">
+                    <th valign="middle" width="3%">
+                        <input type="checkbox" id="selectAll" /></th>
+                    <th valign="middle" width="4%">序号</th>
+                    <th width="12%">销售订单号</th>
+                    <th width="10%">运单号</th>
+                    <th width="10%">新跟踪号</th>
+                    <th width="10%">原跟踪号</th>
+                    <th width="6%">发货国家</th>
+                    <th width="6%">运输方式</th>
+                    <th width="5%">状态</th>
+                    @if (Model.Filter.IsAll || Model.Filter.IsDeliver || Model.Filter.IsReceived)
+                    {
+                        <th width="5%">入仓称重总重量(Kg)</th>
+                        <th width="5%">结算总重量(Kg)</th>
+                        <th width="5%">体积(cm)</th>
+                    }
+                    <th width="10%">转单时间</th>
+                    @if (Model.Filter.IsReceived)
+                    {
+                        <th width="10%">收货时间</th>
+                    }
+                    else if (Model.Filter.IsDeliver)
+                    {
+                        <th width="10%">发货时间</th>
+                    }
+                    else
+                    {
+                        <th width="10%">创建时间</th>
+                    }
+                    @if (isBlocked)
+                    {
+                        <th width="10%">备注原因</th>
+                    }
+
+                    @if (showRemark)
+                    {
+                        <th width="10%">错误原因</th>
+                    }
+                    <th width="8%">操作</th>
+                </tr>
+                @{
+            
+                    int i = 1;
+                }
+                @foreach (var item in Model.OrderList)
+                {
+
+                    bool flag = i % 2 > 0;
+                    <tr class="@(flag ? "data_row_dan" : "data_row_shuang")">
+                        <td valign="middle">
+                            <input type="checkbox" name="selected" value="@item.CustomerOrderID"/></td>
+                        <td valign="middle">
+                            @(i + (Model.Filter.Page - 1) * Model.Filter.PageSize)</td>
+                        <td valign="middle"><a class="tdl txt_tip" title="点击编辑" href="@Url.Action("Edit", new { id = item.CustomerOrderID })">@item.CustomerOrderNumber</a></td>
+                        <td>@item.WayBillNumber</td>
+                        <td>@item.TrackingNumber</td>
+                        <td>@item.RawTrackingNumber</td>
+                        <td>@(item.CountryCode.IsNullOrWhiteSpace() ? "" : countryList.First(s => s.Value == item.CountryCode.Trim().ToUpperInvariant()).Text)</td>
+                        <td>@item.ShippingMethodName</td>
+                        <td>@CustomerOrder.GetStatusDescription(item.Status)</td>
+                        @if (Model.Filter.IsAll || Model.Filter.IsDeliver || Model.Filter.IsReceived)
+                        {
+                            <td>@item.Weight</td>
+                            <td>@item.SettleWeight</td>
+                            <td>@item.Length*@item.Width*@item.Height</td>
+                        }
+                        @if (item.TransferOrderDate >= DateTime.Now.AddDays(-7))
+                        {
+                            <td style="color: green">@(item.TransferOrderDate.HasValue ? item.TransferOrderDate.Value.ToString("yyyy-MM-dd") : "")<img src=@Url.Content("~/images/new.jpg") /></td>
+                        }
+                        else
+                        {
+                            <td>@(item.TransferOrderDate.HasValue ? item.TransferOrderDate.Value.ToString("yyyy-MM-dd") : "")</td>
+                        }
+                        <td>@item.CreatedOn.ToString("yyyy-MM-dd HH:mm")</td>
+                        @if (isBlocked)
+                        {
+                            <td>@item.AbnormalDescription</td>
+                        }
+                        @if (showRemark)
+                        {
+                            <td>@item.Remark</td>
+                        }
+                        <td>
+                            <div class="tc f0">
+                                @{
+                        var isEdit = Model.Filter.Status == CustomerOrder.StatusEnum.None.GetStatusValue() || Model.Filter.Status == CustomerOrder.StatusEnum.OK.GetStatusValue() || Model.Filter.Status == CustomerOrder.StatusEnum.SubmitFail.GetStatusValue();
+                        var isHold = Model.Filter.Status == CustomerOrder.StatusEnum.Submitted.GetStatusValue() || Model.Filter.Status == CustomerOrder.StatusEnum.Have.GetStatusValue();
+                                }
+                                @if (isEdit)
+                                {
+                               
+                                    <a title="编辑" class="data_btn btn_green" href="@Url.Action("Edit", new { ID = item.CustomerOrderID, ReturnUrl = currentUrl })">
+                                        <i class="icon-edit data_icon"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a title="查看" class="data_btn btn_green" href="@Url.Action("Edit", new { ID = item.CustomerOrderID, ReturnUrl = currentUrl })">
+                                        <i class="icon-search data_icon"></i>
+                                    </a>
+                                }
+
+
+
+                                @if (Model.Filter.Status == CustomerOrder.StatusEnum.None.GetStatusValue() || Model.Filter.Status == CustomerOrder.StatusEnum.SubmitFail.GetStatusValue())
+                                {
+                                    <a title="删除" class="data_btn btn_red" onclick="return confirm('确认删除吗?');" href="@Url.Action("Delete", new { ID = item.CustomerOrderID })">
+                                        <i class="icon-delete data_icon"></i>
+                                    </a>
+                                }
+                                @if (Model.Filter.Status == CustomerOrder.StatusEnum.OK.GetStatusValue())
+                                {
+                                    <a title="取消" class="data_btn btn_red" onclick="return confirm('确认取消吗?');" href="@Url.Action("Cancel", new { ID = item.CustomerOrderID })">
+                                        <i class="icon-cancel data_icon"></i>
+                                    </a>
+                                }
+
+
+                                @*@if (Model.Filter.Status == CustomerOrder.StatusEnum.Submitted.GetStatusValue())
+                            {
+                                string print = "打印";
+                                string cl = "data_btn btn_yellow";
+                                if (item.IsPrinted)
+                                {
+                                    cl = "data_btn btn_gray";
+                                    print = "已打印";
+                                }
+                                <a title="@print" class="@cl" target="_blank" onclick="return confirm('确认打印吗?');" href="@Url.Action("Printer", new { ID = item.CustomerOrderID })">
+                                    <i class="icon-print data_icon"></i>
+                                </a>
+                            }*@
+
+                                @if (isHold && !item.IsHold)
+                                {
+                                    if (sysConfig.CompanyType.ToLower().Equals("lightake"))
+                                    {
+                                        <a id="hold_@(item.CustomerOrderID)" title="拦截" class="data_btn btn_red" onclick=" return holdon('@item.CustomerOrderID'); " href="javascript:;">
+                                            <i class="icon-shield data_icon"></i>
+                                        </a>
+                                    }
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                                {
+                                    i++;
+                                }
+                }
+                <tr class="date_row_none">
+                    @{
+                        int x = 12;
+                    }
+                    @if (Model.Filter.IsAll || Model.Filter.IsDeliver || Model.Filter.IsReceived)
+                    {
+                        x = x + 3;
+                    }
+                    @if (isBlocked)
+                    {
+                        x = x + 1;
+                    }
+                    @if (showRemark)
+                    {
+                        x = x + 1;
+                    }
+                    <td colspan="@x">
+                        <div class="fix">
+                            @Html.Pager(Model.OrderList, Url.MergeRouteValues(Model.Filter))
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <!-- 列表 End -->
+        
+        
+            <div id="HoldMsg" class="dn">
+                <span class="info_box info_short ">原因：</span>
+                <textarea id="message" class="area area_short"></textarea>
+                <span id="message_error" class="mr20 ml10 txt_tip"></span>
+            </div>
+        
+            <div id="RemoteAreaMsg" class="dn" style="text-align:center">
+                <p>以下订单是收货地址属偏远地址，会产生偏远附加。</p>
+                <p>详细费用请咨询业务，你确认提交吗?</p>
+                <br>
+                <div id="RemoteAreaMsgOrders"></div>
+            </div>
+
+            <div id="BatchExportContent" class="dn">
+                <input id="selectAllItem" type="checkbox" value="All" /><label for="selectAllItem">全选所有信息</label><br />
+                @{
+                    var query = Model.FieldItems.GroupBy(p => p.GroupName);
+                    foreach (var info in query)
+                    {
+                        <input id="@info.Key" type="checkbox" class="selector" value="@info.Key" />
+                        <label for="@info.Key">@info.Key </label>
+                        <br />
+                        foreach (var item in info)
+                        {
+                            <input id="@item.Value" type="checkbox" class="selectorItem" name="@item.GroupName" value="@item.Id" />
+                            <label for="@item.Value">@item.Text </label>
+                        }
+                        <hr />
+                   
+                    }
+                }
+                <span id="message_error" class="mr20 ml10 txt_tip"></span>
+
+            </div>
+        </form>
+</div>
+
+<script type="text/javascript">
+
+    $(function() {
+        $('#selectAll').click(function() {
+            //$("input[name='selected']").attr("checked", "true");
+            var isSelected = $(this).attr("checked");
+            $("input[name='selected']").each(function() {
+                if (isSelected) {
+                    $(this).attr("checked", "true");
+                } else {
+                    $(this).removeAttr("checked");
+                }
+            });
+
+        });
+        var valIds = [];
+        $('#selectAllItem').click(function() {
+            var isSelected = $(this).attr("checked");
+            $("#BatchExportContent>input[type='checkbox']").each(function() {
+                if (isSelected) {
+                    $(this).attr("checked", "true");
+                    var name = $(this).attr("name");
+                    if ($.inArray($(this).val(), valIds) < 0 && name != undefined) {
+                        valIds.push($(this).val());
+                    }
+                } else {
+                    $(this).removeAttr("checked");
+                    valIds.splice(jQuery.inArray($(this).val(), valIds), 1);
+                }
+                $("#Filter_FieldIds").val(valIds.join(','));
+            });
+        });
+        $('.selector').click(function() {
+            var isSelected = $(this).attr("checked");
+            var name = $(this).val();
+            $("input[name='" + name + "']").each(function() {
+                if (isSelected) {
+                    $(this).attr("checked", "true");
+                    if ($.inArray($(this).val(), valIds) < 0) {
+                        valIds.push($(this).val());
+                    }
+                } else {
+                    $(this).removeAttr("checked");
+                    valIds.splice($.inArray($(this).val(), valIds), 1);
+                }
+            });
+            $("#Filter_FieldIds").val(valIds.join(','));
+            //alert(valIds.join(','));
+        });
+
+        $('.selectorItem').click(function() {
+            var isSelected = $(this).attr("checked");
+            if (isSelected) {
+                $(this).attr("checked", "true");
+                if ($.inArray($(this).val(), valIds) < 0) {
+                    valIds.push($(this).val());
+                }
+            } else {
+                $(this).removeAttr("checked");
+                valIds.splice($.inArray($(this).val(), valIds), 1);
+            }
+            $("#Filter_FieldIds").val(valIds.join(','));
+        });
+
+        $("#PrintLable").click(function() {
+            var ids = [];
+            $("input[name='selected']").each(function() {
+
+                if ($(this).attr("checked")) {
+                    ids.push($(this).val());
+                }
+            });
+
+            if (ids.length == 0) {
+                artDialog.alert("请选择要打印的订单");
+                return false;
+            }
+            var url = "/order/print?ids=" + ids.join(',');
+
+            window.open(url, "_blank");
+            return true;
+        });
+
+        $("#Filter_PrintTypeId").change(function() {
+            if ($(this).val() == "") {
+                return false;
+            }
+            var ids = [];
+            $("input[name='selected']").each(function() {
+
+                if ($(this).attr("checked")) {
+                    ids.push($(this).val());
+                }
+            });
+            if (ids.length == 0) {
+                artDialog.alert("请选择要打印的订单");
+                $("#Filter_PrintTypeId option").eq(0).attr('selected', 'true');
+                return false;
+            }
+            var url = "/order/printer?typeId=" + $(this).val() + "&type=0&ids=" + ids.join(',');
+
+            if ($(this).val() == "DT1308100021") {
+                $.ajax({
+                    type: "POST",
+                    sync: false,
+                    url: "@Url.Action("GZPrinter")",
+                    data: { typeId: $(this).val(), ids: ids.join(',') },
+                    success: function(data) {
+                        if (data.Result) {
+                            window.open(url, "_blank");
+                        } else {
+                            artDialog.alert(data.Message);
+                        }
+                    }
+                });
+            } else {
+                window.open(url, "_blank");
+            }
+            $("#Filter_PrintTypeId option").eq(0).attr('selected', 'true');
+            return true;
+        });
+
+
+        $("#printType1").change(function() {
+            if ($(this).val() == "") {
+                return false;
+            }
+            var ids = [];
+            $("input[name='selected']").each(function() {
+
+                if ($(this).attr("checked")) {
+                    ids.push($(this).val());
+                }
+            });
+            if (ids.length == 0) {
+                artDialog.alert("请选择要打印的订单");
+                $("#printType1 option").eq(0).attr('selected', 'true');
+                return false;
+            }
+
+            var url = "/order/printer?typeId=" + $(this).val() + "&type=1&ids=" + ids.join(',');
+            window.open(url, "_blank");
+            $("#printType1 option").eq(0).attr('selected', 'true');
+            return true;
+        });
+
+        $("#BatchSubmittedbtn").click(function() {
+
+            var ids = [];
+            $("input[name='selected']").each(function() {
+                if ($(this).attr("checked")) {
+                    ids.push($(this).val());
+                }
+            });
+
+            if (ids.length == 0) {
+                artDialog.alert("请选择要提交的订单");
+                return false;
+            } else {
+                if (confirm('确认批量提交订单?')) {
+                    $.ajax({
+                        type: "POST",
+                        async: true,
+                        url: "@Url.Action("CheckRemoteArea")",
+                        data: $('#form').serialize(),
+                        success: function(data) {
+                            if (data.length > 0) {
+                                var html = "";
+                                data.forEach(function(e) {
+                                    html+="<p>"+e+"<p>";
+                                });
+                                $("#RemoteAreaMsgOrders").html(html);
+                                art.dialog({
+                                    title: '确认提示',
+                                    content: document.getElementById('RemoteAreaMsg'),
+                                    lock: true,
+                                    ok: function() {
+                                        $("#BatchSubmitted").click();
+                                    },
+                                    okVal: '确认提交',
+                                    cancelVal: '取消提交',
+                                    cancel: true
+                                });
+                            } else {
+                                $("#BatchSubmitted").click();
+                            }
+                        }
+                    });
+                }
+            }
+            return false;
+        });
+
+    });
+
+
+    artDialog.alert = function (content) {
+
+        var timer;
+        return art.dialog({
+            icon: 'succeed',
+            init: function () {
+                var that = this, i = 5;
+                var fn = function () {
+                    that.title(i + '秒后关闭');
+                    !i && that.close();
+                    i--;
+                };
+                timer = setInterval(fn, 1000);
+                fn();
+            },
+            close: function () {
+                clearInterval(timer);
+            },
+            content: content
+        });
+    };
+
+
+
+
+    function holdon(id) {
+
+        art.dialog({
+            title: '请填写拦截原因',
+            content: document.getElementById('HoldMsg'),
+            lock: true,
+            ok: function () {
+                var msg = $.trim($("#message").val());
+                if (msg == "") {
+                    $("#message").focus();
+                    $("#message_error").html("*请填写拦截原因");
+                    return false;
+                } else {
+                    $("#message_error").html("");
+                }
+                $.ajax({
+                    type: "POST",
+                    sync: false,
+                    url: "@Url.Action("HoldOn")",
+                    data: { id: id, msg: msg },
+                    success: function (data) {
+
+                        if (data != "true") return false;
+
+                        var obj = "#hold_" + id;
+                        $(obj).remove();
+
+                        art.dialog.alert('订单拦截原因成功！');
+
+                        return true;
+                    },
+                    error: function (data) {
+                        art.dialog.alert('订单拦截原因失败，请稍候再试！' + data);
+                        return false;
+                    }
+                });
+
+                this.close();
+                return false;
+            },
+
+            cancelVal: '关闭',
+            cancel: true
+        });
+
+        return false;
+    }
+    function BatchExportExcel() {
+        art.dialog({
+            title: '批量订单导出',
+            content: document.getElementById('BatchExportContent'),
+            lock: true,
+            ok: function () {
+                var msg = $.trim($("#Filter_FieldIds").val());
+                if (msg == "") {
+                    $("#message_error").html("*请选择要导出的字段名称");
+                    return false;
+                } else {
+                    $("#message_error").html("");
+                }
+                this.close();
+                $("#BatchExport").val("BatchExport");
+                $("form").submit();
+                $("#BatchExport").val("");
+                return true;
+            },
+
+            cancelVal: '关闭',
+            cancel: true
+        });
+
+        return false;
+    }
+
+    function batchHoldon() {
+        var ids = [];
+        $("input[name='selected']").each(function () {
+
+            if ($(this).attr("checked")) {
+                ids.push($(this).val());
+            }
+        });
+
+        if (ids.length == 0) {
+            artDialog.alert("请选择要拦截的订单");
+            return false;
+        }
+
+        art.dialog({
+            title: '请填写拦截原因',
+            content: document.getElementById('HoldMsg'),
+            lock: true,
+            ok: function () {
+                var msg = $.trim($("#message").val());
+                if (msg == "") {
+                    $("#message").focus();
+                    $("#message_error").html("*请填写拦截原因");
+                    return false;
+                } else {
+                    $("#message_error").html("");
+                }
+                $.ajax({
+                    type: "POST",
+                    sync: false,
+                    url: "@Url.Action("BatchHoldOn")",
+                    data: { ids: ids.join(','), msg: msg },
+                    success: function (data) {
+
+                        if (data != "true") return false;
+
+                        for (var id in ids) {
+                            var obj = "#hold_" + id;
+                            $(obj).remove();
+                        }
+                        art.dialog.alert('订单拦截原因成功！');
+                        $("#SelectBtn").click();
+                        return true;
+                    },
+                    error: function (data) {
+                        art.dialog.alert('订单拦截原因失败，请稍候再试！' + data);
+                        return false;
+                    }
+                });
+
+                this.close();
+                return false;
+            },
+
+            cancelVal: '关闭',
+            cancel: true
+        });
+
+        return false;
+    }
+
+</script>

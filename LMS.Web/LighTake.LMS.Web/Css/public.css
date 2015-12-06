@@ -1,0 +1,105 @@
+﻿@charset "utf-8";
+/****10X10标准尺寸***/
+.Area_10-10{ width:360px; height:360px; page-break-after:always}
+
+/***公共***/
+body{ font-family:Arial, Helvetica, sans-serif; }
+.bt0{ border-top:1px solid #000}
+.br0{ border-right:1px solid #000}
+.bb0{ border-bottom:1px solid #000}
+.bl0{ border-left:1px solid #000}
+.bd0{ border:1px solid #000}
+.vm{ vertical-align:middle;}
+.f24{ font-size:24px;}
+.mt-1{ margin-top:-1px;}
+.F_Barcode{font-size:12px; height:14px; line-height:14px; font-family:"Times New Roman", Times, serif; display: inline-block; background:#fff;  position:absolute; left:0; top:50px; width:100%; }
+.ovh_4{height:76px;}
+.mt5{ margin-top:5px;}
+.w10{ width:10px;}
+.tc{ text-align:center}
+.tl{ text-align:left}
+.bar_area{ position:relative; height:62px;}
+.bar_area img{ height: 50px;}
+
+
+
+
+
+
+/***************正面*******************/
+/***To_From--发货方收货方前面的单词***/
+.To_From{ width:20px;}
+
+/****Table***/
+table{ border-collapse:collapse; width:100%;}
+/***Positive--正面***/
+
+
+/****发件人sender****/
+.Sender{ font-size:11px; line-height:12px; font-weight:bold}
+/***寄件信息--Send a message~~Send***/
+.Send_area{}
+.Send_Tb{ font-size:10px; line-height:14px;}
+.Send_Tb td{ padding:3px;}
+.Send_Tb table{ padding:3px;}
+.Send_Tb table td{ padding:0;}
+
+/***收件信息--Collection of information~~Collection***/
+.Collection_Tb{ font-size:10px; line-height:12px;font-weight:bold;}
+.Collection_Tb td{ padding:3px;}
+.Collection_Tb table{ padding:3px;}
+.Collection_Tb table td{ padding:0;}
+
+/***派送标贴--Delivery label~~Delivery***/
+.Delivery_Tb{ font-size:12px; line-height:16px; font-weight:bold}
+.Delivery_Tb td{ padding:3px;} 
+
+/***派送标贴I---Delivery labelI~~DeliveryI***/
+.DeliveryI_Tb{ font-size:16px; line-height:20px; font-weight:bold}
+.DeliveryI_Tb td{ padding:3px;} 
+
+/*******R******/
+.R_w{ font-size:30px; font-weight:bold;}
+
+/***代理单号--Acting number~~Acting***/
+.Acting_area{}
+
+
+
+/***顺丰单号--Shunfeng number~~SfN***/
+.SfN{ font-size:10px; line-height:12px;}
+.SfN_Tb td{ padding:3px;}
+
+/***国家代码--Country code~~Countrycode***/
+.Countrycode_Tb{ padding:3px;}
+.Countrycode_n{ font-weight:bold; display:inline-block;}
+
+
+/***打印时间**客户代码*客户单号***/
+.Time,.CustomerCode,.CustomerNb{ font-size:11px; line-height:12px;}
+/***客户代码***/
+
+/**客户单号***/
+
+
+
+/***********背面*************/
+/**checkbox**/
+.Checkbox{ margin:3px 0;}
+.Back_Tb{ border-top:1px solid #000;}
+.Back_Tb td{ padding:3px;}
+.Back_customer{ font-size:14px; font-weight:bold; line-height:16px; display:inline-block}
+.Back_maybe{ font-size:12px; line-height:14px; display:inline-block;}
+.Back_cn{ font-size:16px; font-weight:bold; line-height:20px; display:inline-block; font-weight:bold;}
+.Back_designated{ font-size:10px; line-height:12px; display:inline-block}
+.Back_important{ font-size:10px; line-height:12px; display:inline-block;}
+
+.Back_select_Tb td{ padding:0;}
+.Back_select_Tb{ font-size:10px; line-height:20px;  border-top:1px solid #000;}
+.Back_math_Tb{ border-top:1px solid #000; font-size:10px; line-height:12px;}
+.Back_math_Tb span{ display:inline-block;}
+.Back_math_Tb .p3 td{ padding:3px;}
+.Back_math_Tb table td{ padding:3px;}
+.Back_Guarantee{ font-size:9px; line-height:10px; padding:3px; text-align:justify; border-top:1px solid #000;}
+.Back_Remarks{ border-top:1px solid #000; padding:3px;font-size:9px;}
+

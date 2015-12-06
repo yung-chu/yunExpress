@@ -1,0 +1,17 @@
+网站类：
+
+LMS.Web.项目名称 	例如：LMS.Web.Yunpost
+
+
+服务类：
+
+LMS.WCF.项目名称 	例如：LMS.WCF.TrackNumber
+LMS.WebAPI.项目名称	例如：LMS.WebAPI.LabelPrint
+
+
+JOB类：
+
+LMS.Client.项目名称 	例如：LMS.Client.SubmitOrder
+
+
+

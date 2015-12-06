@@ -1,0 +1,165 @@
+﻿@model LMS.Controllers.WayBillController.UpdateReturnAuditViewModel
+@{
+    ViewBag.Title = "UpdateReturnAudit";
+}
+<div style="text-align: center">
+    @{
+        var ReturnReasons1 = new List<SelectListItem>()
+            {
+                new SelectListItem
+                    {
+                        Text = "海关未过",
+                        Value = "海关未过",
+
+                    },
+                new SelectListItem
+                    {
+                        Text = "无人签收",
+                        Value = "无人签收",
+
+                    },
+                new SelectListItem
+                    {
+                        Text = "客户要求",
+                        Value = "客户要求",
+
+                    },
+                new SelectListItem
+                    {
+                        Text = "海外退货",
+                        Value = "海外退货",
+
+                    },
+                new SelectListItem
+                    {
+                        Text = "其它原因",
+                        Value = "其它原因",
+
+                    },
+
+            };
+
+        var ReturnReasons2 = new List<SelectListItem>()
+            {
+               new SelectListItem
+                    {
+                        Text = "操作错误",
+                        Value = "操作错误",
+
+                    },
+                new SelectListItem
+                    {
+                        Text = "其它原因",
+                        Value = "其它原因",
+
+                    },
+
+            };
+    }
+    <ul>
+        <br/>
+        <br/>
+        <br/>
+        <li>
+            <span>退货原因:</span>
+            <label>@Html.RadioButtonFor(p => p.Type, "2",new {id="Radio1",@checked ="checked"}) 外部</label>
+            &nbsp; &nbsp;&nbsp;
+            <label>@Html.RadioButtonFor(p => p.Type, "1",new {id="Radio2"}) 内部</label>
+        </li>
+        <br/>
+        <li id="ReturnReasons1">
+            <span>退货原因:</span>
+            @Html.DropDownListFor(p => p.NewReturnReason, ReturnReasons1,new {@class="ReturnReason"})
+        </li>
+        <li id="ReturnReasons2">
+            <span>退货原因:</span>
+            @Html.DropDownListFor(p => p.NewReturnReason, ReturnReasons2,new {@class="ReturnReason"})
+        </li>
+        <br/>
+        <li>
+            <span>是否退运费:</span>
+            <label>@Html.RadioButtonFor(p => p.NewIsReturnShipping, true,new {@checked ="checked"}) 是</label>
+            &nbsp; &nbsp;&nbsp;
+            <label>@Html.RadioButtonFor(p => p.NewIsReturnShipping, false) 否</label>
+        </li>
+        <br/>
+        <li>
+            <input type="hidden" id="wayBillList" value="@Model.WayBillList" />
+            <input type="button" class="btn" value="确认审核通过" id="Savebnt" onclick="Save();" />
+        </li>
+    </ul>
+</div>
+
+<script type="text/javascript">
+
+    $(function () {
+        var $ReturnReasons1 = $("#ReturnReasons1");
+        var $ReturnReasons2 = $("#ReturnReasons2");
+        
+        if ($("input[id='Radio1']:checked").length > 0) {
+            $ReturnReasons1.removeClass("dn");
+            $ReturnReasons2.addClass("dn");
+            $ReturnReasons1.addClass("che");
+        }
+        
+        if ($("input[id='Radio2']:checked").length>0) {
+            $ReturnReasons1.addClass("dn");
+            $ReturnReasons2.removeClass("dn");
+            $ReturnReasons2.addClass("che");
+        }
+    });
+
+    $("#Radio1").click(function () {
+        var $ReturnReasons1 = $("#ReturnReasons1");
+        var $ReturnReasons2 = $("#ReturnReasons2");
+        if ($("input[id='Radio1']:checked").length > 0) {
+            $ReturnReasons1.removeClass("dn");
+            $ReturnReasons1.addClass("che");
+            
+            $ReturnReasons2.addClass("dn");
+            $ReturnReasons2.removeClass("che");
+        }
+    });
+    $("#Radio2").click(function () {
+        var $ReturnReasons1 = $("#ReturnReasons1");
+        var $ReturnReasons2 = $("#ReturnReasons2");
+        if ($("input[id='Radio2']:checked").length > 0) {
+            $ReturnReasons1.addClass("dn");
+            $ReturnReasons2.removeClass("dn");
+            
+            $ReturnReasons2.addClass("che");
+            $ReturnReasons1.removeClass("che");
+        }
+    });
+
+    function Save() {
+        if ($("#wayBillList").val() == "") {
+            alert("请先选择要修改的退货信息");
+            return false;
+        }
+        var typeval= $("input[name='Type']:checked").val();
+        var returnReasonval= $(".che .ReturnReason").val();
+        var isReturnShippingval= $("input[name='NewIsReturnShipping']:checked").val();
+        $.ajax({
+            type: "GET",
+            url: "JsonUpdateReturnAudit",
+            dataType: "json",
+            data: { waybillList: $("#wayBillList").val(), type: typeval, returnReason: returnReasonval, isReturnShipping: isReturnShippingval },
+            success: function(data) {
+                if (data.Result) {
+                    alert("审核成功！");
+                    $('#test').window("close");
+                    //location.reload();
+                    $("#btnSelect").click();
+                } else {
+                    alert(data.Message);
+                }
+            },
+            complete: function(data) {
+                $("#editfrom #Savebnt").attr('disabled', false);
+            }
+        });
+        return true;
+    }
+</script>
+

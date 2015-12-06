@@ -1,0 +1,211 @@
+﻿@*@model LMS.FrontDesk.Controllers.HomeController.Models.HomeListModel
+
+@{
+    if(Model.CategoryModel !=null)
+    {
+        ViewBag.Title = string.IsNullOrWhiteSpace(Model.CategoryModel.SeoTitle) ? "关于我们" : Model.CategoryModel.SeoTitle;
+    }
+    else
+    {
+        ViewBag.Title = "关于我们";
+    }
+}
+@section ExtraHeadContent {
+    <meta name="description" content="@Model.CategoryModel.SeoDescription">
+    <meta name="Keywords" content="@Model.CategoryModel.SeoKeywords">
+}
+<div class="banner_in bgc14">
+    <div class="constr">
+        <div class="constr_in">
+            <img src="@Url.Content( string.IsNullOrWhiteSpace(Model.CategoryImg.Pic) ? "~/images/banner/banner_in_04.jpg":Model.PicPath+Model.CategoryImg.Pic)" width="980" height="308" />
+        </div>
+    </div>
+</div>
+<div class="main_in">
+    <div class="constr">
+        <div class="constr_in">
+            <div class="min_minBox">
+                <div class="pt20 pb20">
+                    <div class="bread_area mb15">
+                        <a href="#" class="u u12 mr5" title="回到首页"></a>
+                        <span class="vm">您当前所在的位置：
+		                        <a href="@Url.Action("Index", "Home")" class="tdn" title="回到首页">首页</a>
+                            -->
+		                        <span href="#" class="bread_on">关于我们
+                                </span>
+                        </span>
+
+                    </div>
+                    @{
+                        int count = (int)Math.Ceiling((double)Model.CategoryModels.Count / 6);
+                    }
+                    @for (int x = 1; x <= count; x++)
+                    {
+                        <div class="twoSolid"></div>
+                        <div class="tj mt-7 inline_box">
+                            @if (x == count)
+                            {
+                                for (int i = 0; i < (6 * count) - Model.CategoryModels.Count; i++)
+                                {
+                                <span class="dib_any inline_six"></span>
+                                }
+                            }
+                            @foreach (var row in Model.CategoryModels.Skip((x - 1) * 6).Take(6).ToList())
+                            {
+                                string css = Model.CategoryId == row.CategoryID ? "menu_in_on" : "menu_in_off";
+                                <a href="@Url.Action("About", "Home", new { id = @row.CategoryID })" class="@css" title="@row.Name">
+                                    <span class="u u11 mr50"></span>
+                                    <span class="db">
+                                        <span class="r">
+                                            <span class="dib_tt_two">
+                                                @row.Name
+                                            </span>
+                                            <span class="f12 lsp-1">
+                                                @if (row.EnglishName != null)
+                                                {
+                                                    @row.EnglishName.Substring(1, row.EnglishName.Length - 1)
+                                                }
+                                            </span>
+                                        </span>
+                                        <span class="dib_tt_one">
+                                            @if (row.EnglishName != null)
+                                            {
+                                                @row.EnglishName.Substring(0, 1)
+                                            }
+                                        </span></span></a>
+                            }
+                            <span class="dib_full"></span>
+                        </div>
+                    }
+                    <div class="mt50">
+                        @Html.Raw(Model.CategoryModel.Description)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>*@
+
+
+
+@using Castle.Components.DictionaryAdapter
+@using LighTake.Infrastructure.Common.Configuration
+@using LMS.FrontDesk.Controllers.HomeController.Models
+@model LMS.FrontDesk.Controllers.HomeController.Models.HomeListModel
+
+@{
+    if(Model.CategoryModel !=null)
+    {
+        ViewBag.Title = string.IsNullOrWhiteSpace(Model.CategoryModel.SeoTitle) ? "关于我们" : Model.CategoryModel.SeoTitle;
+    }
+    else
+    {
+        ViewBag.Title = "关于我们";
+    }
+}
+@section ExtraHeadContent {
+    <meta name="description" content="@Model.CategoryModel.SeoDescription">
+    <meta name="Keywords" content="@Model.CategoryModel.SeoKeywords">
+}
+
+
+<div class="bn_area" style="height:300px;box-shadow:0 0 3px #b1b1b1; position:relative;" id="inx_AdSlide">
+  <div style="background:#749f58; height:100%">
+    <div class="conStr">
+      <div class="strIn">
+          <div class="tr">
+               <a href="javascript:">
+                    <img src="@Url.Content(string.IsNullOrWhiteSpace(Model.CategoryModel.Pic)?"~/images/banner/bn3.jpg":Model.PicPath+Model.CategoryModel.Pic)"  height="300">
+               </a> 
+          </div>
+             
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="bgf6">
+<div class="conStr">
+  <div class="strIn">
+  	<div class="bgf shadow">
+	    <div class="tr pt20 mr20 lh20">
+        	<div class="bread_area mb15">
+                    	<a href="#" class="dib vm" title="回到首页"><img src="@Url.Content("~/images/house.jpg")" /></a>
+                        <span class="vm">
+                            <a href="@Url.Action("Index", "Home")" class="tdn" title="回到首页">首页</a>
+                            --&gt;
+                            <span href="#" class="bread_on">
+                            	关于我们
+                            </span>
+                        </span>
+                        
+                    </div>
+        </div>
+        <div class="fix mt-20 pl10">
+        	<div class="l w250">
+	            <div>
+	                <span class="tt">关于我们</span>
+	                <span class="fa">About</span>
+	            </div>
+                
+	            <ul class="Inav_box mt10">
+	                @{
+                        foreach (var item in Model.CategoryModels)
+                        {
+
+                            string getClass = Model.CategoryId == item.CategoryID ? "Inav_on" : "Inav_off";
+                            if (Model.CategoryModels.IndexOf(item) == 0&&Model.CategoryId==2)
+                            {
+                                getClass = "Inav_on";
+                            }
+                            <li> 
+	                        <a class="@getClass" href="@Url.Action("About", "Home", new { id = @item.CategoryID })">
+	                            @item.Name 
+	                        </a>
+	                      </li> 
+                        }
+	                }
+
+	            </ul>
+    
+	        </div>
+            <div class="cell pl20">
+                <div class="mt40">
+                	<div class="pack_area">
+	                    <div class="pack_in">
+	                        
+	                        <div class="part">                           
+                                <p>
+ 
+	                            </p>
+	                        </div>
+
+	                        <h3 class="IItt">
+                                @Html.Raw(Model.CategoryModel.SeoTitle)
+	                        </h3>
+	                        <div class="part">
+	                            @Html.Raw(Model.CategoryModel.Description)
+	                        </div>
+
+	                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/client.js")"></script>
+  </div>
+</div>
+</div>
+
+
+
+
+
+
+
+

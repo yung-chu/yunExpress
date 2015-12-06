@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+    <head>
+       <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>跟踪号查询</title>
+
+        <link type="text/css" rel="stylesheet" href="@Url.Content("~/css/base.css")" />
+        <link type="text/css" rel="stylesheet" href="@Url.Content("~/css/public.css")" />
+        <link type="text/css" rel="stylesheet" href="@Url.Content("~/css/style.css")" />
+
+        <script type="text/javascript" src="@Url.Content("~/js/jq1.4.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/js/jquery-powerSwitch-min.js")"></script>
+
+     
+    
+        <script type="text/javascript">
+            $(function() {
+                $('.qw_Textarea').focus(function() { //得到焦点
+                    $(this).keyup(function(event) { //得到焦点的同时添加按键释放的事件
+                        var n = $(this).val().split("\n").length;
+                        if (event.keyCode != '13' && event.keyCode != '32') //如果按键不是回车，因为俺回车的时候同时就多了一个/n，因此li会比行数要多
+                        {
+                            $('.qw_L').html(""); //清空li
+                            for (i = 0; i < n; i++)  //按一个键就循环一次，比如是有X行，第一次进来N等于0，那么LI，就添加一个li，第二次按了回车的时候，这时候n等于2，那么进行就循环2次，每次添加一个li，共添加2行
+                            {
+                                $('.qw_L').append("<li><span class='Dib_vm'></span> <i></i></li>");
+                            }
+                        }
+
+                        if (n > 12) //释放的时候判断，如果回车的数量大于12，那么就把就qw_Textarea高度增加30 
+                        {
+                            $(this).css('height', n * 30);
+                            $('.qw_L').css('left', 505);
+                        }
+                        if ($(this).val() == '')   //移除XX ，恢复高度，恢复left
+                        {
+                            $('.qw_L li').remove();
+                            $(this).css('height', 360);
+                            $('.qw_L').css('left', 515);
+                        }
+                    });
+                });
+
+                $('.qw_L li').live('click', function () {
+
+                    var idx = $(this).index();
+                    var chat = $('.qw_Textarea').val();
+                    var text = chat.split("\n"); /*[idx]*/
+                    text.splice(idx, 1);
+                    $('.qw_Textarea').val(text.toString().replace(/,/gi, '\n'));
+                    console.log();
+                    if (chat.split("\n").length > 12) {
+                        $('.qw_Textarea').css('height', (chat.split("\n").length - 1) * 30);
+                        $(this).parent().children().last().remove();
+                        if ($('.qw_Textarea').css('height') == "360px") {
+                            $('.qw_L').css('left', 515);
+                        }
+
+                    } else {
+                        $(this).parent().children().last().remove();
+                    }
+
+                });
+            });
+
+
+            /*详细搜索筛选*/
+            var size = function () {
+                if ($(this).width() <= 1024) {
+                    $('.Main_scroll').css('width', '88%');
+                    $('.mwd_opsition').css('left', '6%');
+                }
+                if ($(this).width() > 1024 && $(this).width() <= 1280) {
+                    $('.Main_scroll').css('width', '70%');
+                    $('.mwd_opsition').css('left', '15%');
+                }
+                if ($(this).width() > 1280) {
+                    $('.Main_scroll').css('width', '56%');
+                    $('.mwd_opsition').css('left', '22%');
+                }
+            };
+            $(window).resize(size);
+
+        </script> 
+  
+    </head>
+    
+
+    <body>
+
+        
+        <img class="Bg" src="@Url.Content("~/images/bg.jpg")"  usemap="#bg" />
+   
+        <map name="bg" id="bg">  
+            <area shape="rect" coords="0,0,111,20" href="http://www.yunexpress.com/" />
+            <area shape="rect" coords="10,10,202,76" href="http://www.yunexpress.com/" />
+        </map>
+
+        @RenderBody()
+        <script type="text/javascript" src="@Url.Content("~/js/client.js")"></script> 
+    </body>
+
+</html>

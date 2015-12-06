@@ -1,0 +1,91 @@
+﻿.w240
+{
+    width: 240px;
+}
+
+.table_scroll
+{
+    overflow-y: scroll;
+    height: 181px;
+    position: relative;
+    padding-bottom: 45px;
+}
+
+.Tb_fix
+{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.inline_box
+{
+    font-size: 0px;
+    font-family: Arial;
+}
+
+.inline_two, .inline_three, .inline_four, .inline_five, .inline_six, .inline_any
+{
+    display: inline-block;
+    *display: inline;
+    font-size: 12px;
+    letter-spacing: 0;
+    *zoom: 1;
+}
+
+.float_two, .float_three, .float_four, .float_five, .float_six, .float_seven
+{
+    float: left;
+}
+
+.inline_two, .float_two
+{
+    width: 49.9%;
+}
+
+.inline_three, .float_three
+{
+    width: 33.3%;
+}
+
+.inline_four, .float_four
+{
+    width: 24.9%;
+}
+
+.inline_five, .float_five
+{
+    width: 19.9%;
+}
+
+.inline_six, .float_six
+{
+    width: 16.6%;
+}
+
+.inline_fix
+{
+    display: inline-block;
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+}
+
+.dib_fix
+{
+    display: inline-block;
+    height: 0;
+    overflow: hidden;
+}
+
+.fileField
+{
+    height: 28px;
+    background-color: #900;
+    width: 78px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    filter: alpha(opacity:0);
+    opacity: 0;
+}

@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>LMS.WCF.TrackNumber.ReadMe</title>
+</head>
+<body>
+    <h1>LMS.WCF.TrackNumber</h1>
+    <h3>Author</h3>
+    <p>Created by daniel , 2014-10-31 ,  搭建框架和基本功能</p>
+    <p><i>Updated by 你,时间,内容...</i></p>
+    <h3>项目用途:</h3>
+    管理跟踪号分配，提供统一标准的分配接口。
+    <h3>依赖:</h3>
+    <p>--</p>
+    <h3>使用方法:</h3>
+    <p>1、服务端代码,桌面/控制台等程序，可以直接添加<b>服务引用</b></p>
+    <pre>
+        RefAPI.TNA.TrackNumberAssignClient client = new RefAPI.TNA.TrackNumberAssignClient();
+            var r = client.TrackNumberAssignStandard(15, 1, "");
+            Console.WriteLine(r.IsSuccess);
+            Console.WriteLine(r.ErrorMessage);
+            Console.WriteLine(r.Data.Count());
+            Console.ReadKey();
+
+    </pre>
+    <p>2、网站可以直接发送HTTP请求,返回<b>JSON数据格式</b> </p>
+    <pre>
+      请求:  http://localhost:16103/TrackNumberAssign.svc/TrackNumberAssignStandard?shippingMethodId=15&count=1 <br/> 
+        http://211.154.151.46:836/TrackNumberAssign.svc/TrackNumberAssignStandard?shippingMethodId=15&count=1 
+      返回:<br/>      
+            {"Data":["TESTZXQ00001"],"ErrorMessage":null,"IsSuccess":true}
+    </pre>
+    <h3>其它:</h3>
+    <p>如有变更请记录。</p>
+</body>
+</html>

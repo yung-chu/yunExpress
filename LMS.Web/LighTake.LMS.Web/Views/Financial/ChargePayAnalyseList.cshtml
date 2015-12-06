@@ -1,0 +1,217 @@
+﻿@model LMS.Controllers.FinancialController.ChargePayAnayiseModel
+
+@{
+    ViewBag.Title = "ChargePayAnalyseList";
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+}
+
+
+
+
+<div id="showCustomerList" tabindex="200" style="overflow: scroll; display: none; position: relative">
+</div>
+
+<div id="showVenderList" style="overflow: scroll; display: none; position: relative">
+</div>
+
+<div id="showShippingMethodList" style="overflow: scroll; display: none; position: relative">
+</div>
+
+
+<div class="domebg" id="right_con">
+    @using (Html.BeginForm("ChargePayAnalyseList", "Financial"))
+    {
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <input type="hidden" value="@Model.FilterModel.IsFirstIn" name="FilterModel.IsFirstIn"/>
+            <tr class="date_row_select">
+                <td width="25%">
+                    <span class="info_box info_select">客户:</span>
+                    <input type="text" id="CustomerCode"  name="FilterModel.CustomerCode" value="@Model.FilterModel.CustomerCode" readonly="readonly" class="txt txt_short" />
+                    <a href="javascript:void(0)" id="selectCustomer" class="btn_href">选择</a>
+                    <input type="hidden" id="CustomerType"/>
+                    <input type="hidden" id="CustomerID"/>
+                </td>
+                
+
+                <td width="25%">
+                    <span class="info_box info_select">服务商:</span>
+                    <input type="text" id="_VenderName"  name="FilterModel.VenderName" value="@Model.FilterModel.VenderName"/>
+                    <input type="button" id="selectVender" class="btn" value="选择" />
+                    <input type="hidden" id="_VenderCode" name="FilterModel.VenderCode"  value="@Model.FilterModel.VenderCode"/>
+                </td>
+                
+
+                <td width="25%">
+                    <span class="info_box info_select">运输方式:</span>
+                    <input type="text" id="ShippingName"  name="FilterModel.ShippingMethodName" value="@Model.FilterModel.ShippingMethodName" readonly="readonly" class="txt txt_short"/>
+                    <input type="hidden" id="ShippingMethodId" name="FilterModel.ShippingMethodId" value="@Model.FilterModel.ShippingMethodId"/>
+                    <input type="button" id="selectShippingMethod" class="btn" value="选择" />
+                </td>
+
+
+            </tr>
+            <tr class="date_row_select">
+                <td colspan="2">
+                    <span class="info_box info_select">发货日期:</span>
+                    <input id="FilterModel_StartTime" name="FilterModel.StartTime" class="txt wdate" style="width:130px" type="text"  Value = "@String.Format("{0:yyyy-MM-dd}", Model.FilterModel.StartTime)" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'FilterModel_EndTime\',{M:-1});}',maxDate:'#F{$dp.$D(\'FilterModel_EndTime\',{d:0});}'})" />
+                    <span>至:</span>
+                    <input id="FilterModel_EndTime" name="FilterModel.EndTime" class="txt wdate" style="width:130px" type="text" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'FilterModel_StartTime\',{d:0});}',maxDate:'#F{$dp.$D(\'FilterModel_StartTime\',{M:1});}'})" Value = "@String.Format("{0:yyyy-MM-dd}", Model.FilterModel.EndTime)" />
+
+
+                    <br/> <br/>
+                    &nbsp;  &nbsp; &nbsp; &nbsp;  &nbsp;  <input type="submit" value="查询" id="Search" name="Search" class="btn"/>
+                    &nbsp;&nbsp;
+                    <input type="submit" value="按客户导出利润表" id="ExportByCustomer" name="ExportByCustomer" class="btn"/>
+                    &nbsp;&nbsp;
+                    <input type="submit" value="按服务商导出利润表" id="ExportByVender" name="ExportByVender" class="btn"/>
+
+
+                </td>
+                
+                <td colspan="2">
+    
+
+                </td>
+            </tr>
+            
+        </table>
+        
+        <div id="pm_dis_div">
+            <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr class="data_row_two">
+                        <th>客户名称
+                        </th>
+                        <th>运单号
+                        </th>
+                        <th>服务商
+                        </th>
+                        <th>发货运输方式
+                        </th>
+                        <th>应收
+                        </th>
+                        <th>应付
+                        </th>
+                        <th>利润率%
+                        </th>
+             
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (Model != null)
+                        {
+                            foreach (var row in Model.PagedList.InnerList)
+                            {
+                            
+                                         <tr class="data_row_dan">
+    
+                                            <td style="text-align: center">
+                                             @row.Name
+                                            </td>
+                                            <td style="text-align: center">
+                                             @row.WayBillNumber
+                                            </td>
+                                            <td style="text-align: center">
+                                            @row.VenderName
+                                            </td>
+                                            <td style="text-align: center">
+                                             @row.ShippingmethodName
+                                            </td>
+                                            <td style="text-align: center">
+                                             @row.ReceivingAmount
+                                            </td>
+                                            <td style="text-align: center">
+                                             @row.DeliveryAmount
+                                            </td>
+                                             <td style="text-align: center">
+                                             @row.Rate<label>%</label>
+                                             </td>
+
+                                        </tr>
+                              
+                            }
+                        }
+
+                    }
+                    <tr class="data_row_none">
+                        <td colspan="14">
+                            @Html.Pager(Model.PagedList, Model.FilterModel)
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+<script type="text/javascript">
+    $(function () {
+
+
+        //选择服务商
+        $("#selectVender").bind("click", function () {
+
+            $("#showVenderList").showWindow("@Url.Action("SelectVender", "WayBill")", "选择服务商");
+            var parentWindow = $("#showVenderList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                top: 120
+            }, {
+                duration: 50,
+                step: function (now, fx) {
+                    $(".window").css("top", now);
+                }
+            });
+            $("#showVenderList").show();
+        });
+        
+
+        //选择运输方式
+        $("#selectShippingMethod").bind("click", function () {
+            $("#showShippingMethodList").showWindow("@Url.Action("SelectShippingMethod", "WayBill")?venderCode=" + $("#_VenderCode").val() + "&type=2", "选择运输方式");
+            var parentWindow = $("#showShippingMethodList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                top: 120
+            }, {
+                duration: 50,
+                step: function (now, fx) {
+                    $(".window").css("top", now);
+                }
+            });
+            $("#showShippingMethodList").show();
+        });
+        //查询
+       // clickSearch();
+    });
+    
+    //查询
+    var clickSearch = function () {
+        $("#Search").click(function () {
+          
+            var starttime = $("#FilterModel_StartTime").val();
+            var endtime = $("#FilterModel_EndTime").val();
+
+        
+            if ((starttime == "" || starttime == null) || (endtime == "" || endtime==null)) {
+                alert("请填写创建日期起止时间!");
+                return false;
+            }
+         
+            
+            //搜索进度条
+            $.messager.progress({
+                title: '请稍后数据加载中',
+                msg: 'Loading ...'
+            });
+
+        });
+    };
+
+
+
+</script>
+
+
+

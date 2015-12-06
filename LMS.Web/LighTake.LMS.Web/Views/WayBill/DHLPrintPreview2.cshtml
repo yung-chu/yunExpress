@@ -1,0 +1,1255 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "DHLPrintPreview";
+}
+@using System.Text
+@using LMS.Data.Entity
+@using RazorEngine
+@using LMS.Services.CountryServices;
+@model LMS.Controllers.WayBillController.DHLPrintViewModel
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>DHL打印预览</title>
+    </head>
+    <body style="margin: 0; font-family: Arial, Helvetica, sans-serif; line-height: 1.2;">
+        <div id="print" >
+               @foreach(var wayBillInfo in Model.WayBillInfos)
+                 {
+                     ExpressAccountInfo accountInfo = null;
+                     var isDhlsg = Model.ShippingMethodCodes[wayBillInfo.OutShippingMethodID.Value].Contains("DHLSG");
+                     var shippingMethodCode = Model.ShippingMethodCodes[wayBillInfo.OutShippingMethodID.Value];
+
+                     //if (wayBillInfo.CustomerOrderInfo.SensitiveTypeID == 1)
+                     if (isDhlsg && "1,2,6,7".Split(',').Select(s => Convert.ToInt32(s)).Contains(wayBillInfo.CustomerOrderInfo.SensitiveTypeID ?? 0))
+                     {
+                         accountInfo = Model.ExpressAccountInfos.Find(p => p.VenderCode == wayBillInfo.VenderCode && p.ShippingMethodId == wayBillInfo.OutShippingMethodID && p.CompanyName.Contains("Largebees"));
+                     }
+                     else
+                     {
+                         accountInfo = Model.ExpressAccountInfos.Find(p => p.VenderCode == wayBillInfo.VenderCode && p.ShippingMethodId == wayBillInfo.OutShippingMethodID);
+                     }
+
+                     if (accountInfo == null)
+                     {
+                         continue;
+                     } 
+                     
+                     var amount = wayBillInfo.ApplicationInfos.Sum(p => (p.UnitPrice ?? 0M)*(p.Qty ?? 1));
+                 
+                    var countryService = LighTake.Infrastructure.Common.InversionOfControl.EngineContext.Current.Resolve<ICountryService>();
+                    var country = countryService.GetCountryList("").Single(c => c.CountryCode == wayBillInfo.ShippingInfo.CountryCode);
+                    var countryName=country.Name;
+                   
+         <!--第一张-->    
+          <div style="width:350px; border:1px solid #000;font-size:11px;  margin-top:10px; line-height:12px; font-family:Arial, Helvetica, sans-serif; border:1px solid #000;">
+            <table border="0" cellpadding="0" cellspacing="0" style=" border-collapse:collapse; width:100%;  font-size:11px; line-height:12px;">
+                    <tr>
+                        <td width="55%" align="center" valign="middle">
+                            <strong style="font-size:12px;">EXPRESS WORLDWIDE</strong>
+                            <div style="font-size:9px;">
+                            	XML Plv4.0
+                            </div>
+                        </td>
+                        <td width="45%" >
+                            <table border="0" cellpadding="0" cellspacing="0" style=" border-collapse:collapse;width:100%;">
+                                <tr>
+                                    <td>
+                                        <div style="float: left; letter-spacing:-3px;">
+                                            <img src="@Url.Content("~/images/Print/DHL/logo.jpg")"  width="59" height="31"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+        </div>	
+        <div style="width:350px; border:1px solid #000;font-size:11px; margin-top:-1px; line-height:12px; font-family:Arial, Helvetica, sans-serif; border:1px solid #000;">
+            <table border="0" cellpadding="0" cellspacing="0" style=" border-collapse:collapse; width:100%;  font-size:11px; line-height:12px;">
+                    <tr valign="top">
+                    	<td>
+                        	<table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                    <tr valign="top">
+                                        <td width="12%" style="padding:5px;">
+                                            <strong>From</strong>      
+                                        </td>
+                                        <td style="padding:5px;">
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%"> 
+                                            	<tr>
+                                                	<td>
+                                                    	<div style="font-size:9px;line-height:10px; height:10px;">
+	                                                    	@accountInfo.CompanyName
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:9px;line-height:10px; height:10px;">
+	                                                    	@accountInfo.PersonName
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:9px;line-height:10px; height:10px;">
+	                                                    	@accountInfo.Address
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:9px;line-height:10px; height:10px;">
+	                                                    	
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                        <div style="font-size:10px;line-height:10px; height:20px;">
+	                                                    	
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:9px;line-height:10px; height:20px;">
+                                                    		<strong>@accountInfo.City  @accountInfo.DivisionCode  @accountInfo.PostalCode  @accountInfo.CountryName </strong>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td width="30%" style="padding:5px;">
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%"> 
+                                            	<tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                                
+                                                <tr>
+                                                	<td>
+                                               	 		<div style="font-size:9px;line-height:10px; height:10px;">
+			                                                    <strong>Ph:@accountInfo.PhoneNumber</strong><br/>
+                                                                @if (!shippingMethodCode.Contains("DHLSG"))
+                                                                {
+                                                                    <strong>CNPJ/CPF:ID:@accountInfo.Telex</strong>
+                                                                }
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                              </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td width="10%" style="padding:5px;">
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%"> 
+                                            	<tr>
+                                                	<td>
+                                                    	<div style="font-size:9px;line-height:10px; height:10px;"><strong>Origin</strong></div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:9px;line-height:10px; height:10px;"><strong>@accountInfo.Origin</strong></div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                            </table>
+                        </td>
+            </table>	
+        </div>	
+        <div style="width:350px; border:1px solid #000;font-size:11px; margin-top:-1px; line-height:12px; font-family:Arial, Helvetica, sans-serif; border:1px solid #000;">
+            <table border="0" cellpadding="0" cellspacing="0" style=" border-collapse:collapse; width:100%;  font-size:11px; line-height:12px;">
+                    <tr valign="top">
+                    	<td>
+                        	<table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                    <tr valign="top">
+                                        <td width="12%" style="padding:5px;">
+                                            <strong>To</strong>      
+                                        </td>
+                                        <td style="padding:5px;">
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%"> 
+                                            	<tr>
+                                                	<td>
+	                                                    <div style="font-size:12px;line-height:14px;">
+	                                                        @if (string.IsNullOrWhiteSpace(wayBillInfo.ShippingInfo.ShippingCompany))
+	                                                        {
+	                                                            @(wayBillInfo.ShippingInfo.ShippingFirstName+" "+wayBillInfo.ShippingInfo.ShippingLastName)
+	                                                        }
+	                                                        else
+	                                                        {
+	                                                            @wayBillInfo.ShippingInfo.ShippingCompany 
+	                                                        }
+	                                                    </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:12px;line-height:14px;">
+	                                                    	@(wayBillInfo.ShippingInfo.ShippingFirstName+" "+wayBillInfo.ShippingInfo.ShippingLastName)
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td style="width:180px;word-break:break-all">
+                                                    	<div style="font-size:12px;line-height:14px; ">
+	                                                    	@wayBillInfo.ShippingInfo.ShippingAddress
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:12px;line-height:14px; ">
+	                                                    	
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                        <div style="font-size:10px;line-height:12px; height:24px;">
+	                                                    	
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:11px;line-height:12px; height:24px;">
+	                                                    	<strong>@(wayBillInfo.ShippingInfo.ShippingCity+" "+ wayBillInfo.ShippingInfo.ShippingState+" "+ wayBillInfo.ShippingInfo.ShippingZip+" "+ countryName)</strong>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td width="35%" style="padding:5px;">
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%"> 
+                                            	<tr>
+                                                	<td>
+                                                    	<div style="font-size:8px;line-height:10px; height:10px;">
+	                                                    	<strong>Ph:@wayBillInfo.ShippingInfo.ShippingPhone</strong>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:8px;line-height:10px; height:10px;">
+	                                                    	<strong>VNPJ/CPF:ID:@wayBillInfo.ShippingInfo.ShippingTaxId</strong>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:12px;line-height:14px; height:28px">
+                                                        </div>
+                                                     </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                            </table>
+                        </td>
+            </table>	
+        </div>
+        <div style="width:350px;  border:1px solid #000; margin-top:-1px; font-size:11px; line-height:12px; font-family:Arial, Helvetica, sans-serif;">
+        <div style="line-height:30px; font-size:20px; text-align:center; border-bottom:1px solid #000;">
+            <strong>@(wayBillInfo.ShippingInfo.CountryCode+"-"+wayBillInfo.ExpressRespons.ServiceAreaCode+"-"+wayBillInfo.ExpressRespons.FacilityCode)</strong>
+        </div>
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+                <td rowspan="2" style="width:50px; background:#000;">
+                    <div style=" color:#FFF; font-size:20px; font-weight:bold;  width:50px;">
+                        C
+                    </div>
+                </td>
+                <td style="width:40%"></td>
+                <td><div style="padding:3px; line-height:10px; font-size:10px;">Day</div></td>
+                <td><div style="padding:3px; line-height:10px; font-size:10px;">Time</div></td>
+            </tr>
+            <tr>
+                <td style="width:40%"></td>
+                <td><div style="padding:3px; line-height:10px; font-size:10px;"></div></td>
+                <td><div style="padding:3px; line-height:10px; font-size:10px;"></div></td>
+            </tr>
+        </table>
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top:1px solid #000; padding:3px;">
+            <tr>                
+                <td><div style="font-size:10px;line-height:11px; height:11px;">Account: @accountInfo.ShipperAccountNumber</div></td>
+                <td><div style="font-size:10px;line-height:11px; height:11px;">ShipmentWeight:@(wayBillInfo.SettleWeight.HasValue?wayBillInfo.SettleWeight.Value.ToString("F2"):"0.00")Kg</div></td>
+                <td><div style="font-size:9px;line-height:11px; height:11px;">pieces</div></td>
+            </tr>
+            <tr>
+                <td>
+                    Ref:@wayBillInfo.WayBillNumber	
+                </td>
+                <td>Date: @(wayBillInfo.ExpressRespons.ShipmentDetailTime.HasValue?wayBillInfo.ExpressRespons.ShipmentDetailTime.Value.ToString("yyyy-MM-dd"):"")</td>
+                <td align="center"><strong style="font-size:20px; line-height:22px;">1/1</strong></td>
+            </tr>
+        </table>
+        <div style="border-top:1px solid #000; padding:5px;">
+            <div style="height:40px; font-size:8px; line-height:10px;">
+                DHL standard Terms and Conditions apply.Warsaw convention may also apply. <BR/>
+                Shipment may be carried via intermediate stopping places DHL deems appropriate.<BR/> 
+                Content:@wayBillInfo.ApplicationInfos.First().ApplicationName.Cutstring(70)
+            </div>
+        </div>
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+                <td>
+                    <div style="font-family:c39P36DmTt; font-size:60px; text-align:center; color:#000; line-height:60px; text-align:center">
+                        <img src="@(LMS.Core.sysConfig.WebDHLBarCodePath+wayBillInfo.ExpressRespons.AirwayBillNumberBarCodeImg)"  width="260"/> 
+                    
+                    </div> 
+                    <div style="text-align:center">
+                        <strong style="font-size:11px; line-height:11px;">WAYBILL @wayBillInfo.ExpressRespons.AirwayBillNumber</strong>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top:10px;">
+            <tr>
+                <td>
+                    <div style="font-family:c39P36DmTt; font-size:60px; text-align:center; color:#000; line-height:60px; text-align:center"> 
+                        <img src="@(LMS.Core.sysConfig.WebDHLBarCodePath+wayBillInfo.ExpressRespons.DHLRoutingBarCodeImg)"  width="260"/> 
+                    </div> 
+                    <div style="text-align:center">
+                        <strong style="font-size:11px; line-height:11px;">(@wayBillInfo.ExpressRespons.DHLRoutingDataId) @wayBillInfo.ExpressRespons.DHLRoutingBarCode </strong>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin:10px 0">
+            <tr>
+                <td>
+                    <div style="font-family:c39P36DmTt; font-size:60px; text-align:center; color:#000; line-height:60px; text-align:center">
+                        <img src="@(LMS.Core.sysConfig.WebDHLBarCodePath+wayBillInfo.ExpressRespons.LicensePlateBarCodeImg)"  width="260"/>
+                    </div> 
+                    <div style="text-align:center">
+                        <strong style="font-size:11px; line-height:11px;">(@wayBillInfo.ExpressRespons.DataIdentifier) @wayBillInfo.ExpressRespons.LicensePlate </strong>
+                    </div>
+                    @if (isDhlsg)
+                    {
+                        if (wayBillInfo.CustomerOrderInfo.SensitiveTypeID == 6)
+                        {
+                            <div style="font-size: 12px; font-weight: bold; line-height: 14px; height: 14px;">
+                                PI967，lithium ion battery in compliance with section || 
+                            </div>
+                        }
+                        else if (wayBillInfo.CustomerOrderInfo.SensitiveTypeID == 7)
+                        {
+                            <div style="font-size: 12px; font-weight: bold; line-height: 14px; height: 14px;">
+                                PI966，lithium ion battery in compliance with section || 
+                            </div>
+                        }
+                    }
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!--分页符 start-->
+    <div style="page-break-after:always;"></div>
+    <!--分页符 end-->        
+  		<div style="width:350px; margin-top:10px;  border:1px solid #000;font-size:11px; line-height:12px; font-family:Arial, Helvetica, sans-serif; border:1px solid #000;">
+            <table border="0" cellpadding="0" cellspacing="0" style=" border-collapse:collapse; width:100%;  font-size:11px; line-height:12px;">
+                    <tr>
+                        <td width="55%" align="center" valign="middle">
+                            <strong style="font-size:12px;">EXPRESS WORLDWIDE</strong>
+                            <div style="font-size:9px;">
+                            	XML Plv4.0
+                            </div>
+                        </td>
+                        <td width="45%" >
+                            <table border="0" cellpadding="0" cellspacing="0" style=" border-collapse:collapse;width:100%;">
+                                <tr>
+                                    <td>
+                                        <div style="float: left; letter-spacing:-3px;">
+                                            <img src="@Url.Content("~/images/Print/DHL/logo.jpg")"  width="59" height="31"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>	
+        </div>	
+        <div style="width:350px; border:1px solid #000;font-size:11px; margin-top:-1px; line-height:12px; font-family:Arial, Helvetica, sans-serif; border:1px solid #000;">
+            <table border="0" cellpadding="0" cellspacing="0" style=" border-collapse:collapse; width:100%;  font-size:11px; line-height:12px;">
+                    <tr valign="top">
+                    	<td>
+                        	<table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                    <tr valign="top">
+                                        <td width="12%" style="padding:5px;">
+                                            <strong>From</strong>      
+                                        </td>
+                                        <td style="padding:5px;">
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%"> 
+                                            	<tr>
+                                                	<td>
+                                                    	<div style="font-size:9px;line-height:10px; height:10px;">
+	                                                    	@accountInfo.CompanyName
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:9px;line-height:10px; height:10px;">
+	                                                    	@accountInfo.PersonName
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:9px;line-height:10px; height:10px;">
+	                                                    	@accountInfo.Address
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:9px;line-height:10px; height:10px;">
+	                                                    	
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                        <div style="font-size:10px;line-height:10px; height:20px;">
+	                                                    	
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:9px;line-height:10px; height:20px;">
+                                                    		<strong>@accountInfo.City  @accountInfo.DivisionCode  @accountInfo.PostalCode  @accountInfo.CountryName </strong>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td width="30%" style="padding:5px;">
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%"> 
+                                            	<tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                                
+                                                <tr>
+                                                	<td>
+                                               	 		<div style="font-size:9px;line-height:10px; height:10px;">
+	                                                    	<strong>Ph:@accountInfo.PhoneNumber</strong><br/>
+                                                            <strong>CNPJ/CPF:ID:@accountInfo.Telex</strong>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                              </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td width="10%" style="padding:5px;">
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%"> 
+                                            	<tr>
+                                                	<td>
+                                                    	<div style="font-size:9px;line-height:10px; height:10px;"><strong>Origin</strong></div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:9px;line-height:10px; height:10px;"><strong>@accountInfo.Origin</strong></div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                            </table>
+                        </td>
+            </table>	
+        </div>	
+        <div style="width:350px; border:1px solid #000;font-size:11px; margin-top:-1px; line-height:12px; font-family:Arial, Helvetica, sans-serif; border:1px solid #000;">
+            <table border="0" cellpadding="0" cellspacing="0" style=" border-collapse:collapse; width:100%;  font-size:11px; line-height:12px;">
+                    <tr valign="top">
+                    	<td>
+                        	<table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                    <tr valign="top">
+                                        <td width="12%" style="padding:5px;">
+                                            <strong>To</strong>      
+                                        </td>
+                                        <td style="padding:5px;">
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%"> 
+                                            	<tr>
+                                                	<td>
+	                                                    <div style="font-size:12px;line-height:14px;">
+	                                                        @if (string.IsNullOrWhiteSpace(wayBillInfo.ShippingInfo.ShippingCompany))
+	                                                        {
+	                                                            @(wayBillInfo.ShippingInfo.ShippingFirstName+" "+wayBillInfo.ShippingInfo.ShippingLastName)
+	                                                        }
+	                                                        else
+	                                                        {
+	                                                            @wayBillInfo.ShippingInfo.ShippingCompany 
+	                                                        }
+	                                                    </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:12px;line-height:14px;">
+	                                                    	@(wayBillInfo.ShippingInfo.ShippingFirstName+" "+wayBillInfo.ShippingInfo.ShippingLastName)
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td style="width:180px;word-break:break-all">
+                                                    	<div style="font-size:12px;line-height:14px; ">
+	                                                    	@wayBillInfo.ShippingInfo.ShippingAddress
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:12px;line-height:14px; ">
+	                                                    	
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                        <div style="font-size:10px;line-height:12px; height:24px;">
+	                                                    	
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:11px;line-height:12px; height:24px;">
+	                                                        <strong>@(wayBillInfo.ShippingInfo.ShippingCity+" "+ wayBillInfo.ShippingInfo.ShippingState+" "+ wayBillInfo.ShippingInfo.ShippingZip+" "+ countryName)</strong>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td width="30%" style="padding:5px;">
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%"> 
+                                            	<tr>
+                                                	<td>
+                                                    	<div style="font-size:10px;line-height:11px; height:11px;">
+	                                                    	<strong>Ph:@wayBillInfo.ShippingInfo.ShippingPhone</strong>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:10px;line-height:11px; height:11px;">
+	                                                    	<strong>VNPJ/CPF:ID:@wayBillInfo.ShippingInfo.ShippingTaxId</strong>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:12px;line-height:14px; height:28px">
+                                                        </div>
+                                                    	
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                            </table>
+                        </td>
+            </table>	
+        </div>
+        <div style="width:350px;  border:1px solid #000; margin-top:-1px; font-size:11px; line-height:12px; font-family:Arial, Helvetica, sans-serif;">
+        <div style="line-height:30px; font-size:20px; text-align:center; border-bottom:1px solid #000;">
+            <strong>@(wayBillInfo.ShippingInfo.CountryCode+"-"+wayBillInfo.ExpressRespons.ServiceAreaCode+"-"+wayBillInfo.ExpressRespons.FacilityCode)</strong>
+        </div>
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+                <td rowspan="2" style="width:50px; background:#000;">
+                    <div style=" color:#FFF; font-size:20px; font-weight:bold;  width:50px;">
+                        C
+                    </div>
+                </td>
+                <td style="width:40%"></td>
+                <td><div style="padding:3px; line-height:10px; font-size:10px;">Day</div></td>
+                <td><div style="padding:3px; line-height:10px; font-size:10px;">Time</div></td>
+            </tr>
+            <tr>
+                <td style="width:40%"></td>
+                <td><div style="padding:3px; line-height:10px; font-size:10px;"></div></td>
+                <td><div style="padding:3px; line-height:10px; font-size:10px;"></div></td>
+            </tr>
+        </table>
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top:1px solid #000; padding:3px;">
+            <tr>                
+                <td><div style="font-size:10px;line-height:11px; height:11px;">Account: @accountInfo.ShipperAccountNumber</div></td>
+                <td><div style="font-size:10px;line-height:11px; height:11px;">ShipmentWeight:@(wayBillInfo.SettleWeight.HasValue?wayBillInfo.SettleWeight.Value.ToString("F2"):"0.00")Kg</div></td>
+                <td><div style="font-size:9px;line-height:11px; height:11px;">pieces</div></td>
+            </tr>
+            <tr>
+                <td>
+                    Ref:@wayBillInfo.WayBillNumber	
+                </td>
+                <td>Date:@(wayBillInfo.ExpressRespons.ShipmentDetailTime.HasValue?wayBillInfo.ExpressRespons.ShipmentDetailTime.Value.ToString("yyyy-MM-dd"):"")</td>
+                <td align="center"><strong style="font-size:20px; line-height:22px;">1</strong></td>
+            </tr>
+        </table>
+        <div style="border-top:1px solid #000; padding:5px;">
+            <div style="height:40px; font-size:8px; line-height:10px;">
+                DHL standard Terms and Conditions apply.Warsaw convention may also apply. <BR/>
+                Shipment may be carried via intermediate stopping places DHL deems appropriate.<BR/> 
+                Content:@wayBillInfo.ApplicationInfos.First().ApplicationName.Cutstring(70)
+            </div>
+        </div>
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" >
+            <tr>
+                <td>
+                    <div style="font-family:c39P36DmTt; font-size:60px; text-align:center; color:#000; line-height:60px; text-align:center"> 
+                   
+                        <img src="@(LMS.Core.sysConfig.WebDHLBarCodePath+wayBillInfo.ExpressRespons.AirwayBillNumberBarCodeImg)"  width="260"/>
+                    </div> 
+                    <div style="text-align:center">
+                        <strong style="font-size:11px; line-height:11px;">WAYBILL  @wayBillInfo.ExpressRespons.AirwayBillNumber </strong>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top:10px; border-top:1px solid #000; padding:3px;" >
+            <tr>
+                <td width="40%">
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                        <span style="float:right">:&nbsp;</span>
+                        <span style="display:inline-block;  vertical-align:middle;">
+                            Product
+                        </span>
+                    </div>
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                        <span style="float:right">:&nbsp;</span>
+                        <span style="display:inline-block;  vertical-align:middle;">
+                            Service
+                        </span>
+                    </div>
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                        <span style="float:right">:&nbsp;</span>
+                        <span style="display:inline-block;  vertical-align:middle;">
+                            Billing Account No
+                        </span>
+                    </div>
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                        <span style="float:right">:&nbsp;</span>
+                        <span style="display:inline-block;  vertical-align:middle;">
+                            DTP Account No
+                        </span>
+                    </div>
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                        <span style="float:right">:&nbsp;</span>
+                        <span style="display:inline-block;  vertical-align:middle;">
+                            Insurance Value
+                        </span>
+                    </div>
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                        <span style="float:right">:&nbsp;</span>
+                        <span style="display:inline-block;  vertical-align:middle;">
+                            Declared Value
+                        </span>
+                    </div>
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                        <span style="float:right">:&nbsp;</span>
+                        <span style="display:inline-block;  vertical-align:middle;">
+                            Terms of Trade
+                        </span>
+                    </div>
+                     
+                </td>
+                <td width="60%">
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                        P	EXPRESS WORLDWIDE
+                    </div>
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                        C
+                    </div>
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                		@accountInfo.ShipperAccountNumber
+                    </div>
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                		
+                    </div>
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                       
+                    </div>
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                        @(amount!=0M?amount.ToString("#0.00"):"") USD
+                    </div>
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                		
+                    </div>
+                </td>
+            </tr>
+        </table>
+            <div style="padding:3px; border-top:1px solid #000;">
+                <div style="font-size:10px; line-height:11px; height:11px;">
+                    License plates of Pieces in Shipment	
+                </div>
+                <div style="font-size:10px; line-height:11px; height:11px;">
+                    - (@wayBillInfo.ExpressRespons.DataIdentifier) @wayBillInfo.ExpressRespons.LicensePlate
+                </div>
+                <div style="line-height:11px; height:33px; font-size:10px; margin:3px 0;">
+                </div>
+                <div style="float:right;font-size:10px; line-height:11px; height:11px;">
+                    (Archive Page 1)
+                </div>
+                <div style="font-size:10px; line-height:11px; height:11px;">
+                    DHL Origin Copy - Do not put in the package
+                </div>
+                @if (isDhlsg)
+                {
+                    if (wayBillInfo.CustomerOrderInfo.SensitiveTypeID == 6)
+                     {
+                         <div style="font-size: 12px; font-weight: bold; line-height: 14px; height: 14px;">
+                             PI967，lithium ion battery in compliance with section || 
+                         </div>
+                     }
+                     else if (wayBillInfo.CustomerOrderInfo.SensitiveTypeID == 7)
+                     {
+                         <div style="font-size: 12px; font-weight: bold; line-height: 14px; height: 14px;">
+                             PI966，lithium ion battery in compliance with section || 
+                         </div>
+                     }
+                }
+            </div>
+         
+        
+    </div>
+                  
+    <!--分页符 start-->
+    <div style="page-break-after:always;"></div>
+    <!--分页符 end-->   
+    @*              
+          <!--第三张-->
+                   
+        <div style="width:350px; margin-top:10px;  border:1px solid #000;font-size:11px; line-height:12px; font-family:Arial, Helvetica, sans-serif; border:1px solid #000;">
+            <table border="0" cellpadding="0" cellspacing="0" style=" border-collapse:collapse; width:100%;  font-size:11px; line-height:12px;">
+                    <tr>
+                        <td width="55%" align="center" valign="middle">
+                            <strong style="font-size:12px;">EXPRESS WORLDWIDE</strong>
+                            <div style="font-size:9px;">
+                            	XML Plv4.0
+                            </div>
+                        </td>
+                        <td width="45%" >
+                            <table border="0" cellpadding="0" cellspacing="0" style=" border-collapse:collapse;width:100%;">
+                                <tr>
+                                    <td>
+                                        <div style="float: left; letter-spacing:-3px;">
+                                            <img src="@Url.Content("~/images/Print/DHL/logo.jpg")"  width="59" height="31"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>	
+        </div>	
+        <div style="width:350px; border:1px solid #000;font-size:11px; margin-top:-1px; line-height:12px; font-family:Arial, Helvetica, sans-serif; border:1px solid #000;">
+            <table border="0" cellpadding="0" cellspacing="0" style=" border-collapse:collapse; width:100%;  font-size:11px; line-height:12px;">
+                    <tr valign="top">
+                    	<td>
+                        	<table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                    <tr valign="top">
+                                        <td width="12%" style="padding:5px;">
+                                            <strong>From</strong>      
+                                        </td>
+                                        <td style="padding:5px;">
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%"> 
+                                            	<tr>
+                                                	<td>
+                                                    	<div style="font-size:9px;line-height:10px; height:10px;">
+	                                                    	@accountInfo.CompanyName
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:9px;line-height:10px; height:10px;">
+	                                                    	@accountInfo.PersonName
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:9px;line-height:10px; height:10px;">
+	                                                    	@accountInfo.Address
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:9px;line-height:10px; height:10px;">
+	                                                    	
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                        <div style="font-size:10px;line-height:10px; height:20px;">
+	                                                    	
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:9px;line-height:10px; height:20px;">
+                                                    		<strong>@accountInfo.City  @accountInfo.DivisionCode  @accountInfo.PostalCode  @accountInfo.CountryName </strong>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td width="30%" style="padding:5px;">
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%"> 
+                                            	<tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                                
+                                                <tr>
+                                                	<td>
+                                               	 		<div style="font-size:9px;line-height:10px; height:10px;">
+	                                                    	<strong>Ph:@accountInfo.PhoneNumber</strong><br/>
+                                                            <strong>CNPJ/CPF:ID:@accountInfo.Telex</strong>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                              </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td width="10%" style="padding:5px;">
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%"> 
+                                            	<tr>
+                                                	<td>
+                                                    	<div style="font-size:9px;line-height:10px; height:10px;"><strong>Origin</strong></div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:9px;line-height:10px; height:10px;"><strong>@accountInfo.Origin</strong></div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                            </table>
+                        </td>
+            </table>	
+        </div>	
+        <div style="width:350px; border:1px solid #000;font-size:11px; margin-top:-1px; line-height:12px; font-family:Arial, Helvetica, sans-serif; border:1px solid #000;">
+            <table border="0" cellpadding="0" cellspacing="0" style=" border-collapse:collapse; width:100%;  font-size:11px; line-height:12px;">
+                    <tr valign="top">
+                    	<td>
+                        	<table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                    <tr valign="top">
+                                        <td width="12%" style="padding:5px;">
+                                            <strong>To</strong>      
+                                        </td>
+                                        <td style="padding:5px;">
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%"> 
+                                            	<tr>
+                                                	<td>
+	                                                    <div style="font-size:12px;line-height:14px;">
+	                                                         @if (string.IsNullOrWhiteSpace(wayBillInfo.ShippingInfo.ShippingCompany))
+	                                                        {
+	                                                            @(wayBillInfo.ShippingInfo.ShippingFirstName+" "+wayBillInfo.ShippingInfo.ShippingLastName)
+	                                                        }
+	                                                        else
+	                                                        {
+	                                                            @wayBillInfo.ShippingInfo.ShippingCompany 
+	                                                        }
+	                                                    </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:12px;line-height:14px;">
+	                                                    	@(wayBillInfo.ShippingInfo.ShippingFirstName+" "+wayBillInfo.ShippingInfo.ShippingLastName)
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:12px;line-height:14px; ">
+	                                                    	@wayBillInfo.ShippingInfo.ShippingAddress
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:12px;line-height:14px; ">
+	                                                    	
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                        <div style="font-size:10px;line-height:12px; height:24px;">
+	                                                    	
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:11px;line-height:12px; height:24px;">
+	                                                    	<!--<strong>@(wayBillInfo.ShippingInfo.ShippingCity+" "+ wayBillInfo.ShippingInfo.CountryCode+" "+ wayBillInfo.ShippingInfo.ShippingZip+" "+wayBillInfo.ShippingInfo.ShippingState)</strong>-->
+                                                            <strong>@(wayBillInfo.ShippingInfo.ShippingCity+" "+ wayBillInfo.ShippingInfo.ShippingState+" "+ wayBillInfo.ShippingInfo.ShippingZip+" "+ countryName)</strong>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td width="30%" style="padding:5px;">
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%"> 
+                                            	<tr>
+                                                	<td>
+                                                    	<div style="font-size:10px;line-height:11px; height:11px;">
+	                                                    	<strong>Ph:@wayBillInfo.ShippingInfo.ShippingPhone</strong>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:10px;line-height:11px; height:11px;">
+	                                                    	<strong>VNPJ/CPF:ID:@wayBillInfo.ShippingInfo.ShippingTaxId</strong>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>
+                                                    	<div style="font-size:12px;line-height:14px; height:28px">
+                                                        </div>
+                                                    	
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                	<td>&nbsp;
+                                                    	
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                            </table>
+                        </td>
+            </table>	
+        </div>
+        <div style="width:350px;  border:1px solid #000; margin-top:-1px; font-size:11px; line-height:12px; font-family:Arial, Helvetica, sans-serif;">
+        <div style="line-height:30px; font-size:20px; text-align:center; border-bottom:1px solid #000;">
+            <strong>@(wayBillInfo.ShippingInfo.CountryCode+"-"+wayBillInfo.ExpressRespons.ServiceAreaCode+"-"+wayBillInfo.ExpressRespons.FacilityCode)</strong>
+        </div>
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+                <td rowspan="2" style="width:50px; background:#000;">
+                    <div style=" color:#FFF; font-size:20px; font-weight:bold;  width:50px;">
+                        C
+                    </div>
+                </td>
+                <td style="width:40%"></td>
+                <td><div style="padding:3px; line-height:10px; font-size:10px;">Day</div></td>
+                <td><div style="padding:3px; line-height:10px; font-size:10px;">Time</div></td>
+            </tr>
+            <tr>
+                <td style="width:40%"></td>
+                <td><div style="padding:3px; line-height:10px; font-size:10px;"></div></td>
+                <td><div style="padding:3px; line-height:10px; font-size:10px;"></div></td>
+            </tr>
+        </table>
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top:1px solid #000; padding:3px;">
+            <tr>                
+                <td><div style="font-size:10px;line-height:11px; height:11px;">Account: @accountInfo.ShipperAccountNumber</div></td>
+                <td><div style="font-size:10px;line-height:11px; height:11px;">ShipmentWeight:@(wayBillInfo.SettleWeight.HasValue?wayBillInfo.SettleWeight.Value.ToString("F2"):"0.00")Kg</div></td>
+                <td><div style="font-size:9px;line-height:11px; height:11px;">pieces</div></td>
+            </tr>
+            <tr>
+                <td>
+                    Ref:@wayBillInfo.WayBillNumber	
+                </td>
+                <td>Date:@(wayBillInfo.ExpressRespons.ShipmentDetailTime.HasValue?wayBillInfo.ExpressRespons.ShipmentDetailTime.Value.ToString("yyyy-MM-dd"):"")</td>
+                <td align="center"><strong style="font-size:20px; line-height:22px;">1</strong></td>
+            </tr>
+        </table>
+         <div style="border-top:1px solid #000; padding:5px;">
+            <div style="height:40px; font-size:8px; line-height:10px;">
+                DHL standard Terms and Conditions apply.Warsaw convention may also apply. <BR/>
+                Shipment may be carried via intermediate stopping places DHL deems appropriate.<BR/> 
+                Content:@wayBillInfo.ApplicationInfos.First().ApplicationName.Cutstring(70)
+            </div>
+        </div>
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" >
+            <tr>
+                <td>
+                    <div style="font-family:c39P36DmTt; font-size:60px; text-align:center; color:#000; line-height:60px; text-align:center"> 
+                   
+                        <img src="@(LMS.Core.sysConfig.WebDHLBarCodePath+wayBillInfo.ExpressRespons.AirwayBillNumberBarCodeImg)"  width="260"/>
+                    </div> 
+                    <div style="text-align:center">
+                        <strong style="font-size:11px; line-height:11px;">WAYBILL  @wayBillInfo.ExpressRespons.AirwayBillNumber </strong>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top:10px; border-top:1px solid #000; padding:3px;" >
+            <tr>
+                <td width="40%">
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                        <span style="float:right">:&nbsp;</span>
+                        <span style="display:inline-block;  vertical-align:middle;">
+                            Product
+                        </span>
+                    </div>
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                        <span style="float:right">:&nbsp;</span>
+                        <span style="display:inline-block;  vertical-align:middle;">
+                            Service
+                        </span>
+                    </div>
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                        <span style="float:right">:&nbsp;</span>
+                        <span style="display:inline-block;  vertical-align:middle;">
+                            Billing Account No
+                        </span>
+                    </div>
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                        <span style="float:right">:&nbsp;</span>
+                        <span style="display:inline-block;  vertical-align:middle;">
+                            DTP Account No
+                        </span>
+                    </div>
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                        <span style="float:right">:&nbsp;</span>
+                        <span style="display:inline-block;  vertical-align:middle;">
+                            Insurance Value
+                        </span>
+                    </div>
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                        <span style="float:right">:&nbsp;</span>
+                        <span style="display:inline-block;  vertical-align:middle;">
+                            Declared Value
+                        </span>
+                    </div>
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                        <span style="float:right">:&nbsp;</span>
+                        <span style="display:inline-block;  vertical-align:middle;">
+                            Terms of Trade
+                        </span>
+                    </div>
+                     
+                </td>
+                <td width="60%">
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                        P	EXPRESS WORLDWIDE
+                    </div>
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                        C
+                    </div>
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                		@accountInfo.ShipperAccountNumber
+                    </div>
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                		
+                    </div>
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                        
+                    </div>
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                        @(amount!=0M?amount.ToString("#0.00"):"") USD
+                    </div>
+                    <div style="font-size:11px; line-height:12px; height:12px;">
+                		
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div style="padding:3px; border-top:1px solid #000;">
+            <div style="font-size:10px; line-height:11px; height:11px;">
+                License plates of Pieces in Shipment	
+            </div>
+            <div style="font-size:10px; line-height:11px; height:11px;">
+                - (@wayBillInfo.ExpressRespons.DataIdentifier) @wayBillInfo.ExpressRespons.LicensePlate
+            </div>
+            <div style="line-height:11px; height:33px; font-size:10px; margin:3px 0;">
+            </div>
+            <div style="float:right;font-size:10px; line-height:11px; height:11px;">
+                (Archive Page 1)
+            </div>
+            <div style="font-size:10px; line-height:11px; height:11px;">
+                DHL Origin Copy - Do not put in the package
+            </div>
+        </div>
+         
+        
+    </div>
+                     
+     <!--分页符 start-->
+    <div style="page-break-after:always;"></div>
+    <!--分页符 end-->*@     
+}
+        </div>
+    </body>
+</html>

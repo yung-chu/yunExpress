@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <!--全局属性-->
+  <PropertyGroup>
+    <!--项目根路径-->
+    <RootFolder>$(MSBuildProjectDirectory)\..</RootFolder>
+    <!--版本号：alphal：内部测试版 beta：外部测试版 beta：外部测试版 + 主版本号.子版本号.修正版本号 -->
+    <Version>alphal 1.0.1</Version>
+    <ProjectCode>LighTake.LMS</ProjectCode>
+    <!--部署包路径-->
+    <PublishPath>$(RootFolder)\Deployable</PublishPath>
+    <!--解决方案路径 $(RootFolder)\LighTake.LMS.sln-->
+    <SolutionPath></SolutionPath>
+    <!--FTP配置名称-->
+    <FtpServer>TEST</FtpServer>
+    <!--自动上传FTP-->
+    <FtpAutoUpload>true</FtpAutoUpload>
+    <!--数据库架构比较-->
+    <DatabaseCompare>false</DatabaseCompare>
+    <ConnectionLocal>Data Source=211.154.151.181;Initial Catalog=LMS_DB;User ID=dba;Password=lightake;</ConnectionLocal>
+    <ConnectionRemote>Data Source=211.154.151.46;Initial Catalog=LMS_DB;User ID=dba;Password=lightake;</ConnectionRemote>
+    <TargetDatabase>LMS_DB</TargetDatabase>
+  </PropertyGroup>
+  <!--项目配置-->
+  <ItemGroup>
+    <ProjectsToPublish Include="$(RootFolder)\LMS.Web\LighTake.LMS.Web\LighTake.LMS.Web.csproj">
+      <ProjectName>LMS.Web.Admin</ProjectName>
+      <ProjectType>Web</ProjectType>
+      <IsPublish>true</IsPublish>
+    </ProjectsToPublish>
+    <ProjectsToPublish Include="$(RootFolder)\LMS.Web.UserCenter\LMS.UserCenter.Web\LMS.UserCenter.Web.csproj">
+      <ProjectName>LMS.Web.UserCenter</ProjectName>
+      <ProjectType>Web</ProjectType>
+      <IsPublish>false</IsPublish>
+    </ProjectsToPublish>
+    <ProjectsToPublish Include="$(RootFolder)\LMS.WebAPI\LMS.WebAPI.csproj">
+      <ProjectName>LMS.WebAPI</ProjectName>
+      <ProjectType>Web</ProjectType>
+      <IsPublish>false</IsPublish>
+    </ProjectsToPublish>
+    <ProjectsToPublish Include="$(RootFolder)\LMS.WebAPI.API\LMS.WebAPI.Client\LMS.WebAPI.Client.csproj">
+      <ProjectName>LMS.WebAPI.Client</ProjectName>
+      <ProjectType>Web</ProjectType>
+      <IsPublish>false</IsPublish>
+    </ProjectsToPublish>
+    <ProjectsToPublish Include="$(RootFolder)\LMS.TrackingAPI\LMS.TrackingAPI.csproj">
+      <ProjectName>LMS.TrackingAPI</ProjectName>
+      <ProjectType>Web</ProjectType>
+      <IsPublish>false</IsPublish>
+    </ProjectsToPublish>
+    <ProjectsToPublish Include="$(RootFolder)\LMS.Web.FrontDesk\LighTake.LMS.Web.FrontDesk\LighTake.LMS.Web.FrontDesk.csproj">
+      <ProjectName>LMS.Web.FrontDesk-Lightake</ProjectName>
+      <ProjectType>Web</ProjectType>
+      <IsPublish>false</IsPublish>
+    </ProjectsToPublish>
+    <ProjectsToPublish Include="$(RootFolder)\LMS.Web.FrontDesk\LMS.Web.YTWL\LMS.Web.YTWL.csproj">
+      <ProjectName>LMS.Web.YTWL-Lightake</ProjectName>
+      <ProjectType>Web</ProjectType>
+      <IsPublish>false</IsPublish>
+    </ProjectsToPublish>
+    <ProjectsToPublish Include="$(RootFolder)\LMS.Web.FrontDesk\LMS.Web.YunPost\LMS.Web.YunPost.csproj">
+      <ProjectName>LMS.Web.YunPost</ProjectName>
+      <ProjectType>Web</ProjectType>
+      <IsPublish>false</IsPublish>
+    </ProjectsToPublish>
+    <ProjectsToPublish Include="$(RootFolder)\LMS.Web.FrontDesk\LMS.Web.Track\LMS.Web.Track.csproj">
+      <ProjectName>LMS.Web.Track</ProjectName>
+      <ProjectType>Web</ProjectType>
+      <IsPublish>false</IsPublish>
+    </ProjectsToPublish>
+    <ProjectsToPublish Include="$(RootFolder)\LMS.Web.FrontDesk\LMS.Web.YSD-Express\LMS.Web.YSD-Express.csproj">
+      <ProjectName>LMS.Web.YSD-Express</ProjectName>
+      <ProjectType>Web</ProjectType>
+      <IsPublish>false</IsPublish>
+    </ProjectsToPublish>
+    <ProjectsToPublish Include="$(RootFolder)\LMS.Web.FrontDesk\MXBN.Web\MXBN.Web.csproj">
+      <ProjectName>LMS.Web.FrontDesk_MXBN</ProjectName>
+      <ProjectType>Web</ProjectType>
+      <IsPublish>false</IsPublish>
+    </ProjectsToPublish>
+    <ProjectsToPublish Include="$(RootFolder)\LMS.Client\LMS.Client.Eub\LMS.Client.Eub.csproj">
+      <ProjectName>LMS.Client.Eub-EubJob</ProjectName>
+      <ProjectType>Job</ProjectType>
+      <IsPublish>false</IsPublish>
+    </ProjectsToPublish>
+    <ProjectsToPublish Include="$(RootFolder)\LMS.Client\LIS.WebAPI.Client.LMS\LIS.WebAPI.Client.LMS.csproj">
+      <ProjectName>LIS.WebAPI.Client.LIS-LMSJob</ProjectName>
+      <ProjectType>Job</ProjectType>
+      <IsPublish>false</IsPublish>
+    </ProjectsToPublish>
+    <ProjectsToPublish Include="$(RootFolder)\LMS.GetLabelPrint.WebAPI\LMS.GetLabelPrint.WebAPI.csproj">
+      <ProjectName>LIS.WebAPI.Client.LIS-LMSJob</ProjectName>
+      <ProjectType>Job</ProjectType>
+      <IsPublish>false</IsPublish>
+    </ProjectsToPublish>
+  </ItemGroup>
+  <!--FTP配置-->
+  <ItemGroup>
+    <FtpConfig Include="TEST">
+      <FTPHost>211.154.151.46</FTPHost>
+      <FTPUser>admin</FTPUser>
+      <FTPPass>a135246A</FTPPass>
+      <RemoteDirectory>UpgradePackages</RemoteDirectory>
+    </FtpConfig>
+  </ItemGroup>
+</Project>

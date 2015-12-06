@@ -1,0 +1,177 @@
+﻿@{
+    ViewBag.Title = "SettlementInfoList";
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+}
+@model LMS.Controllers.SettlementController.SettlementInfoList
+
+<div id="showCustomerList" tabindex="200" style="overflow: scroll; display: none; position: relative">
+</div>
+
+<div class="domebg" id="right_con">
+    @using (Html.BeginForm())
+    {
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+       
+            <tr class="date_row_select">
+              
+                <td width="25%">
+                    <span class="info_box info_select">客户编码:</span>
+                    @*    <input type="text" id="CustomerCode" readonly="readonly" class="txt txt_short" name="FilterModel_CustomerCode"/>*@
+                     @Html.TextBoxFor(p=>p.FilterModel.CustomerCode,new{@id="CustomerCode",@readonly="readonly",@class="txt txt_short"})
+                     @Html.TextBoxFor(p=>p.FilterModel.NikcName,new{@id="nickName",@class="txt txt_short"})
+                    <input type="button" id="selectCustomer" class="btn" value="选择" />
+
+                </td>
+                
+
+                <td width="30%">
+                    <span class="info_box info_select">创建日期:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.StartTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.StartTime), @class = "txt wdate", @style = "width:130px;" })
+                    <span>至:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.EndTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.EndTime), @class = "txt wdate", @style = "width:130px;" })
+                </td>
+                
+                <td width="25%">
+                    <span class="info_box info_select">创建人:</span>
+                    @Html.TextBoxFor(a=>a.FilterModel.CreatedBy)
+                </td>
+
+            </tr>
+            
+
+            <tr>
+                <td>
+                    <span class="info_box info_select">状态:</span>
+                    @Html.DropDownListFor(a=>a.FilterModel.Status,Model.StatusList)
+                </td>
+
+                <td>
+                    <span class="info_box info_select">结算人:</span>
+                    @Html.TextBoxFor(a=>a.FilterModel.SettlementBy)
+                </td>
+
+                <td>
+                    <span class="info_box info_select">结算单号:</span>
+                    @Html.TextAreaFor(a=>a.FilterModel.SettlementNumber,new{ @style = "height:45px; width:150px;" })
+                </td>
+
+
+            </tr>
+            <tr >
+                <td>
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  <input type="submit" value="查 询" id="Search" name="Search" class="btn"/>
+                </td>
+
+            </tr>
+            
+        </table>
+        
+        
+        
+        
+        
+        <div id="pm_dis_div">
+            <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr class="data_row_two">
+                        <th>结算单号
+                        </th>
+                        <th>客户名称
+                        </th>
+                        <th>客户编号
+                        </th>
+                        <th>运单总数
+                        </th>
+
+                        <th>结算总重量kg
+                        </th>
+
+                        <th>结算总金额
+                        </th>
+                        
+                        <th>创建人
+                        </th>
+
+                        <th>创建时间
+                        </th>
+
+                        <th>状态
+                        </th>
+                        <th>结算人</th>
+                        <th>结算时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                   
+                    @foreach (var row in Model.PagedList.InnerList)
+                    {
+                            
+                        <tr class="data_row_dan">
+    
+                            <td style="text-align: center" >
+                                @row.SettlementNumber
+                            </td>
+                            <td style="text-align: center">
+                                @row.CustomerName
+                            </td>
+                            <td style="text-align: center" >
+                                @row.CustomerCode
+                            </td>
+                            <td style="text-align: center" >
+                                @row.TotalNumber
+                            </td>
+                            <td style="text-align: center" >
+                                @row.TotalSettleWeight kg
+                            </td>
+                            <td style="text-align: center" >
+                                @row.TotalFee
+                            </td>
+                                    
+                            <td style="text-align: center" >
+                                @row.CreatedBy
+                            </td>
+                            
+                            <td style="text-align: center" >
+                                @row.CreatedOn
+                            </td>
+                            <td style="text-align: center">
+                                @row.StatusDesc
+                            </td>
+                            <td style="text-align: center" >
+                                @row.SettlementBy
+                            </td>
+                            <td style="text-align: center">
+                                @row.SettlementOn
+                            </td>
+                            <td style="text-align: center">
+                                <input type="button"  name="@row.SettlementNumber"  value="打印" class="btn"   onclick="OpenNewWin(this)"/>
+                                
+                            </td>
+                        </tr>
+                              
+                    }
+                        
+
+                    
+                    <tr class="data_row_none">
+                        <td colspan="14">
+                            @Html.Pager(Model.PagedList,Model.FilterModel)
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+<script type="text/javascript">
+    function OpenNewWin(obj) {
+
+        var url = "@Url.Action("SettlementDetail","Settlement")?settlementNumber=" + obj.name;
+        window.open(url);
+
+    }
+</script>

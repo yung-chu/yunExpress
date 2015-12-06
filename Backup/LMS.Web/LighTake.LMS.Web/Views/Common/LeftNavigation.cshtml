@@ -1,0 +1,25 @@
+﻿@model LMS.Models.Menu
+@{
+    Layout = null;
+}
+<div class="p10">
+    @if (Model != null && Model.Items != null)
+    {
+        for (int i = 0; i < Model.Items.Count; i++)
+        {
+        <div class="mb10">
+            <h6 id="@("title_leftmenu" + i.ToString())"  class="@(Model.Items[i].IsActive ? "selected" : "un_selected")" onclick="dis_scecondmenu(this.id)">
+                <a class="left_titlebox" href="javascript:void()"><span class="left_title">@Model.Items[i].Name</span>
+                </a>
+            </h6>
+            <ul class="ul_opened" id="@("title_leftmenu" + i.ToString() + "_inbox")" style="@(Model.Items[i].IsActive ? "display: block;" : "display: none;")">
+                @for (int j = 0; j < @Model.Items[i].SubItems.Count; j++)
+                {
+                    <li class="leftmenu_li1" style="@(Model.Items[i].SubItems[j].IsActive ? "background-color:#E8780C" : "")"><a class="leftmenu_item1" href="@Model.Items[i].SubItems[j].NavigateUrl">
+                        @Model.Items[i].SubItems[j].Name</a> </li>
+                }
+            </ul>
+        </div>
+        }
+    }
+</div>

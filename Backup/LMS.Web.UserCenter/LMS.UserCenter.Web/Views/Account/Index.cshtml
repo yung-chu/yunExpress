@@ -1,0 +1,98 @@
+﻿@using LMS.Core
+@using LighTake.Infrastructure.Common.InversionOfControl
+@model LMS.UserCenter.Controllers.AccountController.CustomerStatisticsModel
+@{
+    ViewBag.Title = "Index";
+}
+
+@{
+    var workContext = EngineContext.Current.Resolve<IWorkContext>();
+}
+<div class="bd_b bread_box">
+    <a href="/" class="icon-home bread_home"></a>
+    <strong class="gtlt bread_gtlt">&gt;&gt;</strong>
+    <a href="javascript:" class="bread_off">首页
+    </a>
+
+</div>
+<div class="p20">
+    <div class="fix">
+        <div class="single_from" style="width: 100%;">
+            <div class="fix single_from_tt">
+                <div class="l">
+                </div>
+                <div class="r">
+                </div>
+            </div>
+            <div class="single_from_in">
+                <div class="from_horizontal fix">
+                    <span class="mr20 ml10 b">Hello, @workContext.User.RealName ,Welcome！</span>
+                </div>
+                <div class="from_horizontal fix">
+                    <span class="mr20 ml10 b">账户信息：</span>
+                    <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                        <thead>
+                            <tr class="data_row_head">
+                                <th width="3%">今日扣费
+                                </th>
+                                <th width="8%">今日充值
+                                </th>
+                                <th width="9%">当前余额
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="data_row_dan">
+                                <td style="text-align:center;">
+                                    ￥@Model.TakeOffMoney
+                                </td>
+                                <td style="text-align:center;">
+                                    ￥@Model.Recharge
+                                </td>
+                                <td style="text-align:center;">
+                                    ￥@Model.Balance
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="from_horizontal fix">
+                    <span class="mr20 ml10 b">订单信息：</span>
+                    <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                        <thead>
+                            <tr class="data_row_head">
+                                <th width="3%">未确认订单
+                                </th>
+                                <th width="8%">已确认订单
+                                </th>
+                                <th width="9%">已提交订单
+                                </th>
+                                <th width="9%">已拦截订单
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="data_row_dan">
+                                <td style="text-align:center;">
+                                   <a href="@Url.Action("unconfirmed", "order")" style="cursor:pointer;"> @Model.UnconfirmOrder 笔</a>
+                                </td>
+                                <td style="text-align:center;">
+                                   <a href="@Url.Action("confirmed", "order")" style="cursor:pointer;"> @Model.ConfirmOrder 笔</a>
+                                </td>
+                                <td style="text-align:center;">
+                                   <a href="@Url.Action("submitted", "order")" style="cursor:pointer;"> @Model.SubmitOrder 笔</a>
+                                </td>
+                                <td style="text-align:center;">
+                                   <a href="@Url.Action("blocked", "order")" style="cursor:pointer;"> @Model.HoldOrder 笔</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>

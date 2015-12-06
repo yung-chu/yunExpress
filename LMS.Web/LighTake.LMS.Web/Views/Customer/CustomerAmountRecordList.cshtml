@@ -1,0 +1,126 @@
+﻿@model LMS.Controllers.CustomerController.CustomerAmountRecordListViewModel
+@{
+    ViewBag.Title = "CustomerAmountRecordList";
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+}
+<div id="showCustomerList"  tabindex="200" style="overflow: scroll; display: none; position: relative">
+</div>
+<div class="domebg" id="right_con">
+    @using (Html.BeginForm())
+    {
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+                <td width="30%">
+                    <span class="info_box info_select">客户编码:</span>
+                    <input type="text" id="CustomerCode" value="@Model.FilterModel.CustomerCode" name="FilterModel.CustomerCode" readonly="readonly" class="txt txt_short" />
+                    <input type="hidden" id="nickName" class="txt txt_long" />
+                    <a href="javascript:void(0)" id="selectCustomer" class="btn_href">选择</a>
+                </td>
+                <td width="50%">
+                    <span class="info_box info_select">汇总日期:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.StartDateTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd'})", @Value = String.Format("{0:yyyy-MM-dd}", Model.FilterModel.StartDateTime), @class = "txt wdate", @style = "width:110px;" })
+                    <span>至:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.EndDateTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd'})", @Value = String.Format("{0:yyyy-MM-dd}", Model.FilterModel.EndDateTime), @class = "txt wdate", @style = "width:110px;" })
+                </td>
+                <td width="20%">
+                    <div class="tl">
+                        <input type="submit" class="btn" value="搜索" id="btnSearch" name="btnSearch" />
+                        <input type="submit" class="btn btnDownLoad" value="导出" name="btnToExcel" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div id="pm_dis_div">
+            <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr class="data_row_two">
+                        <th>流水号
+                        </th>
+                        <th>交易号
+                        </th>
+                        <th>客户编码
+                        </th>
+                        <th>日期
+                        </th>
+                        <th>费用类型
+                        </th>
+                        <th>费用说明
+                        </th>
+                        <th>进账金额
+                        </th>
+                        <th>出账金额
+                        </th>
+                        <th>账户结余
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+        int index = 1;
+        foreach (var row in Model.PagedList.InnerList)
+        {
+                            
+                        <tr class="data_row_dan">
+                            <td>
+                                @index
+                            </td>
+                            <td>
+                                @row.TransactionNo
+                            </td>
+                            <td>
+                                @row.CustomerCode
+                            </td>
+                            <td>
+                                @row.CreatedOn.ToString("yyyy-MM-dd")
+                            </td>
+                            <td>
+                                @row.MoneyChangeTypeShortName
+                            </td>
+                            <td>
+                                @row.Remark
+                            </td>
+                            <td>
+                                @if (row.Amount > 0)
+                                {
+                                    @row.Amount.Value.ToString("F2")
+                                }
+                            </td>
+                            <td>
+                                @if (row.Amount <= 0)
+                                {
+                                    @row.Amount.Value.ToString("F2")
+                                }
+                            </td>
+                            <td>
+                                @row.Balance.Value.ToString("F2")
+                            </td>
+                        </tr>
+                                index++;
+        }
+                    }
+                    <tr class="data_row_dan">
+                        <td colspan="6">汇总</td>
+                        <td>@Model.TotalInFee.ToString("F2")</td>
+                        <td>@Model.TotalOutFee.ToString("F2")</td>
+                        <td></td>
+                    </tr>
+                    <tr class="data_row_none">
+                        <td colspan="9">
+                            @Html.Pager(Model.PagedList, Model.FilterModel)
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#btnSearch").click(function () {
+            if ($.trim($("#CustomerCode").val()) == "") {
+                alert("请选择客户编码!");
+                return false;
+            }
+        });
+    });
+</script>

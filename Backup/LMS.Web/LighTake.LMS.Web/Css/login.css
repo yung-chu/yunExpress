@@ -1,0 +1,20 @@
+@charset "utf-8";
+/* CSS Document */
+body{  background:url(../images/login_2.png) repeat;}
+.con{  background:url(../images/login_bg.png) no-repeat ; width:1200px; margin:0 auto;}
+.login_logo{ background:url(../images/logo_03.gif) no-repeat 457px; height:84px; margin-top:70px;}
+.login_middle_img{ background:url(../images/login_middle_img.png) no-repeat; height:2px; margin-top:50px;}
+.mt30{ margin-top:30px;}
+.vm{ vertical-align:middle;}
+.mr15{ margin-right:15px;}
+.logo_box{ width:350px; margin:0 auto;}
+.logoin_input,.logoin_input2,.logoin_input_name,.logoin_input_word{ height:40px; line-height:40px; width:350px;}
+.logoin_input,.logoin_input2{ padding-left:38px; background:url(../images/logo_07.gif) no-repeat 10px #000; margin-bottom:30px;}
+.logoin_input{ margin-top:115px;}
+.logoin_input2{ background:url(../images/logo_10.gif) no-repeat 10px #000;}
+.logoin_input_name,.logoin_input_word{ border:none; background:#000; height:38px; color:#cccccc; font-size:18px;  }
+.txt_short{ width:190px;  padding-left:5px;}
+.logo_forgot{ color:#ffffff; text-decoration:none; font-family:Verdana, Geneva, sans-serif;}
+.login_btn{ background:url(../images/logo_17.gif) no-repeat; width:115px; height:38px; cursor:pointer; border:none; margin-left:25px;}
+.coda{color:Red;} 
+.coff{ color:#ff9933} 

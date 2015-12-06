@@ -1,0 +1,554 @@
+﻿@model LMS.Controllers.FinancialController.ViewModels.DeliveryCostDetailsModel
+@{
+    ViewBag.Title = "发货费用明细审核";
+
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+    //Html.AddCssFileParts("/Scripts/AjaxFileUpload/ajaxfileupload.css");
+    //Html.AddScriptParts("/Scripts/AjaxFileUpload/ajaxfileupload.js");  
+    var path = System.Configuration.ConfigurationManager.AppSettings["Upload_Web_Path"];  
+}
+
+<div id="showVenderList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showShippingMethodList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showCountryList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="auditError" style="display: none;">
+    <div style="font-weight: bold; padding: 10px;">填写备注:</div>
+    <div id="remark" style="padding: 10px;">
+        <textarea id="remarkContent" style="height: 50px; width: 90%;"></textarea>
+    </div>
+    <div style="padding: 0 10px; font-weight: bold; font-size: 14px;">
+        <a href="javascript:void(0)" onclick="auditErrorOk();return false;">确定</a> | 
+        <a href="javascript:void(0)" onclick="$('#auditError').window('close');return false;">取消</a>
+        <span id="msg"></span>
+    </div>
+    <div style="font-weight: bold; padding: 10px; border-top: dotted 1px blue;">历史审核记录:</div>
+    <div id="remarkHistory" style="padding: 10px; width: 90%; height: 150px; overflow: auto;">
+        Loading ...
+    </div>
+</div>
+<div id="uploadPanel" style="display: none;">
+    <iframe id="uploadfrm" src="DeliveryFeeVectorExcelUpload" style="border: 0; width: 100%; height: 400px;"></iframe>
+</div>
+<form id="search" name="Search">
+    <div class="domebg" id="right_con">
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr>
+                <td width="25%">
+                    <span class="info_box info_select">服务商:</span>
+                    <input type="text" id="_VenderName" name="Filter.VenderName" value="@Model.Filter.VenderName" readonly="readonly" class="txt txt_short" />
+                    <input type="hidden" id="_VenderCode" name="Filter.VenderCode" value="@Model.Filter.VenderCode" />
+                    <input type="button" id="selectVender" class="btn" value="选择" />
+                </td>
+                <td width="25%">
+                    <span class="info_box info_select">运输方式:</span>
+                    <input type="text" id="ShippingName" name="Filter.ShippingName" value="@Model.Filter.ShippingName" readonly="readonly" class="txt txt_short" />
+                    <input type="hidden" id="ShippingMethodId" name="Filter.ShippingMethodId" value="@Model.Filter.ShippingMethodId"/>
+                    <input type="button" id="selectShippingMethod" class="btn" value="选择" />
+                </td>
+                <td width="20%">
+                    状态:
+                     <select id="Filter_Status" name="Filter.Status">
+                         <option value="1">未审核</option>
+                         <option value="2">异常</option>
+                         <option value="3">已审核</option>
+                         <option value="">全部</option>
+                     </select>
+                </td>
+                <td rowspan="2">
+                    <span class="vt">@Html.DropDownListFor(p => p.Filter.SearchWhere, Model.SearchWhereTypes, new { @style = "width:100px;" })</span>
+                    @Html.TextAreaFor(p => p.Filter.SearchContext, new { @style = "height:60px; width:200px;" })
+                </td>
+            </tr>
+            <tr class="date_row_select">
+                <td colspan="2">
+                    <span class="info_box info_select">发货时间:</span>
+                    <input type="text" class="Wdate" style="width:100px;" id="Filter_StartTime" name="Filter.StartTime" value="@String.Format("{0:yyyy-MM-dd}", Model.Filter.StartTime)"  onfocus="WdatePicker({minDate:'#F{$dp.$D(\'Filter_EndTime\',{M:-3});}',maxDate:'#F{$dp.$D(\'Filter_EndTime\',{d:0});}'})" />
+                    到
+                    <input type="text" class="Wdate" style="width:100px;" id="Filter_EndTime" name="Filter.EndTime" value="@String.Format("{0:yyyy-MM-dd}", Model.Filter.EndTime)"  onfocus="WdatePicker({minDate:'#F{$dp.$D(\'Filter_StartTime\',{d:0});}',maxDate:'#F{$dp.$D(\'Filter_StartTime\',{M:3});}'})" />
+                </td>
+                <td>
+                    <a href="@(path)ExcelTemplate/DeliveryFeeImportTemplate.xls" target="_blank">导入账单格式下载</a>
+                </td>
+            </tr>
+            <tr class="date_row_select">
+                <td colspan="3">
+                    <div class="tl">
+                        <input type="submit" class="btn" value="搜索" id="btnSearch" name="btnSearch" onclick="search(); return false;" />
+                        <input type="submit" class="btn" value="导出" id="btnExport" name="btnExport" onclick="exportExcel(); return false;" />
+                        <span style="color: blue">&nbsp;|&nbsp;</span>
+                        <input type="submit" class="btn" value="导入账单" name="btnImport" onclick="importExcel(); return false;" />
+                        <input type="submit" class="btn" value="已导入待审核" name="btnLastImport" onclick="waitAduit(); return false;" />
+                        <input type="submit" class="btn" value="反审核" name="btnReverseAudit" onclick="reverseAudit(); return false;" />
+
+                        <input type="submit" class="btn dn" value="批量审核通过" name="btnBatchAudit" onclick="batchAudit(); return false;" />                        
+                        <input type="submit" class="btn dn" value="审核异常" name="btnAuditError" onclick="auditError(); return false;" />
+                    </div>
+                </td>
+                <td>
+                    <p>最终总费用:￥<span id="cacheAmount" style="color: red; font-weight: bold; cursor: pointer;">0</span></p>
+                </td>
+            </tr>
+        </table>
+
+        <div id="pm_dis_div_Search" data-options="iconCls:'icon-search'" title="搜索">
+            <div id="div_Search">
+                <div style="margin: 10px;">请选择需要的操作 ~</div>
+            </div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    //string extensions
+    String.prototype.JsonFormat = function (config, reserve) { return this.replace(/\{([^}]*)\}/g, (typeof config == 'object') ? function (m, i) { var ret = config[i]; return ret == null && reserve ? m : ret } : config); };
+    String.prototype.Trim = function () { return this.replace(/(^\s*)|(\s*$)/g, ""); }
+    String.prototype.TrimEnd = function (c) { var str = this; var rg = new RegExp(c); var i = str.length; while (rg.test(str.charAt(--i))); return str.slice(0, i + 1); };
+</script>
+
+<script type="text/javascript">
+    //init
+    $(function () {
+        //选择服务商
+        $("#selectVender").bind("click", function () {
+            $("#showVenderList").showWindow("@Url.Action("SelectVender", "WayBill")", "选择服务商");
+            var parentWindow = $("#showVenderList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                top: 120
+            }, {
+                duration: 50,
+                step: function (now, fx) {
+                    $(".window").css("top", now);
+                }
+            });
+            $("#showVenderList").show();
+        });
+        //选择运输方式
+        $("#selectShippingMethod").bind("click", function () {
+            if ($("#_VenderCode").val() == "") {
+                alert("请选择服务商！");
+                return;
+            }
+            $("#showShippingMethodList").showWindow("@Url.Action("SelectShippingMethod", "WayBill")?venderCode=" + $("#_VenderCode").val() + "&type=2&shippingMethodType=1&isAll=true", "选择运输方式");
+            var parentWindow = $("#showShippingMethodList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                top: 120
+            }, {
+                duration: 50,
+                step: function (now, fx) {
+                    $(".window").css("top", now);
+                }
+            });
+            $("#showShippingMethodList").show();
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    var currentPage = 1;
+    var pageType = 0;//0 search , 1 waitAudit
+    var pagesize = 300;
+    function BtnsOnOff(p)
+    {
+        var ibtnBatchAudit = $("input[name='btnBatchAudit']");
+        var ibtnAuditError = $("input[name='btnAuditError']");
+        if (p == 1) {
+            $(ibtnBatchAudit).show();
+            $(ibtnAuditError).show();
+        } else {
+            $(ibtnBatchAudit).hide();
+            $(ibtnAuditError).hide();
+        }
+    }
+
+    function refreshPage() {
+        if (pageType == 0) {
+            seach_page(currentPage);
+        }
+        else {
+            waitAduit(currentPage);
+        }
+    }
+    function checkInput(p) {
+        var params = {
+            VenderCode: $("#_VenderCode").val(),
+            ShippingMethodId: $("#ShippingMethodId").val(),
+            StartTime: $("#Filter_StartTime").val(),
+            EndTime: $("#Filter_EndTime").val(),
+            Status: $("#Filter_Status").val(),
+            SearchWhere: $("#Filter_SearchWhere").val(),
+            SearchContext: $("#Filter_SearchContext").val(),
+            page: p == undefined ? 1 : p,
+            pageSize: pagesize,
+            ShippingType:1
+        };
+
+        if ($.trim(params.SearchContext) == "") {
+            if (params.VenderCode == "") {
+                alert("请选择服务商");
+                return;
+            }
+            //运输方式,非必须
+            //if (params.ShippingMethodId == "") {
+            //    alert("请选择运输方式");
+            //    return;
+            //}
+            if (params.StartTime == "" || params.EndTime == "") {
+                alert("请选择时间范围");
+                return;
+            }
+        }
+
+        return params;
+    }
+
+    //page custome event
+    function seach_page(page) {
+        search(page);
+        console.log("search " + page);
+    }
+
+    function search(p) {
+        var params = checkInput(p);
+        if (params == undefined) return;
+        $.messager.progress({
+            title: '请稍后数据加载中',
+            msg: 'Loading ...'
+        });
+        var divSearch = $("#div_Search");
+        $(divSearch).html("<p><b>Loading...</b></p>");
+        $(divSearch).load("GetSearchDataAjax", params, function () {
+            currentPage = p;
+            pageType = 0;
+            getTotalFinal();
+            $.messager.progress('close');
+            BtnsOnOff(0);
+        });
+    }
+
+    function exportExcel() {
+        var params = checkInput();
+        if (params == undefined) return;
+        params.SearchContext = encodeURI(params.SearchContext);
+        //console.log(params);
+        var url = "ExportExcel?VenderCode={VenderCode}&ShippingMethodId={ShippingMethodId}&StartTime={StartTime}&EndTime={EndTime}&Status={Status}&SearchWhere={SearchWhere}&SearchContext={SearchContext}&ShippingType=1";
+        url = url.JsonFormat(params);
+        //console.log(url);
+        window.open(url);
+    }
+
+    function importExcel() {
+        if ($("#_VenderCode").val() == "") {
+            alert("请选择服务商");
+            return;
+        }
+        $("#uploadfrm").attr("src", "DeliveryFeeVectorExcelUpload?VenderCode=" + $("#_VenderCode").val() + "&r=" + Math.random());
+        $('#uploadPanel').show().window({
+            //url: "DeliveryFeeVectorExcelUpload",
+            title: '导入数据',
+            width: 800,
+            height: 450,
+            modal: true
+        });
+    }
+
+    function importExcelComplete() {
+        $('#uploadPanel').window('close');
+    }
+
+    function GetCheckedId() {
+        var checks = $("#dataTable").find(":checkbox[name!=SelectAll][name!=SelectAllRed][checked=checked]");
+        var ids = "";//new Array();
+        $.each(checks, function (i, n) {
+            ids += $(n).attr("name") + ",";
+            //ids.push(parseInt($(n).attr("name")));
+        });
+        //console.log(ids);
+        ids = ids.TrimEnd(",");
+        console.log(ids);
+        return ids;
+    }
+    function GetCheckedRedId() {
+        var checks = $("#dataTable").find(":checkbox[name!=SelectAll][name!=SelectAllRed][checked=checked][VenderDataStatus=1]");
+        //var checks = $("#dataTable").find(":hidden");//
+        var ids = "";
+        $.each(checks, function (i, n) {
+            ids += $(n).attr("Index") + ",";
+        });
+        ids = ids.TrimEnd(",");
+        console.log("redIds:" + ids);
+        return ids;
+    }
+
+
+    function waitAduit(p) {
+        if (!p) {
+            p = 1;
+        }
+        var params = {
+            Status: $("#Filter_Status").val(),
+            page: p,
+            pageSize: pagesize,
+            ShippingType: 1
+        };
+        var divSearch = $("#div_Search");
+        $.messager.progress({
+            title: '请稍后数据加载中',
+            msg: 'Loading ...'
+        });
+        $(divSearch).html("<p><b>Loading...</b></p>");
+        $(divSearch).load("GetVenderImportWaitAduit", params, function () {
+            currentPage = p;
+            pageType = 1;
+            $.messager.progress('close');
+            BtnsOnOff(1);
+        });
+
+        //console.log("waitAduit prosess");
+    }
+
+    function batchAudit() {
+        var selectedIds = GetCheckedId();
+        //console.log(selectedIds);
+        if (selectedIds == null || selectedIds == undefined || selectedIds == "") {
+            alert("请选择运单!");
+            return;
+        }
+        var redIds = GetCheckedRedId();
+        //console.log(redIds);
+        var alertStr = "确定全部审核通过吗?";
+        if (redIds != undefined && redIds != "" && redIds.length > 1) {
+            alertStr = "序号为" + redIds + "运单是标红的异常订单,\n确定全部审核通过吗?";
+        }
+        if (!confirm(alertStr)) { return; }
+
+        $.ajax({
+            type: "POST",
+            url: "DeliveryCostDetailsAuditPass",
+            data: { ids: selectedIds },
+            success: function (msg) {
+                if (msg.Status == 1) {
+                    alert("审核成功！");
+                    refreshPage();
+                } else {
+                    alert(msg.Info);
+                }
+                console.log(msg);
+            }
+        });
+
+        return false;
+    }
+
+    function reverseAudit() {
+        var params = checkInput();
+        var selectedIds = GetCheckedId();
+        var checks = $("#dataTable").find(":hidden[name!=SelectAll][name!=SelectAllRed]");
+        var idArray = selectedIds.split(",");
+        console.log(idArray);
+        var idsError = "";
+        $.each(checks, function (i, n) {
+            console.log($(n).attr("id"));
+            var id = $(n).attr("id");
+            if (id != undefined) {
+                id = id.replace("h_Status_", "");
+                if (idArray.indexOf(id) > -1) { //被选中
+                    if ($(n).val() != 3) { //不是已审核                    
+                        idsError += $(n).attr("data") + ",";
+                    }
+                }
+            }
+        });
+        if (idsError != "") {
+            alert("您选择的,序号为第" + idsError.TrimEnd(",") + "的运单,\n不是已审核状态,无法反审核!");
+            return;
+        }
+
+        if (!confirm("确定反审核?")) { return; }
+
+        console.log(selectedIds);
+        if (selectedIds == null || selectedIds == undefined || selectedIds == "") {
+            alert("请选择运单!");
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            url: "DeliveryCostDetailsReverseAudit",
+            data: { ids: selectedIds },
+            success: function (msg) {
+                if (msg.Status == 1) {
+                    alert("反审核成功！");
+                    refreshPage();
+                } else {
+                    alert(msg.Info);
+                }
+                console.log(msg);
+            }
+        });
+
+    }
+
+    function GetRemarkHistory(id) {
+        $.ajax({
+            type: "POST",
+            url: "GetRemarkHistory",
+            data: { id: id },
+            success: function (msg) {
+                if (msg.Status == 1) {
+                    $("#remarkHistory").html(msg.Data);
+                }
+                console.log(msg);
+            }
+        });
+    }
+
+    function auditErrorOk() {
+        var selectedIds = GetCheckedId();
+        var remarkContent = $("#remarkContent");
+        var newContent = $(remarkContent).val();
+
+        //if (newContent == "" || newContent == undefined || newContent == null) {
+        //    alert("请输入内容!");
+        //    $(newContent).focus();
+        //    return;
+        //}
+        //else {
+            //console.log(selectedIds);
+            //console.log($(remarkContent).val());
+            auditErrorPost(selectedIds, $(remarkContent).val());
+            $('#auditError').window('close');
+        //}
+    }
+
+    function auditError(id) {
+        $("#remarkHistory").html("");
+        var remarkContent = $("#remarkContent");
+        var remarkContentbody = $(remarkContent).val("");
+        //if ($(remarkContent).val() != "")
+        //{
+        //    $(remarkContent).val("")
+        //}
+        if (id) {
+            GetRemarkHistory(parseInt(id));
+            $("#dataTable").find(":checkbox[name!=SelectAll][name!=SelectAllRed]").attr("checked", false);
+            $("#dataTable").find(":checkbox[name=" + id + "]").attr("checked", true);
+        }
+        else {
+            var selectedIds = GetCheckedId();
+            console.log(selectedIds);
+            if (selectedIds == null || selectedIds == undefined || selectedIds == "") {
+                alert("请选择运单!");
+                return;
+            }
+
+            var checks = $("#dataTable").find(":hidden[name!=SelectAll][name!=SelectAllRed]");
+            var idArray = selectedIds.split(",");
+            console.log(idArray);
+            var idsError = "";
+            $.each(checks, function (i, n) {
+                console.log($(n).attr("id"));
+                var id = $(n).attr("id");
+                if (id != undefined) {
+                    id = id.replace("h_Status_", "");
+                    if (idArray.indexOf(id) > -1) { //被选中
+                        if ($(n).val() != 1) { //不是已审核                    
+                            idsError += $(n).attr("data") + ",";
+                        }
+                    }
+                }
+            });
+            console.log(idsError);
+            if (idsError != "") {
+                alert("您选择的,序号为第" + idsError.TrimEnd(",") + "的运单,\n不是未审核状态,无法[审核异常]操作!");
+                return;
+            }
+            
+            var idsArray = selectedIds.split(",");
+            if (idsArray.length == 1) {
+                $("#remarkHistory").html("Loading ... ");
+                GetRemarkHistory(parseInt(selectedIds));
+            }
+        }
+
+        $('#auditError').show().window({
+            title: '审核异常',
+            width: 500,
+            height: 400,
+            modal: true
+        });
+    }
+
+    function auditErrorPost(selectedIds, remark) {
+        $.ajax({
+            type: "POST",
+            url: "DeliveryFeeAuditError",
+            data: { ids: selectedIds, error: remark },
+            success: function (msg) {
+                if (msg.Status == 1) {
+                    alert("操作成功！");
+                    refreshPage();
+                } else {
+                    alert(msg.Info);
+                }
+                console.log(msg);
+            }
+        });
+    }
+    function getTotalFinal() {
+        var params = checkInput();
+        if (params == undefined || params == null) return;
+        //if (params.Status == 3) {            
+        $("#cacheAmount").text("计算中 ... ");
+        $.ajax({
+            type: "POST",
+            url: "GetTotalFinalSum",
+            data: params,
+            success: function (msg) {
+                if (msg.Status == 1) {
+                    $("#cacheAmount").text(msg.Data);
+                } else {
+                    alert(msg.Info);
+                }
+                console.log(msg);
+            }
+        });
+        console.log("getTotalFinal invoked");
+
+        //} else {
+        //    alert("只能计算[已审核]的运单!");
+        //}        
+    }
+
+    //function fistDateTimeSelected() {
+    //    $dp.$('Filter_EndTime').focus();
+    //    //console.log("fistDateTimeSelected invoked");
+    //}
+    //function lastDateTimeSelected() {
+    //    var start = $("#Filter_StartTime");
+    //    var end = $("#Filter_EndTime");
+    //    var diff = Substract(end.val(), start.val());
+    //    if (diff > 365) {
+    //        $(start).focus();
+    //        alert("时间范围不允许超过一年!");
+    //    }
+    //    else if (diff < 0) {
+    //        $(start).focus();
+    //        alert("[结束时间] 应该大于 [开始时间] !");
+    //    }
+    //}
+
+    //function Substract(dtDate1, dtDate2) {
+    //    if (dtDate1 == undefined || dtDate2 == undefined) return 0;
+    //    var dt1 = new Date(dtDate1.replace(/-/g, '/'));//"2011-02-07 15:13:06"
+    //    var dt2 = new Date(dtDate2.replace(/-/g, '/'));//
+    //    if (dt1 < dt2) return -1;
+    //    var nDifference = Math.abs(dt1 - dt2);
+    //    var one_day = 1000 * 60 * 60 * 24;
+    //    var diff = Math.round(nDifference / one_day);
+    //    console.log(diff);
+    //    return diff;
+    //}
+</script>

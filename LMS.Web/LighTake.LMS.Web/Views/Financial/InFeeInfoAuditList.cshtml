@@ -1,0 +1,581 @@
+﻿@using LMS.Data.Entity
+@model LMS.Controllers.FinancialController.InFeeInfoAuditListViewModel
+@{
+    ViewBag.Title = "InFeeInfoAuditList";
+    <link href="/Scripts/artdialog/skins/default.css" type="text/css" rel="stylesheet" />
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+    Html.AddScriptParts("/Scripts/chosen/chosen.jquery.min.js");
+    Html.AddScriptParts("/Scripts/artdialog/jquery.artDialog.js");
+}
+@Html.Partial("_ShowDialog")
+<div id="showCustomerList" tabindex="500" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showShippingMethodList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showCountryList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div>
+   <form id="search" name="Search" method="POST">
+        <div>
+            <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <tr class="date_row_select">
+                    <td width="25%">
+                        <span class="info_box info_select">客户编码:</span>
+                        <input type="text" id="nickName" name="FilterModel.CustomerName" value="@Model.FilterModel.CustomerName" readonly="readonly" class="txt txt_short" />
+                        <input type="hidden" id="CustomerCode" name="FilterModel.CustomerCode" value="@Model.FilterModel.CustomerCode" />
+                        <a href="javascript:void(0)" id="selectCustomer" class="btn_href">选择</a>
+                    </td>
+                    <td width="25%">
+                        <span class="info_box info_select">运输方式:</span>
+                        <input type="text" id="ShippingName" value="@Model.FilterModel.ShippingName" name="FilterModel.ShippingName" readonly="readonly" class="txt txt_short"/>
+                        <input type="hidden" id="ShippingMethodId" name="FilterModel.ShippingMethodId" value="@Model.FilterModel.ShippingMethodId" />
+                        <input type="button" id="selectShippingMethod" class="btn" value="选择" />
+                    </td>
+                    <td width="25%">
+                        <span class="info_box info_select">状态:</span>
+                        @Html.DropDownListFor(o => o.FilterModel.Status, Model.StatusList, new { @style = "width:100px;" })
+                    </td>
+                    <td rowspan="2">
+                        <span class="vt">
+                            @Html.DropDownListFor(o => o.FilterModel.SearchWhere, Model.SearchWheres, new { @style = "width:100px;" })
+                        </span>
+                        @Html.TextAreaFor(p => p.FilterModel.SearchContext, new { @style = "height: 73px; width:181px;" })
+                    </td>
+                </tr>
+                <tr class="date_row_select">
+                    <td>
+                        <span class="info_box info_select">发货国家:</span>
+                        <input type="text" id="_CountryCode" value="@Model.FilterModel.CountryCode" name="FilterModel.CountryCode" readonly="readonly" class="txt txt_short" />
+                        <input type="hidden" id="_CountryName" />
+                        <a href="javascript:void(0)" id="selectCountry" class="btn_href">选择</a>
+                    </td>
+                    <td colspan="2">
+                        <span class="info_box info_select">验收时间:</span>
+                        <input id="FilterModel_StartTime" name="FilterModel.StartTime" class="txt wdate" style="width:130px" type="text"  Value = "@String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.StartTime)" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'FilterModel_EndTime\',{M:-1});}',maxDate:'#F{$dp.$D(\'FilterModel_EndTime\',{d:0});}' ,dateFmt:'yyyy-MM-dd HH:mm'})" />
+                        至:
+                        <input id="FilterModel_EndTime" name="FilterModel.EndTime" class="txt wdate" style="width:130px" type="text" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'FilterModel_StartTime\',{d:0});}',maxDate:'#F{$dp.$D(\'FilterModel_StartTime\',{M:1});}',dateFmt:'yyyy-MM-dd HH:mm'})" Value = "@String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.EndTime)" />
+                        <br/>
+                    </td>
+                </tr>
+                <tr class="date_row_select">
+                    <td colspan="10">
+                        @*<input type="hidden" value="@Model.FilterModel.Page" name="FilterModel.Page" />*@
+                        <input type="hidden" value="@Model.FilterModel.PageSize" name="FilterModel.PageSize" />
+                        <input type="submit" name="Select" class="btn" id="SelectBtn" value="查询" onclick="return  SelectAudit()"/>
+                        <input type="button" name="BatchAudited" class="btn" value="批量审核通过" onclick=" return BatchAudit();"/>
+                        <input type="button" name="BatchAnomaly" class="btn" value="审核异常" onclick="return  BatchAuditedAnomaly()"/>
+                        <input type="submit" name="BatchOutBilled" class="btn" value="出账单" onclick="return OutBilled()"/>
+                        <input type="button" name="BatchAntiAudit" class="btn" value="反审核" onclick=" return BatchAnti();"/>
+                        <input type="submit" name="Exprot" class="btn" value="导出" onclick=" return ExprotAudit()"/>
+                        <input type="hidden" name="FilterModel.IsFistIn" value="@Model.FilterModel.IsFistIn"/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <hr/>
+        <div>
+            <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <tr class="data_row_two">
+                    <th>
+                        <input type="checkbox" class="checkbox" id="SelectAll" name="SelectAll" /><label for="SelectAll">全选</label>
+                    </th>
+                    <th>序号</th>
+                    <th>运单号</th>
+                    <th>客户订单号</th>
+                    <th>客户名称</th>
+                    <th>跟踪号</th>
+                    <th>收货时间</th>
+                    <th>验收时间</th>
+                    <th>发货国家</th>
+                    <th>运输方式</th>
+                    <th>计费重量</th>
+                    <th>称重重量</th>
+                    <th>运费</th>
+                    <th>挂号费</th>
+                    <th>燃油费</th>
+                    <th>附加费</th>
+                    <th>关税服务费</th>
+                    <th>偏远附加费</th>
+                    <th>总费用</th>
+                    <th>状态</th>
+                    <th>审核人</th>
+                    <th>审核时间</th>
+                    <th>操作</th>
+                </tr>
+                @{
+        var n = 1;
+                }
+                @foreach (var row in Model.PagedList)
+                {
+                    if (row.OperationType != null)
+                    {
+                        var styles = "";
+                        if (row.OperationType == 2)
+                        {
+                            styles = "background-color: #ffa07a";
+                        }
+                        <tr class="data_row_dan">
+                            <td>
+                                @if (row.OperationType == 1 && row.Status != (int)Financial.ReceivingExpenseStatusEnum.OutBilled)
+                                {
+                                    <input type="checkbox" class="checkbox" name="WayBillNumbers" value="@row.WayBillNumber" />
+                                }
+                            </td>
+                            <td>
+                                @n
+                            </td>
+                            <td name="WayBillNumber">
+                                @row.WayBillNumber
+                            </td>
+                            <td>
+                                @row.CustomerOrderNumber
+                            </td>
+                            <td>
+                                @row.CustomerName
+                            </td>
+                            <td>
+                                @row.TrackingNumber
+                            </td>
+                            <td>
+                                @row.InStorageCreatedOn
+                            </td>
+                             <td>
+                                @row.OutDateTime
+                            </td>
+                            <td>
+                                @row.CountryCode
+                            </td>
+                            <td>
+                                @row.InShippingMethodName
+                            </td>
+                            <td>
+                                @row.SettleWeight
+                            </td>
+                            <td>
+                                @row.Weight
+                            </td>
+                            <td>
+                                @(row.Freight??0)
+                            </td>
+                            <td>
+                                @(row.Register??0)
+                            </td>
+                            <td>
+                                @(row.FuelCharge??0)
+                            </td>
+                            <td>
+                                @((row.Surcharge??0)+ (row.SpecialFee??0))
+                            </td>
+                            <td>
+                                @(row.TariffPrepayFee??0)
+                            </td>
+                            <td>
+                                @(row.RemoteAreaFee??0)
+                            </td>
+                            <td>
+                                @((row.Freight??0) + (row.Register??0) + (row.FuelCharge??0) + (row.Surcharge??0) + (row.TariffPrepayFee??0) + (row.SpecialFee??0)+(row.RemoteAreaFee??0))
+                            </td>
+                            <td name="Status">
+                                @{
+                                    var statu = Model.StatusList.FirstOrDefault(p => p.Value == row.Status.ToString());
+                                }
+                                @if (statu != null)
+                                {
+                                    @statu.Text
+                                    ;
+                                }
+                            </td>
+                            <td>
+                                @row.Auditor
+                            </td>
+                            <td>
+                                @row.AuditorDate
+                            </td>
+                            <td width="150px">
+                                @if (row.Status == 1 && row.OperationType == 1)
+                                {
+                                    <input type="button" name="Audited" class="btn" value="审核通过" onclick=" return Audite('@row.WayBillNumber'); "/>
+                                    <input type="button" name="AuditAnomaly" class="btn" value="审核异常" onclick=" Anomaly('@row.WayBillNumber    '); "/>
+                                }
+                            </td>
+                        </tr>
+                        n++;
+                    }
+                }
+                <tr>
+                    <td colspan="30">
+                        @Html.Pager(Model.PagedList, Model.FilterModel)
+                       @* <input type="hidden" name="FilterModel.Page" value="@Model.FilterModel.Page"/>
+                        <input type="hidden" name="FilterModel.PageSize" value="@Model.FilterModel.PageSize"/>*@
+                    </td>
+                </tr>
+            </table>
+        </div>
+</form>
+</div>
+<div id="test" style="padding-left: 15px; padding-top: 10px;">
+</div>
+<div id="ModifyShippingMethodMsg" class="dn" style="width: 400px;height: 200px">
+    <span class="vt">审核异常信息：</span>
+            <textarea id="textarea" style="width: 275px; height: 148px;"></textarea>
+    <span id="message_error" class="mr20 ml10 txt_tip"></span>
+</div>
+<script type="text/javascript" language="javascript">
+    $(function() {
+        
+
+        //选择运输方式
+        $("#selectShippingMethod").bind("click", function() {
+            $("#showShippingMethodList").showWindow("@Url.Action("SelectShippingMethod", "WayBill")?customerTypeId=" + $("#CustomerType").val() + "&type=1", "选择运输方式");
+            var parentWindow = $("#showShippingMethodList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                    top: 120
+                }, {
+                    duration: 1000,
+                    step: function(now, fx) {
+                        $(".window").css("top", now);
+                    }
+                });
+            $("#showShippingMethodList").show();
+        });
+        //选择国家
+        $("#selectCountry").bind("click", function () {
+            $("#showCountryList").showWindow("@Url.Action("SelectCountry", "Common")", "选择国家");
+            var parentWindow = $("#showCountryList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                top: 120
+            }, {
+                duration: 1000,
+                step: function (now, fx) {
+                    $(".window").css("top", now);
+                }
+            });
+            $("#showCountryList").show();
+        });
+        
+        $("#SelectAll").click(function () {
+            if ($(this).attr("checked")) {
+                $(":checkbox[name='WayBillNumbers']").attr("checked", true);
+            } else {
+                $(":checkbox[name='WayBillNumbers']").attr("checked", false);
+            }
+        });
+        
+    });
+
+
+
+    function SelectAudit() {
+        //var CustomerCode = $("#CustomerCode").val();
+        var StartTime = $("#FilterModel_StartTime").val();
+        var EndTim = $("#FilterModel_EndTime").val();
+        //if (CustomerCode == "") {
+            //alert("请选择客户!");
+            //return false;
+        //} else 
+        if (StartTime == "") {
+            alert("请选择开始时间!");
+            return false;
+        } else if (EndTim == "") {
+            alert("请选择结束时间!");
+            return false;
+        }
+        //更改请求方式
+        // $("#search").attr("method", "GET");
+        return true;
+    }
+
+    function ExprotAudit() {
+        var CustomerCode = $("#CustomerCode").val();
+        var StartTime = $("#FilterModel_StartTime").val();
+        var EndTim = $("#FilterModel_EndTime").val();
+        var SearchContext = $("#FilterModel_SearchContext").val();
+        if (SearchContext != null && $.trim(SearchContext) != "") {
+            if ($.trim(StartTime) == "" || StartTime==null) {
+                alert("请选择开始时间!");
+                return false;
+            } else if ($.trim(EndTim) == ""  || EndTim==null) {
+                alert("请选择结束时间!");
+                return false;
+            }
+        } else {
+            if ($.trim(CustomerCode) == "" || CustomerCode == null) {
+            alert("请选择客户!");
+            return false; 
+            } else 
+                if ($.trim(StartTime) == "" || StartTime==null) {
+                alert("请选择开始时间!");
+                return false;
+                } else if ($.trim(EndTim) == "" || EndTim==null) {
+                alert("请选择结束时间!");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    //批量审核
+    function BatchAudit() {
+        var wayBillNumbers = [];
+        var orders = [];
+        $("input[name='WayBillNumbers']").each(function () {
+            if ($(this).attr("checked")) {
+                var statuText = $(this).parents("tr").children("[name='Status']").text().trim();
+                if (statuText == "未审核") {
+                    wayBillNumbers.push($(this).val());
+                } else {
+                    var order = $(this).parents("tr").children("[name='WayBillNumber']").text().trim();
+                    orders.push(order);
+                }
+            }
+        });
+        if (orders.length != 0) {
+            alert("" + orders.join(',') + "运单号不是未审核状态不能批量审核!");
+            return false;
+        }
+        if (wayBillNumbers.length == 0) {
+            alert("请选择要审核的账单!");
+            return false;
+        }
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("BatchAudited")",
+            dataType: "json",
+            data: { wayBillNumbers: wayBillNumbers.join(',') },
+            success: function (data) {
+                if (data.Result) {
+                    alert("审核成功");
+                    $("#SelectBtn").click();
+                    return true;
+                } else {
+                    alert(data.Message);
+                    return false;
+                }
+            }
+         });
+        return true;
+    }
+    //单个审核
+    function Audite(w) {
+        var wayBillNumbers = [];
+        wayBillNumbers.push(w);
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("BatchAudited")",
+            dataType: "json",
+            data: { wayBillNumbers: wayBillNumbers.join(',') },
+            success: function(data) {
+                if (data.Result) {
+                    alert("审核成功");
+                    $("#SelectBtn").click();
+                    return true;
+                } else {
+                    alert(data.Message);
+                    return false;
+                }
+            }
+        });
+        return true;
+    }
+
+    //反审核
+    function BatchAnti() {
+        var wayBillNumbers = [];
+        var orders = [];
+        $("input[name='WayBillNumbers']").each(function () {
+            if ($(this).attr("checked")) {
+                var statuText = $(this).parents("tr").children("[name='Status']").text().trim();
+                if (statuText == "已审核") {
+                    wayBillNumbers.push($(this).val());
+                } else {
+                    var order = $(this).parents("tr").children("[name='WayBillNumber']").text().trim();
+                    orders.push(order);
+                }
+            }
+        });
+        if (orders.length != 0) {
+            alert("" + orders.join(',') + "运单号不是已审核状态不能反审核!");
+            return false;
+        }
+        if (wayBillNumbers.length == 0) {
+            alert("请选择需要反审核的账单!");
+            return false;
+        }
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("BatchAntiAudit")",
+            dataType: "json",
+            data: { wayBillNumbers: wayBillNumbers.join(',') },
+            success: function (data) {
+                if (data.Result) {
+                    alert("反审核成功");
+                    $("#SelectBtn").click();
+                    return true;
+                } else {
+                    alert(data.Message);
+                    return false;
+                }
+            }
+        });
+        return true; 
+    }
+    //单个审核异常
+
+    function Anomaly(w) {
+        $("#test").showWindow('AuditAnomaly?wayBillNumber=' + w, "审核异常备注", 600, 400);
+        var parentWindow = $("#test").parent("div");
+        $(parentWindow).css("top", "0");
+        $(parentWindow).animate({
+            top: 120 + getScrollTop()
+        }, {
+            duration: 1000,
+            step: function(now, fx) {
+                $(".window").css("top", now);
+
+            }
+        });
+        $("#test").show();
+
+    }
+    function getScrollTop()
+    {
+        var scrollTop=0;
+        if(document.documentElement&&document.documentElement.scrollTop)
+        {
+            scrollTop=document.documentElement.scrollTop;
+        }
+        else if(document.body)
+        {
+            scrollTop=document.body.scrollTop;
+        }
+        return scrollTop;
+    }
+
+
+    //批量审核异常运单
+
+    function BatchAuditedAnomaly() {
+        var wayBillNumbers = [];
+        var orders = [];
+        $("input[name='WayBillNumbers']").each(function () {
+            if ($(this).attr("checked")) {
+                var statuText = $(this).parents("tr").children("[name='Status']").text().trim();
+                if (statuText == "未审核") {
+                    wayBillNumbers.push($(this).val());
+                } else {
+                    var order = $(this).parents("tr").children("[name='WayBillNumber']").text().trim();
+                    orders.push(order);
+                }
+            }
+        });
+        if (orders.length != 0) {
+            alert("" + orders.join(',') + "运单号不是未审核状态不能审核!");
+            return false;
+        }
+        if (wayBillNumbers.length == 0) {
+            alert("请选择需要审核的账单!");
+            return false;
+        }
+        
+        art.dialog({
+            title: '审核异常信息',
+            content: document.getElementById('ModifyShippingMethodMsg'),
+            lock: true,
+            ok: function() {
+                if ($.trim($("#textarea").val()).length > 150 || $.trim($("#textarea").val()).length <= 0) {
+                    alert("备注长度大于零小150个字符！");
+                    return false;
+                }
+                $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("BatchAnomaly")",
+                    dataType: "json",
+                    data: { wayBillNumbers: wayBillNumbers.join(','), remarks: $("#textarea").val() },
+                    success: function(data) {
+                        if (data.Result) {
+                            alert("审核成功");
+                            $("#SelectBtn").click();
+                            return true;
+                        } else {
+                            alert(data.Message);
+                            return false;
+                        }
+                    }
+                });
+            },
+            cancelVal: '关闭',
+            cancel: true
+        });
+        return true;
+    }
+
+    function OutBilled() {
+        //var wayBillNumbers = [];
+        //var orders = [];
+        var vCustomerCode = $("#CustomerCode").val();
+        //var vCustomerName = $("#nickName").val();
+        var vStartTime = $("#FilterModel_StartTime").val();
+        var vEndTim = $("#FilterModel_EndTime").val();
+        var vStatus = $("#FilterModel_Status").val();
+        //var vShippingMethodId = $("#ShippingMethodId").val();
+        //var vCountryCode = $("#_CountryCode").val();
+        //var vSearchWhere = $("#FilterModel_SearchWhere").val();
+        var vSearchContext = $("#FilterModel_SearchContext").val();
+
+        if (vCustomerCode == "") {
+            alert("请选择客户!");
+            return false;
+        } else if (vStartTime == "") {
+            alert("请选择开始时间!");
+            return false;
+        } else if (vEndTim == "") {
+            alert("请选择结束时间!");
+            return false;
+        }else if (vStatus=="") {
+            alert("请选择状态!");
+            return false;
+        }else if (vSearchContext.trim() != "") {
+            alert("无法按照单号出账单!");
+            return false;
+        }
+@*        
+        $("input[name='WayBillNumbers']").each(function () {
+            if ($(this).attr("checked")) {
+                var statuText = $(this).parents("tr").children("[name='Status']").text().trim();
+                if (statuText == "已审核") {
+                    wayBillNumbers.push($(this).val());
+                } else {
+                    var order = $(this).parents("tr").children("[name='WayBillNumber']").text().trim();
+                    orders.push(order);
+                }
+            }
+        });
+        if (orders.length != 0) {
+            alert("" + orders.join(',') + "运单号不是已审核状态不能出账单!");
+            return false;
+        }
+        if (wayBillNumbers.length == 0) {
+            alert("请选择需要出账单的账单!");
+            return false;
+        }
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("BatchOutBilled")",
+            dataType: "json",
+            data: { wayBillNumbers: wayBillNumbers.join(','),customerCode:vCustomerCode,customerName:vCustomerName,startTime:vStartTime,endTim:vEndTim,status:vStatus,shippingMethodId:vShippingMethodId,countryCode:vCountryCode,searchWhere:vSearchWhere,searchContext:vSearchContext, },
+            success: function (data) {
+                if (data.Result) {
+                    alert("出账单成功");
+                    location.reload();
+                    return true;
+                } else {
+                    alert(data.Message);
+                    return false;
+                }
+            }
+        });*@
+        return true;
+    }
+</script>

@@ -1,0 +1,266 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Root>
+  <Data Name="CustomerOrder">
+    <Collect Name="Status" Desc="状态">
+      <Item ID="1" Value="None" CNName="未确定" ENName="未确定"></Item>
+      <Item ID="2" Value="OK" CNName="已确定" ENName="已确定"></Item>
+      <!--<Item ID="3" Value="Printed" CNName="已打印" ENName="已打印"></Item>-->
+      <Item ID="4" Value="Submitted" CNName="已提交" ENName="已提交"></Item>
+      <Item ID="5" Value="Have" CNName="已收货" ENName="已收货"></Item>
+      <Item ID="6" Value="Send" CNName="发货运输中" ENName="发货运输中"></Item>
+      <Item ID="7" Value="Delete" CNName="已删除" ENName="已删除"></Item>
+      <Item ID="9" Value="ReGoodsInStorage" CNName="退货在仓" ENName="退货在仓"></Item>
+      <Item ID="8" Value="Return" CNName="已退回" ENName="已退回"></Item>
+      <Item ID="10" Value="Delivered" CNName="已签收" ENName="已签收"></Item>
+      <Item ID="11" Value="Submiting" CNName="提交中" ENName="提交中"></Item>
+      <Item ID="12" Value="SubmitFail" CNName="提交失败" ENName="提交失败"></Item>
+    </Collect>
+    <Collect Name="ApplicationType" Desc="申报类型">
+      <Item ID="4" Value="Others" CNName="Others" ENName="Others"></Item>
+      <Item ID="1" Value="Gift" CNName="Gift" ENName="Gift"></Item>
+      <Item ID="2" Value="Sameple" CNName="Sameple" ENName="Sameple"></Item>
+      <Item ID="3" Value="Documents" CNName="Documents" ENName="Documents"></Item>
+    </Collect>
+    <Collect Name="InsuredCalculationsType" Desc="保险类型">
+      <Item ID="1" Value="每件6元" CNName="每件6元" ENName="每件6元"></Item>
+      <Item ID="2" Value="按投保额度" CNName="按投保额度" ENName="按投保额度"></Item>
+      <Item ID="3" Value="每件8元" CNName="每件8元" ENName="每件8元"></Item>
+    </Collect>
+    <Collect Name="SensitiveTypeInfosType" Desc="保险类型">
+      <Item ID="1" Value="纯电池" CNName="纯电池" ENName="纯电池"></Item>
+      <Item ID="2" Value="钮扣电池" CNName="钮扣电池" ENName="钮扣电池"></Item>
+      <Item ID="3" Value="仿牌" CNName="仿牌" ENName="仿牌"></Item>
+      <Item ID="4" Value="粉沫" CNName="粉沫" ENName="粉沫"></Item>
+      <Item ID="5" Value="液体" CNName="液体" ENName="液体"></Item>
+    </Collect>
+    <Collect Name="MoneyChangeType" Desc="资金变动类型">
+      <Item ID="1" Value="Recharge" CNName="充值" ENName="充值"></Item>
+      <Item ID="2" Value="Deductions" CNName="扣费" ENName="扣费"></Item>
+      <Item ID="3" Value="Refund" CNName="退钱" ENName="退钱"></Item>
+    </Collect>
+    <Collect Name="FeeType" Desc="费用类型">
+      <Item ID="1" Value="Fetched" CNName="进账" ENName="进账"></Item>
+      <Item ID="2" Value="Surcharge" CNName="附加费" ENName="附加费"></Item>
+      <Item ID="3" Value="Freight" CNName="运费" ENName="运费"></Item>
+      <Item ID="4" Value="Register" CNName="挂号费" ENName="挂号费"></Item>
+      <Item ID="5" Value="FuelCharge" CNName="燃油费" ENName="燃油费"></Item>
+      <Item ID="6" Value="TariffPrepayFee" CNName="关键预付服务费" ENName="关键预付服务费"></Item>
+      <Item ID="7" Value="SpecialFee" CNName="特殊费" ENName="特殊费"></Item>
+      <Item ID="8" Value="SecurityAppendFee" CNName="安全附加费" ENName="安全附加费"></Item>
+      <Item ID="9" Value="OverWeightLengthGirthFee" CNName="超长超重超周长费" ENName="超长超重超周长费"></Item>
+      <Item ID="10" Value="AddedTaxFee" CNName="增值税费" ENName="增值税费"></Item>
+      <Item ID="11" Value="OtherFee" CNName="杂费" ENName="杂费"></Item>
+      <Item ID="12" Value="RemoteAreaFee" CNName="偏远附加费" ENName="偏远附加费"></Item>
+    </Collect>
+  </Data>
+  <Data Name="WayBill">
+    <Collect Name="Status" Desc="状态">
+      <!--<Item ID="1" Value="Print" CNName="未打印" ENName="未打印"></Item>
+      <Item ID="2" Value="Printed" CNName="已打印" ENName="已打印"></Item>-->
+      <Item ID="3" Value="Submitted" CNName="已提交" ENName="已提交"></Item>
+      <Item ID="350" Value="InStoraging" CNName="入仓中[入仓扫描保存处理中]" ENName="入仓中[入仓扫描保存处理中]"></Item>
+      <Item ID="4" Value="Have" CNName="已收货" ENName="已收货"></Item>
+      <Item ID="8" Value="WaitOrder" CNName="待转单" ENName="待转单"></Item>
+      <Item ID="5" Value="Send" CNName="发货运输中" ENName="发货运输中"></Item>
+      <Item ID="6" Value="Delete" CNName="已删除" ENName="已删除"></Item>
+      <Item ID="9" Value="ReGoodsInStorage" CNName="退货在仓" ENName="退货在仓"></Item>
+      <Item ID="7" Value="Return" CNName="已退回" ENName="已退回"></Item>
+      <Item ID="10" Value="Delivered" CNName="已签收" ENName="已签收"></Item>
+    </Collect>
+    <Collect Name="SearchFilter" Desc="查询条件字段">
+      <Item ID="2" Value="CustomerOrderNumber" CNName="订单号" ENName="订单号"></Item>
+      <Item ID="1" Value="WayBillNumber" CNName="运单号" ENName="运单号"></Item>
+      <Item ID="3" Value="TrackingNumber" CNName="跟踪号" ENName="跟踪号"></Item>
+      <Item ID="4" Value="InStorageNumber" CNName="入仓号" ENName="入仓号"></Item>
+      <Item ID="5" Value="OutStorageNumber" CNName="出仓号" ENName="出仓号"></Item>
+    </Collect>
+    <Collect Name="DateFilter" Desc="时间条件字段">
+      <Item ID="1" Value="CreatedOn" CNName="创建时间" ENName="创建时间"></Item>
+      <Item ID="2" Value="TakeOverOn" CNName="收货时间" ENName="收货时间"></Item>
+      <Item ID="3" Value="DeliverOn" CNName="发货时间" ENName="发货时间"></Item>
+    </Collect>
+    <Collect Name="AbnormalType" Desc="运单异常类型">
+      <Item ID="1" Value="Intercepted" CNName="拦截" ENName="拦截"></Item>
+      <Item ID="2" Value="InAbnormal" CNName="入仓异常" ENName="入仓异常"></Item>
+      <Item ID="3" Value="OutAbnormal" CNName="出仓异常" ENName="出仓异常"></Item>
+      <Item ID="4" Value="ReGoodsAbnormal" CNName="退货异常" ENName="退货异常"></Item>
+      <Item ID="5" Value="InStorageWeightAbnormal" CNName="入仓重量异常" ENName="入仓重量异常"></Item>
+      <Item ID="6" Value="SubmitSFAbnormal" CNName="提交顺丰异常" ENName="提交顺丰异常"></Item>
+      <Item ID="7" Value="Forecast" CNName="预报异常" ENName="预报异常"></Item>
+    </Collect>
+    <Collect Name="AbnormalStatus" Desc="运单异常状态">
+      <Item ID="1" Value="NO" CNName="未完成" ENName="未完成"></Item>
+      <Item ID="2" Value="OK" CNName="已完成" ENName="已完成"></Item>
+    </Collect>
+    <Collect Name="ScanTypes" Desc="扫描方式">
+      <Item ID="0" Value="None" CNName="按订单号" ENName="按订单号"></Item>
+      <Item ID="1" Value="TrackingNumber" CNName="按跟踪号" ENName="按跟踪号"></Item>
+    </Collect>
+    <Collect Name="ReturnGoodType" Desc="退货类型">
+      <Item ID="1" Value="Internal" CNName="内部" ENName="内部"></Item>
+      <Item ID="2" Value="External" CNName="外部" ENName="外部"></Item>
+    </Collect>
+    <Collect Name="NoForecastAbnormal" Desc="无预报异常状态">
+      <Item ID="1" Value="Forecasted" CNName="有预报" ENName="有预报"></Item>
+      <Item ID="2" Value="NoForecast" CNName="无预报" ENName="无预报"></Item>
+      <Item ID="3" Value="NoForecastRetrun" CNName="无预报退回" ENName="无预报退回"></Item>
+    </Collect>
+  </Data>
+  <Data Name="CustomerCreditInfo">
+    <Collect Name="Status" Desc="状态">
+      <!--<Item ID="0" Value="None" CNName="请选择" ENName="请选择"></Item>-->
+      <Item ID="1" Value="NoCheck" CNName="未审核" ENName="未审核"></Item>
+      <Item ID="2" Value="Checked" CNName="已审核" ENName="已审核"></Item>
+      <!--<Item ID="3" Value="Deleted" CNName="删除" ENName="删除"></Item>-->
+    </Collect>
+  </Data>
+  <Data Name="Customer">
+    <Collect Name="Status" Desc="状态">
+      <Item ID="1" Value="Unaudited" CNName="未审核" ENName="未审核"></Item>
+      <Item ID="2" Value="Enable" CNName="已审核" ENName="已审核"></Item>
+      <Item ID="3" Value="Disable" CNName="禁用" ENName="禁用"></Item>
+    </Collect>
+    <Collect Name="NumberType" Desc="单号类型">
+      <Item ID="1" Value="TransactionNo" CNName="交易号" ENName="交易号"></Item>
+      <Item ID="2" Value="WayBill" CNName="运单号" ENName="运单号"></Item>
+    </Collect>
+	 <Collect Name="CustomerSourceType" Desc="客户来源类型">
+		  <Item ID="1" Value="Common" CNName="普通客户" ENName="普通客户"></Item>
+		  <Item ID="2" Value="TongTu" CNName="通途平台客户" ENName="通途平台客户"></Item>
+	 </Collect>
+  </Data>
+
+  <Data Name="TrackingNumberInfo">
+    <Collect Name="Status" Desc="状态">
+      <Item ID="1" Value="Enable" CNName="启用" ENName="启用"></Item>
+      <Item ID="2" Value="Disable" CNName="禁用" ENName="禁用"></Item>
+    </Collect>
+    <Collect Name="AddressLabel" Desc="地址标签">
+      <Item ID="1" Value="TNT" CNName="TNT地址标签" ENName="TNT地址标签"></Item>
+      <Item ID="2" Value="ChinaPost" CNName="中邮地址标签" ENName="中邮地址标签"></Item>
+    </Collect>
+  </Data>
+  <Data Name="TrackingNumberDetailInfo">
+    <Collect Name="Status" Desc="状态">
+      <Item ID="1" Value="NotUsed" CNName="未使用" ENName="未使用"></Item>
+      <Item ID="2" Value="Used" CNName="已使用" ENName="已使用"></Item>
+      <Item ID="3" Value="Invalid" CNName="无效" ENName="无效"></Item>
+    </Collect>
+  </Data>
+
+  <Data Name="WayBillTemplateInfo">
+    <Collect Name="Status" Desc="状态">
+      <Item ID="1" Value="Enable" CNName="启用" ENName="启用"></Item>
+      <Item ID="2" Value="Disable" CNName="禁用" ENName="禁用"></Item>
+    </Collect>
+    <Collect Name="TemplateType" Desc="模板类型">
+      <Item ID="1" Value="Head" CNName="模板头" ENName="模板头"></Item>
+      <Item ID="2" Value="Body" CNName="模板体" ENName="模板体"></Item>
+    </Collect>
+  </Data>
+  
+  <Data Name="EubWayBillApplicationInfo">
+    <Collect Name="Status" Desc="状态">
+      <Item ID="1" Value="UnApply" CNName="未申请" ENName="未申请"></Item>
+      <Item ID="2" Value="Apply" CNName="已申请" ENName="已申请"></Item>
+      <Item ID="3" Value="DownLoad" CNName="已下载" ENName="已下载"></Item>
+      <Item ID="4" Value="Printer" CNName="已打印" ENName="已打印"></Item>
+    </Collect>
+    <Collect Name="PrintFormat" Desc="打印规格">
+      <Item ID="1" Value="A4Page" CNName="A4" ENName="A4"></Item>
+      <Item ID="2" Value="Page4x4" CNName="4x4" ENName="4x4"></Item>
+      <Item ID="3" Value="Page4x6" CNName="4x6" ENName="4x6"></Item>
+    </Collect>
+
+    <Collect Name="QueryNumber" Desc="查询条件">
+      <Item ID="1" Value="WayBillNumber" CNName="运单号" ENName="运单号"></Item>
+      <Item ID="2" Value="OrderNumber" CNName="订单号" ENName="订单号"></Item>
+      <Item ID="3" Value="TrackNumber" CNName="跟踪号" ENName="跟踪号"></Item>
+      <Item ID="4" Value="BatchNumber" CNName="批次号" ENName="批次号"></Item>
+    </Collect>
+    <Collect Name="TimeQuery" Desc="时间查询">
+      <Item ID="1" Value="ApplyTime" CNName="申请时间" ENName="申请时间"></Item>
+      <Item ID="2" Value="CreateTime" CNName="创建时间" ENName="创建时间"></Item>
+    </Collect>
+  </Data>
+
+  <Data Name="Financial">
+    <Collect Name="ReceivingExpenseStatus" Desc="状态">
+      <Item ID="1" Value="UnAudited" CNName="未审核" ENName="未审核"></Item>
+      <Item ID="2" Value="AuditAnomaly" CNName="审核异常" ENName="审核异常"></Item>
+      <Item ID="3" Value="Audited" CNName="已审核" ENName="已审核"></Item>
+      <Item ID="4" Value="OutBilled" CNName="已出账单" ENName="已出账单"></Item>
+    </Collect>
+    <Collect Name="DeliveryFeeStatus" Desc="状态">
+      <Item ID="1" Value="UnAudited" CNName="未审核" ENName="未审核"></Item>
+      <Item ID="2" Value="AuditAnomaly" CNName="审核异常" ENName="审核异常"></Item>
+      <Item ID="3" Value="Audited" CNName="已审核" ENName="已审核"></Item>
+    </Collect>
+  </Data>
+  <Data Name="ReturnGood">
+    <Collect Name="ReturnStatus" Desc="状态">
+      <Item ID="1" Value="UnAudited" CNName="未审核" ENName="未审核"></Item>
+      <Item ID="2" Value="Audited" CNName="已审核" ENName="已审核"></Item>
+    </Collect>
+    <Collect Name="ReturnSourceStatus" Desc="状态">
+      <Item ID="1" Value="BSReturn" CNName="BS退货" ENName="BS退货"></Item>
+      <Item ID="2" Value="CSReturn" CNName="CS退货" ENName="CS退货"></Item>
+    </Collect>
+  </Data>
+  <Data Name="WayBillEvent">
+    <Collect Name="EventCode" Desc="操作码">
+      <Item ID="100" Value="Submit" CNName="提交" ENName="提交"></Item>
+      <Item ID="200" Value="InStorage" CNName="入仓" ENName="入仓"></Item>
+      <Item ID="300" Value="OutStorage" CNName="出仓" ENName="出仓"></Item>
+      <Item ID="400" Value="ReturnGood" CNName="退货" ENName="退货"></Item>
+    </Collect>
+  </Data>
+
+
+  <Data Name="OperateLog">
+    <Collect Name="KeyWordType" Desc="关键词类别">
+      <Item ID="0" Value="None" CNName="请选择" ENName="请选择"></Item>
+      <Item ID="1" Value="WayBillNumber" CNName="运单号" ENName="运单号"></Item>
+      <Item ID="2" Value="CustomerOrderNumber" CNName="订单号" ENName="订单号"></Item>
+      <Item ID="3" Value="CustomerCode" CNName="客户编号" ENName="客户编号"></Item>
+      <Item ID="4" Value="Lms_WayBillTemplateId" CNName="物流模板编号" ENName="物流模板编号"></Item>
+      <Item ID="5" Value="Lis_TemplateId" CNName="运费模板编号" ENName="运费模板编号"></Item>
+      <Item ID="6" Value="ShippingMethodId" CNName="运输方式" ENName="运输方式"></Item>
+      <Item ID="7" Value="CategoryId" CNName="类别编号" ENName="类别编号"></Item>
+      <Item ID="8" Value="ArticleId" CNName="新闻编号" ENName="新闻编号"></Item>
+    </Collect>
+
+  </Data>
+
+
+  <Data Name="TotalPackageConfig">
+    <Collect Name="ShowTime" Desc="显示编辑时间">
+      <Item ID="4" Value="ToPort" CNName="到港时间" ENName="到港时间"></Item>
+      <Item ID="5" Value="FromPort" CNName="离港时间" ENName="离港时间"></Item>
+      <Item ID="6" Value="ToAirport" CNName="到达机场时间" ENName="到达机场时间"></Item>
+      <Item ID="7" Value="CustomsClearance" CNName="机场清关完成时间" ENName="机场清关完成时间"></Item>
+    </Collect>
+  </Data>
+  <Data Name="Settlement">
+    <Collect Name="Status" Desc="结算清单状态">
+      <Item ID="1" Value="Outstanding" CNName="未结清" ENName="未结清"></Item>
+      <Item ID="2" Value="OK" CNName="已结清" ENName="已结清"></Item>
+    </Collect>
+  </Data>
+
+	<Data Name="MailReturnGoodsLogs">
+		<Collect Name="ReasonType" Desc="福邮宝退件原因">
+			<Item ID="1" Value="CHNoPass" CNName="海关未过" ENName="海关未过"></Item>
+			<Item ID="2" Value="Other" CNName="其他原因" ENName="其他原因"></Item>
+		</Collect>
+	</Data>
+  
+  <Data Name="B2CPreAlter">
+    <Collect Name="Status" Desc="预报状态">
+      <Item ID="0" Value="None" CNName="未预报" ENName="未预报"></Item>
+      <Item ID="1" Value="Submit" CNName="预报中" ENName="预报中"></Item>
+      <Item ID="2" Value="OK" CNName="已预报" ENName="已预报"></Item>
+      <Item ID="3" Value="SubmitFail" CNName="预报失败" ENName="预报失败"></Item>
+    </Collect>
+  </Data>
+</Root>

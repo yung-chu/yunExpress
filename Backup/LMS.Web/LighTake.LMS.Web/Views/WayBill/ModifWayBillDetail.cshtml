@@ -1,0 +1,902 @@
+﻿@{
+    ViewBag.Title = "ModifWayBillDetail";
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+}
+@model LMS.Controllers.WayBillController.ModifWayBillDetailModel
+           
+<link href="@Url.Content("~/Css/ajax_loading.css")" rel="stylesheet" type="text/css" />   
+<script src="@Url.Content("~/Scripts/ajax_loading.js")"  type="text/javascript"></script>
+
+<style>
+    .info_right{ width: 80px;}
+    .info_middle{ width: 100px;}
+    .txt_longx{ width: 260px;}
+    .error_message{ color: red;}
+    .error{ border-color: red;border-width: 1px;}
+    .lowtr td{ max-width: 100px;padding: 2px;text-align: center;overflow: hidden;text-overflow:ellipsis ;white-space: nowrap;}
+    th{ height: 30px;text-align: center}
+</style>
+@{ var rowIndex = -1; }
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(p => p.WayBillNumber)
+    <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+        <tr class="date_row_select">
+            <td colspan="2">
+                <fieldset>
+                    <legend>变更原因</legend>
+                    <ul>
+                        <li class="">
+                            <span class="info_box info_middle">变更原因：</span>
+                            @Html.RadioButtonFor(p => p.ChangeType, 0, new { id="ChangeType_0", name = "ChangeType"})客户要求
+                            @Html.RadioButtonFor(p => p.ChangeType, 1, new { id="ChangeType_1",name = "ChangeType"})内部要求
+                            <span class="info_box info_middle" >原因说明：</span>
+                            @Html.TextAreaFor(p => p.ChangeReason, new {@style = "height:50px; width:300px;", @class = "vb"})
+                            <input type="button" id="btnSave" name="btnSave" class="btn" value="提交" />
+                             <a href="@Model.ReturnUrl" class="btn_href">返回</a>
+                            <input type="hidden" id="returnUrl" value="@Model.ReturnUrl" />
+                        </li>
+                        <li class="mt5">
+                            <span class="error_message" messagefor="ChangeReason"></span>
+                        </li>
+                    </ul>
+                </fieldset>
+            </td>
+        </tr>
+        <tr class="date_row_select" >
+            <td width="30%" rowspan=2 style="vertical-align: top;min-width: 340px" >
+                <fieldset style="height: 250px">
+                    <legend>运单承运信息</legend>
+                    <ul>
+                        <li class="mt10">
+                            <span class="info_box info_middle">客户订单号：</span>
+                            @Model.CustomerOrderNumber
+                        </li>
+                        <li class="mt10">
+                            <span class="info_box info_middle">客户名称：</span>
+                            @Model.CustomerName
+                            @Html.HiddenFor(p => p.CustomerCode)
+                            @Html.HiddenFor(p => p.CustomerId)
+                            @Html.HiddenFor(p => p.CustomerTypeId)
+                        </li>
+                        <li class="mt10">
+                            <span class="info_box info_middle">运输方式：</span>
+                            @Html.TextBoxFor(p => p.ShippingName, new {@readonly = "readonly", @class = "txt txt_short"})
+                            @Html.HiddenFor(p => p.ShippingMethodId)
+                            <input type="button" id="selectShippingMethod" class="btn" value="选择" />
+                        </li>
+                        <li class="mt10">
+                            <span class="info_box info_middle">国家：</span>
+                            @Html.TextBoxFor(p => p.CountryChineseName, new {@readonly = "readonly", @class = "txt txt_short"})
+                            @Html.HiddenFor(p => p.CountryCode)
+                            <input type="button" id="selectCountry" class="btn" value="选择" />
+                        </li>
+                        <li class="mt10">
+                            <span class="info_box info_middle">跟踪号：</span>
+                            @Html.TextBoxFor(p => p.TrackingNumber, new {@class = "txt txt_midle"})
+                            <span class="info_box info_small"></span>
+                            <span id="TrackingNumberErrorMessage" style="margin-left: 2px"></span>
+                        </li>
+                        
+                        <li class="mt10">
+                            <span class="info_box info_middle">业务日期：</span>
+                             @Html.TextBoxFor(p => p.BusinessDate, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd',isShowClear:false})", @Value = String.Format("{0:yyyy-MM-dd}", Model.BusinessDate), @class = "txt wdate", @style = "width:130px;" })
+                        </li>
+                    </ul>
+                </fieldset>
+                
+                
+                
+                 <fieldset style="height: 70px">
+                <legend>货物信息</legend>
+                <ul>
+                    <li class="mt10">
+                        <span class="info_box info_middle">件数：</span>
+                        @if (Model.IsSubmitStatus)
+                        {
+                            @Html.TextBoxFor(p => p.PackageNumber, new {@class = "txt txt_midle"})
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(p => p.PackageNumber, new {@class = "txt txt_midle",@readonly = "readonly"})
+                        }
+                        <span class="info_box info_middle"></span>
+                        <span id="PackageNumberErrorMessage" style="color:red"></span>
+                    </li>
+                </ul>   
+             </fieldset>
+                
+
+            </td>
+    
+            <td>
+                <fieldset id="ShippingInfo">
+                    <legend>收件人信息</legend>
+                    <ul>
+                        <li class="mt10">
+                            <span class="info_box info_right">收件人姓：</span>
+                            @Html.TextBoxFor(p => p.ShippingInfo.ShippingFirstName, new {@class = "txt txt_short"})
+                            <span class="info_box info_right">收件人名：</span>
+                            @Html.TextBoxFor(p => p.ShippingInfo.ShippingLastName, new {@class = "txt txt_short"})
+                            <span class="info_box info_right">电话：</span>
+                            @Html.TextBoxFor(p => p.ShippingInfo.ShippingPhone, new {@class = "txt txt_short"})
+                            <span class="info_box info_right">邮编：</span>
+                            @Html.TextBoxFor(p => p.ShippingInfo.ShippingZip, new {@class = "txt txt_short"})
+                        </li>
+                        <li class="mt5">
+                            <span class="error_message" messagefor="ShippingInfo_ShippingFirstName"></span>
+                            <span class="error_message" messagefor="ShippingInfo_ShippingLastName"></span>
+                            <span class="error_message" messagefor="ShippingInfo_ShippingPhone"></span>
+                            <span class="error_message" messagefor="ShippingInfo_ShippingZip"></span>
+                        </li>
+                        <li class="mt10">
+                            <span class="info_box info_right">公司：</span>
+                            @Html.TextBoxFor(p => p.ShippingInfo.ShippingCompany, new {@class = "txt txt_short"})
+                            <span class="info_box info_right">城市：</span>
+                            @Html.TextBoxFor(p => p.ShippingInfo.ShippingCity, new {@class = "txt txt_short"})
+                            <span class="info_box info_right">省/州：</span>
+                            @Html.TextBoxFor(p => p.ShippingInfo.ShippingState, new {@class = "txt txt_short"})
+                        </li>
+                        <li class="mt5">
+                            <span class="error_message" messagefor="ShippingInfo_ShippingCompany"></span>
+                            <span class="error_message" messagefor="ShippingInfo_ShippingCity"></span>
+                            <span class="error_message" messagefor="ShippingInfo_ShippingState"></span>
+                        </li>
+                        <li class="mt10">
+                            <span class="info_box info_right">收货地址1：</span>
+                            @Html.TextBoxFor(p => p.ShippingInfo.ShippingAddress, new {@class = "txt txt_longx"})
+                            <span class="info_box info_right">收货地址2：</span>
+                            @Html.TextBoxFor(p => p.ShippingInfo.ShippingAddress1, new {@class = "txt txt_longx"})
+                        </li>
+                        <li class="mt5">
+                            <span class="error_message" messagefor="ShippingInfo_ShippingAddress"></span>
+                            <span class="error_message" messagefor="ShippingInfo_ShippingAddress1"></span>
+                        </li>
+                        <li class="mt10">
+                            <span class="info_box info_right">收货地址3：</span>
+                            @Html.TextBoxFor(p => p.ShippingInfo.ShippingAddress2, new {@class = "txt txt_longx"})
+                        </li>
+                        <li class="mt5">
+                            <span class="error_message" messagefor="ShippingInfo_ShippingAddress2"></span>
+                        </li>
+                    </ul>
+                </fieldset>
+            </td>
+        </tr>
+  
+        <tr class="date_row_select">
+            <td>
+                <fieldset id="SenderInfo">
+                    <legend>发件人信息</legend>
+                    <ul>
+                        <li class="mt10">
+                            <span class="info_box info_right">发件人姓：</span>
+                            @Html.TextBoxFor(p => p.SenderInfo.SenderFirstName, new {@class = "txt txt_short"})
+                            <span class="info_box info_right">收件人名：</span>
+                            @Html.TextBoxFor(p => p.SenderInfo.SenderLastName, new {@class = "txt txt_short"})
+                            <span class="info_box info_right">电话：</span>
+                            @Html.TextBoxFor(p => p.SenderInfo.SenderPhone, new {@class = "txt txt_short"})
+                            <span class="info_box info_right">邮编：</span>
+                            @Html.TextBoxFor(p => p.SenderInfo.SenderZip, new {@class = "txt txt_short"})
+                        </li>
+                        <li class="mt10">
+                            <span class="info_box info_right">公司：</span>
+                            @Html.TextBoxFor(p => p.SenderInfo.SenderCompany, new {@class = "txt txt_short"})
+                            <span class="info_box info_right">城市：</span>
+                            @Html.TextBoxFor(p => p.SenderInfo.SenderCity, new {@class = "txt txt_short"})
+                            <span class="info_box info_right">省/州：</span>
+                            @Html.TextBoxFor(p => p.SenderInfo.SenderState, new {@class = "txt txt_short"})
+                        </li>
+                        <li class="mt10">
+                            <span class="info_box info_right">发货地址：</span>
+                            @Html.TextBoxFor(p => p.SenderInfo.SenderAddress, new {@class = "txt txt_longx"})
+                        </li>
+                    </ul>
+                </fieldset>
+            </td>
+        </tr>
+        <tr class="date_row_select">
+            <td style="vertical-align: top">
+                <fieldset style="height: 200px">
+                    <legend>货物保险信息</legend>
+                    <ul>
+                        <li class="mt10">
+                            <span class="info_box info_middle">保险类型：</span>
+                            @Html.DropDownListFor(p => Model.InsuredID, Model.InsuredList, new {style = "width:88px;"})
+                        </li>
+                        <li class="mt10">
+                            <span class="info_box info_middle">保险价值：</span>
+                            @Html.TextBoxFor(p => p.InsureAmount, new {@class = "txt txt_short"})
+                        </li>
+                        <li class="mt10">
+                            <span class="info_box info_middle">是否含敏感货：</span>
+                            @Html.DropDownListFor(p => p.SensitiveTypeID, Model.SensitiveTypeList, new {style = "width:88px;"})
+                        </li>
+                        <li class="mt10">
+                            <span class="info_box info_middle">是否退件：</span>
+                            @Html.CheckBoxFor(p => p.IsReturn)
+                        </li>
+                        <li class="mt10">
+                            <span class="info_box info_middle">是否关税预付：</span>
+                            @Html.CheckBoxFor(p => p.EnableTariffPrepay)
+                            <span id="EnableTariffPrepayErrorMessage"></span>
+                        </li>
+                    </ul>
+                </fieldset>
+            </td>
+            <td>
+                <fieldset>
+                    <legend>申报信息</legend>
+                    <ul>
+                        <li class="mt10">
+                            <span class="info_box info_right">申报类型：</span>
+                            @Html.DropDownListFor(p => Model.AppLicationType, Model.ApplicationTypeList, new {style = "width:88px;"})
+                            <span class="info_box info_right">申报总价值：</span>
+                            <span class="info_box info_right" style="text-align: left" id="ApplicationInfoAmountTotal">@Model.ApplicationInfos.Sum(p => p.Total ?? 0)$</span>
+                        </li>
+                        <li class="mt10">
+                            <table class="data_table ml20" id="ApplicationInfoTable" width="95%" border="1" cellpadding="0" cellspacing="0">
+                                <tr class="date_row_select">
+                                    <th>
+                                        申报名称
+                                    </th>
+                                    <th>
+                                        申报中文名称
+                                    </th>
+                                    <th>
+                                        海关编码
+                                    </th>
+                                    <th>
+                                        数量
+                                    </th>
+                                    <th>
+                                        申报单价$
+                                    </th>
+                                    <th>
+                                        净重量kg
+                                    </th>
+                                    <th>
+                                        总额
+                                    </th>
+                                    <th>
+                                        销售链接
+                                    </th>
+                                    <th>
+                                        备注
+                                    </th>
+                                    <th>
+                                        操作
+                                    </th>
+                                </tr>
+                                <tr class="data_row_dan lowtr">
+                                    <td>
+                                        @Html.TextBox("ApplicationID","",new{@style="display:none"})
+                                        @Html.TextBox("ApplicationName", "", new {@class = "txt txt_short"})
+                                        <p class="error_message" messagefor="ApplicationName"></p>
+                                    </td>
+                                    <td>@Html.TextBox("PickingName", "", new {@class = "txt txt_short"})
+                                        <p class="error_message" messagefor="PickingName"></p>
+                                    </td>
+                                    <td>@Html.TextBox("HSCode", "", new {@class = "txt txt_short"})
+                                        <p class="error_message" messagefor="HSCode"></p>
+                                    </td>
+                                    <td>@Html.TextBox("Qty", "", new {@class = "txt txt_short"})
+                                        <p class="error_message" messagefor="Qty"></p>
+                                    </td>
+                                    <td>@Html.TextBox("UnitPrice", "", new {@class = "txt txt_short"})
+                                        <p class="error_message" messagefor="UnitPrice"></p>
+                                    </td>
+                                    <td>@Html.TextBox("UnitWeight", "", new {@class = "txt txt_short"})
+                                        <p class="error_message" messagefor="UnitWeight"></p>
+                                    </td>
+                                    <td name="rowTotal">
+                                    </td>
+                                    <td>@Html.TextBox("ProductUrl", "", new {@class = "txt txt_short"})
+                                        <p class="error_message" messagefor="ProductUrl"></p>
+                                    </td>
+                                    <td>@Html.TextBox("Remark", "", new {@class = "txt txt_short"})
+                                        <p class="error_message" messagefor="Remark"></p>
+                                    </td>
+                                    <td>
+                                        <input type="button" class="btn" value="新增" onclick="addApplicationInfo(this) "/>
+                                    </td>
+                                </tr>
+                                @{
+                                    foreach (var row in Model.ApplicationInfos)
+                                    {
+                                        rowIndex++;
+                                        <tr class="data_row_dan lowtr">
+                                            <input type="hidden" name="@row.ApplicationID" />
+                                            <td>
+                                                @row.ApplicationName
+                                            </td>
+                                            <td>
+                                                @row.PickingName
+                                            </td>
+                                            <td>
+                                                @row.HSCode
+                                            </td>
+                                            <td>
+                                                @row.Qty
+                                            </td>
+                                            <td>
+                                                @row.UnitPrice
+                                            </td>
+                                            <td>
+                                                @row.UnitWeight
+                                            </td>
+                                            <td name="rowTotalAdd">
+                                                @row.Total
+                                            </td>
+                                            <td>
+                                                @row.ProductUrl
+                                            </td>
+                                            <td>
+                                                @row.Remark
+                                            </td>
+                                            <td>
+                                                <input type="button" class="btn" value="删除" onclick=" removeApplicationInfo(this) "/>
+                                                <input type="hidden" value="@row.ApplicationID" name="ApplicationInfos[@(rowIndex)].ApplicationID">
+                                                <input type="hidden" value="@row.ApplicationName" name="ApplicationInfos[@(rowIndex)].ApplicationName">
+                                                <input type="hidden" value="@row.PickingName" name="ApplicationInfos[@(rowIndex)].PickingName">
+                                                <input type="hidden" value="@row.HSCode" name="ApplicationInfos[@(rowIndex)].HSCode">
+                                                <input type="hidden" value="@row.Qty" name="ApplicationInfos[@(rowIndex)].Qty">
+                                                <input type="hidden" value="@row.UnitPrice" name="ApplicationInfos[@(rowIndex)].UnitPrice">
+                                                <input type="hidden" value="@row.UnitWeight" name="ApplicationInfos[@(rowIndex)].UnitWeight">
+                                                <input type="hidden" value="@row.ProductUrl" name="ApplicationInfos[@(rowIndex)].ProductUrl">
+                                                <input type="hidden" value="@row.Remark" name="ApplicationInfos[@(rowIndex)].Remark">
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </table>
+                        </li>
+                    </ul>
+                </fieldset> 
+            </td>
+        </tr>
+    </table>
+}
+<script type="text/javascript">
+    $(function() {
+
+        //选择运输方式
+        $("#selectShippingMethod").bind("click", function () {
+            var url = "@Url.Action("SelectShippingMethod", "WayBill")" + "?type=1&CustomerId=" + $("#CustomerId").val() + "&CustomerTypeId=" + $("#CustomerTypeId").val();
+            $.showWindow(url,"选择运输方式");
+        });
+
+        //选择国家
+        $("#selectCountry").bind("click", function () {
+            var url = "@Url.Action("SelectCountry", "WayBill")";
+            $.showWindow(url, "选择国家");
+        });
+
+        ////运输方式发生变化
+        //$("#ShippingName").bind("propertychange input", function () {
+        //    alert($("#ShippingMethodId").val());
+        //});
+
+        $("#ChangeReason").bind("change", function() {
+            checkChangeReason();
+        });
+
+        $("#TrackingNumber").bind("change", function () {
+            if ($("#TrackingNumber").val() == "") {
+                $("#TrackingNumberErrorMessage").html("");
+                removeError($("#TrackingNumber"));
+                return;
+            }
+            checkTrackingNumber($("#TrackingNumber").val());
+        });
+
+        //件数为数字
+        $("#PackageNumber").blur(function() {
+            if ($("#PackageNumber").val() != "") {
+                if (!$.RegExpHelper.IsNumber($("#PackageNumber").val())) {
+                    $("#PackageNumberErrorMessage").text("输入格式有误");
+                    return false;
+                } else {
+                   
+                    $("#PackageNumberErrorMessage").text('');
+                    return true;
+                }
+            }
+            else {
+                $("#PackageNumberErrorMessage").text('');
+                return true;
+            }
+        });
+
+
+
+
+        $("#ShippingInfo_ShippingFirstName").bind("change", function () {
+            checkShippingInfoName();
+        });
+        
+        $("#ShippingInfo_ShippingLastName").bind("change", function () {
+            checkShippingInfoName();
+        });
+        
+        $("#ShippingInfo_ShippingCity").bind("change", function () {
+            checkShippingInfoCity();
+        });
+
+        $("#ShippingInfo_ShippingAddress").bind("change", function () {
+            checkShippingInfoAddress();
+        });
+
+        $("#InsuredID").bind("change", function() {
+            checkInsureAmount();
+        });
+        
+        $("#InsureAmount").bind("change", function () {
+            checkInsureAmount();
+        });
+
+        $("#EnableTariffPrepay").bind("change", function() {
+            checkEnableTariffPrepay();
+        });
+
+        $("#ApplicationInfoTable input[name='ApplicationName']").bind("change", function () {
+            checkApplicationName(this);
+        });
+        $("#ApplicationInfoTable input[name='Qty']").bind("change", function () {
+            if (checkQty(this)) {
+                calcRowTotal(this);
+            }
+        });
+        $("#ApplicationInfoTable input[name='UnitPrice']").bind("change", function () {
+            if (checkUnitPrice(this)) {
+                calcRowTotal(this);
+            }
+        });
+        $("#ApplicationInfoTable input[name='UnitWeight']").bind("change", function () {
+            checkUnitWeight(this);
+        });
+        
+        $("#ShippingInfo input").bind("change", function () {
+            checkShippingInfo();
+        });
+        
+        $("#btnSave").bind("click", function () {
+            var errorMessage="";
+            $("form").find("[error]").each(function () {
+                errorMessage += $(this).attr("error")+"\n";
+            });
+            
+            if (errorMessage!="") {
+                alert("提交前请先检查：\n"+errorMessage);
+                return;
+            }
+            
+            if ($("input[name='ChangeType']:checked").length <= 0) {
+                alert("变更原因必须选择一个"); return;
+            }
+                
+            if (checkChangeReason() & checkShippingInfo() & checkShippingMethod() & checkShippingMethodCountry()) {
+                $.ajax({
+                    async: true,
+                    type: "POST",
+                    url: "@Url.Action("SaveWayBillDetail")",
+                    dataType: "JSON",
+                    data: $("form").serializeArray(),
+                    success: function (data) {
+                        if (data.Result) {
+                            alert("保存成功");
+                            // location.href = "@Server.UrlDecode(Request["retUrl"])";
+                            location.href = $("#returnUrl").val();
+                        } else {
+                            alert(data.Message);
+                        }
+                    },
+                    error: function (data) {
+                            alert("保存失败，请检查");
+                    },
+                });
+            }
+        });
+    });
+
+    function selectCountryCallBack(countryName, countryCode) {
+        removeError($("#CountryChineseName"));
+    }
+    
+    function selectShippingMethodCallBack(shippingMethodId, shippingMethodName) {
+        removeError($("#ShippingName"));
+    }
+
+    function checkChangeReason(showAlert) {
+        if ($.RegExpHelper.IsNull($("#ChangeReason").val())) {
+            addError($("#ChangeReason"), "原因说明不能为空");
+            if (showAlert) {
+                alert("原因说明不能为空");
+            }
+            return false;
+        }
+        removeError($("#ChangeReason"));
+        return true;
+    }
+    
+    function checkShippingMethod(showAlert) {
+        if ($.RegExpHelper.IsNull($("#ShippingMethodId").val())) {
+            addError($("#ShippingName"), "运输方式不能为空");
+            if (showAlert) {
+                alert("运输方式不能为空");
+            }
+            return false;
+        }
+        removeError($("#ShippingName"));
+        return true;
+    }
+    
+    function checkShippingMethodCountry(showAlert) {
+        var ret = false;
+        if ($.RegExpHelper.IsNull($("#CountryCode").val())) {
+            addError($("#CountryChineseName"), "运输方式国家不能为空");
+            if (showAlert) {
+                alert("运输方式国家不能为空");
+            }
+            return false;
+        }
+        
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: "@Url.Action("CheckShippingMethodCountry")",
+            dataType: "JSON",
+            data: { ShippingMethodId: $("#ShippingMethodId").val(), CountryCode: $("#CountryCode").val() },
+            success: function (data) {
+                if (data.Result) {
+                    removeError($("#CountryChineseName"));
+                    ret = true;
+                } else {
+                    addError($("#CountryChineseName"), "运输方式国家校验失败");
+                    ret = false;
+                }
+            }
+        });
+        return ret;
+    }
+    
+    function checkTrackingNumber(trackingNumber) {
+        $("#TrackingNumberErrorMessage").html("");
+        $.ajax({
+            async: true,
+            type:  "POST",
+            url:  "@Url.Action("checkTrackingNumber")",
+            dataType: "JSON",
+            data: { trackingNumber: trackingNumber, WayBillNumber: $("#WayBillNumber").val() },
+            success: function(data) {
+                if (data.Result) {
+                    $("#TrackingNumberErrorMessage").html("跟踪号可用");
+                    $("#TrackingNumberErrorMessage").css("color", "black");
+                    removeError($("#TrackingNumber"));
+                } else {
+                    $("#TrackingNumberErrorMessage").html("跟踪号不可用");
+                    $("#TrackingNumberErrorMessage").css("color", "red");
+                    addError($("#TrackingNumber"), "跟踪号不可用");
+                }
+            }
+        });
+    }
+
+    function addError(obj, message) {
+        $(obj).attr("Error", message ? message : "");
+        $(obj).addClass("error");
+        $("[messagefor='" + $(obj).attr("id") + "']").html($(obj).attr("Error"));
+        $("span[messagefor='" + $(obj).attr("id") + "']").offset({ left: $(obj).offset().left });
+        $("[messagefor='" + $(obj).attr("id") + "']").html($(obj).attr("Error"));
+    }
+
+    function removeError(obj) {
+        $(obj).removeAttr("Error");
+        $(obj).removeClass("error");
+        $("[messagefor='" + $(obj).attr("id") + "']").html("");
+    }
+
+    function removeApplicationInfo(obj) {
+        if ($(obj).parents("table:first").find("tr").length <= 3) {
+            alert("必须至少包含一条申报信息");
+            return;
+        }
+        if (confirm("确实删除该条申报信息？")) {
+            $(obj).parent().parent().remove();
+            updateApplicationTotal();
+        }
+    }
+
+    function addApplicationInfo(obj) {
+
+        var tr = $(obj).parent().parent();
+
+        if (checkApplicationName(tr.find("input[name='ApplicationName']"))
+            & checkQty(tr.find("input[name='Qty']"))
+            & checkUnitPrice(tr.find("input[name='UnitPrice']"))
+            & checkUnitWeight(tr.find("input[name='UnitWeight']")))
+           {
+            if (calcRowTotal(obj) && checkApplicationInfoRemote(obj)) {
+                addApplicationInfoRow(
+                    {
+                        ApplicationID:tr.find("input[name='ApplicationID").val(),
+                        ApplicationName: tr.find("input[name='ApplicationName']").val(),
+                        PickingName: tr.find("input[name='PickingName']").val(),
+                        HSCode: tr.find("input[name='HSCode']").val(),
+                        Qty: tr.find("input[name='Qty']").val(),
+                        UnitPrice: tr.find("input[name='UnitPrice']").val(),
+                        UnitWeight: tr.find("input[name='UnitWeight']").val(),
+                        ProductUrl: tr.find("input[name='ProductUrl']").val(),
+                        Total: tr.find("td[name='rowTotal']").text(),
+                        Remark: tr.find("input[name='Remark']").val()
+                    });
+                clearApplicationInfoAddRow();
+            }
+        }
+    }
+
+    function checkShippingInfo() {
+        return checkShippingInfoName() & checkShippingInfoAddress() & checkShippingInfoCity() & checkShippingInfoRemote();
+    }
+    
+    function checkShippingInfoName(showAlert) {
+        if ($.RegExpHelper.IsNull($("#ShippingInfo_ShippingFirstName").val()) && $.RegExpHelper.IsNull($("#ShippingInfo_ShippingLastName").val())) {
+            addError($("#ShippingInfo_ShippingFirstName"), "收件人姓或名至少填一个");
+            addError($("#ShippingInfo_ShippingLastName"), "收件人姓或名至少填一个");
+            if (showAlert) {
+                alert("收件人姓或名至少填一个");
+            }
+            return false;
+        }
+        removeError($("#ShippingInfo_ShippingFirstName"));
+        removeError($("#ShippingInfo_ShippingLastName"));
+        return true;
+    }
+    
+    function checkShippingInfoAddress(showAlert) {
+        if ($.RegExpHelper.IsNull($("#ShippingInfo_ShippingAddress").val())) {
+            addError($("#ShippingInfo_ShippingAddress"), "收货地址1不能为空");
+            if (showAlert) {
+                alert("收货地址1不能为空");
+            }
+            return false;
+        }
+        removeError($("#ShippingInfo_ShippingAddress"));
+        return true;
+    }
+    
+    function checkShippingInfoCity(showAlert) {
+        if ($.RegExpHelper.IsNull($("#ShippingInfo_ShippingCity").val())) {
+            addError($("#ShippingInfo_ShippingCity"), "收件人城市不能为空");
+            if (showAlert) {
+                alert("收件人城市不能为空");
+            }
+            return false;
+        }
+        removeError($("#ShippingInfo_ShippingCity"));
+        return true;
+    }
+
+    function checkShippingInfoRemote() {
+        var ret = false;
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: "@Url.Action("CheckShippingInfo")",
+            dataType: "JSON",
+            data: $.merge($("#ShippingInfo  input").serializeArray(), [{ name: "shippingMethodId", value: $("#ShippingMethodId").val() }]),
+            success: function(data) {
+                $("#ShippingInfo input").each(function() {
+                    removeError(this);
+                });
+                if (data.Result) {
+                    ret= true;
+                } else {
+                    var rawMessage = eval("(" + data.Message + ")");
+                    var errorMessage = "";
+                    for (var i in rawMessage) {
+                        addError($("#" + rawMessage[i].key), rawMessage[i].value);
+                        errorMessage += rawMessage[i].value + "\n";
+                    }
+                    //alert("该运输方式下，收件人信息还存在以下问题：\n" + errorMessage);
+                    ret= false;
+                }
+            }
+        });
+        return ret;
+    }
+
+    function checkInsureAmount(showAlert) {
+        if ($("#InsuredID").val() != "" && !$.RegExpHelper.IsDecimalP($("#InsureAmount").val())) {
+            addError($("#InsureAmount"), "保险价值不能为空");
+            if (showAlert) {
+                alert("保险价值不能为空");
+            }
+            return false;
+        }
+        removeError($("#InsureAmount"));
+        return true;
+    }
+
+    function checkEnableTariffPrepay() {
+        if ($("#EnableTariffPrepay").attr("checked")) {
+            $.ajax({
+                async: true,
+                type: "POST",
+                url: "@Url.Action("CheckTariffPrepayFee")",
+                dataType: "JSON",
+                data: { shippingMethodId: $("#ShippingMethodId").val(), customerCode: $("#CustomerCode").val() },
+                success: function(data) {
+                    if (data.Result) {
+                        $("#EnableTariffPrepayErrorMessage").html("");
+                        removeError($("#EnableTariffPrepay"));
+                    } else {
+                        $("#EnableTariffPrepayErrorMessage").html("该客户的该运输方式未开通关税预付");
+                        $("#EnableTariffPrepayErrorMessage").css("color", "red");
+                        addError($("#EnableTariffPrepay"), "该客户的该运输方式未开通关税预付");
+                    }
+                }
+            });
+        } else {
+            $("#EnableTariffPrepayErrorMessage").html("");
+            removeError($("#EnableTariffPrepay"));
+        }
+    }
+
+    function checkApplicationName(obj, showAlert) {
+        var $element = $(obj);
+        if ($.RegExpHelper.IsNull($element.val())) {
+            addError($element, "申报名称必填");
+            if (showAlert)
+            {
+                alert("申报名称必填");
+            }
+            return false;
+        }
+        removeError(obj);
+        return true;
+    }
+
+    function checkQty(obj, showAlert) {
+        var $element = $(obj);
+        if (!$.RegExpHelper.IsNumber($element.val())) {
+            addError($element, "申报数量不正确");
+            if (showAlert)
+            {
+                alert("申报数量不正确");
+            }
+            return false;
+        }
+        removeError(obj);
+        return true;
+    }
+
+    function checkUnitPrice(obj,showAlert) {
+        var $element = $(obj);
+        if (!$.RegExpHelper.IsDecimalP($element.val())) {
+            addError($element, "申报单价不正确");
+            if (showAlert)
+            {
+                alert("申报单价不正确");
+            }
+            return false;
+        }
+        removeError(obj);
+        return true;
+    }
+
+    function checkUnitWeight(obj, showAlert) {
+        var $element = $(obj);
+        if (!$.RegExpHelper.IsDecimalP($element.val())) {
+            addError($element, "申报净重量不正确");
+            if (showAlert)
+            {
+                alert("申报净重量不正确");
+            }
+            return false;
+        }
+        removeError(obj);
+        return true;
+    }
+
+    function checkApplicationInfoRemote(obj) {
+        var tr = $(obj).parent().parent();
+        var ret = false;
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: "@Url.Action("CheckApplicationInfo")",
+            dataType: "JSON",
+            data: $.merge(tr.find("input[type='text']").serializeArray(), [{ name: "shippingMethodId", value: $("#ShippingMethodId").val() }]),
+            success: function(data) {
+                tr.find("input[type='text']").each(function () {
+                    removeError(this);
+                });
+                if (data.Result) {
+                    ret = true;
+                } else {
+                    var rawMessage = eval("(" + data.Message + ")");
+                    var errorMessage = "";
+                    for (var i in rawMessage) {
+                        addError($("#" + rawMessage[i].key), rawMessage[i].value);
+                        errorMessage += rawMessage[i].value + "\n";
+                    }
+                    //alert("该运输方式下，申报信息还存在以下问题：\n" + errorMessage);
+                    ret= false;
+                }
+            }
+        });
+        return ret;
+    }
+
+
+    function calcRowTotal(obj) {
+        var tr = $(obj).parent().parent();
+        try {
+            var qty = tr.find("input[name='Qty']").val();
+            var unitPrice = tr.find("input[name='UnitPrice']").val();
+            tr.find("td[name='rowTotal']").html(parseFloat(qty * unitPrice).toFixed(3));
+            return true;
+        } catch (e) {
+            tr.find("td[name='rowTotal']").html("计算失败");
+            return false;
+        }
+    }
+
+    function addApplicationInfoRow(obj) {
+
+        var inputHiddens = ""
+            + "<input type=\"hidden\" value=\"" + obj.ApplicationName + "\" name=\"ApplicationInfos[0].ApplicationName\"/>"
+            + "<input type=\"hidden\" value=\"" + obj.PickingName + "\" name=\"ApplicationInfos[0].PickingName\"/>"
+            + "<input type=\"hidden\" value=\"" + obj.HSCode + "\" name=\"ApplicationInfos[0].HSCode\"/>"
+            + "<input type=\"hidden\" value=\"" + obj.Qty + "\" name=\"ApplicationInfos[0].Qty\"/>"
+            + "<input type=\"hidden\" value=\"" + obj.UnitPrice + "\" name=\"ApplicationInfos[0].UnitPrice\"/>"
+            + "<input type=\"hidden\" value=\"" + obj.UnitWeight + "\" name=\"ApplicationInfos[0].UnitWeight\"/>"
+            + "<input type=\"hidden\" value=\"" + obj.ProductUrl + "\" name=\"ApplicationInfos[0].ProductUrl\"/>"
+            + "<input type=\"hidden\" value=\"" + obj.Remark + "\" name=\"ApplicationInfos[0].Remark\"/>";
+        var row = $('<tr class="data_row_dan lowtr" </tr>')
+            .append($('<td></td>').text(obj.ApplicationName))
+            .append($('<td></td>').text(obj.PickingName))
+            .append($('<td></td>').text(obj.HSCode))
+            .append($('<td></td>').text(obj.Qty))
+            .append($('<td></td>').text(obj.UnitPrice))
+            .append($('<td></td>').text(obj.UnitWeight))
+            .append($('<td name="rowTotalAdd"></td>').text(obj.Total))
+            .append($('<td></td>').text(obj.ProductUrl))
+            .append($('<td></td>').text(obj.Remark))
+            .append($('<td></td>').html("<input type=\"button\" class=\"btn\" value=\"删除\" onclick=\"removeApplicationInfo(this)\"/>" + inputHiddens));
+
+        $(row).insertAfter("#ApplicationInfoTable tr:last");
+
+        updateApplicationTotal();
+    }
+
+
+    function clearApplicationInfoAddRow() {
+        $("#ApplicationInfoTable tr:eq(1) input").each(function() {
+            if (!$(this).hasClass("btn"))
+                $(this).val("");
+        });
+        $("#ApplicationInfoTable tr:eq(1) td[name='rowTotal']").text("");
+    }
+
+    function updateApplicationTotal() {
+        var value = 0;
+        $("#ApplicationInfoTable tr").find("td[name='rowTotalAdd']").each(function() {
+            if ($.RegExpHelper.IsDecimalP($(this).text())) {
+                value += parseFloat($(this).text());
+            }
+        });
+        $("#ApplicationInfoAmountTotal").text(value.toFixed(3) + "$");
+        
+        var dataRowIndex = -1;
+        $("#ApplicationInfoTable tr:gt(1)").each(function() {
+            dataRowIndex++;
+            $(this).find("input[type='hidden']").each(function() {
+                $(this).attr("name",$(this).attr("name").replace(/\[\d+\]/, "[" + dataRowIndex + "]"));
+            });
+        });
+    }
+
+</script>
+        

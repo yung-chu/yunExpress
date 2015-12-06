@@ -1,0 +1,139 @@
+﻿@model LMS.Controllers.WayBillController.InStorageSyncErrorListModel
+@{
+    ViewBag.Title = "入仓异步保存失败订单";
+}
+
+<div class="domebg" id="right_con">
+
+    <input type="button" value="批量提交订单" class="btn ml5" onclick="retry(); return false;">
+
+    <div id="in_storage_sync_div">
+        <table class="data_table mt5" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr class="data_row_two">
+                    <th><input type="checkbox" name="checkAll" id="checkAll" />全选
+                    </th>
+                    <th>序号
+                    </th>
+                    <th>入仓单号
+                    </th>
+                    <th>运单号
+                    </th>
+                    <th>订单号
+                    </th>
+                    <th>跟踪号
+                    </th>
+                    <th>状态
+                    </th>
+                    <th>错误描述
+                    </th>
+                    <th>操作
+                    </th>
+                </tr>
+            </thead>
+            <tbody
+                 @{
+                     var index = 1;
+                     foreach (var row in Model.List.InnerList)
+                     {
+                             <tr class="data_row_dan">
+                                 <td>
+                                     <input type="checkbox" name="@(row.TaskID)" />
+                                 </td>
+                                 <td>@index
+                                 </td>
+                                 <td>@(row.Body.InStorageID)
+                                 </td>
+                                 <td>@(row.TaskKey)
+                                 </td>
+                                 <td>@(row.Body.WayBillInfoExt.CustomerOrderID)
+                                 </td>
+                                 <td>@(row.Body.WayBillInfoExt.TrackingNumber)
+                                 </td>
+                                 <td>@{
+                         switch (row.Status)
+                         {
+                             case -1:
+                                     @Html.Raw("<span style='color:red'>失败</span>");
+                                                                                   break;
+                             case 0:
+                                     @Html.Raw("未处理");
+                                                     break;
+                             case 1:
+                                     @Html.Raw("处理中");
+                                                     break;
+                             default:
+                                                     break;
+                         }
+                                 }
+                                 </td>
+                                 <td>@(row.Error)
+                                 </td>
+                                 <td><a href="javascript:void(0);" onclick="retry(@(row.TaskID))">再次提交</a>
+                                 </td>
+                             </tr>
+                     }
+                }
+                <tr class="data_row_none">
+                    <td colspan="10">
+                        @Html.Pager(Model.List, Model.SearchParam)
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript"> 
+    String.prototype.TrimEnd = function (c) { var str = this; var rg = new RegExp(c); var i = str.length; while (rg.test(str.charAt(--i))); return str.slice(0, i + 1); };
+
+    $(function () {
+        //复选框全选
+        $("#checkAll").click(function () {
+            var checks = $("#in_storage_sync_div").find(":checkbox[name!=checkAll]");            
+            if ($(this).attr("checked")) {
+                $(checks).attr("checked", true);
+            } else {
+                $(checks).attr("checked", false);
+            }
+        });
+    });
+
+    function getIds() {
+        var checks = $("#in_storage_sync_div").find(":checkbox[name!=checkAll][checked=checked]");
+        var ids = "";//new Array();
+        $.each(checks, function (i, n) {
+            ids += $(n).attr("name") + ",";           
+        });      
+        ids = ids.TrimEnd(",");
+        console.log("ids:"+ids);
+        return ids;
+    }
+    function retry(id) {       
+        if (id == undefined || id == null) {
+            var ids = getIds();
+            if (ids != "") {
+                doPost(ids);
+            } else {
+                alert("请选择！");
+            }
+        } else {
+            doPost(id);
+        }
+    }
+    function doPost(s) {
+        $.ajax({
+            type: "POST",
+            url: "InStorageSyncRetry",
+            data: { ids: s },
+            success: function (msg) {
+                if (msg.Status == 1) {
+                    alert("提交成功！");
+                    location.reload();
+                } else {
+                    alert(msg.Info);
+                }
+                console.log(msg);
+            }
+        });
+    }   
+</script>

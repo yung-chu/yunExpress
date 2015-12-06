@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Title = "Add";
+}
+
+@model LMS.UserCenter.Controllers.OrderController.Models.CustomerOrderInfoModel
+@section Scripts
+{
+    <script src="@Url.Content("~/js/jquery-jtemplates.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/js/validation.js")" type="text/javascript"></script>
+}
+<!-- 面包屑 Start -->
+<div class="bd_b bread_box">
+    <a href="javascript:" class="icon-home bread_home"></a>
+    <strong class="gtlt bread_gtlt">&gt;&gt;</strong>
+    <a href="javascript:" class="bread_off">运输服务</a>
+    <strong class="gtlt bread_gtlt">&gt;&gt;</strong>
+    <a href="javascript:" class="bread_on">创建订单</a>
+</div>
+
+<!-- 面包屑 Start -->
+
+@Html.Partial("_AddAndEdit", Model)

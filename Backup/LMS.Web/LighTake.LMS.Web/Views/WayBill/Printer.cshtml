@@ -1,0 +1,259 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>订单打印</title>
+    <script language="javascript" src="@Url.Content("~/Scripts/print/LodopFuncs.js")"></script>
+    <object id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width="0" height="0">
+        <embed id="LODOP_EM" type="application/x-print-lodop" width="0" height="0"></embed>
+    </object>
+</head>
+
+
+<input type="button" value="打印" onclick="prn_print()" />
+<input type="button" value="打印预览" onclick="prn_preview()" />
+<script type="text/javascript">
+    var LODOP; //声明为全局变量     function prn_print() {
+        CreateOneFormPage();
+        LODOP.PRINT();
+    };    function prn_preview() {
+        CreateOneFormPage();
+        LODOP.PREVIEW();
+    };    function CreateOneFormPage() {
+        LODOP = getLodop(document.getElementById('LODOP_OB'), document.getElementById('LODOP_EM'));
+        LODOP.PRINT_INIT("打印TNT小包");
+        //LODOP.SET_PRINT_STYLE("FontSize", 11);
+        var strFormHtml = "<body style=\"margin: 0; font-family:Times New Roman, Times, serif; line-height: 1.2;\">+" + document.getElementById("printTB").innerHTML + "</body>";
+        //LODOP.SET_PRINT_PAGESIZE(0, 0, 15000, "CreateCustomPage");
+        LODOP.ADD_PRINT_HTM(10, 10, 350, 900, document.getElementById("printTB").innerHTML);
+    };
+</script>
+<body  style="margin: 0; font-family: 'Times New Roman', Times, serif; line-height: 1.2;">
+    <table id="printTB" cellpadding="0" width="350" height="540" cellspacing="0" border="0" style="font-size: 11px; font-family: Arial, Helvetica, sans-serif; line-height: 1;">
+        <tr>
+            <td>
+                <table cellpadding="0" width="100%" cellspacing="0" border="0" style="border-top: 1px solid #000;">
+                    <tr>
+                        <td colspan="2" style="padding: 5px; border: 1px solid #000; border-top: none;">
+                            <table cellpadding="0" width="100%" cellspacing="0" border="0">
+                                <tr>
+                                    <td width="45%" style="font-size: 12px; font-family: 'Times New Roman', Times, serif;">From:
+                                        <br />
+                                        <strong style="font-size: 16px;">S-11024 </strong>
+                                        <br />
+                                        Postbus 71203<br />
+                                        3000 PE Rotterdam Netherlands<br />
+                                    </td>
+                                    <td width="55%">
+                                       @* <img src="priority.jpg" width="100" />
+                                        <img src="postnl.jpg" width="100" />*@
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <table cellpadding="0" width="100%" style="border: 1px solid #000; border-top: none;" cellspacing="0">
+                                <tr>
+                                    <td colspan="2">
+                                        <table cellpadding="0" width="100%" cellspacing="0" border="0" style="font-family: 'Times New Roman', Times, serif; font-size: 14px;">
+                                           
+                                            <tr>
+                                                <td align="left" style="padding: 5px; border-bottom: 1px solid #000; font-size: 12px;">
+                                                    To : 收件人<br />
+                                                    城市，省份，邮编 国家 电话<br />
+                                                             1350 E OGDEN AVE-NAPERVILLE-IL-60563-164<br />
+                                                    6306317242<br />
+                                                    USA
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" colspan="2" style="padding: 5px; border-bottom: 1px solid #000;">
+                                        <table cellpadding="0" width="100%" cellspacing="0" border="0" style="font-family: 'Times New Roman', Times, serif; font-size: 12px;">
+                                            <tr>
+                                                <td align="center">Registered/recommande
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" align="center">
+                                                    <span style="font-family: c39P36DmTt; font-size: 40px; color: #000;">RS104672367NL
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="center">R*&*&^*
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="padding: 5px;">
+                                        <table cellpadding="0" width="100%" cellspacing="0" border="0" >
+                                            <tr>
+                                                <td>
+                                                    <table cellpadding="0" width="100%" cellspacing="0" border="0" style="font-family: 'Times New Roman', Times, serif; font-size: 12px;">
+                                                        <tr>
+                                                            <td align="right">Customer Code:</td>
+                                                            <td align="left">35147859620</td>
+                                                            <td align="right">Order ID:</td>
+                                                            <td align="left">35147859620</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="">
+                            <table cellpadding="0" width="100%" cellspacing="0" border="0" style="border: 1px solid #000; border-top: none">
+                                <tr>
+                                    <td style="padding: 2px 4px;">
+                                        <table cellpadding="0" width="100%" cellspacing="0" border="0" style="font-family: 'Times New Roman', Times, serif; font-size: 12px;">
+                                            <tr>
+                                                <td width="33%" align="left">
+                                                    <strong style="font-size: 12px; line-height: 1; color: #000">CUSTOMS DECLARATION</strong>
+                                                </td>
+                                                <td align="center">I may be opened officially
+                                                </td>
+                                                <td width="20%" align="right">
+                                                    <strong>CN22</strong>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 2px 4px; border-top: 1px solid #000;">
+                                        <table cellpadding="0" width="100%" cellspacing="0" border="0" style="font-family: 'Times New Roman', Times, serif; font-size: 12px;">
+                                            <tr>
+                                                <td width="30%" align="left">Designated operator
+                                                </td>
+                                                <td width="28%" align="center">POSTNL
+                                                </td>
+                                                <td align="right" style="display: table; width: 100%; table-layout: fixed; word-wrap: break-word;">I Important! See instructions on the bock
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-top: 1px solid #000;">
+                                        <table cellpadding="0" width="100%" cellspacing="0" border="0" style="font-family: 'Times New Roman', Times, serif; font-size: 12px;">
+                                            <tr>
+                                                <td width="10%" style="border-right: 1px solid #000;">
+                                                    <span style="display: block; height: 16px; position: relative; cursor: pointer;" id="img1">
+                                                        <img src="selec.jpg" style="position: absolute; left: -9999em; top: 0;" />
+                                                    </span>
+                                                </td>
+                                                <td width="40%" style="border-right: 1px solid #000;">Gift
+                                                </td>
+                                                <td width="10%" style="border-right: 1px solid #000;">
+                                                    <span style="display: block; height: 16px; position: relative; cursor: pointer;" id="img2">
+                                                        <img src="selec.jpg" style="position: absolute; left: -9999em; top: 0;" />
+                                                    </span>
+                                                </td>
+                                                <td width="40%" style="display: table; width: 100%; table-layout: fixed; word-wrap: break-word;">Commercial Sample
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-top: 1px solid #000;">
+                                        <table cellpadding="0" width="100%" cellspacing="0" border="0" style="font-family: 'Times New Roman', Times, serif; font-size: 12px;">
+                                            <tr>
+                                                <td width="10%" style="border-right: 1px solid #000;">
+                                                    <span style="display: block; height: 16px; position: relative; cursor: pointer;" id="img3">
+                                                        <img src="selec.jpg" style="position: absolute; left: -9999em; top: 0;" />
+                                                    </span>
+                                                </td>
+                                                <td valign="middle" width="40%" style="border-right: 1px solid #000;">Documents
+                                                </td>
+                                                <td width="10%" style="border-right: 1px solid #000;">
+                                                    <span style="display: block; height: 16px; position: relative; cursor: pointer;" id="img4">
+                                                        <img src="selec.jpg" style="position: absolute; left: -9999em; top: 0;" />
+                                                    </span>
+                                                </td>
+                                                <td valign="middle" width="40%" style="display: table;">Other
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-top: 1px solid #000;">
+                                        <table cellpadding="0" width="100%" cellspacing="0" border="0" style="font-family: 'Times New Roman', Times, serif; font-size: 12px;">
+                                            <tr>
+                                                <td width="45%" style="border-right: 1px solid #000; padding: 2px 4px;">Quantity and detailed<br>
+                                                    description of  contents
+                                                </td>
+                                                <td width="30%" align="center" style="border-right: 1px solid #000; padding: 2px 4px;">Weight(in g)
+                                                </td>
+                                                <td width="25%" align="center" style="padding: 2px 4px;">value
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-top: 1px solid #000;">
+                                        <table cellpadding="0" width="100%" cellspacing="0" border="0" style="font-family: 'Times New Roman', Times, serif; font-size: 12px;">
+                                            <tr>
+                                                <td width="45%" align="center" style="border-right: 1px solid #000; padding: 2px 4px;">pig(1 pc)
+                                                </td>
+                                                <td width="30%" align="center" style="border-right: 1px solid #000; padding: 2px 4px;">10
+                                                </td>
+                                                <td width="25%" align="center" style="padding: 2px 4px;">10
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-top: 1px solid #000;">
+                                        <table cellpadding="0" width="100%" cellspacing="0" border="0" style="font-family: 'Times New Roman', Times, serif; font-size: 12px;">
+                                            <tr>
+                                                <td width="45%" style="border-right: 1px solid #000; padding: 2px 4px;">For commercial items only. If known, HS tariff number(4) and country of origin of goods(5) Singapore
+                                                </td>
+                                                <td width="30%" align="center" style="border-right: 1px solid #000; padding: 2px 4px;">Total Weight (in kg) 0.01
+                                                </td>
+                                                <td width="25%" align="center" style="padding: 2px 4px;">Total Value USD 10
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-top: 1px solid #000;">
+                                        <table cellpadding="0" width="100%" cellspacing="0" border="0" style="font-family: 'Times New Roman', Times, serif; font-size: 12px;">
+                                            <tr>
+                                                <td style="padding: 2px 4px;">I, the undersigned, whose name and address are give on the item certify that the particulars given in this declaration are correct and that this item does not contain any dangerous article or articles prohibited by legislation or by postal or customs regulations.
+Date and sender's signature(9)
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+</body>
+
+</html>

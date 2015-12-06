@@ -1,0 +1,312 @@
+﻿@{
+    ViewBag.Title = "AddOrEditDeliveryDeviation";
+}
+
+
+@model LMS.Controllers.FinancialController.DeliveryDeviationModel
+
+<div id="showVenderListInfo" style="overflow: scroll; display: none; position: relative">
+</div>
+
+<div id="showShippingMethodListInfo" style="overflow: scroll; display: none; position: relative">
+</div>
+
+
+<div class="cell pl10 mt30">
+    <div class="domebg" style="margin-left: 100px;margin-top: 30px">
+                     
+               <input type="hidden" value="@Model.GetTypeItem" id="getOperateType"/>
+               <input type="hidden" value="@Model.GetId" id="deliveryDeviationId"/>
+
+               <input type="hidden" value="@Model.GetVenderCode" id="GetVenderCode"/>
+               <input type="hidden" value="@Model.GetVenderName" id="GetVenderName"/>
+               <input type="hidden" value="@Model.GetShippingmethodId" id="GetShippingmethodId"/>
+               <input type="hidden" value="@Model.GetShippingmethodName" id="GetShippingmethodName"/>
+               <input type="hidden" value="@Model.GetWaillDeviationValue" id="GetWaillDeviationValue"/>
+               <input type="hidden" value="@Model.GetWaillDeviationRate" id="GetWaillDeviationRate"/>
+               <input type="hidden" value="@Model.GetWeightDeviationValue" id="GetWeightDeviationValue"/>
+               <input type="hidden" value="@Model.GetWeightDeviationRate" id="GetWeightDeviationRate"/>
+        
+               <input type="hidden" id="waybillFeeCount"/>
+
+
+        <span class="info_box info_select"><span style="color: red">*</span>服务商:</span>
+                    <input type="text" id="_VenderNameInfo"  name="FilterModel.VenderName" value="@Model.FilterModel.VenderName" readonly="readonly" class="txt txt_short"/>
+                    <input type="button" id="selectVenderListInfo" class="btn" value="选择" />
+                    <input type="hidden" id="_VenderCodeInfo" name="FilterModel.VenderCode"  value="@Model.FilterModel.VenderCode"/>
+             
+        
+         <br/> <br/>
+
+                   <span class="info_box info_select"><span style="color: red">*</span>运输方式:</span>
+                    <input type="text" id="ShippingNameInfo"  name="FilterModel.ShippingmethodName" value="@Model.FilterModel.ShippingmethodName" readonly="readonly" class="txt txt_short"/>
+                    <input type="hidden" id="ShippingMethodIdInfo" name="FilterModel.ShippingMethodId" value="@Model.FilterModel.ShippingmethodID"/>
+                    <input type="button" id="selectShippingMethodListInfo" class="btn" value="选择" />
+        
+        
+          <br/> <br/>
+         
+        
+                       <span class="info_box info_select"><span style="color: red">*</span>运费偏差:</span>
+                            <select  onchange="selectWayBillFeeDeviation(this[selectedIndex].innerHTML)" id="wayBillFeeDeviationSelect">
+                                <option value="0"  selected="selected">偏差值</option>
+                                <option value="1">偏差率</option>
+                            </select>
+                           <input type="text" id="WayBillFeeDeviation"/>
+                           <span id="spanWayBillFeeDeviation"></span>
+            
+         <br/> <br/>
+
+                        <span class="info_box info_select"><span style="color: red">*</span>重量偏差:</span>
+                            <select  onchange="selectWeightDeviation(this[selectedIndex].innerHTML)" id="weightDeviationSelect">
+                                <option value="0" selected="selected" >偏差值</option>
+                                <option value="1">偏差率</option>
+                            </select>
+        
+                             <input type="text" id="WeightDeviation"/>
+                            <span id="spanWeightDeviation"></span>
+        
+        
+                      
+        <br/> <br/>
+        
+        <div style="padding-left: 60px">
+            <input type="submit" value="保 存" id="Save" name="Save" onclick="SavaData()" class="btn">
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+           <input type="button" value="取 消" id="Cancel" name="Cancel" class="btn">
+        </div>
+
+              
+    </div>
+</div>
+
+<script type="text/javascript">
+    var weightStr = "偏差值";
+    var wayBillFeeStr = "偏差值";
+
+    var getWeightDeviation;
+    var getWayBillDeviation;
+
+    $("#spanWeightDeviation").html("kg");
+    $("#spanWayBillFeeDeviation").html("元");
+
+
+    $(function() {
+
+        //编辑初始化
+        if ($("#getOperateType").val() == 2) {
+
+            $("#_VenderCodeInfo").val($.trim($("#GetVenderCode").val()));
+            $("#_VenderNameInfo").val($.trim($("#GetVenderName").val()));
+            $("#ShippingMethodIdInfo").val($.trim($("#GetShippingmethodId").val()));
+            $("#ShippingNameInfo").val($.trim($("#GetShippingmethodName").val()));
+
+            var getWaillDeviationValue = $("#GetWaillDeviationValue").val();
+            var getWaillDeviationRate = $("#GetWaillDeviationRate").val();
+            var getWeightDeviationValue = $("#GetWeightDeviationValue").val();
+            var getWeightDeviationRate = $("#GetWeightDeviationRate").val();
+
+            //运费
+            if (getWaillDeviationValue != "") {
+
+                $("#WayBillFeeDeviation").val(getWaillDeviationValue);
+                $("#spanWayBillFeeDeviation").html("元");
+                wayBillFeeStr = "偏差值";
+                getWayBillDeviation = getWaillDeviationValue;
+            }
+            if (getWaillDeviationRate != "") {
+
+                $("#WayBillFeeDeviation").val(getWaillDeviationRate);
+                $("#wayBillFeeDeviationSelect option[value='1']").attr("selected", true);
+                $("#spanWayBillFeeDeviation").html("%");
+                wayBillFeeStr = "偏差率";
+                getWayBillDeviation = getWaillDeviationRate;
+            }
+
+            //重量
+            if (getWeightDeviationValue != "") {
+                $("#WeightDeviation").val(getWeightDeviationValue);
+                $("#spanWeightDeviation").html("kg");
+                weightStr = "偏差值";
+                getWeightDeviation = getWeightDeviationValue;
+            }
+            if (getWeightDeviationRate != "") {
+
+                $("#WeightDeviation").val(getWeightDeviationRate);
+                $("#weightDeviationSelect option[value='1']").attr("selected", true);
+                $("#spanWeightDeviation").html("%");
+                weightStr = "偏差率";
+                getWeightDeviation = getWeightDeviationRate;
+            }
+
+        }
+
+
+        //选择服务商
+        $("#selectVenderListInfo").bind("click", function() {
+
+            $("#showVenderListInfo").show();
+            $("#showVenderListInfo").showWindow("@Url.Action("SelectVenderInfo", "WayBill")", "选择服务商");
+            var parentWindow = $("#showVenderListInfo").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                    top: 120
+                }, {
+                    duration: 50,
+                    step: function(now, fx) {
+                        $(".window").css("top", now);
+                    }
+                });
+            $("#showVenderListInfo").show();
+
+
+        });
+
+        //选择运输方式
+        $("#selectShippingMethodListInfo").bind("click", function() {
+
+            $("#showShippingMethodListInfo").show();
+            $("#showShippingMethodListInfo").showWindow("@Url.Action("SelectShippingMethodInfo", "WayBill")?venderCode=" + $("#_VenderCodeInfo").val() + "&type=2", "选择运输方式");
+            var parentWindow = $("#showShippingMethodListInfo").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                    top: 120
+                }, {
+                    duration: 50,
+                    step: function(now, fx) {
+                        $(".window").css("top", now);
+                    }
+                });
+            $("#showShippingMethodListInfo").show();
+        });
+
+     
+
+        //取消
+        $("#Cancel").click(function () {
+            $(".panel-tool-close").trigger("click");
+        });
+        
+    });
+
+
+
+
+
+
+    //重量偏差下拉框切换
+    function selectWeightDeviation(data) {
+
+        //编辑切换清空
+        if ($("#getOperateType").val() == 2) {
+            if (weightStr == data && data == "偏差值") {
+                        $("#spanWeightDeviation").html("kg");
+                        $("#WeightDeviation").val(getWeightDeviation);
+            } else if (weightStr == data && data == "偏差率") {
+                        $("#spanWeightDeviation").html("%");
+                        $("#WeightDeviation").val(getWeightDeviation);
+            } else if (weightStr != data && data == "偏差值") {
+                    $("#spanWeightDeviation").html("kg");
+                    $("#WeightDeviation").val("");
+            } else if (weightStr != data && data == "偏差率") {
+                    $("#spanWeightDeviation").html("%");
+                    $("#WeightDeviation").val("");
+                }
+            }
+        
+
+        if (data == "偏差值") {
+            $("#spanWeightDeviation").html("kg");
+        } else {
+            $("#spanWeightDeviation").html("%");
+        }
+    };
+    
+    //运费偏差下拉框切换
+    function selectWayBillFeeDeviation(data) {
+
+        //编辑切换清空
+        if ($("#getOperateType").val() == 2) {
+        
+            if (wayBillFeeStr ==data && data== "偏差值") {
+
+                $("#spanWayBillFeeDeviation").html("元");
+                $("#WayBillFeeDeviation").val(getWayBillDeviation);
+            }else if (wayBillFeeStr == data && data == "偏差率") {
+                $("#spanWayBillFeeDeviation").html("%");
+                $("#WayBillFeeDeviation").val(getWayBillDeviation);
+            }
+            else if (wayBillFeeStr != data && data == "偏差值") {
+                $("#spanWayBillFeeDeviation").html("元");
+                $("#WayBillFeeDeviation").val("");
+            } else if (wayBillFeeStr != data && data == "偏差率") {
+                $("#spanWayBillFeeDeviation").html("%");
+                $("#WayBillFeeDeviation").val("");
+            }
+
+        }
+
+        if (data == "偏差值") {
+            $("#spanWayBillFeeDeviation").html("元");
+        } else {
+            $("#spanWayBillFeeDeviation").html("%");
+        }
+   }
+
+
+    
+
+
+
+    //保存数据
+    function SavaData() {
+
+        var getVenderCode = $.trim($("#_VenderCodeInfo").val());
+        var getShippingmethodId = $.trim($("#ShippingMethodIdInfo").val());
+        var weightDeviation = $.trim($("#WeightDeviation").val());
+        var wayBillFeeDeviation = $.trim($("#WayBillFeeDeviation").val());
+
+
+        var weightOptions = $("#weightDeviationSelect option:selected").text();  //获取选中的项
+        var wayBillOptions=$("#wayBillFeeDeviationSelect option:selected").text();  //获取选中的项
+
+        if (getVenderCode == "" || getShippingmethodId == "" || weightDeviation == "" || wayBillFeeDeviation == "") {
+            alert("每个选项必填！");
+            return false;
+        }
+        
+        var reg = /^[+-]?\d+(\.\d+)?$/;
+        if (!reg.test(weightDeviation) || !reg.test(wayBillFeeDeviation)) {
+            alert("输入格式错误！");
+            $(weightDeviation).val("");
+            $(wayBillFeeDeviation).val("");
+            $(weightDeviation).focus();
+            return false;
+        }
+
+
+    
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("AddOrEditDeliveryDeviationInfo")",
+            dataType: "json",
+            data: { type: $("#getOperateType").val(), DeliveryId: $("#deliveryDeviationId").val(), venderCode: getVenderCode, shippingmethodId: getShippingmethodId, weightString: weightOptions, weightDeviations: weightDeviation, wayBillFeeString: wayBillOptions, wayBillFeeDeviations: wayBillFeeDeviation, VenderName: $("#_VenderNameInfo").val(), ShippingmethodName: $("#ShippingNameInfo").val() },
+            success: function (data) {
+                if (data.Result) {
+
+                    window.location.reload();
+
+                } else {
+                    alert(data.Message);
+                }
+            },
+            complete: function () {
+                //$(this).attr('disabled', false);
+            }
+        });
+
+
+    }
+
+</script>

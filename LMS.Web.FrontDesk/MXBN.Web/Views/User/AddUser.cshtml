@@ -1,0 +1,193 @@
+﻿@model LMS.FrontDesk.Controllers.UserController.Models.AddCustomerModel
+@{
+    ViewBag.Title = "用户注册";
+}
+@using (Html.BeginForm())
+{
+    <div class="main_in">
+        <div class="constr">
+            <div class="constr_in">
+                <div class="min_minBox">
+                    <div class="pl45">
+                        <div class="pt35 mb40">
+                            <span class="u u14 mr10"></span>
+                            <span class="co01 f20 fw vb">会员注册</span>
+                        </div>
+                        <div class="pl45 ml30">
+                        	<div class="mb10">
+                                <i class="coe5 vm mr5">*</i>
+                                &nbsp;&nbsp;&nbsp;用户名 :
+                                @Html.TextBoxFor(p => p.AccountID, new { @class = "txt size_middle",id="accountid"})
+                                @Html.ValidationMessageFor(p=>p.AccountID,"",new{@style="color:red",id="user_tip"})
+                            </div>
+                            <div class="mb10">
+                                <i class="coe5 vm mr5">*</i>
+                                密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码 :
+                                @Html.PasswordFor(p => p.Password, new { @class = "txt size_middle"})
+                                @Html.ValidationMessageFor(p=>p.Password,"",new{@style="color:red"})
+                            </div>
+                            <div class="mb10">
+                                <i class="coe5 vm mr5">*</i>
+                                确认密码 :
+                                @Html.PasswordFor(p => p.NextPassword, new { @class = "txt size_middle"})
+                                @Html.ValidationMessageFor(p=>p.NextPassword,"",new{@style="color:red"})
+                            </div>
+                            <div class="mb10">
+                                <i class="coe5 vm mr5">&nbsp;&nbsp;</i>
+                                客户名称 :
+                                @Html.TextBoxFor(p => p.Name, new { @class = "txt size_middle"})
+                            </div>
+                            <div class="mb10">
+                                <i class="coe5 vm mr5">*</i>
+                                &nbsp;&nbsp;&nbsp;联系人 :
+                                @Html.TextBoxFor(p => p.LinkMan, new { @class = "txt size_middle"})
+                                @Html.ValidationMessageFor(p=>p.LinkMan,"",new{@style="color:red"})
+                            </div>
+                            <div class="mb10">
+                                <i class="coe5 vm mr5">*</i>
+                                联系电话 :
+                                @Html.TextBoxFor(p => p.Tele, new { @class = "txt size_middle"})
+                                @Html.ValidationMessageFor(m=>m.Tele,"",new{@style="color:red"})
+                            </div>
+                            <div class="mb10">
+                                <i class="coe5 vm mr5">*</i>
+                                详细地址 :
+                                @Html.TextBoxFor(p => p.Address, new { @class = "txt size_long"})
+                                @Html.ValidationMessageFor(p=>p.Address,"",new{@style="color:red"})
+                            </div>
+                            <div class="mb10">
+                                <i class="coe5 vm mr5">*</i>
+                                &nbsp;&nbsp;&nbsp;&nbsp;Email :
+                                @Html.TextBoxFor(p => p.Email, new { @class = "txt size_middle"})
+                                @Html.ValidationMessageFor(p=>p.Email,"",new{@style="color:red"})
+                            </div>
+                             <div class="mb10">
+                                 <i class="coe5 vm mr5">&nbsp;&nbsp;</i>
+                                &nbsp;&nbsp;&nbsp;&nbsp;QQ :
+                                @Html.TextBoxFor(p => p.QQ, new { @class = "txt size_middle"})
+                            </div>
+                            <div>
+                            	       
+                            	<input type="checkbox" id="Checked" class="check">
+                                同意 淼信快递物流条款内容
+                            </div>
+                            <div class="mt10">
+                            	<textarea class="area_big_box" disabled="disabled">                                	                 淼信快递会员注册服务条款
+本服务条款自寄件人签署之日订立，订约双方为淼信快递及寄件人，订约双方均须遵守本服务条款。本条款所称“货件”，是指已抵达我公司或由我公司工作人员签收的货物，每一货件运输都将适用本条款中关于责任限制的规定。
+一、限寄和禁寄的货件
+寄件人同意其交寄的货件都是可运输的。
+以下货件不予收寄：
+1）属于国际航空货运协会（IATA）、国际民用航空组织（ICAO）及其他相关政府部门或组织所规定的有害物品、危险物品，以及属于禁运或限运的物品（限制投寄的物品：紧急用于医疗或科研的药品、体育用的枪支、活动物、未超标准的磁性物品、易腐品、放射性物品、疫苗、私章或公章等）。
+2）淼信快递认为不能安全、合法运输的物品（包括但不限于：喷雾容器、酒精类液体、石棉、丁烷打火机、医疗废品、毒性物品、腐蚀物品、食品、茶叶、现金、支票、假钞、药品、干冰、易燃易爆品、淫秽物品、超过标准的磁性物品、氧化物和有机过氧化物、武器弹药、溶解性油漆涂料、动物、现钞、不记名可议付票据、贵重金属和矿石、火器、弹药、人体、色情物品和非法的麻醉药品/毒品和其他当地法律禁止邮寄的物品）。
+二、查验
+淼信快递有权在未事先通知寄件人的情况下对货件进行抽样开封查验，如查出限寄或禁寄物品，淼信快递将扣留当天所有货件，不做发货处理。一周内通知寄件人，并做退货处理。
+三、派送和不能派送
+寄件人确保提供收件人的准确性和完整性，货件不能按照某邮政信箱（PO BOX）或仅能按邮政编码派送，将按寄件人提供的收件人地址派送（在投递中邮件的第一接收者应被视为收货人），但不一定直接送达收件人本人。如果收件人地址设有集中接收点，货件将被派送到该接收点。
+有以下情形之一的，淼信快递将以合理的方式处理货件，如因此发生的所有额外费用由寄件人承担：
+1）收件人拒绝接收货件或支付税费；
+2）该货件被认为是不可接受的；
+3）海关认为寄件人清关资料与实际货物不符；
+4）无法确定或找到收件人。
+如寄件人不能及时提供处理意见或目的国政府不能接受寄件人的处理意见，淼信快递可有权放弃该货件，且无需向寄件人或其他人承担任何责任。
+四、运费
+淼信快递网站公布的运费不包括偏远费和特殊产品、特殊包装的相关附加费用，部分货运方式需以货物实际重量或体积计算标准两者中较高的计算，淼信快递可以对任何货物重新称重和测量以确认其计算数据。寄件人应向淼信快递支付或返还运输服务中由淼信快递自身收取或代表寄件人、收件人及任何第三方所发生的所有运费、附加费、仓储费、关税等税费（部分快递方式可能无法预先得知附加费用，最终费用以承运商账单为准）；当所寄运的货件属于本条款第3条所称的不可派送的情形时还应向三态速递支付所有由此引发的退回运费、进口费用、赔偿、损害、罚款等相关的费用。
+五、货物退回或改发
+1）寄件人委托淼信快递所承运的货件出现本协议第三条“派送和不能派送”所述原因之一的，经双方确定后由三淼信快递回国内操作中心。
+2）淼信快递对寄件人所需退回的货件不做时间承诺，以三态速递具体通知时间为准。
+3）淼信快递对寄件人因任何原因滞留的货件，可提供15天免费保管服务，15天内淼信快递会以电话、邮件的方式联系寄件人征求处理意见；超过15天淼信快递会将货件存入仓库；超过3
+个月以上，寄件人仍未给予处理意见，淼信快递视情况予以销毁处理。
+六、货物查询
+对承运商可提供查询的货运方式（平邮小包以外的其他货运方式）出现以下情况之一的，寄件人可向淼信快递提出查询申请：
+1）货物未按正常处理时效显示网上跟踪信息；
+2）货物在超出所选择运输方式正常时效未派送成功；
+3）收件人反应货物减少，与发出货物不一致；
+4）产生不明费用。
+5）中邮服务产品淼信快递只负责交寄上网，配合查询
+寄件人在发货时应确保货物信息详细准确，在查询时需提供查询货物的相关信息，如因货物发出时的信息与提交查询时信息不符，或寄件人提交的货物信息不符合查询条件造成的承运商拒绝查询，一切损失和责任由寄件人承担。由于国际运输货件查询存在的时间、空间和中转环节限制，不同国家和不同运输方式的查询期存在差异，淼信快递将以合理的努力为寄件人查询货件，但不对承运商的延迟回复承担责任。
+七、索赔
+任何索赔必须在三态速递各货运方式查询期结束后提出。
+1）淼信快递内部丢失
+从淼信快递签收货件到淼信快递将货件交寄到承运商之间，如果发生货件丢失，淼信快递将承担赔偿责任。淼信快递会将已收取的邮寄或快递费用退还给客户，并赔偿两倍运费（不计货值）。
+2）承运商丢失
+货件从淼信快递发出后，承运商会提供相关的交接凭证。如果货件丢失，赔偿责任在于承运商。淼信快递将协助客户向承运商索赔，索赔额度根据各货运方式的赔偿规定执行。
+3）淼信快递操作原因导致货件发错地址 
+因淼信快递操作原因导致货件发错地址，淼信快递会将已收取的邮寄或快递费用退还给客户，并赔偿两倍运费（不计货值）。但不承担发错货件的间接经济损失。
+4）由于海关抽查造成的邮包丢失 
+货件在经过海关时，海关打开货件检查，可能导致邮包丢失、邮包内物品（全部或部分）丢失、或被海关扣押。淼信快递不承担由此带来的任何责任。
+八、运输延误
+淼信快递网站公布的投递时间是从在对应查询网站有操作记录开始至货物到达的时间，但不包括淼信快递取件的时间、在分拣中心分拣的时间和海关清关时间。这些标准并不属于承诺，也不构成协议的组成部分。淼信快递不对运输延误而导致的任何损失或损害承担责任。
+九、不可抗拒因素
+对于超出承运商控制范围的原因而导致的损失或损害，淼信快递不承担责任。这些原因包括但不限于：自然灾害，如地震、龙卷风、风暴、洪水、大雾等；战争、空难或禁运等不可抗力；货件固有的缺陷或特性(无论淼信快递是否知晓)；暴乱或民间骚乱；非淼信快递雇员或与淼信快递没有合同关系的人员的作为或不作为，如寄件人、收货人、第三人、海关或其他政府部门；劳资事件；对于电子音像图片、数据或纪录的电磁性损坏或删除。
+十、寄件人的保证和赔偿责任
+寄件人违反有关法律法规或违反以下保证和陈述，寄件人应承担因此产生的所有费用和赔偿因此而给淼信快递造成的损失和损害： 
+1）寄件人或其代理人提供的所有信息都是完整和准确的； 
+2）货物是由寄件人或其雇员在安全的前提下准备的； 
+3）为寄件人准备货物的人员足可信赖； 
+4）寄件人应确保货物在准备、仓储或运输过程中淼信快递免受他人不当干扰； 
+5）货物所有标识完整准确，地址清晰，包装妥当，适于一般注意程度下的安全运输； 
+6）符合有关海关和进出口的规定，以及其他法律法规的规定。
+十一、淼信快递的责任
+淼信快递基于本条款对寄件人所承担的责任仅限于直接损失，且不超过各运输方式公布的限额。淼信快递不承担任何其它损失或损害（包括但不限于利润、收入、利息及未来业务的损失），无论这些其它损失或损害是特殊的或是间接的，无论淼信快递是否在受理货件之前或之后知晓存在这些损失或损害的风险。每票货件只能提出一次索赔，且这种赔偿将作为对有关损失及损害的全部和最终的解决方案。 
+十二、路线
+寄件人接受承运商安排的所有路线和绕航，包括可能的运输中转站。
+十三、账号审核认证
+寄件人在使用淼信快递服务前，需提供真实有效资料对账号进行认证激活。账号激活后才能正常享受淼信快递所提供服务。
+十四、法律适用和争议解决
+考虑到淼信快递的利益，除与所适用法律冲突，与本条款有关的一切争议将受到货件原寄件地国法院的非排他管辖，并适用原寄件地国法律，寄件人不可撤销地接受该管辖。
+十五、可分割性
+本条款任何部分的无效或不可执行，不影响其他条款的效力和执行。
+
+
+                                </textarea>
+                            </div>
+                            <div class="mt30 mb40">
+                            	<input type="submit" name="Addbtn" value="" id="Addbtn" onclick="return AddUser();"/>
+                            </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    
+    //注册按钮的禁用
+    $(function () {
+        $("#Addbtn").attr("disabled", "disabled");
+        $("#Addbtn").addClass("u u18");
+        $("#Checked").change(function () {
+            if ($("#Checked").get(0).checked) {
+                $("#Addbtn").removeClass("u u18");
+                $("#Addbtn").addClass("u u15");
+                $("#Addbtn").attr("disabled", false);
+            } else {
+                $("#Addbtn").removeClass("u u15");
+                $("#Addbtn").addClass("u u18");
+                $("#Addbtn").attr("disabled", true);
+            }
+        });
+    });
+    
+    //调用Ajax判断用户名是否存在
+
+    function AddUser() {
+        var mysubmit = true;
+        var accountId = $("#accountid").val();
+        $.ajax({
+            async: false,
+            url: '@Url.Action("SelectAccountId","User")',
+        data: {
+            AccountId: accountId
+        },
+        success: function (data, textStatus) {
+            if (data.result) {
+                $("#user_tip").text("用户已存在");
+                mysubmit = false;
+            } 
+        }
+        });
+        return mysubmit;
+    }
+    
+</script>

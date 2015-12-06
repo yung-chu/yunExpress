@@ -1,0 +1,221 @@
+﻿@{
+    ViewBag.Title = "PackageExchangeBag";
+}
+<div class="domebg" id="right_con">
+    <fieldset>
+        <legend>包裹换袋</legend>
+        <table class="data_table" style="margin: 15px; width: 98%;" border="1" cellpadding="0" cellspacing="0">
+            <tr>
+                <td style="width: 100px; text-align: right;">包裹单号：</td>
+                <td style="width: 30%;">
+                    <input type="text" id="TrackNumber" name="TrackNumber" class="txt" style="width: 150px;" maxlength="20" /></td>
+                <td rowspan="3" style="color: red; font-weight: bold;"><span id="ErrorMessage"></span></td>
+            </tr>
+            <tr>
+                <td style="width: 100px; text-align: right;">目标袋牌：</td>
+                <td>
+                    <input type="text" id="BagNumber" name="BagNumber" class="txt" style="width: 150px;" maxlength="35" /></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center;">
+                    <input type="button" id="btnSubmit" class="btn" value="提交" title="提交扫描袋牌" /></td>
+            </tr>
+        </table>
+    </fieldset>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $(":text").focus(function () {
+            this.select();
+        });
+        $(":text").click(function () {
+            this.select();
+        });
+        $(":text").mouseup(function () {
+            return false;
+        });
+        $("#TrackNumber").bind("keydown", function (e) {
+            if (e.keyCode == 13) {
+                $("#ErrorMessage").html("");
+                if ($.trim($(this).val()) != "") {
+                    if (!/^591[0-9]{8}$/.test($.trim($(this).val()))) {
+                        $("#TrackNumber").select();
+                        $("#ErrorMessage").html("包裹单号规则不符！");
+                        PlayFaile();
+                    } else {
+                        $.ajax({
+                            type: "GET",
+                            url: "@Url.Action("CheckTrackNumber")",
+                            data: { trackNumber: $.trim($(this).val()) },
+                            dataType: "json",
+                            beforeSend: function () {
+                                $("#ErrorMessage").html("包裹单号验证中，请等待！");
+                            },
+                            success: function (data) {
+                                if (data.Result == "1") {
+                                    $("#TrackNumber").select();
+                                    $("#ErrorMessage").html("无效包裹单号！");
+                                    PlayFaile();
+                                } else if (data.Result == "2") {
+                                    $("#TrackNumber").select();
+                                    $("#ErrorMessage").html("包裹单号已退件！");
+                                    PlayFaile();
+                                } else if (data.Result == "0") {
+                                    $("#BagNumber").focus();
+                                    $("#ErrorMessage").html("");
+                                } else {
+                                    $("#TrackNumber").select();
+                                    $("#ErrorMessage").html("无效包裹单号！");
+                                    PlayFaile();
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+        $("#BagNumber").bind("keydown", function (e) {
+            if (e.keyCode == 13) {
+                $("#ErrorMessage").html("");
+                if ($.trim($("#TrackNumber").val()) == "") {
+                    $("#TrackNumber").select();
+                    $("#ErrorMessage").html("包裹单号不能为空！");
+                    PlayFaile();
+                } else {
+                    if ($.trim($(this).val()) != "") {
+                        $.ajax({
+                            type: "GET",
+                            url: "@Url.Action("CheckBagNumber")",
+                            data: { bagNumber: $.trim($(this).val()), trackNumber: $.trim($("#TrackNumber").val()) },
+                            dataType: "json",
+                            beforeSend: function() {
+                                $("#ErrorMessage").html("目的袋牌验证中，请等待！");
+                            },
+                            success: function(data) {
+                                if (data.Result == "0") {
+                                    $("#TrackNumber").select();
+                                    $("#ErrorMessage").html("包裹单号不存在！");
+                                    PlayFaile();
+                                } else if (data.Result == "1") {
+                                    $("#TrackNumber").select();
+                                    $("#ErrorMessage").html("该包裹单号已退件！");
+                                    PlayFaile();
+                                } else if(data.Result=="2") {
+                                    $("#BagNumber").select();
+                                    $("#ErrorMessage").html("目的袋牌不存在！");
+                                    PlayFaile();
+                                } else if (data.Result == "3") {
+                                    $("#BagNumber").select();
+                                    $("#ErrorMessage").html("该单号与目标袋牌国家不匹配！");
+                                    PlayFaile();
+                                } else if (data.Result == "4") {
+                                    $("#BagNumber").select();
+                                    $("#ErrorMessage").html("该目标袋牌重量已超重不能放入！");
+                                    PlayFaile();
+                                } else if (data.Result == "6") {
+                                    $("#BagNumber").select();
+                                    $("#ErrorMessage").html("该目标袋牌已在中心局扫描过！");
+                                    PlayFaile();
+                                } else if (data.Result == "100") {
+                                    $("#ErrorMessage").html("");
+                                    $("#btnSubmit").trigger("click");
+                                } else {
+                                    $("#BagNumber").select();
+                                    $("#ErrorMessage").html("目的袋牌不存在！");
+                                    PlayFaile();
+                                }
+                            }
+                        });
+                    } else {
+                        $("#BagNumber").select();
+                        $("#ErrorMessage").html("目的袋牌不能为空！");
+                        PlayFaile();
+                    }
+                }
+            }
+        });
+        $("#btnSubmit").click(function() {
+            if ($.trim($("#TrackNumber").val()) == "") {
+                $("#TrackNumber").focus();
+                $("#ErrorMessage").html("包裹单号不能为空！");
+                PlayFaile();
+                return false;
+            }
+            if ($.trim($("#BagNumber").val()) == "") {
+                $("#BagNumber").focus();
+                $("#ErrorMessage").html("目的袋牌不能为空！");
+                PlayFaile();
+                return false;
+            }
+            if (!/^591[0-9]{8}$/.test($.trim($("#TrackNumber").val()))) {
+                $("#TrackNumber").focus();
+                $("#ErrorMessage").html("包裹单号规则不符！");
+                PlayFaile();
+                return false;
+            }
+            $("#ErrorMessage").html("");
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("SacnPackageExchangeBag")",
+                data: { trackNumber: $.trim($("#TrackNumber").val()), bagNumber: $.trim($("#BagNumber").val()) },
+                dataType: "json",
+                beforeSend: function () {
+                    $("#ErrorMessage").html("数据提交中，请等待！");
+                    $("#btnSubmit").attr('disabled', true);
+                },
+                success: function (data) {
+                    if (data.Result == "100") {
+                        $("#ErrorMessage").html("提交成功！");
+                        $(":text").val("");
+                        $("#TrackNumber").focus();
+                        PlaySuccess();
+                    } else if (data.Result == "-1") {
+                        $("#BagNumber").focus();
+                        PlayFaile();
+                        $("#ErrorMessage").html("提交失败！");
+                    } else if (data.Result == "0") {
+                        $("#TrackNumber").select();
+                        $("#ErrorMessage").html("包裹单号不存在！");
+                        PlayFaile();
+                    } else if (data.Result == "1") {
+                        $("#TrackNumber").select();
+                        $("#ErrorMessage").html("该包裹单号已退件！");
+                        PlayFaile();
+                    } else if (data.Result == "2") {
+                        $("#BagNumber").select();
+                        $("#ErrorMessage").html("目的袋牌不存在！");
+                        PlayFaile();
+                    } else if (data.Result == "3") {
+                        $("#BagNumber").select();
+                        $("#ErrorMessage").html("该单号与目标袋牌国家不匹配！");
+                        PlayFaile();
+                    } else if (data.Result == "4") {
+                        $("#BagNumber").select();
+                        $("#ErrorMessage").html("该目标袋牌重量已超重不能放入！");
+                        PlayFaile();
+                    } else if (data.Result == "6") {
+                        $("#BagNumber").select();
+                        $("#ErrorMessage").html("该目标袋牌已在中心局扫描过！");
+                        PlayFaile();
+                    } else {
+                        $("#BagNumber").focus();
+                        PlayFaile();
+                        $("#ErrorMessage").html("该单号发货渠道错误！");
+                    }
+                },
+                complete: function (data) {
+                    $("#btnSubmit").attr('disabled', false);
+                }
+            });
+            return true;
+        });
+    });
+    function PlaySuccess() {
+        $('embed').remove();
+        $('body').append('<embed src="/Css/Success.wav" autostart="true" hidden="true" loop="false">');
+    }
+    function PlayFaile() {
+        $('embed').remove();
+        $('body').append('<embed src="/Css/Faile.wav" autostart="true" hidden="true" loop="false">');
+    }
+</script>

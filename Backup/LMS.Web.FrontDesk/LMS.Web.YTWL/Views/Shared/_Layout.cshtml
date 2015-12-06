@@ -1,0 +1,134 @@
+﻿@using LMS.Core
+@using LighTake.Infrastructure.Common
+@using LighTake.Infrastructure.Common.InversionOfControl
+<!DOCTYPE html>
+<html>
+    <head>
+        @*<title>@ViewBag.Title</title>*@
+        @RenderSection("ExtraHeadContent", required: false)
+        @*<link href="@Url.Content("~/css/logistics.css")" rel="stylesheet" type="text/css" />
+        <link href="@Url.Content("~/css/skin.css")" rel="stylesheet" type="text/css" />        
+        <script src="@Url.Content("~/Scripts/jquery-1.7.1.min.js")"></script>*@
+        @*<script src="@Url.Content("http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js")" type="text/javascript"></script>*@
+        @*<script src="@Url.Content("~/Scripts/website/jquery.soChange.js")" type="text/javascript"></script>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />*@
+        <title>@ViewBag.Title</title>
+        <link href="@Url.Content("~/Scripts/qq/qq.css")" rel="stylesheet" type="text/css" />
+        <link type="text/css" rel="stylesheet" href="@Url.Content("~/css/base.css")"/>
+        <link type="text/css" rel="stylesheet" href="@Url.Content("~/css/logistics_pub.css")"/>
+        <link type="text/css" rel="stylesheet" href="@Url.Content("~/css/logistics_style.css")"/>
+        <script type="text/javascript" src="@Url.Content("~/Scripts/jquery-1.4.4.min.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/Scripts/jquery-powerSwitch-min.js")"></script>
+    </head>
+
+    <body>
+        <div class="top">
+            <div class="conStr">
+                <div class="strIn">
+                    <div class="fix">
+                        
+                        <div class="l"> <a href="@Url.Action("index", "Home")"> <img src="@Url.Content("~/images/logo_1.png")" class="mt5" /> </a> </div>
+                        <div class="nsv_in r ">
+                            <div class="tr pt5">
+                                @if (Request.IsAuthenticated)
+                                {
+                                    var user = EngineContext.Current.Resolve<IWorkContext>();
+
+                                    var url = Tools.GetAppSettings("UserCenter_Path");
+                                    <span>欢迎你 @user.User.RealName </span>
+                                    <a href="@url" class="coff4">
+                                        <span class="vm dib cpi">进入账户中心</span>
+                                    </a>
+                                    <a href="@Url.Action("Logout", "Home")">退出</a>
+                                }
+                                else
+                                {
+                                    <a href="javascript:" class="coff4">
+                                        <span class="vm dib cpi"></span>
+                                    </a>
+                                }
+                                <a href="javascript:" class="coff4">
+                                    <span class="vm dib cpi"></span>
+                                </a>
+                            </div>
+                            <div class="r"> <a href="@Url.Action("About", "Home", new { id = 2 })" class="nav_off"> 关于我们 </a> </div>
+                            <div class="r"> <a href="@Url.Action("NewList", "New", new { CategoryId = 1 })" class="nav_off"> 新闻中心 </a> </div>
+                            <div class="nav_active r"> <a href="@Url.Action("ProductServices", "Home", new { id = 3 })" class="nav_off nav_Warp"> 产品服务 </a>
+                                @if (Model.ShippingMethodServices.Count > 0)
+                                {
+                                    <div class="nav_Warp_" >
+                                        <div class="rel nav_abs">
+                                            <span class="diamond_top">◆</span>
+                                            <span class="diamond">◆</span>
+                                        </div>
+                                        @foreach (var row in Model.ShippingMethodServices)
+                                        {
+                                            <div> <a href="@Url.Action("ProductServices", "Home", new {id = @row.CategoryID})">
+                                                      @if (row.Name != null && row.Name.Length > 10)
+                                                      {
+                                                          @row.Name.Substring(0, 10)
+                                                      }
+                                                      else
+                                                      {
+                                                          @row.Name
+                                                      }
+                                                  </a> </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                            <div class="r"> <a href="@Url.Action("Index", "Home")" class="nav_off" >首  页</a> </div>
+                        </div>
+       
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="oneSolid bdc4"></div>
+        <div class="oneSolid bdad"></div>
+        @RenderBody()
+        <!--  *******foot***********   -->
+        <div class="foot">
+            <div class="conStr">
+                <div class="strIn">
+                    <div class="pt20 pb20 tr fix">
+                        <div class="r">
+                            <p> <a href="/user/adduser">注册账号</a> | <a href="/home/about/2">关于我们 </a></p>
+                            <p class="mt10">
+                                Copyright 2013, 版权所有深圳市云途物流有限公司  ICP/IP证：粤ICP备07502767号
+                            </p>
+                        </div>
+                        <div class="l">
+                            <img src="@Url.Content("~/images/logo_2.jpg")" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+<script type="text/javascript" src="@Url.Content("~/Scripts/client.js")"></script>
+   <script src="@Url.Content("~/Scripts/qq/qqservice.js")" type="text/javascript"></script>
+    <script>
+        $(function () {
+            /*
+             * 皮肤编号 lrkf_blue1 无图版，lrkf_blue2 图片版
+             * 参数配置参考正文中的参数配置说明
+            */
+            $("#lrkfwarp").lrkf({
+                kftop: '140',
+                defshow: false,
+                qqs: [
+                    { 'name': '售前1号', 'qq': '526449838' },			//注意逗号是英文的逗号
+                    { 'name': '客服1号', 'qq': '191221838' }		//注意最后一个{}不要英文逗号
+                ],
+                tel: [
+                    { 'name': '售前', 'tel': '400-655-0888' },		//注意逗号是英文的逗号
+                    { 'name': '售后', 'tel': '15638527790' }
+                ],
+                more: "@Url.Action("ContactUs", "Home", new { id = 4 })"				//>>更多方式		
+            });
+
+        });
+    </script>
+
+</html>

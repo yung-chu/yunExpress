@@ -1,0 +1,7 @@
+﻿/*分页控件样式*/
+.pages { color:red;font-weight:bold; font-size:11px;}
+.pages  .item a{padding: 1px 6px;font-size: 13px;} /*数字页索引样式*/
+.pages .cpb {color:red;padding: 1px 6px;font-size: 13px;} /*当前页样式*/
+.pages a { text-decoration:none;padding: 0 5px; border: 1px solid #ddd;margin:0 2px; color:#000;font-weight:normal;}
+.pages a:hover { background-color: #E61636; color:#fff;border:1px solid #E61636; text-decoration:none;font-weight:normal;}
+.pages .pagingInfo { float: right; padding-right: 6px;vertical-align: middle;color:#000;font-weight: normal;}

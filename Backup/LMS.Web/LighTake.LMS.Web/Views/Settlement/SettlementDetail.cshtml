@@ -1,0 +1,116 @@
+﻿@{
+    ViewBag.Title = "结算清单详情";
+    Layout = null;
+}
+@model LMS.Controllers.SettlementController.SettlementDetailViewModel
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=8"/> <!-- IE8 mode -->
+        <title>结算清单打印预览</title>
+        <style>
+            body {
+                font-size: 14px;
+            }
+            td {
+                height: 40px;
+            }
+            .tac {
+                text-align:center
+            }
+            .tal {
+                text-align:left
+            }
+            .tar {
+                text-align:right
+            }
+            .black {
+                font-family: "Arial Negreta", "Arial";
+                font-size: 18px;
+                font-weight: 700;
+            }
+            .tablegrid {
+                border-left:1px solid #000;
+                border-bottom:1px solid #000;
+                margin:0 auto;
+            }
+            .tablegrid td {
+                border-top:1px solid #000;
+                border-right:1px solid #000;
+                text-align:center;
+                height: 30px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="print">
+            <div style="page-break-after: always;">
+                <div style="width:680px;border:1px solid #000;margin-top:20px;margin-left:auto;margin-right:auto;">
+                    <div style="padding:10px 0;border-top:1px solid #000;margin-top:-1px;">
+                        <table cellpadding="0" cellspacing="0" width="100%">
+                            <tbody>
+                                <tr>
+                                    <td height="60" colspan="10"><div style="text-align:center;font-size:18px;margin-top:-20px;">云途通运物流结算清单</div></td>
+                                </tr>
+                                <tr>
+                                    <td class="tar">客户名称：</td>
+                                    <td class="black">@Model.CustomerName</td>
+                                    <td class="tar">客户编码：</td>
+                                    <td class="black">@Model.CustomerCode</td>
+                                    <td class="tar">单号：</td>
+                                    <td class="black">@Model.SettlementNumber</td>
+                                </tr>
+                                <tr>
+                                    <td class="tar">制单人：</td>
+                                    <td class="black">@Model.CreatedBy </td>
+                                    <td class="tar">制单日期：</td>
+                                    <td class="black" colspan="2">@Model.CreatedOn </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" width="650" class="tablegrid">
+                            <tr>
+                                <td width="230px"> 入仓渠道 </td>
+                                <td width="70px"> 总票数 </td>
+                                <td width="130px"> 货物总重量kg</td>
+                                <td width="130px"> 结算总重量kg</td>
+                                <td> 总金额</td>
+                            </tr>
+                            @foreach (var settlementDetailsInfo in Model.SettlementDetailsInfos)
+                            {
+                                <tr>
+                                    <td>@settlementDetailsInfo.ShippingMethodName</td>
+                                    <td>@settlementDetailsInfo.TotalNumber</td>
+                                    <td>@settlementDetailsInfo.TotalWeight.ToString("0.000")</td>
+                                    <td>@settlementDetailsInfo.TotalSettleWeight.ToString("0.000")</td>
+                                    <td>@settlementDetailsInfo.TotalFee.ToString("0.00")</td>
+                                </tr>
+                            }
+                            <tr>
+                                <td>总计</td>
+                                <td>@Model.SettlementDetailsInfos.Sum(p=>p.TotalNumber)</td>
+                                <td>@Model.SettlementDetailsInfos.Sum(p=>p.TotalWeight).ToString("0.000")</td>
+                                <td>@Model.SettlementDetailsInfos.Sum(p=>p.TotalSettleWeight).ToString("0.000")</td>
+                                <td>@Model.SettlementDetailsInfos.Sum(p=>p.TotalFee).ToString("0.00")</td>
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" width="650" style="margin:10px auto;">
+                            <tbody>
+                                <tr>
+                                    <td>实收：_________元</td>
+                                    <td>本期结余：_________元</td>
+                                    <td>业务员：@Model.SalesMan</td>
+                                    <td>业务人电话：@Model.SalesManTel</td>
+                                </tr>
+                                <tr>
+                                    <td> 结算人签章： </td>
+                                    <td colspan="3"> 客户签章：</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="5f8cf088-bd41-4ae1-8ef6-0e23a0ca0323" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://bizlog.yunpost.cn/API.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="API1.disco" MetadataType="Disco" ID="1e740fc5-7c84-4d24-a5bc-2f012a8fa5d2" SourceId="1" SourceUrl="http://bizlog.yunpost.cn/API.svc?disco" />
+    <MetadataFile FileName="API3.xsd" MetadataType="Schema" ID="054524a4-360c-402b-8f22-fabe15dfc908" SourceId="1" SourceUrl="http://bizlog.yunpost.cn/API.svc?xsd=xsd2" />
+    <MetadataFile FileName="API1.wsdl" MetadataType="Wsdl" ID="85d8a998-e270-4e3f-b20d-9809a4563c2c" SourceId="1" SourceUrl="http://bizlog.yunpost.cn/API.svc?wsdl" />
+    <MetadataFile FileName="API31.xsd" MetadataType="Schema" ID="b0ba58a8-64d9-495b-8dbc-fd69c431a651" SourceId="1" SourceUrl="http://bizlog.yunpost.cn/API.svc?xsd=xsd0" />
+    <MetadataFile FileName="API32.xsd" MetadataType="Schema" ID="fa39595d-942f-4f98-b785-451e97fc40fc" SourceId="1" SourceUrl="http://bizlog.yunpost.cn/API.svc?xsd=xsd1" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

@@ -1,0 +1,27 @@
+﻿
+/* 运单列表 下拉框样式*/
+
+.dropdownlist .ddl-select,.dropdownlist .hover,.dropdownlist .ddl-disabled{cursor:default;padding:0px;color:#000;border:solid 1px #ccc;height:20px;padding-right:20px;background:#fff url(downarrow.jpg) no-repeat right; overflow:hidden}
+/*鼠标经过下拉框的样式*/
+.dropdownlist .hover,.dropdownlist .ddl-select:hover{border-color:#aaa;}
+/*下拉选项样式*/
+.dropdownlist table,.dropdownlist tbody tr,.dropdownlist tbody td{border:none;border-collapse: collapse;border-spacing: 0px 0px;padding: 3px}
+/*下拉列表样式*/
+.dropdownlist .ddl-listbox{border:solid 1px #ccc;color:#000;overflow:hiden;overflow-y:auto;}
+/*禁用时的样式*/
+.dropdownlist .ddl-select{color:#000;background:#fff url(../Images/downarrow.jpg) no-repeat right;}
+/*下拉选项样式*/
+.dropdownlist tbody td{color:#000;background:#fff;height:20px;}
+/*下拉选项鼠标经过样式*/
+.dropdownlist tbody td.hover,.dropdownlist tbody td:hover{color:#fff;background:#00f}
+/*tfoot*/
+.dropdownlist tfoot{background:#f0f0f0;}
+/*信息样式*/
+.dropdownlist tfoot span.info{font-size:12px;color:orange;}
+/*按钮区样式*/
+.dropdownlist tfoot span.btn-area{float:right;}
+/*确定按钮样式*/
+.dropdownlist tfoot .btn-ok {color:red;}
+/*取消按钮样式*/
+.dropdownlist tfoot .btn-cancel {color:#666;}
+

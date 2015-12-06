@@ -1,0 +1,522 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BE6FE0EF-6A3D-4628-803B-747FF0762FC3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LMS.Data.Entity</RootNamespace>
+    <AssemblyName>LMS.Data.Entity</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AbnormalWayBillLog.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ApplicationInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Article.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="B2CPreAlertLogs.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="B2CPreAlterEnum.cs">
+      <DependentUpon>LMS_Enums.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Category.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CommonCountry.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Country.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CurrencyCategory.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Customer.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerAmountRecord.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerBalance.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerCreditInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerCreditInfoEnum.cs">
+      <DependentUpon>LMS_Enums.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerEnum.cs">
+      <DependentUpon>LMS_Enums.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerManagerInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerOrderEnum.cs">
+      <DependentUpon>LMS_Enums.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerOrderInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerOrderStatus.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerSourceInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerUpdatedLog.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeliveryChannelChangeLog.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeliveryChannelConfiguration.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeliveryDeviation.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeliveryFee.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeliveryFeeInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeliveryImportAccountCheck.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeliveryImportAccountChecksFinal.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeliveryImportAccountChecksTemp.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DictionaryType.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EubAccountInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EubWayBillApplicationInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EubWayBillApplicationInfoEnum.cs">
+      <DependentUpon>LMS_Enums.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExpressAccountInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExpressDeliveryImportAccountCheck.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExpressDeliveryImportAccountChecksTemp.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExpressRespons.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExtModel\AgentNumberInfo.cs" />
+    <Compile Include="ExtModel\ArticleExt.cs" />
+    <Compile Include="ExtModel\AuditAnomalyExt.cs" />
+    <Compile Include="ExtModel\B2CPreAlterExt.cs" />
+    <Compile Include="ExtModel\BagTagPrintExt.cs" />
+    <Compile Include="ExtModel\ChargePayAnalysesExt.cs" />
+    <Compile Include="ExtModel\DHLandEUBWayBillInfoExt.cs" />
+    <Compile Include="ExtModel\FubListModelExt.cs" />
+    <Compile Include="ExtModel\InTrackingLogInfoExt.cs" />
+    <Compile Include="ExtModel\MailExchangeBagLogsExt.cs" />
+    <Compile Include="ExtModel\MailPostBagInfoExt.cs" />
+    <Compile Include="ExtModel\MailReturnGoodsLogsExt.cs" />
+    <Compile Include="ExtModel\MailTotalPackageInfoExt.cs" />
+    <Compile Include="ExtModel\OutStorageInfo.cs" />
+    <Compile Include="ExtModel\SettlementExt.cs" />
+    <Compile Include="ExtModel\CustomerExt.cs" />
+    <Compile Include="ExtModel\ErrorWayBillExt.cs" />
+    <Compile Include="ExtModel\FZWayBillInfoExt.cs" />
+    <Compile Include="ExtModel\InStorageProcess.cs" />
+    <Compile Include="ExtModel\InStorageTotalModel.cs" />
+    <Compile Include="ExtModel\CreateInStorageExtCS.cs" />
+    <Compile Include="ExtModel\CustomerOrderInfoExportExt.cs" />
+    <Compile Include="ExtModel\DeliveryDeviationExt.cs" />
+    <Compile Include="ExtModel\DeliveryFeeExt.cs" />
+    <Compile Include="ExtModel\DeliveryImportAccountCheck.cs" />
+    <Compile Include="ExtModel\EubWayBillApplicationInfoExt.cs" />
+    <Compile Include="ExtModel\ExportOutStorageInfo.cs" />
+    <Compile Include="ExtModel\CountryExt.cs" />
+    <Compile Include="ExtModel\CreateInStorageExt.cs" />
+    <Compile Include="ExtModel\CreateOutStorageExt.cs" />
+    <Compile Include="ExtModel\CustomerAmountRecordExt.cs" />
+    <Compile Include="ExtModel\CustomerOrderInfoExt.cs" />
+    <Compile Include="ExtModel\CustomerStatisticsInfoExt.cs" />
+    <Compile Include="ExtModel\CustomerType.cs" />
+    <Compile Include="ExtModel\EnableStatus.cs" />
+    <Compile Include="ExtModel\ExpressPrintWayBillExt.cs" />
+    <Compile Include="ExtModel\ExpressWayBillExt.cs" />
+    <Compile Include="ExtModel\ExpressWayBillViewExt.cs" />
+    <Compile Include="ExtModel\InFeeInfoAuditListExt.cs" />
+    <Compile Include="ExtModel\InFeeInfoExt.cs" />
+    <Compile Include="ExtModel\InFeeTotalInfoExt.cs" />
+    <Compile Include="ExtModel\InStorageAsyncModel.cs" />
+    <Compile Include="ExtModel\InStorageInfoExtSlim.cs" />
+    <Compile Include="ExtModel\InStorageWeightAbnormalExt.cs" />
+    <Compile Include="ExtModel\JobErrorLogExt.cs" />
+    <Compile Include="ExtModel\LabelPrintExt.cs" />
+    <Compile Include="ExtModel\LabelPrintModel.cs" />
+    <Compile Include="ExtModel\OrderTrackingModel.cs" />
+    <Compile Include="ExtModel\OrderTrackingRequestModel.cs" />
+    <Compile Include="ExtModel\OutFeeInfoExt.cs" />
+    <Compile Include="ExtModel\PriceProviderResult.cs" />
+    <Compile Include="ExtModel\PrintInStorageInvoiceExt.cs" />
+    <Compile Include="ExtModel\ReceivingBillExt.cs" />
+    <Compile Include="ExtModel\RemoteAreaAddressExt.cs" />
+    <Compile Include="ExtModel\ResponseResult.cs" />
+    <Compile Include="ExtModel\ResultExt.cs" />
+    <Compile Include="ExtModel\ReturnGoodsExt.cs" />
+    <Compile Include="ExtModel\ReturnWayBillModelExt.cs" />
+    <Compile Include="ExtModel\SelectTrackingNumberExt.cs" />
+    <Compile Include="ExtModel\SettlementInfoExt.cs" />
+    <Compile Include="ExtModel\ShippingMethod.cs" />
+    <Compile Include="ExtModel\ShippingWayBillExt.cs" />
+    <Compile Include="ExtModel\TaskModel.cs" />
+    <Compile Include="ExtModel\TotalPackageAddressExt.cs" />
+    <Compile Include="ExtModel\TotalPackageInfoExt.cs" />
+    <Compile Include="ExtModel\Vender.cs" />
+    <Compile Include="ExtModel\WayBillImportModel.cs" />
+    <Compile Include="ExtModel\WayBillInfoExtSilm.cs" />
+    <Compile Include="ExtModel\WayBillListExportModel.cs" />
+    <Compile Include="ExtModel\WaybillInfoUpdateExt.cs" />
+    <Compile Include="ExtModel\WayBillTemplateExt.cs" />
+    <Compile Include="ExtModel\InStorageInfoExt.cs" />
+    <Compile Include="ExtModel\ReceivingExpenseExt.cs" />
+    <Compile Include="ExtModel\WayBillEventLogExt.cs" />
+    <Compile Include="ExtModel\NoForecastAbnormalExt.cs" />
+    <Compile Include="ExtModel\AbnormalWayBillModel.cs" />
+    <Compile Include="FeeType.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FinalExpressDeliveryImportAccountCheck.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FinancialEnum.cs">
+      <DependentUpon>LMS_Enums.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FuzhouPostLog.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GoodsTypeInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GZPacketAddressInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="InStorageInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="InStorageOrSettlementRelational.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="InStorageWeightDeviation.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="InsuredCalculation.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="InTrackingLogInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JobErrorLog.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LanguageInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LithuaniaInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LMS_Db.Entities.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MailExchangeBagLog.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MailHoldLog.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MailPostBagInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MailReturnGoodsLog.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MailReturnGoodsLogsEnum.cs">
+      <DependentUpon>LMS_Enums.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MailTotalPackageInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MailTotalPackageOrPostBagRelational.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MoneyChangeTypeInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MouthCountry.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NetherlandsParcelRespons.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NoForecastAbnormal.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OperateLogEnum.cs">
+      <DependentUpon>LMS_Enums.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OutStorageInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Param\AbnormalWayBillParam.cs" />
+    <Compile Include="Param\ArticleParam.cs" />
+    <Compile Include="Param\B2CPreAlterListParam.cs" />
+    <Compile Include="Param\ChragePayAnalyeseParam.cs" />
+    <Compile Include="Param\CountryParam.cs" />
+    <Compile Include="Param\CustomerAmountRecordParam.cs" />
+    <Compile Include="Param\CustomerCreditParam.cs" />
+    <Compile Include="Param\CustomerOrderParam.cs" />
+    <Compile Include="Param\CustomerParam.cs" />
+    <Compile Include="Param\DeliveryDeviationParam.cs" />
+    <Compile Include="Param\DeliveryReviewParam.cs" />
+    <Compile Include="Param\EubWayBillApplicationInfoParam.cs" />
+    <Compile Include="Param\EubWayBillParam.cs" />
+    <Compile Include="Param\ExpressPrintWayBillParam.cs" />
+    <Compile Include="Param\ExpressWayBillParam.cs" />
+    <Compile Include="Param\FubListParam.cs" />
+    <Compile Include="Param\InFeeInfoAuditParam.cs" />
+    <Compile Include="Param\InStorageListSearchParam.cs" />
+    <Compile Include="Param\InStorageWeightAbnormalParam.cs" />
+    <Compile Include="Param\JobErrorLogsParam.cs" />
+    <Compile Include="Param\LogFlightNumberListParam.cs" />
+    <Compile Include="Param\MailExchangeBagLogsParam.cs" />
+    <Compile Include="Param\MailReturnGoodsLogsParam.cs" />
+    <Compile Include="Param\OrderListParam.cs" />
+    <Compile Include="Param\OutStorageListSearchParam.cs" />
+    <Compile Include="Param\PackageModel.cs" />
+    <Compile Include="LMS_Enums.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LMS_Enums.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Param\RemoteAreaAddressParam.cs" />
+    <Compile Include="Param\ReturnWayBillParam.cs" />
+    <Compile Include="Param\SettlementInfoParam.cs" />
+    <Compile Include="Param\ShippingWayBillParam.cs" />
+    <Compile Include="Param\TrackingNumberParam.cs" />
+    <Compile Include="Param\FinancialParam.cs" />
+    <Compile Include="Param\ReceivingBillParam.cs" />
+    <Compile Include="Param\WayBillListExportParam.cs" />
+    <Compile Include="Param\WaybillInfoUpdateParam.cs" />
+    <Compile Include="Param\WaybillSummaryParam.cs" />
+    <Compile Include="Param\WeightDeviationParam.cs" />
+    <Compile Include="Param\SettlementSummaryParam.cs" />
+    <Compile Include="PaymentType.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReceivingBill.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReceivingExpens.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReceivingExpenseInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RechargeType.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReturnGoodEnum.cs">
+      <DependentUpon>LMS_Enums.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReturnGoods.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SenderInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SensitiveTypeInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SequenceNumber.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SettlementDetailsInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SettlementEnum.cs">
+      <DependentUpon>LMS_Enums.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SettlementInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShippingInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExtModel\TariffPrepayFeeShippingMethod.cs" />
+    <Compile Include="Task.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SystemConfiguration.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TotalPackageConfigEnum.cs">
+      <DependentUpon>LMS_Enums.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TotalPackageInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TotalPackageOutStorageRelationalInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TotalPackageTraceInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrackingNumberDetailInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrackingNumberDetailInfoEnum.cs">
+      <DependentUpon>LMS_Enums.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrackingNumberInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrackingNumberInfoEnum.cs">
+      <DependentUpon>LMS_Enums.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserModel\Permission.cs" />
+    <Compile Include="UserModel\PermissionMenu.cs" />
+    <Compile Include="UserModel\PermissionMenuMenuItem.cs" />
+    <Compile Include="UserModel\User.cs" />
+    <Compile Include="VenderFeeLog.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WayBillBusinessDateInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WayBillChangeLog.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WayBillEnum.cs">
+      <DependentUpon>LMS_Enums.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WayBillEventEnum.cs">
+      <DependentUpon>LMS_Enums.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WayBillEventLog.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WayBillInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WayBillInfoImportTemp.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WaybillPackageDetail.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WayBillPrintLog.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WayBillTemplate.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WayBillTemplateInfo.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WayBillTemplateInfoEnum.cs">
+      <DependentUpon>LMS_Enums.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WeightAbnormalLog.cs">
+      <DependentUpon>LMS_Db.Entities.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="LMS_Db.Entities.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>LMS_Db.Entities.cs</LastGenOutput>
+    </None>
+    <None Include="LMS_Enums.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>LMS_Enums.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Common\LighTake.Infrastructure.Common.csproj">
+      <Project>{eac46871-3661-4d4e-8f6a-fe44593e1191}</Project>
+      <Name>LighTake.Infrastructure.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Seedwork\LighTake.Infrastructure.Seedwork.csproj">
+      <Project>{1b2a08a7-3bbd-4bc3-8014-d702e7db9e2d}</Project>
+      <Name>LighTake.Infrastructure.Seedwork</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="LMS_Enums.xml">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://appservice.sfexpress.business.ieca.sf.com/" name="SfexpressService" targetNamespace="http://appservice.sfexpress.business.ieca.sf.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types />
+  <wsdl:message name="sfexpressServiceResponse">
+    <wsdl:part name="return" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="sfexpressService">
+    <wsdl:part name="xml" type="xsd:string" />
+    <wsdl:part name="verifyCode" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:portType name="SfexpressService">
+    <wsdl:operation name="sfexpressService">
+      <wsdl:input name="sfexpressService" message="ns1:sfexpressService" />
+      <wsdl:output name="sfexpressServiceResponse" message="ns1:sfexpressServiceResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+</wsdl:definitions>

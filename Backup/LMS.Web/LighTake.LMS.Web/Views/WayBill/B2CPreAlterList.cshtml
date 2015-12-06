@@ -1,0 +1,204 @@
+﻿@model LMS.Controllers.WayBillController.B2CPreAlterViewModel
+@{
+    ViewBag.Title = "B2CPreAlterList";
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+    Html.AddScriptParts("/Scripts/artdialog/jquery.artDialog.js");
+    Html.AddScriptParts("/Scripts/artdialog/jquery.artDialog.js?skin=default");
+    Html.AddScriptParts("/Scripts/artdialog/plugins/iframeTools.js");    
+}
+<style type="text/css">
+    .aui_dialog
+    {
+        width: 800px;
+    }
+</style>
+<div id="showCustomerList" tabindex="200" style="overflow: scroll; display: none; position: relative">
+</div>
+<div class="domebg" id="right_con">
+    @Html.Partial("_ShowDialog")
+    @using (Html.BeginForm())
+    {
+        <input type="hidden" id="txtCodes" name="CountryCode" value="" />
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+                <td style="width: 40%;">
+                    <span>客户:</span>
+                    <input type="text" id="nickName" value="@Model.Param.NickName" name="Param.NickName" readonly="readonly" class="txt txt_middle" />
+                    <input type="hidden" id="CustomerCode" value="@Model.Param.CustomerCode" class="txt txt_long" name="Param.CustomerCode" />
+                    <a href="javascript:void(0)" id="selectCustomer" class="btn_href">选择</a>
+                </td>
+                <td style="width: 20%;">
+                    <span>运输方式:</span>
+                    @Html.DropDownListFor(p => p.Param.ShippingMethodId, Model.ShippingMethods)
+                </td>
+                <td style="width: 30%;">
+                    <span class="vm">发货国家:</span>
+                    @Html.TextAreaFor(p => p.Param.CountryCode, new { @readonly = "readonly", id = "CountryList", @style = "Width:150px", @class = "vm" })
+                    <input type="button" value="选择" title="选择国家" class="btn" onclick="AddCountries();">
+                </td>
+            </tr>
+            <tr class="date_row_select">
+                <td>
+                    <span>结算重量：</span>
+                    @Html.TextBoxFor(p => p.Param.StartWeight, new { @style = "width:130px;" })
+                    <span>至</span>
+                    @Html.TextBoxFor(p => p.Param.EndWeight, new { @style = "width:130px;" })
+                </td>
+                <td>
+                    @Html.DropDownListFor(p => p.Param.SearchWhere, Model.SearchWheres, new { @class = "vm" })
+                    @Html.TextAreaFor(p => p.Param.SearchContext, new { @style = "Width:150px", @class = "vm" })
+                </td>
+                <td>
+                    <span>预报状态:</span>
+                    @Html.DropDownListFor(p => p.Param.Status, Model.StatusList)
+                </td>
+            </tr>
+            <tr class="date_row_select">
+                <td>
+                    <span>@Html.DropDownListFor(p => p.Param.SearchTime, Model.DateTimeWheres)</span>
+                    @Html.TextBoxFor(p => p.Param.StartTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.Param.StartTime), @class = "txt wdate", @style = "width:130px;" })
+                    <span>至</span>
+                    @Html.TextBoxFor(p => p.Param.EndTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.Param.EndTime), @class = "txt wdate", @style = "width:130px;" })
+                </td>
+                <td colspan="2">
+                    <input type="submit" class="btn" name="btnSearch" id="btnSearch" value="搜索"/>
+                    <input type="submit" class="btn" name="btnPreAlter" value="预报到服务商" onclick="return  PreAlter();"/>
+                    <input type="hidden" id="SelectWayBillNumber" name="Param.SelectWayBillNumber"/>
+                </td>
+            </tr>
+        </table>
+        <table id="tabList" class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="data_row_two">
+                <th>
+                    <input type="checkbox" class="checkbox" id="SelectAll" name="Param.IsSelectAll" value="false" />
+                    <label for="SelectAll">全选所有页</label>
+                </th>
+                <th>序号</th>
+                <th>运单号</th>
+                <th>客户代码</th>
+                <th>发货国家</th>
+                <th>结算重量</th>
+                <th>物流公司</th>
+                <th>发货运输方式</th>
+                <th>跟踪号</th>
+                <th>收货时间</th>
+                <th>错误信息</th>
+                <th>预报状态</th>
+            </tr>
+            @{
+                int n = 1;
+            }
+            @foreach (var row in Model.PagedList)
+            {
+                <tr class="date_row_select data_row_dan">
+                    <td>
+                        <input type="checkbox" name="WayBillNumbers" value="@row.WayBillNumber" />
+                    </td>                                                  
+                    <td>
+                        @n
+                    </td>
+                    <td>
+                        @row.WayBillNumber
+                    </td>
+                    <td>
+                        @row.CustomerCode
+                    </td>
+                    <td>
+                        @row.CountryCode
+                    </td>
+                    <td>
+                        @row.SettleWeight
+                    </td>
+                    <td>
+                        @row.VenderName
+                    </td>
+                    <td>
+                        @row.OutShippingMethodName
+                    </td>
+                    <td>
+                        @row.TrackingNumber
+                    </td>
+                    <td>
+                        @row.InStorageCreatedOn
+                    </td>
+                    <td>
+                        @row.ErrorMsg
+                    </td>
+                    <td>
+                        @LMS.Data.Entity.B2CPreAlter.GetStatusDescription(row.Status)
+                    </td>            
+                </tr>
+                n++;
+            }
+            <tr class="data_row_none">
+                <td colspan="14">
+                    @Html.Pager(Model.PagedList, Model.Param)
+                </td>
+            </tr>
+        </table>
+    }
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#SelectAll").bind("click", function () {
+            var isSelected = $(this).attr("checked");
+            $(":checkbox[name='WayBillNumbers']").each(function () {
+                if (isSelected) {
+                    $(this).attr("checked", "true");
+                } else {
+                    $(this).removeAttr("checked");
+                }
+            });
+        });
+    });
+    function AddCountries() {
+        var url = "@Url.Action("CountryList", "WayBill")" + "?" +
+                $.param({
+                    Codes: $("#CountryList").val(),
+                    SiteId: 1
+                });
+            $.dialog.open(url, {
+                title: "选择国家",
+                lock: true,
+                width: 578,
+                padding: "0",
+                show: true,
+                button: [{
+                    name: '确定',
+                    callback: function () {
+                        var iframe = this.iframe.contentWindow;
+                        var codes = $(iframe.document).find("#Codes");
+                        $("#txtCodes").val(codes.val());
+                        $("#CountryList").val(codes.val());
+
+                    }
+                }, {
+                    name: '取消'
+                }]
+            });
+        }
+
+        function PreAlter() {
+            var valIds = [];
+            $(":checkbox[name='WayBillNumbers']").each(function () {
+                if ($(this).attr("checked")) {
+                    if ($.inArray($(this).val(), valIds) < 0) {
+                        valIds.push($(this).val());
+                    }
+                }
+            });
+            $("#SelectWayBillNumber").val(valIds.join(','));
+            if ($("#SelectAll").attr("checked")) {
+                $("#SelectAll").val("true");
+                return true;
+            } else {
+                $("#SelectAll").val("false");
+                if (valIds.length > 0) {
+                    return true;
+                } else {
+                    alert("请选择需要预报的运单！");
+                    return false;
+                }
+            }
+        }
+    </script>  

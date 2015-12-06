@@ -1,0 +1,51 @@
+﻿@model LMS.Controllers.FinancialController.AuditAnomalyViewModel
+@{
+    Layout = null;
+}
+<form id="editfrom">
+    <div  id="right_con" >
+        <ul>
+            @if (!string.IsNullOrWhiteSpace(Model.OldFinancialNote))
+            {
+                <li class="mt20"><span class="info_box info_middle">费用异常备注 : </span>
+                    @Html.TextAreaFor(p=>p.OldFinancialNote,new{@class="area vt",@cols="45", @rows="6",@readonly="readonly"})
+                </li>
+            }
+            <li class="mt20"><span class="info_box info_middle">费用异常备注 : </span>
+                @Html.TextAreaFor(p=>p.NewFinancialNote,new{@class="area vt",@cols="45", @rows="6"})
+            </li>
+            <li class="mt20"><span class="info_box info_middle"></span>
+            <input type="hidden" name="WayBillNumber" value="@Model.WayBillNumber"/>
+            <input type="button" class="btn" value="保存" id="Savebnt" onclick="Save();" />
+        </ul>
+    </div>
+</form>
+<script type="text/javascript">
+    function Save() {
+        if ($.trim($("#editfrom #NewFinancialNote").val()).length > 150 || $.trim($("#editfrom #NewFinancialNote").val()).length <= 0) {
+            alert("备注长度大于零小150个字符！");
+            return false;
+        }
+        $("#editfrom #Savebnt").attr('disabled', true);
+        $.ajax({
+            type: "GET",
+            url: "SaveAuditAnomaly",
+            dataType: "json",
+            data: $("#editfrom").serialize(),
+            success: function (data) {
+                if (data.Result) {
+                    alert("保存成功！");
+                    $('#test').window("close");
+                    //location.reload();
+                    $("#SelectBtn").click();
+                } else {
+                    alert(data.Message);
+                }
+            },
+            complete: function (data) {
+                $("#editfrom #Savebnt").attr('disabled', false);
+            }
+        });
+        return true;
+    }
+</script>

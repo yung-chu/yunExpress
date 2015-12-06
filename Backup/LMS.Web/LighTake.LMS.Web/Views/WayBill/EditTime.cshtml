@@ -1,0 +1,176 @@
+﻿@model LMS.Controllers.WayBillController.EditTotalPackageTimeOneModel
+@{
+    Layout = null;
+}
+
+<div class="cell pl10 mt30" id="right_con">
+    <div class="domebg">
+        <form id="edittimetable">
+            <input type="hidden" name="TotalPackageNumber" id="TotalPackageNumber" value="@Model.TotalPackageNumber"/>
+            <input type="hidden" id="nowtime" value="@DateTime.Now.AddHours(1).ToString("yyyy-MM-dd HH:mm:ss")"/>
+            <input type="hidden" id="ishasValue" name="ishasValue" value="@(Model.TraceInfos.Any()?"1":"0")"/>
+            <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+                @{
+                    var conlist = LMS.Data.Entity.TotalPackageConfig.GetShowTimeList();
+                    for (var i = 0; i < conlist.Count; i++)
+                    {
+                        var time = Model.TraceInfos.SingleOrDefault(p => p.TraceEventCode.ToString() == conlist[i].ValueField);
+                        var starttime = Model.CreatedTime;
+                        <tr class="date_row_select" style="height: 50px;">
+                            <td><span class="info_box" style="width: 100px; margin-right: 5px; text-align: right;">@conlist[i].TextField:</span></td>
+                            <td>
+                                @{
+                                    var traceEventTime = time != null ? time.TraceEventTime.ToString("yyyy-MM-dd HH:mm:ss") : string.Empty;
+                                    if (time != null && time.IsJob)
+                                    {
+                        
+                                        <input type="text" name="Trace_@(conlist[i].ValueField)" id="Trace_@(conlist[i].ValueField)" value="@traceEventTime" title="@(conlist[i].TextField)" readonly="readonly" style="width:150px;" alt="@traceEventTime" />
+                                    }
+                                    else
+                                    {
+                                        if (i == 0)
+                                        {
+                                            <input type="text" name="Trace_@(conlist[i].ValueField)" id="Trace_@(conlist[i].ValueField)" title="@(conlist[i].TextField)" value="@traceEventTime" readonly="readonly" style="width: 150px;" onfocus=" WdatePicker({ minDate: '@(starttime.ToString("yyyy-MM-dd HH:mm:ss"))', maxDate: '#F{$dp.$D(\'Trace_@(conlist[i + 1].ValueField)\')||\'2020-01-01 00:00:00\'}', dateFmt: 'yyyy-MM-dd HH:mm:ss'}) " />
+                                        }
+                                        else if (i > 0 && i < conlist.Count - 1)
+                                        {
+                                            <input type="text" name="Trace_@(conlist[i].ValueField)" id="Trace_@(conlist[i].ValueField)" title="@(conlist[i].TextField)" value="@traceEventTime" readonly="readonly" style="width: 150px;" onfocus=" WdatePicker({ minDate: '#F{$dp.$D(\'Trace_@(conlist[i - 1].ValueField)\')||\'@(starttime.ToString("yyyy-MM-dd HH:mm:ss"))\'}', maxDate: '#F{$dp.$D(\'Trace_@(conlist[i + 1].ValueField)\')||\'2020-01-01 00:00:00\'}', dateFmt: 'yyyy-MM-dd HH:mm:ss'})  " />
+                                        }
+                                        else
+                                        {
+                                            <input type="text" name="Trace_@(conlist[i].ValueField)" id="Trace_@(conlist[i].ValueField)" value="@traceEventTime" title="@(conlist[i].TextField)" readonly="readonly" style="width: 150px;" onfocus=" WdatePicker({ minDate: '#F{$dp.$D(\'Trace_@(conlist[i - 1].ValueField)\')||\'@(starttime.ToString("yyyy-MM-dd HH:mm:ss"))\'}', dateFmt: 'yyyy-MM-dd HH:mm:ss' }) " />
+                                        }
+                                    }
+                                }
+                            </td>
+                            <td>
+                                @{
+                                    if (time != null && time.IsJob)
+                                    {
+                                        <select name="Address_@(conlist[i].ValueField)" style="width:118px;">
+                                            <option value="@time.TraceEventAddress">@time.TraceEventAddress</option>
+                                        </select>
+                                    }
+                                    else
+                                    {
+                                        <select name="Address_@(conlist[i].ValueField)" style="width:118px;">
+                                            @{
+                                                var address = Model.AddressList.TraceEventCode.SingleOrDefault(p => p.EventCode.ToString() == conlist[i].ValueField);
+                                                if (address != null)
+                                                {
+                                                    foreach (var a in address.Address)
+                                                    {
+                                                        if (time != null && time.TraceEventCode == address.EventCode&&a==time.TraceEventAddress)
+                                                        {
+                                                            <option value="@a" selected="selected">@a</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@a">@a</option>
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                <tr style="height: 60px; text-align: center;">
+                    <td colspan="3" class="date_row_select">
+                        <input type="button" class="btn mr10" value="确定" id="EbtnOk" onclick="return SaveTime();" />
+                        <input type="button" class="btn mr10" value="取消" id="EbtnCancel" onclick="FunCancel();" />
+                    </td>
+                </tr>
+                <tr style="height: 60px;">
+                    <td colspan="3" style="color: red;">注意：请慎重填写正确，填写后会在官网显示给客户查询货物跟踪信息
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    function FunCancel() {
+        $("#showEditTime").window("close");
+    }
+
+    function SaveTime() {
+        var str = "";
+        var datestr = "";
+        var elment = $("input[name^='Trace_']");
+        for (var i = elment.length - 1; i >= 0; i--) {
+            if ($.trim($(elment[i]).val()) != "") {
+                if (str == "") {
+                    $("input[name^='Trace_']").each(function (index, item) {
+                        if ($(item).val() == "" && index < i) {
+                            if (str == "") {
+                                str = $(item).attr("title");
+                            } else {
+                                str += "," + $(item).attr("title");
+                            }
+                        }
+                    });
+                }
+                if (i > 0 && $(elment[i - 1]).val() != "") {
+                    var date1 = Date.parse($(elment[i]).val());
+                    var date2 = Date.parse($(elment[i - 1]).val());
+                    if (date1 < date2) {
+                        if (datestr == "") {
+                            datestr = $(elment[i]).attr("title") + "时间小于" + $(elment[i - 1]).attr("title");
+                        } else {
+                            datestr += "," + $(elment[i]).attr("title") + "时间小于" + $(elment[i - 1]).attr("title");
+                        }
+                    }
+                }
+            }
+        }
+        var error = "";
+        if (str != "") {
+            error = str + "不能为空！  ";
+        }
+        if (datestr != "") {
+            error += datestr;
+        }
+        if ($("input[name^='Trace_'][value!='']").length == 0&&$("#ishasValue").val()=="0") {
+            alert("请选择时间！");
+            return false;
+        }
+        if (error != "") {
+            alert(error);
+            return false;
+        } else {
+            $("#EbtnOk").attr('disabled', true);
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("PostEditTime")",
+                dataType: "json",
+                data: $("#edittimetable").serialize(),
+                success: function (data) {
+                    if (data.Result) {
+                        SetParentTime();
+                        $("#showEditTime").window("close");
+                    } else {
+                        alert(data.Message);
+                    }
+                },
+                complete: function (data) {
+                    $("#EbtnOk").attr('disabled', false);
+                }
+        });
+            return true;
+        }
+    }
+    
+    function SetParentTime() {
+        $("input[name^='Trace_']").each(function(index, item) {
+            var code = $(item).attr("name").substring("Trace_".length);
+            if ($("#tr_" + $("#TotalPackageNumber").val() + ">td[itemid='" + code + "']")) {
+                $("#tr_" + $("#TotalPackageNumber").val() + ">td[itemid='" + code + "']").text($(item).val());
+            }
+        });
+    }
+
+</script>

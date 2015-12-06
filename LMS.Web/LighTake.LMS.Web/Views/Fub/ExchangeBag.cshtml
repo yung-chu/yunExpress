@@ -1,0 +1,184 @@
+﻿@{
+    ViewBag.Title = "ExchangeBag";
+}
+@*<audio id="SuccessAudio">
+    你的浏览器不支持播放声音，请升级
+    <source src="/Css/Success.wav" type="audio/wav">
+</audio>
+<audio id="FaileAudio">
+    <source src="/Css/Faile.wav" type="audio/wav">
+</audio>*@
+<div class="domebg" id="right_con">
+    <fieldset>
+        <legend>换袋扫描</legend>
+        <table class="data_table" style="margin: 15px; width: 98%;" border="1" cellpadding="0" cellspacing="0">
+            <tr>
+                <td style="width: 100px; text-align: right;">客户袋牌：</td>
+                <td style="width: 30%;">
+                    <input type="text" id="PostBagNumber" name="PostBagNumber" class="txt" style="width: 150px;" maxlength="20" /></td>
+                <td rowspan="3" style="color: red; font-weight: bold;"><span id="ErrorMessage"></span></td>
+            </tr>
+            <tr>
+                <td style="width: 100px; text-align: right;">邮政袋牌：</td>
+                <td>
+                    <input type="text" id="FuPostBagNumber" name="FuPostBagNumber" class="txt" style="width: 150px;" maxlength="35" /></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center;">
+                    <input type="button" id="btnSubmit" class="btn" value="提交" title="提交扫描袋牌"/></td>
+            </tr>
+        </table>
+    </fieldset>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $(":text").focus(function () {
+            this.select();
+        });
+        $(":text").click(function () {
+            this.select();
+        });
+        $(":text").mouseup(function () {
+            return false;
+        });
+        $("#PostBagNumber").bind("keydown", function (e) {
+            if (e.keyCode == 13) {
+                $("#ErrorMessage").html("");
+                if ($.trim($(this).val()) != "") {
+                    $.ajax({
+                        type: "GET",
+                        url: "@Url.Action("GetMailPostBagInfoExt")",
+                        data: { postBagNumber: $.trim($(this).val()) },
+                        dataType: "json",
+                        beforeSend: function () {
+                            $("#ErrorMessage").html("客户袋牌验证中，请等待！");
+                        },
+                        success: function (data) {
+                            if (data.Result == "0") {
+                                $("#PostBagNumber").select();
+                                $("#ErrorMessage").html("无对应客户袋牌！");
+                                PlayFaile();
+                            }else if (data.Result == "1") {
+                                $("#PostBagNumber").select();
+                                $("#ErrorMessage").html("客户袋牌已扫描！");
+                                PlayFaile();
+                            }else if (data.Result == "2") {
+                                $("#FuPostBagNumber").focus();
+                                $("#ErrorMessage").html("");
+                            } else {
+                                $("#PostBagNumber").select();
+                                $("#ErrorMessage").html("无对应客户袋牌！");
+                                PlayFaile();
+                            }
+                        }
+                    });
+                } 
+            }
+        });
+        $("#FuPostBagNumber").bind("keydown", function (e) {
+            if (e.keyCode == 13) {
+                $("#ErrorMessage").html("");
+                if ($.trim($(this).val()) != "") {
+                    if (/^\d{26,34}$/.test($.trim($(this).val()))) {
+                        $.ajax({
+                            type: "GET",
+                            url: "@Url.Action("GetMailPostBagInfoByFu")",
+                            data: { fuPostBagNumber: $.trim($(this).val()) },
+                            dataType: "json",
+                            beforeSend: function () {
+                                $("#ErrorMessage").html("邮政袋牌验证中，请等待！");
+                            },
+                            success: function(data) {
+                                if (data.Result == "0") {
+                                    $("#FuPostBagNumber").select();
+                                    $("#ErrorMessage").html("邮政袋牌已扫描！");
+                                    PlayFaile();
+                                } else if (data.Result == "1") {
+                                    $("#ErrorMessage").html("");
+                                    $("#btnSubmit").trigger("click");
+                                } else {
+                                    $("#FuPostBagNumber").select();
+                                    $("#ErrorMessage").html("邮政袋牌已扫描！");
+                                    PlayFaile();
+                                }
+                            }
+                        });
+                    } else {
+                        $("#ErrorMessage").html("邮政袋牌号规则：输入的为纯数字，且长度为26位到34位之间！");
+                        PlayFaile();
+                    }
+                } else {
+                    $("#ErrorMessage").html("邮政袋牌不能为空！");
+                    PlayFaile();
+                }
+            }
+        });
+        $("#btnSubmit").click(function () {
+            if ($.trim($("#PostBagNumber").val()) == "") {
+                $("#PostBagNumber").focus();
+                $("#ErrorMessage").html("客户袋牌不能为空！");
+                PlayFaile();
+                return false;
+            }
+            if ($.trim($("#FuPostBagNumber").val()) == "") {
+                $("#FuPostBagNumber").focus();
+                $("#ErrorMessage").html("邮政袋牌不能为空！");
+                PlayFaile();
+                return false;
+            }
+            if (/^\d{26,34}$/.test($.trim($("#FuPostBagNumber").val()))==false) {
+                $("#FuPostBagNumber").focus();
+                $("#ErrorMessage").html("邮政袋牌号规则：输入的为纯数字，且长度为26位到34位之间！");
+                PlayFaile();
+                return false;
+            }
+            $("#ErrorMessage").html("");
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("SacnMailPostBagInfo")",
+                data: { postBagNumber: $.trim($("#PostBagNumber").val()), fuPostBagNumber: $.trim($("#FuPostBagNumber").val()) },
+                dataType: "json",
+                beforeSend: function () {
+                    $("#ErrorMessage").html("数据提交中，请等待！");
+                    $("#btnSubmit").attr('disabled', true);
+                },
+                success: function (data) {
+                    if (data.Result == "1") {
+                        $("#ErrorMessage").html("提交成功！");
+                        $(":text").val("");
+                        $("#PostBagNumber").focus();
+                        PlaySuccess();
+                    } else if (data.Result == "0") {
+                        $("#FuPostBagNumber").focus();
+                        PlayFaile();
+                        $("#ErrorMessage").html("提交失败！");
+                    } else {
+                        $("#FuPostBagNumber").focus();
+                        PlayFaile();
+                        $("#ErrorMessage").html(data.Result);
+                    }
+                },
+                complete:function(data) {
+                    $("#btnSubmit").attr('disabled', false);
+                }
+            });
+            return true;
+        });
+    });
+    function PlaySuccess() {
+        //$('#SuccessAudio')[0].play(); //播放成功声音 
+        $('embed').remove();
+        $('body').append('<embed src="/Css/Success.wav" autostart="true" hidden="true" loop="false">');
+    }
+
+    function PlaySuccess2() {
+        $('embed').remove();
+        $('body').append('<embed src="/Css/Success2.wav" autostart="true" hidden="true" loop="false">');
+    }
+
+    function PlayFaile() {
+        $('embed').remove();
+        $('body').append('<embed src="/Css/Faile.wav" autostart="true" hidden="true" loop="false">');
+        //$('#FaileAudio')[0].play(); //播放失败声音 
+    }
+</script>

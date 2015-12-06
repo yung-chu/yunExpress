@@ -1,0 +1,108 @@
+﻿@model LMS.Controllers.WayBillController.WayBillListViewModel
+@{
+    ViewBag.Title = "NewTrackingNumber";
+}
+@Html.Partial("_ShowDialog")
+@using (Html.BeginForm("NewTrackingNumber", "WayBill", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <table class="data_table" width="100%" border="0" cellpadding="0" cellspacing="0">
+        <tr class="date_row_select">
+            <td width="25%">
+                <span class="info_box info_select">跟踪号文件:</span>
+                <input name="excelFile" id="file" type="file" style="width: 200px;" />
+            </td>
+            <td width="10%" align="center">
+                <input type="submit" class="btn" value="上传" name="btnUpload"/>
+            </td>
+            <td width="60%">
+                <a href="@(LMS.Core.sysConfig.ExcelTemplateWebPath + LMS.Core.sysConfig.WayBillTrackingNumber)">下载模板</a>
+            </td>
+        </tr>
+        @if (Model.WayBillTrackingNumbers.Count > 0)
+        {
+            <tr>
+                <td align="center">
+                    <input type="submit" class="btn" id="btnSubmit"value="确认上传" name="btnSave" @(Model.BtnSuccess ? "" : "disabled=\"disabled\"")/>
+                    @Html.HiddenFor(p => p.UniqueExcelFileName)
+                </td>
+
+                <td align="center">
+                    <input type="submit" class="btn" value="取消上传" name="btnCancel"/>
+                </td>
+                <td>
+                    一共上传<text style="color: red">@Model.Total</text>个，成功<text style="color: red">@Model.SuccessTotal</text>个，失败<text style="color: red">@Model.FailureTotal</text>
+                </td>
+            </tr>
+        }
+    </table>
+}
+<div>
+    <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+        <tr class="data_row_two">
+            <th>Excel号</th>
+            <th>运单号/订单号/原跟踪号</th>
+            <th>运单跟踪号</th>
+            <th>检查结果</th>
+        </tr>
+        @if (Model.WayBillTrackingNumbers.Count > 0)
+        {
+            foreach (var row in Model.WayBillTrackingNumbers)
+            {
+                <tr>
+                    <td>
+                        @row.execlRow
+                    </td>
+                    <td>
+                        @row.WayBillNumber
+
+                    </td>
+                    <td>
+                        @row.TrackingNumber
+                    </td>
+                      @if (string.IsNullOrWhiteSpace(row.ErrorMsg.ToString()))
+                      {
+                          <td style="color: green">
+                              检测成功
+                          </td>
+                      }
+                      else
+                      {
+                          <td style="color: red">
+                              <text>@Html.Raw(row.ErrorMsg.ToString())</text>
+                          </td>
+                      }
+                    
+                </tr>
+            }
+            @*
+            <tr>
+                <td>
+                    @Html.Pager(Model.WayBillTrackingNumbers)
+                </td>
+            </tr>*@
+        }
+    </table>
+</div>
+<script type="text/javascript">
+    $(function() {
+ 
+        $("#btnSubmit").bind("click", function () {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("NewTrackingNumber", "WayBill")",
+                dataType: "json",
+                data: $("form").serialize()+"&btnSave=确认上传",
+                success: function(data) {
+                    if (data.Result) {
+                        alert("保存成功");
+                        location.href = "@Url.Action("NewTrackingNumber")";
+                    } else {
+                        alert(data.Message);
+                    }
+                }
+            });
+            
+            return false;
+        });
+    });
+</script>

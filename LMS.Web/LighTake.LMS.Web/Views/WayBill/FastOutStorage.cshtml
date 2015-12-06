@@ -1,0 +1,233 @@
+﻿@model LMS.Controllers.WayBillController.FastOutStorageViewModel
+@{
+    ViewBag.Title = "FastOutStorage";
+}
+<div id="showVenderList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showShippingMethodList" tabindex="100" style="overflow: scroll; display: none; position: relative">
+</div>
+<div class="domebg" id="right_con">
+    <table id="firsttable" class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+        <tr class="date_row_select">
+            <td>
+                <span class="info_box info_select">服务商:</span>
+                <input type="text" id="_VenderCode" name="VenderCode" readonly="readonly" class="txt txt_short" onchange="venderCodeChange();" />
+                <input type="text" id="_VenderName" name="VenderName" class="txt txt_short" />
+                <input type="button" id="selectVender" class="btn" value="选择" />
+            </td>
+            <td>
+                <span class="info_box info_select">运输方式:</span>
+                <span id="ShippingMethodName"></span>
+                <input type="hidden" id="WeightOrVolume" />
+                <input type="hidden" id="ShippingMethodId" name="ShippingMethodId" />
+                <input type="hidden" name="ShippingMethodName" />
+                <input type="button" id="selectShippingMethod" class="btn" value="选择" disabled="disabled" />
+            </td>
+            <td>
+                <span class="info_box info_select">货物类型:</span>
+                @Html.DropDownList("GoodsTypeId", Model.GoodsTypeModels)
+            </td>
+            <td>
+                <input type="button" class="btn" value="确定出仓" id="btnSubmit" />
+                <a href="@Model.ReturnUrl" id="getUrl" style="display:none"></a>
+                @*<a href="@Model.ReturnUrl" class="btn_href">返回</a>*@
+            </td>
+        </tr>
+        <tr class="date_row_select">
+            <td colspan="4">
+                <div class="fix">
+                    <div class="l">
+                        <select id="selectlist" onchange="CancelSelectTotalPackage(this);">
+                            <option value="0">选择总包号</option>
+                            <option value="1">取消选择</option>
+                        </select>  
+                    </div>
+                    <div class="cell pl10">
+                        <input type="radio" name="SelectTotalPackage" value="1" id="aotucreate" />
+                        <label for="aotucreate">新建总包号</label>
+                        <input type="radio" name="SelectTotalPackage" value="2" id="noaotucreate"/>
+                        <label for="noaotucreate">追加总包号</label>
+                        <input type="hidden" name="TotalPackageNumber" id="totalPackageNumber"/>
+                        <span id="span1" style="display: none;"><input type="text" id="newtotalPackageNumber" disabled="disabled"/>  备注：<input type="text" maxlength="100" name="Remark" class="txt txt_short"/> </span>
+                        <span id="span2" style="display: none;"><select id="selecttotalPackageNumber"></select></span>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr class="date_row_select">
+            <td colspan="4">
+                <span style="color: red;font-size:14px; font-weight: bold"> 总票数：@Model.TotalVotes 票 &nbsp;&nbsp;&nbsp; 总件数： @Model.TotalQty 件 &nbsp;&nbsp;&nbsp; 总重量：@Model.TotalWeight.ToString("F3") kg</span>
+            </td>
+        </tr>
+        <tr class="date_row_select">
+            <td colspan="4">
+                <div class="fix">
+                    <div class="l">
+                        运单号：  
+                    </div>
+                    <div class="cell pl10">
+                        <div class="cell_bk">
+                            @Model.WayBillNumbers
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <input type="hidden" id="WayBillNumbers" name="WayBillNumbers" value="@Model.WayBillNumbers"/>
+                </div>
+            </td>
+
+        </tr>
+        <tr class="date_row_select">
+            <td colspan="4" style="color: red;">
+                <span id="ErrorMessage">@Model.ErrorMessage</span>
+            </td>
+        </tr>
+    </table>
+</div>
+<script type="text/javascript">
+    $(function () {
+        //选择服务商
+        $("#selectVender").bind("click", function () {
+            $("#showVenderList").window({
+                width: 550,
+                height: 380,
+                title: "选择服务商",
+                href: "SelectVender",
+                top: 100,
+                modal: true,
+                shadow: false,
+                closed: false,
+                collapsible: false,
+                minimizable: false,
+                maximizable: false
+            });
+            @*$("#showVenderList").showWindow("@Url.Action("SelectVender", "WayBill")", "选择服务商");
+            var parentWindow = $("#showVenderList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                top: 120
+            }, {
+                duration: 1000,
+                step: function (now, fx) {
+                    $(".window").css("top", now);
+                }
+            });*@
+            $("#showVenderList").show();
+        });
+        //选择运输方式
+        $("#selectShippingMethod").bind("click", function () {
+            $("#showShippingMethodList").showWindow("@Url.Action("SelectShippingMethod", "WayBill")?venderCode=" + $("#_VenderCode").val() + "&type=2", "选择运输方式");
+            var parentWindow = $("#showShippingMethodList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                top: 120
+            }, {
+                duration: 1000,
+                step: function (now, fx) {
+                    $(".window").css("top", now);
+                }
+            });
+            $("#showShippingMethodList").show();
+        });
+        $("input:radio[name=SelectTotalPackage]").change(function () {
+            var selectval = $("input:radio[name=SelectTotalPackage]:checked").val();
+            if (selectval == "1") {
+                if ($("#newtotalPackageNumber").val() == "") {
+                    $("#btnSubmit").attr('disabled', true);
+                    $.get("@Url.Action("CreateTotalPackageNumber")", function(data) {
+                        $("#newtotalPackageNumber").val(data);
+                        $("#totalPackageNumber").val(data);
+                    });
+                    $("#btnSubmit").attr('disabled', false);
+                }
+                $("#span2").hide();
+                $("#span1").show();
+            } else {
+                $("#totalPackageNumber").val($("#selecttotalPackageNumber").val());
+                $("#span1").hide();
+                $("#span2").show();
+            }
+        });
+        $("#selecttotalPackageNumber").change(function () {
+            $("#totalPackageNumber").val($("#selecttotalPackageNumber").val());
+        });
+        $("#btnSubmit").click(function () {
+
+            if ($.trim($("#_VenderCode").val()) == "") {
+                alert("请选择服务商！");
+                return false;
+            }
+            if ($.trim($("#ShippingMethodId").val()) == "") {
+                alert("请选择运输方式！");
+                return false;
+            }
+            if ($.trim($("#ShippingMethodName").text()) == "国际小包优+") {
+                alert("国际小包优+不能直接出仓！");
+                return false;
+            }
+            
+            $("input[name='ShippingMethodName']").val($("#ShippingMethodName").html());
+            $(this).attr('disabled', true);
+            $("#ErrorMessage").html("出仓中，请等待！");
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("CheckOnFastOutStorage")",
+                dataType: "json",
+                data: $("#firsttable :input").serializeArray(),
+                success: function (data) {
+                    if (data.Result) {
+                        location.href = $("#getUrl").attr("href");
+                    } else {
+                        $("#ErrorMessage").html(data.Message);
+                    }
+                },
+                error: function () {
+                    alert("直接出仓出错");
+                },
+                complete: function () {
+                    $("#btnSubmit").attr('disabled', false);
+                }
+            });
+        });
+    });
+    
+    function venderCodeChange() {
+        if ($("#_VenderCode").val() != "") {
+            $("#selecttotalPackageNumber").empty();
+            $("#btnSubmit").attr('disabled', true);
+            $.get("@Url.Action("GetTotalPackageNumberLis")", { venderCode: $("#_VenderCode").val() }, function (data) {
+                if (data != "") {
+                    $.each(data.split("|"), function (i, item) {
+                        if (!isExistOption("selecttotalPackageNumber", item)) {
+                            $("#selecttotalPackageNumber").append("<option value='" + item + "'>" + item + "</option>");
+                        }
+                    });
+                }
+            });
+            $("#btnSubmit").attr('disabled', false);
+        } else {
+            $("#selecttotalPackageNumber").empty();
+        }
+    }
+
+    function CancelSelectTotalPackage(obj) {
+        if ($(obj).val() == "1") {
+            $("input:radio[name='SelectTotalPackage']").attr("checked", false);
+            $("input:radio[name='SelectTotalPackage']").attr('disabled', true);
+        } else {
+            $("input:radio[name='SelectTotalPackage']").attr('disabled', false);
+        }
+    }
+    //判断select中是否存在值为value的项  
+    function isExistOption(id, value) {
+        var isExist = false;
+        var count = $('#' + id).find('option').length;
+        for (var i = 0; i < count; i++) {
+            if ($('#' + id).get(0).options[i].value == value) {
+                isExist = true;
+                break;
+            }
+        }
+        return isExist;
+    }
+</script>

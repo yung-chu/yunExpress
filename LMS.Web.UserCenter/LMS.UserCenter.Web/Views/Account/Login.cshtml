@@ -1,0 +1,105 @@
+﻿@{
+    ViewBag.Title = "Login";
+    Layout = null;
+}
+@model LMS.UserCenter.Controllers.AccountController.LoginModel
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>LMS Admin</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <!-- stylesheets -->
+    <link href="@Url.Content("~/css/res.css")" type="text/css" rel="stylesheet" />
+    <link href="@Url.Content("~/css/mool.css")" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/css/login.css")" />
+
+</head>
+<body>
+    <div class="top_box">
+        <div class="fix top_box">
+            <ul class="r">
+                <li class="top_vertical"></li>
+                <li class="topUser_li first1">&nbsp;<a href="javascript:" class="icon-twitter topUser_item"></a>&nbsp;
+                </li>
+                <li class="top_vertical"></li>
+                <li class="topUser_li">&nbsp;<a href="javascript:" class="icon-message topUser_item"></a>&nbsp;
+                </li>
+                <li class="top_vertical"></li>
+                <li class="topUser_li">&nbsp;<a href="javascript:" class="icon-users topUser_item"></a>&nbsp;
+                </li>
+            </ul>
+            <div class="l mb10">
+                <a href="http://www.lightake.com"></a>
+            </div>
+
+        </div>
+        <div class="top_solid"></div>
+
+    </div>
+    <div id="login" style="">
+        <!-- login -->
+        <div class="title_box">
+            <img src="@Url.Content("~/images/uadmin_logo.png")" />
+        </div>
+        <div class="inner">
+            @using (Html.BeginForm())
+            {
+                <div class="field">
+                    <span class="inner_label">
+                        <label>Username  :</label>
+                    </span>
+                    <span class="inner_input_box">
+
+                        @Html.TextBoxFor(m => m.UserName, new { @class = "inner_input" })
+                        <br />
+                        <p class="mr20 ml10 txt_tip" style="width: 300px;">@Html.ValidationMessageFor(p => p.UserName)</p>
+                    </span>
+                </div>
+                <div class="field">
+                    <span class="inner_label">
+                        <label>Password  :</label>
+                    </span>
+                    <span class="inner_input_box">
+                        @Html.PasswordFor(m => m.Password, new { @class = "inner_input" })
+
+                        <br />
+                        <p class="mr20 ml10 txt_tip" style="width: 300px;">@Html.ValidationMessageFor(p => p.Password)</p>
+                    </span>
+                </div>
+                <div class="field">
+                    <span class="inner_label">
+                        <label></label>
+                    </span>
+                    <span class="inner_input_box txt_tip">@Html.ValidationMessage("ALL")</span>
+
+                    <span class=" inner_input_box " style="display: none">
+
+                        <input type="checkbox" id="remember" name="remember" />
+                        <label for="remember">Remember me</label>
+                    </span>
+                </div>
+                <div class="div1px"></div>
+                <div class="field">
+                    <div class="f0">
+                        <span class="inner_label">&nbsp;
+                        </span>
+                        <a href="javascript:" class="btn btn_yellow" title="Forgot pass?">
+                            <img src="@Url.Content("~/images/locked.png")" height="12" />
+                        </a>
+                        <input type="submit" class="btn btn_green" value="Login" />
+                    </div>
+                </div>
+            }
+        </div>
+        <!-- end login -->
+        <div id="colors-switcher" class="color">
+            <a href="" class="blue" title="Blue"></a>
+            <a href="" class="green" title="Green"></a>
+            <a href="" class="brown" title="Brown"></a>
+            <a href="" class="purple" title="Purple"></a>
+            <a href="" class="red" title="Red"></a>
+            <a href="" class="greyblue" title="GreyBlue"></a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{977FAF23-8A6B-4392-A877-59D9AA2EFB99}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LighTake.Infrastructure.Web</RootNamespace>
+    <AssemblyName>LighTake.Infrastructure.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Authentication\FakeAuthenticationService.cs" />
+    <Compile Include="Authentication\FormsAuthenticationService.cs" />
+    <Compile Include="Authentication\IAuthenticationService.cs" />
+    <Compile Include="Authentication\SsoAuthenticationService.cs" />
+    <Compile Include="Authentication\UserData.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\ValidationCodeController.cs" />
+    <Compile Include="DependencyResolver.cs" />
+    <Compile Include="ExcelXlsFileResult.cs" />
+    <Compile Include="Extensions\FormExtensions.cs" />
+    <Compile Include="Extensions\MvcExtensions.cs" />
+    <Compile Include="Extensions\RouteExtensions.cs" />
+    <Compile Include="Filters\FormValueRequiredAttribute.cs" />
+    <Compile Include="Filters\MemberOnlyAttribute.cs" />
+    <Compile Include="Filters\SsoMemberOnlyAttribute.cs" />
+    <Compile Include="HttpHandler\BarCodeHandler.cs" />
+    <Compile Include="UI\HtmlHelperExtensions.cs" />
+    <Compile Include="HttpHandler\Ping.ashx.cs" />
+    <Compile Include="HttpModules\ObjectContextDisposeModule.cs" />
+    <Compile Include="IWebHelper.cs" />
+    <Compile Include="Models\BasePageModel.cs" />
+    <Compile Include="Models\RangeDateTimeFilter.cs" />
+    <Compile Include="Models\SearchFilter.cs" />
+    <Compile Include="MVC.cs" />
+    <Compile Include="Controllers\ContollerExtensions.cs" />
+    <Compile Include="Pager\PageLinqExtensions.cs" />
+    <Compile Include="Pager\PagerBuilder.cs" />
+    <Compile Include="Pager\PagerExtension.cs" />
+    <Compile Include="Pager\PagerHelper.cs" />
+    <Compile Include="Pager\PagerItem.cs" />
+    <Compile Include="Pager\PagerOptions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Route\IModelUrlProvider.cs" />
+    <Compile Include="Route\LowerCaseRouteExtensions.cs" />
+    <Compile Include="Route\LowerCaseUrlRoute.cs" />
+    <Compile Include="Route\ModelAttribute.cs" />
+    <Compile Include="Route\ModelParameterBinder.cs" />
+    <Compile Include="Route\ModelRoutingExtensions.cs" />
+    <Compile Include="Route\ModelUrlRoute.cs" />
+    <Compile Include="Route\RegexRoute.cs" />
+    <Compile Include="UI\IPageTitleBuilder.cs" />
+    <Compile Include="Extensions\LayoutExtensions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UI\NotifyType.cs" />
+    <Compile Include="UI\PageTitleBuilder.cs" />
+    <Compile Include="UI\ResourceLocation.cs" />
+    <Compile Include="Utities\FormBinder.cs" />
+    <Compile Include="Utities\ILocalData.cs" />
+    <Compile Include="Utities\Local.cs" />
+    <Compile Include="Utities\RemotePost.cs" />
+    <Compile Include="Utities\Strings.cs" />
+    <Compile Include="Utities\Tools.cs" />
+    <Compile Include="Validation\AddressStateAttribute.cs" />
+    <Compile Include="Validation\EqualsToAttribute.cs" />
+    <Compile Include="Validation\MustBeTrueAttribute.cs" />
+    <Compile Include="Validation\StringTrimBinderAttribute.cs" />
+    <Compile Include="Validation\ValidateStringLengthAttribute.cs" />
+    <Compile Include="WebHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 和 x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LighTake.Infrastructure.Common.Caching\LighTake.Infrastructure.Common.Caching.csproj">
+      <Project>{68565050-A073-4CBE-B241-E02B9B60A057}</Project>
+      <Name>LighTake.Infrastructure.Common.Caching</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LighTake.Infrastructure.Common.InversionOfControl\LighTake.Infrastructure.Common.InversionOfControl.csproj">
+      <Project>{50A03162-5EB6-4A1D-8E16-F6FA4CE7836C}</Project>
+      <Name>LighTake.Infrastructure.Common.InversionOfControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LighTake.Infrastructure.Common.Logging\LighTake.Infrastructure.Common.Logging.csproj">
+      <Project>{7a557dc4-3f10-4c27-b8f4-8d5f7f5d8b3c}</Project>
+      <Name>LighTake.Infrastructure.Common.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LighTake.Infrastructure.Common\LighTake.Infrastructure.Common.csproj">
+      <Project>{EAC46871-3661-4D4E-8F6A-FE44593E1191}</Project>
+      <Name>LighTake.Infrastructure.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LighTake.Infrastructure.SSO\LighTake.Infrastructure.SSO.csproj">
+      <Project>{7981A381-6029-4E93-BBE0-E49D7B007D3D}</Project>
+      <Name>LighTake.Infrastructure.SSO</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

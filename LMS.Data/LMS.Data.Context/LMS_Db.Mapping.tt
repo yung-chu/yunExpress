@@ -1,0 +1,460 @@
+﻿<#@ template language="C#" debug="false" hostspecific="true"#>
+<#@ include file="EF.Utility.CS.ttinclude"#>
+<#@ assembly name="$(DevEnvDir)Microsoft.Data.Entity.Design.DatabaseGeneration.dll"#>
+<#@ import namespace="Microsoft.Data.Entity.Design.DatabaseGeneration" #>
+<#@ import namespace="System.Text"#>
+<#@ output extension=".cs"#>
+<#
+DefineMetadata();
+CodeGenerationTools code = new CodeGenerationTools(this);
+CodeRegion region = new CodeRegion(this, 1);
+MetadataTools ef = new MetadataTools(this);
+string inputFile = @"LMS_DBContext.edmx"; 
+
+var loadResult = LoadMetadata(inputFile);
+EdmItemCollection itemCollection = loadResult.EdmItems;
+var propertyToColumnMapping = loadResult.PropertyToColumnMapping;
+var manyToManyMappings = loadResult.ManyToManyMappings;
+var tphMappings = loadResult.TphMappings;
+string namespaceName = code.VsNamespaceSuggestion();
+string mapClassSuffix = "_Mapping";
+EntityFrameworkTemplateFileManager fileManager = EntityFrameworkTemplateFileManager.Create(this);
+WriteHeader(fileManager);
+
+foreach (EntityType entity in itemCollection.GetItems<EntityType>().OrderBy(e => e.Name))
+{
+    fileManager.StartNewFile(entity.Name + mapClassSuffix + ".cs");
+    BeginNamespace(namespaceName, code);   
+#>
+#pragma warning disable 1573
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Common;
+using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration;
+using System.Data.Entity.Infrastructure;
+
+using LMS.Data.Entity;
+
+
+internal partial class <#=code.Escape(entity) + mapClassSuffix#><#=string.Format(" : EntityTypeConfiguration<{0}>", code.Escape(entity))#>
+{
+    public <#=code.Escape(entity) + mapClassSuffix#>()
+    {                        
+<#   
+     string hasKey;
+     if(entity.KeyMembers.Count<EdmMember>() == 1)
+          hasKey = string.Format(".HasKey(t => t.{0})", entity.KeyMembers[0].Name);
+     else
+          hasKey = string.Format(".HasKey(t => new {{{0}}})", string.Join(", ", entity.KeyMembers.Select(m => "t." + m.Name)));
+              
+                        
+#>
+          this<#=hasKey#>;        
+<#
+     if(tphMappings.Keys.Contains(entity))
+     {
+          foreach(KeyValuePair<EntityType, Dictionary<EdmProperty, string>> entityMapping in tphMappings[entity])
+          {
+#>
+          this.Map<<#=entityMapping.Key.Name #>>(m =>
+          {
+          <#
+          foreach(KeyValuePair<EdmProperty, string> propertyMapping in entityMapping.Value)
+          {
+              string val;
+               switch(propertyMapping.Key.TypeUsage.EdmType.BaseType.FullName)
+              {
+                   case "Edm.String":
+                        val="\""+propertyMapping.Value+"\"";
+                        break;
+                   default:
+                        val=propertyMapping.Value;
+                        break;
+              }
+              
+          #>     m.Requires("<#=propertyMapping.Key.Name#>").HasValue(<#=val#>);
+          <#
+          }
+          #>});
+<#
+          }
+     }
+     
+    var entityPropertyToColumnMapping = propertyToColumnMapping[entity];     
+#>
+          this.ToTable("<#=ToTable(entityPropertyToColumnMapping.Item1)#>");
+<# 
+     foreach (EdmProperty property in entity.Properties)
+    {
+		string generateOption = GetGenerationOption(property, entity);
+		string required = "";
+		string unicCode = "";
+		string fixedLength = "";
+		string maxLength = "";
+		PrimitiveType edmType = (PrimitiveType) property.TypeUsage.EdmType;
+		if (edmType == null && property.TypeUsage.EdmType is EnumType)
+		{
+			EnumType enumType = property.TypeUsage.EdmType as EnumType;
+			edmType = enumType.UnderlyingType;
+		}
+        if(edmType.ClrEquivalentType == typeof(string) || edmType.ClrEquivalentType == typeof(byte[]))
+        {
+            if (!property.Nullable)
+            required = ".IsRequired()";            
+
+            Facet unicodeFacet = property.TypeUsage.Facets.SingleOrDefault(f => f.Name == "Unicode");
+            unicCode = unicodeFacet != null && unicodeFacet.Value != null && (!(bool)unicodeFacet.Value) ? ".IsUnicode(false)" : "";
+          
+            Facet fixedLengthFacet = property.TypeUsage.Facets.SingleOrDefault(f => f.Name == "FixedLength");
+            fixedLength = fixedLengthFacet != null && fixedLengthFacet.Value != null && ((bool)fixedLengthFacet.Value) ? ".IsFixedLength()" : "";
+          
+            Facet maxLengthFacet = property.TypeUsage.Facets.SingleOrDefault(f => f.Name == "MaxLength");
+            maxLength = (maxLengthFacet != null && maxLengthFacet.Value != null && !maxLengthFacet.IsUnbounded) ? string.Format(".HasMaxLength({0})", maxLengthFacet.Value) : "";
+        }
+        if(!entityPropertyToColumnMapping.Item2.Keys.Contains(property)) continue;
+		string hasColumnName = string.Format(".HasColumnName(\"{0}\")", entityPropertyToColumnMapping.Item2[property].Name);
+#>
+          this.Property(t => t.<#= property.Name#>)<#=hasColumnName + generateOption + required + unicCode + fixedLength + maxLength #>;
+<# 
+    } 
+
+     var navigationProperties = entity.NavigationProperties.Where(np => 
+              {
+                   return ((np.DeclaringType == entity) && 
+                           ((AssociationType) np.RelationshipType).IsForeignKey) && 
+                           (((AssociationType) np.RelationshipType).ReferentialConstraints.Single<ReferentialConstraint>().ToRole == np.FromEndMember);
+              });
+     foreach(NavigationProperty navProperty in navigationProperties)
+     {
+          StringBuilder navPropBuilder = new StringBuilder();
+          NavigationProperty navPropertyBackReference = navProperty.ToEndMember.GetEntityType().NavigationProperties
+                             .Where(npBack => npBack.RelationshipType == navProperty.RelationshipType && npBack != navProperty)
+                             .SingleOrDefault();
+		  if (navPropertyBackReference == null) continue;
+        AssociationType associationType = (AssociationType) navProperty.RelationshipType;
+        if (navProperty.ToEndMember.RelationshipMultiplicity == RelationshipMultiplicity.One)            
+            navPropBuilder.AppendFormat("this.HasRequired(t => t.{0})", code.Escape(navProperty));                            
+        else            
+            navPropBuilder.AppendFormat("this.HasOptional(t => t.{0})", code.Escape(navProperty));                
+        
+        if (navProperty.FromEndMember.RelationshipMultiplicity == RelationshipMultiplicity.Many)
+        {
+            navPropBuilder.AppendFormat(".WithMany(t => t.{0})", code.Escape(navPropertyBackReference));                
+            if (associationType.ReferentialConstraints.Single().ToProperties.Count == 1)                
+                navPropBuilder.AppendFormat(".HasForeignKey(d => d.{0})", associationType.ReferentialConstraints.Single().ToProperties.Single().Name);                    
+            else
+             navPropBuilder.AppendFormat(".HasForeignKey(d => new {{{0}}})", string.Join(", ", associationType.ReferentialConstraints.Single().ToProperties.Select(p => "d." + p.Name)));                    
+        }
+        else
+        {
+            navPropBuilder.AppendFormat(".WithOptional(t => t.{0})", code.Escape(navPropertyBackReference));                
+        }
+#>
+          <#= navPropBuilder.ToString() #>;
+<# 
+          }
+          
+          var manyToMany = entity.NavigationProperties.Where(np =>
+                   np.DeclaringType == entity 
+                   && np.ToEndMember.RelationshipMultiplicity == RelationshipMultiplicity.Many 
+                   && np.FromEndMember.RelationshipMultiplicity == RelationshipMultiplicity.Many 
+                   && np.RelationshipType.RelationshipEndMembers.First() == np.FromEndMember);
+          
+          var manyToManyBuilder = new StringBuilder();
+          
+          foreach (NavigationProperty navProperty in manyToMany)
+          {
+              var member = navProperty.ToEndMember.GetEntityType().NavigationProperties
+                                  .Single(nv => (nv.RelationshipType == navProperty.RelationshipType) && (nv != navProperty));
+              var relationshipType = (AssociationType) navProperty.RelationshipType;
+              Tuple<EntitySet, Dictionary<RelationshipEndMember, Dictionary<EdmMember, string>>> tuple; 
+              if(manyToManyMappings.TryGetValue(relationshipType, out tuple))
+              {
+                   string middleTableName = this.ToTable(tuple.Item1);
+                   
+                   var leftType = (EntityType) navProperty.DeclaringType;
+                   Dictionary<EdmMember, string> leftKeyMappings = tuple.Item2[navProperty.FromEndMember];
+                   string leftColumns = string.Join(", ", leftType.KeyMembers.Select(m => "\"" + leftKeyMappings[m] + "\""));
+                   
+                   var rightType = (EntityType) member.DeclaringType;
+                   Dictionary<EdmMember, string> rightKeyMappings = tuple.Item2[member.FromEndMember];
+                   string rightColumns = string.Join(", ", rightType.KeyMembers.Select(m => "\"" + rightKeyMappings[m] + "\""));
+#>
+			this.HasMany(t => t.<#= code.Escape(navProperty) #>).WithMany(t => t.<#= code.Escape(member) #>)
+				.Map(m => 
+				{
+					m.ToTable("<#= middleTableName #>");
+					m.MapLeftKey(<#= leftColumns #>);
+					m.MapRightKey(<#= rightColumns #>);
+				});
+<#
+			}
+		}
+#>
+     }
+}
+<#
+    EndNamespace(namespaceName);
+}
+#>
+
+<#
+if (!code.VerifyCaseInsensitiveTypeUniqueness(code.GetAllGlobalItems(itemCollection), inputFile))
+{
+    return "";
+}
+
+fileManager.Process();
+
+#>
+<#+
+void WriteHeader(EntityFrameworkTemplateFileManager fileManager)
+{
+    fileManager.StartHeader();
+#>
+//------------------------------------------------------------------------------
+// <auto-generated>
+//    This code was generated from a template.
+//
+//    Manual changes to this file may cause unexpected behavior in your application.
+//    Manual changes to this file will be overwritten if the code is regenerated.
+// </auto-generated>
+//------------------------------------------------------------------------------
+
+<#+
+    fileManager.EndBlock();
+}
+
+void BeginNamespace(string namespaceName, CodeGenerationTools code)
+{
+    CodeRegion region = new CodeRegion(this);
+    if (!String.IsNullOrEmpty(namespaceName))
+    {
+#>
+namespace <#=code.EscapeNamespace(namespaceName)#>
+{
+<#+
+        PushIndent(CodeRegion.GetIndent(1));
+    }
+}
+
+
+void EndNamespace(string namespaceName)
+{
+    if (!String.IsNullOrEmpty(namespaceName))
+    {
+        PopIndent();
+#>
+}
+<#+
+    }
+}
+string ToTable(EntitySet entitySet)
+{
+     var toTable = entitySet.Name;
+     string schema = entitySet.GetSchemaName();
+     if(!string.IsNullOrWhiteSpace(schema) && schema != "dbo") 
+          toTable += "\", \"" + schema;
+     return toTable;
+}
+
+string GetGenerationOption(EdmProperty property, EntityType entity)
+{
+	string result = "";
+	bool isPk = entity.KeyMembers.Contains(property);
+	MetadataProperty storeGeneratedPatternProperty = null;
+	string storeGeneratedPatternPropertyValue = "None";
+     
+	if(property.MetadataProperties.TryGetValue(MetadataConstants.EDM_ANNOTATION_09_02 + ":StoreGeneratedPattern", false, out storeGeneratedPatternProperty))  
+		storeGeneratedPatternPropertyValue = storeGeneratedPatternProperty.Value.ToString();      
+     
+	PrimitiveType edmType = (PrimitiveType) property.TypeUsage.EdmType; 
+	if (edmType == null && property.TypeUsage.EdmType is EnumType)
+	{
+		EnumType enumType = property.TypeUsage.EdmType as EnumType;
+		edmType = enumType.UnderlyingType;
+	}
+	if (storeGeneratedPatternPropertyValue == "Computed")
+	{
+		result = ".HasDatabaseGeneratedOption(new Nullable<DatabaseGeneratedOption>(DatabaseGeneratedOption.Computed))";
+	}
+	else if ((edmType.ClrEquivalentType == typeof(int)) || (edmType.ClrEquivalentType == typeof(short)) || (edmType.ClrEquivalentType == typeof(long)))
+	{
+		if (isPk && (storeGeneratedPatternPropertyValue != "Identity"))
+			result = ".HasDatabaseGeneratedOption(new Nullable<DatabaseGeneratedOption>(DatabaseGeneratedOption.None))";
+		else if ((!isPk || (entity.KeyMembers.Count > 1)) && (storeGeneratedPatternPropertyValue == "Identity"))
+			result = ".HasDatabaseGeneratedOption(new Nullable<DatabaseGeneratedOption>(DatabaseGeneratedOption.Identity))";
+	}    
+	return result;    
+}
+
+MetadataLoadResult LoadMetadata(string inputFile)
+{       
+     var loader = new MetadataLoader(this);
+     bool loaded = false;
+     EdmItemCollection edmItemCollection = loader.CreateEdmItemCollection(inputFile);      
+     StoreItemCollection storeItemCollection = null;
+     if (loader.TryCreateStoreItemCollection(inputFile, out storeItemCollection))
+     {
+          StorageMappingItemCollection storageMappingItemCollection;
+          if (loader.TryCreateStorageMappingItemCollection(inputFile, edmItemCollection, storeItemCollection, out storageMappingItemCollection))
+              loaded = true;
+     }
+
+     if(loaded == false)
+          throw new Exception("Cannot load a metadata from the file " + inputFile);
+
+	 var mappingMetadata = LoadMappingMetadata(inputFile);
+	 var mappingNode	 = mappingMetadata.Item1;
+	 var nsmgr			 = mappingMetadata.Item2;
+    
+     var allEntitySets = storeItemCollection.GetAllEntitySets();   
+     
+     return new MetadataLoadResult
+               {
+                   EdmItems = edmItemCollection,
+                   PropertyToColumnMapping = BuildEntityMappings(mappingNode, nsmgr, edmItemCollection.GetItems<EntityType>(), edmItemCollection.GetAllEntitySets(), allEntitySets),
+                   ManyToManyMappings = BuildManyToManyMappings(mappingNode, nsmgr, edmItemCollection.GetAllAssociationSets(), allEntitySets),
+                   TphMappings=BuildTPHMappings(mappingNode, nsmgr, edmItemCollection.GetItems<EntityType>(), edmItemCollection.GetAllEntitySets(), allEntitySets)
+               };
+}
+
+private Tuple<XmlNode, XmlNamespaceManager> LoadMappingMetadata(string inputFile)
+{
+	var xmlDoc = new XmlDocument();
+     xmlDoc.Load(Host.ResolvePath(inputFile));
+
+	 var schemaConstantsList = new SchemaConstants[]
+					{
+						MetadataConstants.V3_SCHEMA_CONSTANTS,
+						MetadataConstants.V2_SCHEMA_CONSTANTS,
+						MetadataConstants.V1_SCHEMA_CONSTANTS,
+					};
+	foreach (var schemaConstants in schemaConstantsList)
+	{
+		var nsmgr = new XmlNamespaceManager(xmlDoc.NameTable);
+		nsmgr.AddNamespace("ef", schemaConstants.MslNamespace);
+		nsmgr.AddNamespace("edmx", schemaConstants.EdmxNamespace);
+		var mappingNode = xmlDoc.DocumentElement.SelectSingleNode("./*/edmx:Mappings", nsmgr);
+
+		if(mappingNode != null)
+			return Tuple.Create(mappingNode, nsmgr);
+	}     
+
+	throw new Exception(CodeGenerationTools.GetResourceString("Template_UnsupportedSchema"));
+}
+
+private Dictionary<EntityType, Dictionary<EntityType, Dictionary<EdmProperty, string>>> BuildTPHMappings(XmlNode mappingNode, XmlNamespaceManager nsmgr, IEnumerable<EntityType> entityTypes, IEnumerable<EntitySet> entitySets, IEnumerable<EntitySet> tableSets)
+{
+     var dictionary = new Dictionary<EntityType, Dictionary<EntityType, Dictionary<EdmProperty, string>>>();
+
+     foreach (EntitySet set in entitySets)
+     {
+          XmlNodeList nodes = mappingNode.SelectNodes(string.Format(".//ef:EntitySetMapping[@Name=\"{0}\"]/ef:EntityTypeMapping/ef:MappingFragment", set.Name), nsmgr);
+          foreach(XmlNode node in nodes)
+          {
+              string typeName=node.ParentNode.Attributes["TypeName"].Value;
+              if(typeName.StartsWith("IsTypeOf("))
+                   typeName=typeName.Substring("IsTypeOf(".Length, typeName.Length-"IsTypeOf()".Length);
+              EntityType type=entityTypes.Single(z=>z.FullName==typeName);
+              string tableName = node.Attributes["StoreEntitySet"].Value;
+              EntitySet set2 = tableSets.Single(entitySet => entitySet.Name == tableName);
+              var entityMap = new Dictionary<EdmProperty, string>();
+              
+              XmlNodeList propertyNodes = node.SelectNodes("./ef:Condition", nsmgr);
+              if(propertyNodes.Count==0) continue;
+              foreach(XmlNode propertyNode in propertyNodes)
+              {
+                   string str = propertyNode.Attributes["ColumnName"].Value;
+                   EdmProperty property2 = set2.ElementType.Properties[str];
+                   string val=propertyNode.Attributes["Value"].Value;
+                   entityMap.Add(property2, val);
+              }
+              EntityType baseType=(EntityType)(type.BaseType??type);
+              if(!dictionary.Keys.Contains(baseType))
+              {
+              var entityMappings=new Dictionary<EntityType, Dictionary<EdmProperty, string>>();
+              //entityMappings.Add(type,entityMap);
+              dictionary.Add(baseType, entityMappings);
+              }
+              dictionary[baseType].Add(type,entityMap);
+          }
+     }
+     return dictionary;
+}         
+
+private Dictionary<EntityType, Tuple<EntitySet, Dictionary<EdmProperty, EdmProperty>>> BuildEntityMappings(XmlNode mappingNode, XmlNamespaceManager nsmgr, IEnumerable<EntityType> entityTypes, IEnumerable<EntitySet> entitySets, IEnumerable<EntitySet> tableSets)
+{
+     var dictionary = new Dictionary<EntityType, Tuple<EntitySet, Dictionary<EdmProperty, EdmProperty>>>();
+
+     foreach (EntitySet set in entitySets)
+     {
+          XmlNodeList nodes = mappingNode.SelectNodes(string.Format(".//ef:EntitySetMapping[@Name=\"{0}\"]/ef:EntityTypeMapping/ef:MappingFragment", set.Name), nsmgr);
+          foreach(XmlNode node in nodes)
+          {
+              string typeName=node.ParentNode.Attributes["TypeName"].Value;
+              if(typeName.StartsWith("IsTypeOf("))
+                   typeName=typeName.Substring("IsTypeOf(".Length, typeName.Length-"IsTypeOf()".Length);
+              EntityType type=entityTypes.Single(z=>z.FullName==typeName);
+              string tableName = node.Attributes["StoreEntitySet"].Value;
+              EntitySet set2 = tableSets.Single(entitySet => entitySet.Name == tableName);
+              var entityMap = new Dictionary<EdmProperty, EdmProperty>();
+              foreach (EdmProperty property in type.Properties)
+              {
+                   XmlNode propertyNode = node.SelectSingleNode(string.Format("./ef:ScalarProperty[@Name=\"{0}\"]", property.Name), nsmgr);
+                   if(propertyNode == null) continue;
+                   string str = propertyNode.Attributes["ColumnName"].Value;
+                   EdmProperty property2 = set2.ElementType.Properties[str];
+                   entityMap.Add(property, property2);
+              }
+              dictionary.Add(type, Tuple.Create(set2, entityMap));
+          }
+     }
+     return dictionary;
+}
+
+Dictionary<AssociationType, Tuple<EntitySet, Dictionary<RelationshipEndMember, Dictionary<EdmMember, string>>>> BuildManyToManyMappings(XmlNode mappingNode, XmlNamespaceManager nsmgr, IEnumerable<AssociationSet> associationSets, IEnumerable<EntitySet> tableSets)
+{
+     var dictionary = new Dictionary<AssociationType, Tuple<EntitySet, Dictionary<RelationshipEndMember, Dictionary<EdmMember, string>>>>();
+     foreach (AssociationSet associationSet in associationSets.Where(set => set.ElementType.IsManyToMany()))
+     {
+          
+          XmlNode node = mappingNode.SelectSingleNode(string.Format("//ef:AssociationSetMapping[@Name=\"{0}\"]", associationSet.Name), nsmgr);
+          string tableName = node.Attributes["StoreEntitySet"].Value;
+          EntitySet entitySet = tableSets.Single(s => s.Name == tableName);
+          
+          var relationEndMap = new Dictionary<RelationshipEndMember, Dictionary<EdmMember, string>>();
+          foreach (AssociationSetEnd end in associationSet.AssociationSetEnds)
+          {
+              var map = new Dictionary<EdmMember, string>();
+              foreach (XmlNode endProperty in node.SelectSingleNode(string.Format("./ef:EndProperty[@Name=\"{0}\"]", end.Name), nsmgr).ChildNodes)
+              {
+                   string str = endProperty.Attributes["Name"].Value;
+                   EdmProperty key = end.EntitySet.ElementType.Properties[str];
+                   string str2 = endProperty.Attributes["ColumnName"].Value;
+                   map.Add(key, str2);
+              }
+              relationEndMap.Add(end.CorrespondingAssociationEndMember, map);
+          }
+          dictionary.Add(associationSet.ElementType, Tuple.Create(entitySet, relationEndMap));
+     }
+     return dictionary;
+}
+
+public class MetadataLoadResult
+{
+     public EdmItemCollection EdmItems { get; set; }
+     public Dictionary<EntityType, Tuple<EntitySet, Dictionary<EdmProperty, EdmProperty>>> PropertyToColumnMapping { get; set; }
+     public Dictionary<AssociationType, Tuple<EntitySet, Dictionary<RelationshipEndMember, Dictionary<EdmMember, string>>>> ManyToManyMappings { get; set; }
+     public Dictionary<EntityType, Dictionary<EntityType, Dictionary<EdmProperty, string>>> TphMappings { get; set; }
+}
+
+private void DefineMetadata()
+{
+    TemplateMetadata[MetadataConstants.TT_TEMPLATE_NAME] = "CSharpDbContextFluent.Mapping";
+    TemplateMetadata[MetadataConstants.TT_TEMPLATE_VERSION] = "5.0";
+    TemplateMetadata[MetadataConstants.TT_MINIMUM_ENTITY_FRAMEWORK_VERSION] = "5.0";
+}
+#>

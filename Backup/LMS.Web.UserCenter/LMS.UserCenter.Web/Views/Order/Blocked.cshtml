@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "已拦截订单";
+    
+}
+@section Scripts{
+    <link href="@Url.Content("~/css/pager.css")" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="@Url.Content("~/js/My97DatePicker/WdatePicker.js")"></script>
+}
+@model LMS.UserCenter.Controllers.OrderController.Models.CustomerOrderViewModels
+<!-- 面包屑 Start -->
+<div class="bd_b bread_box">
+    <a href="javascript:" class="icon-home bread_home"></a>
+    <strong class="gtlt bread_gtlt">&gt;&gt;</strong>
+    <a href="javascript:" class="bread_off">运输服务</a>
+    <strong class="gtlt bread_gtlt">&gt;&gt;</strong>
+    <a href="javascript:" class="bread_on">已拦截订单</a>
+</div>
+<!-- 面包屑 Start -->
+
+@Html.Partial("_List", Model)

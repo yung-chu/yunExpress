@@ -1,0 +1,199 @@
+﻿@using LMS.UserCenter.Controllers.OrderController.Models
+@model LMS.UserCenter.Controllers.OrderController.Models.BatchAddViewModels
+<div class="cell pl20 fix">
+    <span class="info_box info_middle"></span>
+    <input type="submit" name="UploadPackage" class="btn btn_green" value="上传" />
+    @Html.HiddenFor(m => m.FilePath)
+    @if (Model.OrderList.Count > 0 && Model.OrderList.All(l => l.IsValid))
+    {
+        <input type="submit" name="SavePackage" class="btn btn_red" value="保存" />
+    }
+</div>
+<div class="top_solid mt20"></div>
+<table class="data_table " id="OrderList" width="100%" border="1" cellpadding="0" cellspacing="0">
+    <tr class=" data_row_head">
+
+        <th valign="middle" width="4%">行号</th>
+        <th width="10%">客户订单号</th>
+        <th width="16%">运输方式</th>
+        <th width="6%">跟踪号</th>
+        <th style="width: 150px;">国家</th>
+        <th width="5%">收件人</th>
+        <th width="5%">地址</th>
+        <th width="5%">城市</th>
+        <th width="5%">省/州</th>
+        <th width="5%">邮编</th>
+        <th width="6%">电话</th>
+        <th width="8%">是否退回</th>
+        <th width="8%">保险类型</th>
+        <th width="8%">保险价值</th>
+        <th width="10%">消息</th>
+
+    </tr>
+    @{
+
+        int i = 2, x = 0;
+    }
+    @foreach (var item in Model.OrderList)
+    {
+        x++;
+        bool flag = i % 2 > 0;
+        <tr class="@(flag ? "data_row_dan" : "data_row_shuang")">
+
+            <td valign="middle" id="@x">@item.ExeclRow</td>
+            <td valign="middle">@item.CustomerOrderNumber</td>
+            @if (item.ErrorType == 1 || item.ErrorType == 3)
+            {
+                <td>
+                    @Html.DropDownListFor(p => p.ShippingMethodModel.Code, Model.ShippingMethodModels, "请选择")
+                    @*@Html.DropDownListFormFor(p=>p.ShippingMethodModel.Code,Model.ShippingMethodModels)*@
+                    @*@Html.DropDownListFormFor(p => p.ShippingMethodModel.Code, Model.ShippingMethodModels, new Dictionary<string, object> {{"class", "chzn-select-deselect select_middle r"}, {"data-placeholder", "请选择"}})*@
+                </td>
+            }
+            else
+            {
+                <td>@item.ShippingMethodCode</td>
+            }
+            <td>@item.TrackingNumber</td>
+            @if (item.ErrorType == 2 || item.ErrorType == 3)
+            {
+                <td>
+                    @* @Html.DropDownListFor(p => p.ShippingMethodCountryModel.CountryCode, Model.CountryModels,"请选择")*@
+                    @Html.DropDownListFormFor(p => p.ShippingMethodCountryModel.CountryCode, Model.CountryModels, new Dictionary<string, object> { { "class", "chzn-select-deselect select_short r" }, { "data-placeholder", "请选择" } })
+                </td>
+            }
+            else
+            {
+                <td>@item.CountryCode</td>
+            }
+            <td>@item.ShippingFirstName @item.ShippingLastName</td>
+            <td>@(item.ShippingAddress +" "+item.ShippingAddress1+" "+item.ShippingAddress2)</td>
+            <td>@item.ShippingCity</td>
+            <td>@item.ShippingState</td>
+            <td>@item.ShippingZip</td>
+            <td>@item.ShippingPhone</td>
+            <td>@item.ReturnString</td>
+            <td>@item.InsuredValue</td>
+            <td>@item.InsureAmountValue</td>
+
+            <td style="color: red">
+                @if (string.IsNullOrWhiteSpace(item.ErrorMessage.ToString()))
+                {
+                    <span style="color: green">检测成功</span> 
+                    
+                }
+                else
+                {
+                    @Html.Raw(Tools.TextToHtml(item.ErrorMessage.ToString()))
+                    <div class="tc f0 dn">
+                        <a title="删除" class="data_btn btn_red" onclick=" return confirm('确认删除吗?'); " href="javascript:;">
+                            <i class="icon-delete data_icon"></i>
+                        </a>
+                    </div>
+                }
+            </td>
+
+
+        </tr>
+        <tr>
+            <td colspan="15">
+                @{
+                int n = 1;
+                }
+                @foreach (var d in item.ApplicationInfos)
+                {
+                    <div class="fix" style="padding: 7px; padding-left: 20px; background-color: #f7f7f7;">
+                        <div class="l" style="width: 150px; margin-right: 5px">
+                            海关编码@(n)：<span>@d.HSCode</span>
+                        </div>
+                        <div class="l" style="width: 400px; margin-right: 5px">
+                            申报名称@(n)：<span>@d.ApplicationName.Cutstring(200)</span>
+                        </div>
+                        <div class="l" style="width: 100px; margin-right: 5px">
+                            申报中文名称@(n)：<span>@d.PickingName</span>
+                        </div>
+                        <div class="l" style="width: 100px; margin-right: 5px">
+                            单价@(n)：<span>@d.UnitPrice</span>
+                        </div>
+                        <div class="l" style="width: 100px; margin-right: 5px">
+                            数量@(n)：<span>@d.Qty</span>
+                        </div>
+                        <div class="l" style="width: 100px; margin-right: 5px">
+                            小计@(n)：<span>@d.Total</span>
+                        </div>
+                        <div class="l" style="width: 100px; margin-right: 5px">
+                            备注@(n)：<span>@d.Remark</span>
+                        </div>
+                    </div>
+                    n++;
+                }
+            </td>
+        </tr>
+                {
+                    i++;
+                }
+    }
+
+</table>
+
+<script type="text/javascript">
+
+    var config = {
+        '.chzn-select': {},
+        '.chzn-select-deselect': { allow_single_deselect: true },
+        '.chzn-select-no-single': { disable_search_threshold: 10 },
+        '.chzn-select-no-results': { no_results_text: 'Oops, nothing found!' },
+        '.chzn-select-width': { width: "95%" }
+    };
+    for (var selector in config) {
+        $(selector).chosen(config[selector]);
+    }
+
+
+    $(document).ready(function () {
+        $("#OrderList tr:odd").addClass("odd");
+        $("#OrderList tr:not(.odd)").hide();
+        $("#OrderList tr:first-child").show();
+
+        $("#OrderList tr.odd").click(function () {
+            $(this).next("tr").toggle();
+        });
+    });
+    @{
+        var jsonStr = JsonHelper.JsonSerializer<List<OrderModel>>(Model.OrderList);
+    }
+    var str = JSON.stringify(@Html.Raw(jsonStr));
+    $("[name='ShippingMethodModel.Code']").bind("change", function () {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveIsValid")',
+            dataType: "text",
+            data: {
+                data: str,
+                execlRowId: $(this).parents("tr").find("td:eq(0)").text(),
+                shippngMethodCode: $(this).val()
+            },
+            success: function (data) {
+                $("#divBatch").html(data);
+            }
+        });
+    });
+    $("[name='ShippingMethodCountryModel.CountryCode']").bind("change", function () {
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveIsValid")',
+            dataType: "text",
+            data: {
+                data: str,
+                execlRowId: $(this).parents("tr").find("td:eq(0)").text(),
+                countryCode: $(this).val()
+            },
+            success: function (data) {
+                $("#divBatch").html(data);
+            }
+        });
+    });
+
+</script>
+

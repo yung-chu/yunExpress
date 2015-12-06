@@ -1,0 +1,184 @@
+﻿@using LMS.Data.Entity
+@model LMS.Controllers.WayBillController.ReturnWayBillViewModel
+@{
+    ViewBag.Title = "ReturnWayBillList";
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+}
+
+<div id="showCustomerList"  tabindex="200" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showShippingMethodList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div>
+    @using (Html.BeginForm())
+    {
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+                <td>
+                    <span class="info_box info_select">客户编码:</span>
+                    <input type="hidden" id="CustomerCode" value="@Model.FilterModel.CustomerCode" name="FilterModel.CustomerCode" readonly="readonly" class="txt txt_short" />
+                    <input type="text" id="nickName" value="@Model.FilterModel.CustomerName" name="FilterModel.CustomerName" class="txt txt_short" />
+                    <a href="javascript:void(0)" id="selectCustomer" class="btn_href">选择</a>
+                    <input type="hidden" id="CustomerType" name="CustomerType" />
+                    <input type="hidden" id="CustomerID" class="txt txt_short" />                </td>
+                 <td width="25%">
+                    <span class="info_box info_select">运输方式:</span>
+                    <input type="text" id="ShippingName" value="@Model.FilterModel.ShippingMehtodName" name="FilterModel.ShippingMehtodName" readonly="readonly" class="txt txt_short"/>
+                    <input type="hidden" id="ShippingMethodId" name="FilterModel.ShippingMehtodId" value="@Model.FilterModel.ShippingMehtodId" />
+                    <input type="button" id="selectShippingMethod" class="btn" value="选择" />
+                </td>
+                <td>
+                    <span>退货时间</span>
+                    @Html.TextBoxFor(p => p.FilterModel.ReturnStartTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.ReturnStartTime), @class = "txt wdate", @style = "width:130px;" })
+                    <span>至:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.ReturnEndTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.ReturnEndTime), @class = "txt wdate", @style = "width:130px;" })
+                </td>
+                <td class="vm">
+                    @Html.DropDownListFor(p=>p.FilterModel.SearchWhere,Model.SearchWheres)
+                    @Html.TextAreaFor(p=>p.FilterModel.SearchContext,new{@style="height:80px; width:210px;"})
+                </td>
+            </tr>
+            <tr class="date_row_select">
+                <td colspan="2">
+                    <input type="submit" name="btnSelect" class="btn" value="搜索"/>
+                    <input type="submit" name="btnExport" class="btn" value="导出"/>
+                </td>
+                <td>
+                    <span>退货操作人:</span>
+                    @Html.TextBoxFor(p=>p.FilterModel.CreateBy)
+                </td>
+            </tr>
+        </table>
+    }
+    <hr/>
+    <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+        <tr class="data_row_two">
+            <th>序号
+            </th>
+            <th>客户名称
+            </th>
+            <th>运单号
+            </th>
+            <th>订单号
+            </th>
+            <th>运输方式
+            </th>
+            <th>跟踪号
+            </th>
+            <th>重量
+            </th>
+            <th>国家
+            </th>
+            <th>总运费
+            </th>
+            <th>退货类型
+            </th>
+            <th>退货原因
+            </th>
+            <th>是否退运费
+            </th>
+            <th>发货时间
+            </th>
+            <th>退货时间
+            </th>
+            <th>审核人
+            </th>
+            <th>退货操作人
+            </th>
+        </tr>
+        @{
+            int n = 1;
+        }
+        @foreach (var row in Model.PagedReturnWayBillList)
+        {
+            <tr class="data_row_dan">
+                <td>
+                    @n
+                </td>
+                @{
+                    var customer = Model.Customers.FirstOrDefault(p => p.Value == row.CustomerName);
+                }
+                <td>
+                    @if (customer != null)
+                    {
+                        @customer.Text
+                    }
+                </td>
+                <td>
+                    @row.WayBillNumber
+                </td>
+                <td>
+                    @row.CustomerOrderNumber
+                </td>
+                <td>
+                    @row.InShippingMehtodName
+                </td>
+                <td>
+                    @row.TrackingNumber
+                </td>
+                <td>
+                    @row.TotalWeight
+                </td>
+                <td>
+                    @row.CountryCode
+                </td>
+                <td>
+                    @row.ShippingFee
+                </td>
+                <td>
+                    @WayBill.GetReturnGoodTypeDescription(row.Type)
+                </td>
+                <td>
+                    @row.Reason
+                </td>
+                @if (row.IsReturnShipping)
+                {
+                    <td>
+                        是
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        否
+                    </td>
+                }
+                <td>
+                    @row.OutCreatedOn
+                </td>
+                <td>
+                    @row.AuditorDate
+                </td>
+                <td>
+                    @row.Auditor
+                </td>
+                <td>
+                    @row.CreatedBy
+                </td>
+            </tr>
+            n++;
+        }
+        <tr class="data_row_dan">
+            <td colspan="16">
+                @Html.Pager(Model.PagedReturnWayBillList,Model.FilterModel)
+            </td>
+        </tr>
+    </table>
+</div>
+<script type="text/javascript">
+    //选择运输方式
+    $("#selectShippingMethod").bind("click", function () {
+        $("#showShippingMethodList").showWindow("@Url.Action("SelectShippingMethod", "WayBill")?customerId=" + $("#CustomerID").val() + "&customerTypeId=" + $("#CustomerType").val() + "&type=1", "选择运输方式");
+            var parentWindow = $("#showShippingMethodList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                top: 120
+            }, {
+                duration: 1000,
+                step: function (now, fx) {
+                    $(".window").css("top", now);
+                }
+            });
+            $("#showShippingMethodList").show();
+        });
+</script>

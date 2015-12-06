@@ -1,0 +1,57 @@
+﻿@model LMS.FrontDesk.Controllers.HomeController.Models.HomeListModel
+<div class="main_3">
+    <div class="constr">
+        <div class="constr_in">
+            <div class="l w383">
+                <div class="icon_1">
+                </div>
+            </div>
+            <div class="cell gf">
+                <div class="fix mt105">
+                    <div class="tt_box l fw">
+                        新闻中心<br>
+                        <span class="f14 lt0">News Center</span>
+                    </div>
+                    <div class="cell">
+                        <div class="rel">
+                            @if (Model.ArticleModels.Count < 1)
+                            {
+                                <div class="tt_box l fw">
+                                    <span class="f14 lt0">暂无类容，敬请期待。。。</span>
+                                </div>
+                            }
+                            else
+                            {
+                                foreach (var row in Model.ArticleModels)
+                                {
+                                        <div class="fix mb12">
+                                        <div class="l ell w250">
+                                            <a href="@Url.Action("NewDetailed", "New", new { id = @row.ArticleID })" class="gf" target="_blank">
+                                                @row.Title
+                                            </a>
+                                        </div>
+                                        <div class="r mr10">
+                                            @{
+                                                if (row.CreatedOn.HasValue)
+                                                {
+                                                    @row.CreatedOn.Value.ToString("yyyy-MM-dd")
+                                                }
+                                            }
+                                        
+                                        </div>
+                                    </div>
+                                   
+                                }
+                                <a href="@Url.Action("NewList", "New", new { CategoryID = Model.ArticleModels[0].CategoryID})" class="btn_more1" title="更多新闻"  target="_blank">
+                                <img src="images/more_03.jpg" alt="更多新闻" class="vt" />
+                            </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="oneSolid bd43"></div>
+<div class="oneSolid bd5c"></div>

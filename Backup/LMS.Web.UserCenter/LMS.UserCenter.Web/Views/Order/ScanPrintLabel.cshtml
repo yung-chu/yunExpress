@@ -1,0 +1,171 @@
+﻿@model LMS.UserCenter.Controllers.OrderController.Models.ScanPrintLabelViewModel
+@{
+    ViewBag.Title = "ScanPrintLabel";
+}
+<script type="text/javascript" src="@Url.Content("~/js/print/LodopFuncs.js")"></script>
+<script src="@Url.Content("~/js/quickPrint.js")"></script>
+@*<div id="objectId">
+    <object  id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0> 
+       <embed id="LODOP_EM" type="application/x-print-lodop" width=0 height=0></embed>
+</object>
+</div>*@
+<div class="bd_b bread_box">
+    <a href="javascript:" class="icon-home bread_home"></a>
+    <strong class="gtlt bread_gtlt">&gt;&gt;</strong>
+    <a href="javascript:" class="bread_off">运输服务</a>
+    <strong class="gtlt bread_gtlt">&gt;&gt;</strong>
+    <a href="javascript:" class="bread_on">扫描打印</a>
+</div>
+<div style="border: 1px">
+    <div style="padding-left: 50px">
+        <h3>扫描打印</h3>
+    </div>
+    <hr/>
+@*       @using (Html.BeginForm("SinglePrint", "Order", FormMethod.Post, new { id = "ScanPrintDiv", target = "test" }))
+       {
+           *@<form id="ScanPrintDiv">
+               <ul>
+                   <li style="padding-left: 100px">
+                       打印模板:
+                       <span>@Html.DropDownListFor(p => p.Filter.TemplateName, Model.PrintTemplate)</span>
+                       <input type="checkbox" name="Filter.IsAutoPrint" checked="checked" id="Filter_IsAutoPrint"/><label for="Filter_IsAutoPrint">自动打印</label>
+                   </li>
+                   <br/>
+                   <li style="padding-left: 100px">订单号：
+                       <input id="Filter_OrderNumber" type="text" name="Filter.OrderNumber" value=""/>
+                       <span id="ErrorMessage" style="color: red"></span>
+                   </li>
+               </ul>
+               <br/>
+               <ul>
+                   <li style="padding-left: 150px">
+                       <input type="submit" id="SurePrint" name="SurePrint" value="确认打印" style="display: none;"/>
+                   </li>
+               </ul>
+          </form>
+       @*}*@
+</div>
+ <div id="page1" style="display: none">
+ </div>
+<script type="text/javascript">
+    ////----打印控件 start---------
+    //var LODOP; //声明为全局变量 
+    //function prn_print() {
+    //    CreateFormPage();
+    //    LODOP.PRINT();
+    //};
+    //function CreateFormPage() {
+    //    LODOP = getLodop();
+    //    LODOP.PRINT_INIT("打印地址标签");
+    //    LODOP.ADD_PRINT_HTM(10, 10, 350, 900, document.getElementById("page1").innerHTML);
+    //};
+    ////----打印控件 end---------
+
+
+    $(function() {
+
+        $("#Filter_IsAutoPrint").bind("click", function() {
+            if ($("#Filter_IsAutoPrint").attr("checked")) {
+                $("#SurePrint").hide();
+            } else {
+                $("#SurePrint").show();
+            }
+        });
+
+        $("#SurePrint").bind("click", function() {
+
+            Print();
+
+            return false;
+        });
+        //提交;
+        $("#Filter_OrderNumber").bind("keydown", function(e) {
+            if (e.keyCode == 13) {
+                if ($("#Filter_OrderNumber").val() == "") {
+                    $("#Filter_OrderNumber").focus();
+                    $("#ErrorMessage").html("请输入单号！");
+                    PlayFaile();
+                    return false;
+                }
+                
+                @*                if ($("#Filter_IsAutoPrint").attr("checked")) {
+                    $.ajax({
+                        type: "GET",
+                        url: "@Url.Action("QuickPrint","Print")",
+                        dataType: "json",
+                        //data:$("#ScanPrintDiv").serialize() + "&diffid=" + new Date().getTime(),
+                        data: { TemplateName: $("#Filter_TemplateName").val(), Number: $("#Filter_OrderNumber").val() },
+                        success: function(data) {
+                            if (data.IsSuccess) {
+                                PlaySuccess();
+                                $('#objectId').empty().append('<object id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0><embed id="LODOP_EM" type="application/x-print-lodop" width="0" height="0"></object>');
+                                $("#page1").html(data.HtmlString);
+                                //打印
+                                if ($("#Filter_IsAutoPrint").attr("checked")) {
+                                    prn_print();
+                                }
+                                
+                            } else {
+                                $("#ErrorMessage").html(data.Message);
+                                PlayFaile();
+                            }
+                            $("#Filter_OrderNumber").val("");
+                            $("#Filter_OrderNumber").focus();
+                        }
+                    });
+                }
+                return false;*@
+                
+
+                if ($("#Filter_IsAutoPrint").attr("checked")) {
+                    Print();
+                }
+                return false;
+            }
+        });
+    });
+
+    function Print() {
+        $("#ErrorMessage").html("");
+        var templateName = $("#Filter_TemplateName").val();
+        var number = $("#Filter_OrderNumber").val();
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("CanPrint", "Print")",
+            dataType: "json",
+            data: { TemplateName: templateName, Number: number },
+            success: function(data) {
+                if (data.Result) {
+                    PrintSuccess();
+                    var url = "@Url.Action("QuickPrint", "Print")" + "?TemplateName=" + templateName + "&Number=" + number + "&cacheKey=" + data.Message;
+                    quickPrint(url);
+                } else {
+                    PrintFail(data.Message);
+                }
+            }
+        });
+    }
+
+    function PrintSuccess() {
+        PlaySuccess();
+        $("#Filter_OrderNumber").val("");
+        $("#Filter_OrderNumber").focus();
+        //alert("打印成功");
+    }
+    
+    function PrintFail(message) {
+        PlayFaile();
+        $("#ErrorMessage").html(message);
+    }
+
+    function PlaySuccess() {
+        $('embed').remove();
+        $('body').append('<embed src="/Css/Success.wav" autostart="true" hidden="true" loop="false">');
+    }
+
+    function PlayFaile() {
+        $('embed').remove();
+        $('body').append('<embed src="/Css/Faile.wav" autostart="true" hidden="true" loop="false">');
+    }
+</script>

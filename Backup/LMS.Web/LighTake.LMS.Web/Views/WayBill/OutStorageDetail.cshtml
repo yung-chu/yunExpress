@@ -1,0 +1,77 @@
+﻿@model LMS.Controllers.WayBillController.OutStorageInfoDetailViewModel
+@{
+    ViewBag.Title = "OutStorageDetail";
+}
+
+<div class="domebg" id="right_con">
+    <table id="firsttable" class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+        <tr class="date_row_select">
+            <td>
+                <span class="info_box">出仓单号:</span>
+                @Model.OutStorageInfo.OutStorageID
+            </td>
+            <td>
+                <span class="info_box">服务商:</span>
+                @Model.OutStorageInfo.VenderName
+            </td>
+            <td>
+                <span class="info_box info_select">发货员:</span>
+                @Model.OutStorageInfo.DeliveryStaff
+            </td>
+            <td>
+                @if (Model.ShippingMethodName == "国际小包优+")
+                {
+                    <a href="javascript:void(0)"  onclick="window.open('@Url.Action("BagTagPrint","Fub",new{outStorageId=Model.OutStorageInfo.OutStorageID})')" class="btn_href">打印袋牌</a>
+                }
+                <a href="@Url.Action("FristOutStorage")" class="btn_href">继续出仓</a>
+                <a href="@(!string.IsNullOrWhiteSpace(Request.QueryString["ReturnUrl"])?Request.QueryString["ReturnUrl"]:Url.Action("OutStorageList"))" class="btn_href">返回列表</a>
+            </td>
+        </tr>
+        <tr class="date_row_select">
+            <td>
+                <span class="info_box info_select">结算总重量:</span>
+                @(Model.OutStorageInfo.TotalWeight.HasValue?Model.OutStorageInfo.TotalWeight.Value.ToString("F3"):"0")kg
+            </td>
+            <td>
+                <span class="info_box info_select">总件数:</span>
+                @Model.OutStorageInfo.TotalQty
+            </td>
+            <td>
+                <span class="info_box info_select">结算币种:</span>
+                人民币(RMB)
+            </td>
+        </tr>
+    </table>
+    <table class="data_table mt20" width="60%" border="1" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr class="data_row_two">
+                <th>运输方式
+                </th>
+                <th>目的地国家
+                </th>
+                <th>包裹数量
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var list = from w in Model.OutStorageInfo.WayBillInfos
+                           group w by w.CountryCode
+                           into g
+                           select new
+                               {
+                                   CountryCode= g.Key,
+                                   PackCount=g.Count()
+                               };
+                foreach (var w in list)
+                {
+                    <tr>
+                        <td>@Model.ShippingMethodName</td>
+                        <td>@w.CountryCode</td>
+                        <td>@w.PackCount</td>
+                    </tr>
+                }            
+            }
+        </tbody>
+    </table>
+</div>

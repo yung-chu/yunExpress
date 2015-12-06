@@ -1,0 +1,104 @@
+﻿@model LMS.FrontDesk.Controllers.HomeController.Models.HomeListModel
+@{
+    if (Model.CategoryModel != null)
+    {
+        ViewBag.Title = string.IsNullOrWhiteSpace(Model.CategoryModel.SeoTitle) ? "云途物流" : Model.CategoryModel.SeoTitle;
+    }
+    else
+    {
+        ViewBag.Title = "云途物流";
+    }
+    
+}
+@section ExtraHeadContent {
+    <meta name="description" content="@Model.CategoryModel.SeoDescription">
+    <meta name="Keywords" content="@Model.CategoryModel.SeoKeywords">
+}
+
+<div class="bn_area" style="height:350px;box-shadow:0 0 3px #b1b1b1; position:relative;" id="inx_AdSlide">
+  <div style="background:#5ce2e3; height:100%">
+    <div class="conStr">
+      <div class="strIn">
+          <div class="tr">
+              <a href="javascript:">
+                  <img src="@Url.Content(string.IsNullOrWhiteSpace(Model.CategoryModel.Pic)?"~/images/banner_1.jpg":Model.PicPath+Model.CategoryModel.Pic)"  height="300">
+              </a> 
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="bgf6">
+<div class="conStr">
+  <div class="strIn">
+  	<div class="bgf shadow">
+	    <div class="tr pt20 mr20 lh20">
+	        <div class="bread_area mb15">
+                    	<a href="#" class="dib vm" title="回到首页"><img src="@Url.Content("~/images/house.jpg")" /></a>
+                        <span class="vm">
+                            <a href="@Url.Action("index","Home")" class="tdn" title="回到首页">首页</a>
+                            --&gt;
+                            <span href="@Url.Action("About","Home")" class="bread_on">
+                            	关于我们
+                            </span>
+                        </span>
+                        
+                    </div>
+        </div>
+        <div class="fix mt-20 pl10">
+        	<div class="l w250">
+            	<div>
+                	<span class="tt">关于我们</span>
+                    <span class="fa">about</span>
+                </div>
+	            <ul class="Inav_box mt10">
+
+	                <li>
+	                    <a class="Inav_off" href="@Url.Action("About","Home",new{id=2})">
+	                        关于我们
+	                    </a>
+	                </li>
+	                <li>
+	                    <a class="Inav_on" href="@Url.Action("ContactUs","Home",new{ id=4})">
+	                        联系我们
+	                    </a>
+	                </li>
+	            </ul>
+            </div>
+            <div class="cell pl20">
+                <div class="mt40">
+                	<div class="pack_area">
+                    	<div class="pack_in">
+                        	<h3 class="IItt">
+	                        	公司地址：
+                            </h3>
+                            <div class="part">
+                            	<p>
+                                	  深圳市龙岗区坂田街道南坑第二工业区综合楼
+                                </p>
+                            </div>
+                            <h3 class="IItt">
+	                        	联系电话：
+                            </h3>
+                            <div class="part">
+                            	<p >
+                                	 Tel：0755-28435511
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+
+
+

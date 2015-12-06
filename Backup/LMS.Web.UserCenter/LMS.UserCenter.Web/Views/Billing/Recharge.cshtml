@@ -1,0 +1,110 @@
+﻿@model LMS.UserCenter.Controllers.BillingController.Models.RechargeViewModel
+@{
+    ViewBag.Title = "帐户充值";
+}
+<div id="showCustomerList" tabindex="200" style="overflow: scroll; display: none; position: relative">
+</div>
+
+<div class="bd_b bread_box">
+    <a href="javascript:" class="icon-home bread_home"></a>
+    <strong class="gtlt bread_gtlt">&gt;&gt;</strong>
+    <a href="javascript:" class="bread_off">财务管理</a>
+    <strong class="gtlt bread_gtlt">&gt;&gt;</strong>
+    <a href="javascript:" class="bread_on">账户充值</a>
+</div>
+
+<div class="domebg">
+    @Html.Partial("_Notifications")
+    @using (Html.BeginForm("Recharge", "Billing", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="mt20 l">
+            <div class="ml20 mt20">
+                <span class="info_box info_middle">客户代码:</span>
+                <input type="text" id="CustomerCode" name="CustomerCode" readonly="readonly" class="txt txt_short" value="@Model.CustomerBalances.CustomerCode"/>
+            </div>
+            <div class="ml20 mt20">
+                <span class="info_box info_middle">余额:</span>
+                <input type="text" id="Balance" name="Balance" readonly="readonly" class="txt txt_middle" value="@Model.CustomerBalances.Balance"/>
+            </div>
+            <div class="ml20 mt20">
+                <span class="info_box info_middle">充值方式:</span>
+                <select name="RechargeType" id="RechargeType" class="select select_middle">
+                    @foreach (var p in Model.RechargeWayList)
+                    {
+                        <option value="@p.SelectValue">@p.SelectName</option>
+                    }
+                </select>
+            </div>
+            <div class="ml20 mt20">
+                <span class="info_box info_middle">充值金额:</span>
+                <input type="text" id="Amount" name="Amount" class="txt txt_middle" />
+            </div>
+            <div class="ml20 mt20">
+                <span class="info_box info_middle">交易号:</span>
+                <input type="text" id="TransactionNo" name="TransactionNo" class="txt txt_middle"/>
+            </div>
+            <div class="ml20 mt20">
+                <span class="info_box info_middle">上传凭证:</span>
+                <input type="file" id="flUploadAddress" name="flUploadAddress" title="Select file" value="Select file"/>
+            </div>
+            <div class="ml20 mt20">
+                <span class="info_box info_middle">备注:</span>
+                <textarea class="area vt" id="Remark" name="Remark" cols="45" rows="6"></textarea>
+            </div>
+            <div class="ml20 mt20">
+                <span class="info_box info_middle"></span>
+                <input type="submit" class="btn btn_green" value="保存" id="Savebnt" name="btnSave" onclick="return Save()" />
+            </div>
+        </div>
+    }
+</div>
+<script type="text/javascript">
+    function Save() {
+        if ($.trim($("#editfrom #Remark").val()).length > 400) {
+            alert("备注不能超过400个字符！");
+            return false;
+        }
+        if ($.trim($("#Amount").val()) == "") {
+            alert("费用金额不能为空！");
+            return false;
+        }
+        var reg = /^\d+[\.]?\d{0,4}$/g;
+        if (!reg.test($("#Amount").val())) {
+            $("#Amount").val(0);
+            alert("费用金额请输入数值!");
+            return false;
+        }
+        var amount = parseFloat($("#Amount").val());
+        if (amount <= 0) {
+            alert("费用金额必须大于0！");
+            return false;
+        }
+        if ($.trim($("#TransactionNo").val()) == "") {
+            alert("交易号不能为空！");
+            return false;
+        }
+        
+        $("#editfrom #Savebnt").attr('disabled', true);
+       @* $.ajax({
+            type: "POST",
+            url: "@Url.Action("CreateRechargeRecord")",
+            dataType: "json",
+            data: $("#editfrom").serialize(),
+            success: function (data) {
+                if (data == "1") {
+                    $("input[type='text']").val("");
+                    $("input[type='file']").val("");
+                    $("input[type='textarea']").val("");
+                    alert("保存成功！");
+                } else if (data == "0") {
+                    alert("保存失败!");
+                } else {
+                    alert(data.Message);
+                }
+            },
+            complete: function (data) {
+                $("#editfrom #Savebnt").attr('disabled', false);
+            }
+        });*@
+    }
+</script>

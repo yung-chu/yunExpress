@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{55124DB6-F6F7-4A86-B58C-C8E1C82BE53D}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LMS.Client.SubmitOrder</RootNamespace>
+    <AssemblyName>LMS.Client.SubmitOrder</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SmartThreadPool">
+      <HintPath>..\libs\SmartThreadPool.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\branches\branch_2.9.5\libs\System.Net.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\branches\branch_2.9.5\libs\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CustomerOrderService.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\RefAPI.TrackNumber\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="TrackNumberService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LighTake.Infrastructure\LighTake.Infrastructure.Common.BizLogging\LighTake.Infrastructure.Common.BizLogging.csproj">
+      <Project>{CB847282-7C7B-4232-89E9-4D7E88C03F33}</Project>
+      <Name>LighTake.Infrastructure.Common.BizLogging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LighTake.Infrastructure\LighTake.Infrastructure.Common.Logging\LighTake.Infrastructure.Common.Logging.csproj">
+      <Project>{7A557DC4-3F10-4C27-B8F4-8D5F7F5D8B3C}</Project>
+      <Name>LighTake.Infrastructure.Common.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LighTake.Infrastructure\LighTake.Infrastructure.CommonQueue\LighTake.Infrastructure.CommonQueue.csproj">
+      <Project>{f972d86d-f0c1-4d24-a66c-a0b6bf0f84ef}</Project>
+      <Name>LighTake.Infrastructure.CommonQueue</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LighTake.Infrastructure\LighTake.Infrastructure.Common\LighTake.Infrastructure.Common.csproj">
+      <Project>{EAC46871-3661-4D4E-8F6A-FE44593E1191}</Project>
+      <Name>LighTake.Infrastructure.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LighTake.Infrastructure\LighTake.Infrastructure.Http\LighTake.Infrastructure.Http.csproj">
+      <Project>{fd9c304c-1ed0-4667-b24a-9ec341490ebd}</Project>
+      <Name>LighTake.Infrastructure.Http</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LighTake.Infrastructure\LighTake.Infrastructure.Seedwork.EF\LighTake.Infrastructure.Seedwork.EF.csproj">
+      <Project>{3FD348E3-2746-4BB4-82FF-90A9FB6CB2E6}</Project>
+      <Name>LighTake.Infrastructure.Seedwork.EF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LighTake.Infrastructure\LighTake.Infrastructure.Seedwork\LighTake.Infrastructure.Seedwork.csproj">
+      <Project>{1B2A08A7-3BBD-4BC3-8014-D702E7DB9E2D}</Project>
+      <Name>LighTake.Infrastructure.Seedwork</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LMS.Core\LMS.Core\LMS.Core.csproj">
+      <Project>{336E1DCE-A844-4977-AA9A-8F6720C72F6D}</Project>
+      <Name>LMS.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LMS.Data\LMS.Data.Context\LMS.Data.Context.csproj">
+      <Project>{3FEBC511-3A88-4A4E-AF8E-F85E2E0D808C}</Project>
+      <Name>LMS.Data.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LMS.Data\LMS.Data.Entity\LMS.Data.Entity.csproj">
+      <Project>{BE6FE0EF-6A3D-4628-803B-747FF0762FC3}</Project>
+      <Name>LMS.Data.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LMS.Data\LMS.Data.Repository\LMS.Data.Repository.csproj">
+      <Project>{4FC0106B-B57A-4F8E-A5B0-09F9F6A6AA02}</Project>
+      <Name>LMS.Data.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LMS.Services\LMS.Services.FreightServices\LMS.Services.FreightServices.csproj">
+      <Project>{2F1482E7-E619-40FB-AF78-20B4487FDAE0}</Project>
+      <Name>LMS.Services.FreightServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LMS.Services\LMS.Services.OperateLogServices\LMS.Services.OperateLogServices\LMS.Services.OperateLogServices.csproj">
+      <Project>{B6D6A049-7D3C-4EEA-BC0E-1911DA5124A5}</Project>
+      <Name>LMS.Services.OperateLogServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LMS.Services\LMS.Services.SequenceNumber\LMS.Services.SequenceNumber.csproj">
+      <Project>{0B3C6BB4-D4AC-49AC-AB08-FEB3C92D3822}</Project>
+      <Name>LMS.Services.SequenceNumber</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\RefAPI.TrackNumber\LMS.Client.SubmitOrder.RefAPI.TrackNumber.ResutlInfoOfstring.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\RefAPI.TrackNumber\TrackNumberAssign.wsdl" />
+    <None Include="Service References\RefAPI.TrackNumber\TrackNumberAssign.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\RefAPI.TrackNumber\TrackNumberAssign1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\RefAPI.TrackNumber\TrackNumberAssign2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\RefAPI.TrackNumber\TrackNumberAssign3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\RefAPI.TrackNumber\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\RefAPI.TrackNumber\TrackNumberAssign.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\RefAPI.TrackNumber\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\RefAPI.TrackNumber\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\RefAPI.TrackNumber\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "List";
+    Html.AddCssFileParts("/Scripts/jquery-easyui-1.3.1/themes/default/easyui.css");
+    Html.AddCssFileParts("/Scripts/jquery-easyui-1.3.1/themes/icon.css");
+    Html.AddScriptParts("/Scripts/jquery-easyui-1.3.1/jquery.easyui.min.js");
+    Html.AddScriptParts("/Scripts/jquery.json-2.4.min.js");
+    Html.AddScriptParts("/Scripts/easyui-public.js");
+}
+
+<div class="domebg" id="right_con">
+    <form id="SearchFrom">
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+                <td width="40%">
+                    <span class="info_box info_select">费用名称:</span>
+                    <input type="text" name="feeTypeName" id="feeTypeName" class="txt" />
+                </td>
+                <td width="40%">
+                    <span class="info_box info_select">状态:</span>
+                    <select id="Status" name="Status" class="select select_short">
+                        <option value="">请选择</option>
+                        <option value="true">启用</option>
+                        <option value="false">禁用</option>
+                    </select>
+                </td>
+                <td width="30%">
+                    <div class="tl">
+                        <input type="button" value="搜索" class="btn" id="btnSearch" />
+                        <input type="button" class="btn" value="新增" id="btnAdd" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <div id="test" style="padding-left: 15px; padding-top: 10px;">
+    </div>
+    <table id="dataTable">
+    </table>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('#dataTable').datagrid({
+            url: 'GetFeeList',
+            idField: 'FeeTypeID',
+            rowStyler: function (row) {
+                if (row.persons > 1) {
+                    return 'background:#AAD684;color:#fff';
+                }
+            },
+            onBeforeLoad: function (param) {
+                var obj = {};
+                obj.feeTypeName = $('#feeTypeName').val();
+                if ($('#Status').val() != "") {
+                    obj.Status = $('#Status').val();
+                }
+                param.params = $.toJSON(obj);
+            },
+            columns: [[
+                { field: 'FeeTypeID', title: 'ID', width: 30 },
+                { field: 'FeeTypeName', title: '名称', width: 200 },
+                {
+                    title: '状态', field: 'IsEnable', width: 50, formatter: function (value) {
+                        if (value == "True")
+                            return "启用";
+                        else
+                            return "禁用";
+                    }
+                },
+                {
+                    field: 'CalculateExpression', title: '操作', width: 50,
+                    formatter: function (a, b) {
+                        return "<a href='#' onclick=editData('" + b["FeeTypeID"] + "') >编辑</a>";
+                    }
+                }
+            ]]
+        });
+        $("#btnSearch").click(function () {
+            $('#dataTable').datagrid("reload");
+        });
+        $("#btnAdd").click(function () {
+            $("#test").showWindow("Add", "新增费用类型", 550, 450);
+        });
+    });
+    function editData(id) {
+        $("#test").showWindow('Edit?FeeTypeID=' + id, "编辑费用类型", 550, 450);
+    }
+</script>

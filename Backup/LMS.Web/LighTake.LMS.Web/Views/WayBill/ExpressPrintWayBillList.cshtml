@@ -1,0 +1,629 @@
+﻿@using LMS.Data.Entity
+@model LMS.Controllers.WayBillController.ExpressPrintWayBillViewModel
+@{
+    ViewBag.Title = "ExpressPrintWayBillList";
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+    Html.AddScriptParts("/js/artdialog/jquery.artDialog.js");
+}
+
+
+<style type="text/css">
+    .aui_dialog{width:800px}
+</style>
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/common.js")"></script>
+
+<div id="showCustomerList" tabindex="200" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showShippingMethodList" style="overflow: scroll; display: none; position: relative">
+</div>
+@using (Html.BeginForm())
+{
+    var url = Html.GetUrl("ExpressPrintWayBillList", "WayBill", Model.Param);
+    <input type="hidden" id="txtCodes" name="CountryCode" value="" />
+    <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+        <tr class="date_row_select">
+            @{
+                var options = new List<SelectListItem>()
+                    {
+                        new SelectListItem
+                            {
+                                Text = "请选择",
+                                Value = "0",
+
+                            },
+                        new SelectListItem
+                            {
+                                Text = "入仓渠道",
+                                Value = "1",
+
+                            },
+                        new SelectListItem
+                            {
+                                Text = "出仓渠道",
+                                Value = "2",
+
+                            },
+
+                    };
+            }
+            <td style="width: 20%;">
+                <span>客户:</span>
+                <input type="text" id="nickName" value="@Model.Param.NickName" name="Param.NickName" readonly="readonly" class="txt txt_short" />
+                <input type="hidden" id="CustomerCode" value="@Model.Param.CustomerCode" class="txt txt_long" name="Param.CustomerCode" />
+                <a href="javascript:void(0)" id="selectCustomer" class="btn_href">选择</a>
+            </td>
+            <td style="width: 15%;">
+                <span>物流公司:</span>
+                @Html.DropDownListFor(p=>p.Param.VenderCode,Model.VenderList,new{@style="Width:80px",@id="ddlVenderCode"})
+            </td>
+            
+            <td style="width: 30%;">
+                <span >@Html.DropDownListFor(p=>p.Param.ShippingMethodType,options)</span>
+                <input type="text" id="ShippingName" value="@Model.Param.ShippingName" name="Param.ShippingName" readonly="readonly" class="txt txt_short"/>
+                <input type="hidden" id="ShippingMethodId" name="Param.ShippingMethodId" value="@Model.Param.ShippingMethodId" />
+                <input type="button" id="selectShippingMethod" class="btn" value="选择" />
+                @*@Html.DropDownListFor(p=>p.Param.ShippingMethodId,Model.ShippingMethods, new{@style="Width:130px"})*@
+            </td>
+             <td style="width: 30%;">
+                <span class="vm">发货国家:</span>
+                @Html.TextAreaFor(p =>p.Param.CountryCode ,new{@readonly="readonly",id="CountryList",@style="Width:150px",@class="vm"})
+                <input type="button" value="选择" title="选择国家" class="btn" onclick="AddCountries();">
+            </td>
+             
+        </tr>
+         <tr class="date_row_select">
+             <td colspan="2">
+                 <span>收货时间:</span>
+                 @Html.TextBoxFor(p=>p.Param.StartTime,new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.Param.StartTime), @class = "txt wdate", @style = "width:130px;" })
+                 <span>至</span>
+                 @Html.TextBoxFor(p=>p.Param.EndTime,new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.Param.EndTime), @class = "txt wdate", @style = "width:130px;" })
+             </td>
+             <td width="20%">
+                 <span>关联物流公司:</span>
+                 @{
+                     var IsVender = new List<SelectListItem>()
+                         {
+                             new SelectListItem
+                                 {
+                                     Text = "全部",
+                                     Value = "1",
+
+                                 },
+                             new SelectListItem
+                                 {
+                                     Text = "是",
+                                     Value = "2",
+
+                                 },
+                             new SelectListItem
+                                 {
+                                     Text = "否",
+                                     Value = "3",
+
+                                 },     
+                         };
+                 }
+                 @Html.DropDownListFor(p=>p.Param.IsVender,IsVender)
+                 @*@Html.CheckBoxFor(p=>p.Param.IsCompany)
+                <label for="Param_IsCompany">未关联物流公司</label>*@
+             </td>
+              <td >
+                 @Html.DropDownListFor(p=>p.Param.SearchWhere,Model.SearchWheres,new{@class="vm"})
+                 @Html.TextAreaFor(p=>p.Param.SearchContext,new{@style="Width:150px",@class="vm"})
+             </td>
+        </tr>
+        <tr class="date_row_select">
+             <td colspan="2">
+                <span>结算重量(kg):</span>
+                @Html.TextBoxFor(P=>P.Param.StartWeight,new{@style = "width:130px;"})
+                <span>止:</span>
+                @Html.TextBoxFor(p=>p.Param.EndWeight,new{@style = "width:130px;"})
+            </td>
+           
+            <td colspan="2">
+                @{
+                    var printStatus = new List<SelectListItem>()
+                    {
+
+                        new SelectListItem
+                        {
+                            Text = "请选择",
+                            Value = "0",
+                        },
+                        new SelectListItem
+                        {
+                            Text = "已打印",
+                            Value = "1",
+
+                        },
+                        new SelectListItem
+                        {
+                            Text = "未打印",
+                            Value = "2",
+
+                        }
+
+                    };
+                }
+                
+                
+                
+                打印状态:
+                @Html.DropDownListFor(p=>p.Param.PrintStatus,printStatus)
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                <input type="submit" class="btn" name="Selectbtn" id="Selectbtn" value="搜索"/>
+                <input type="button" class="btn" name="btn" value="指定发货渠道" onclick="Shipper()"/>
+                <input type="button" class="btn" id="btnBatchPrinter" name="btnBatchPrinter" value="批量打印订单"/>
+                <input type="submit" class="btn" name="btnInvoice" id="btnInvoice" value="批量打印发票"/>
+                <input type="button" class="btn" id="btnBatchPrinter2" name="btnBatchPrinter2" value="批量打印订单(2张)"/>
+                <input type="hidden" id="SelectWayBillNumber"/>
+                <input type="hidden" value="@Model.Param.PageSize" name="Param.PageSize" />
+            </td>
+        </tr>
+         <tr class="date_row_select">
+            <td colspan="4">
+                
+            </td>
+           
+        </tr>
+    </table>
+    <hr/>
+    <table id="tabList" class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+        <tr class="data_row_two">
+            <th>
+                <input type="checkbox" class="checkbox" id="SelectAll" name="SelectAll" /><label for="SelectAll">全选</label>
+            </th>
+            <th>序号</th>
+            <th>运单号</th>
+            <th>客户订单号</th>
+            <th>客户代码</th>
+            <th>状态</th>
+            <th>发货国家</th>
+            <th>重量</th>
+            <th>收货运输方式</th>
+            <th>发货物流公司</th>
+            <th>发货运输方式</th>
+            <th>跟踪号</th>
+            <th>收货时间</th>
+            <th>打印状态</th>
+            <th>操作</th>
+        </tr>
+        @{
+            int n = 1;
+        }
+        @foreach (var row in Model.ExpressPrintWayBills)
+        {
+            <tr class="date_row_select data_row_dan">
+                <td>
+                    <input type="checkbox"  class="selectorItem" name="WayBillNumbers" value="@row.WayBillNumber" />
+                </td>                                                  
+                <td>
+                    @n
+                </td>
+                <td>
+                    @row.WayBillNumber
+                </td>
+                <td>
+                    @row.CustomerOrderNumber
+                </td>
+                <td>
+                    @row.CustomerCode
+                </td>
+                <td name="wayBillStatus">
+                    @WayBill.GetStatusDescription(row.Status)
+                </td>
+                <td>
+                    @row.CountryCode
+                </td>
+                <td>
+                    @row.SettleWeight
+                </td>
+                <td name="inShippingMethodID" value="@row.InShippingMethodID">
+                    @row.InShippingMethodName
+                </td>
+                <td>
+                    @row.VenderName
+                </td>
+                <td>
+                    @row.OutShippingMethodName
+                </td>
+                <td>
+                    @row.TrackingNumber
+                </td>
+                <td>
+                    @row.CreatedOn
+                </td>
+                <td>
+                    
+                    @{
+                        if (row.IsPrinted)
+                        {
+
+                            @Html.Label("已打印")
+                        }
+                        else
+                        {
+                            @Html.Label("未打印")
+                        }
+
+                    }
+
+                </td>
+                <td>
+                    
+                    @{
+                        var printInvoiceUrl = "InvoicePrinter?ids={0}".FormatWith(row.WayBillNumber);
+                    }
+
+                    @if (row.IsPrinter)
+                    {
+                        <a target="_blank" href="@Url.Action("DHLPrintPreview", "WayBill", new {wayBillNumber = row.WayBillNumber, ReturnUrl = url})" class="btn_href">打印运单</a>
+                    }
+
+                    @if(row.IsPrinter||row.Status != (int) WayBill.StatusEnum.Have)
+                    {
+                        <a target="_blank" href="@printInvoiceUrl" class="btn_href">打印发票</a>
+                    }
+
+                    @if (row.Status == (int) WayBill.StatusEnum.WaitOrder || row.Status == (int) WayBill.StatusEnum.Send)
+                    {
+                    }
+                    else
+                    {
+                        <a href="javascript:void(0)" class="btn_href" onclick=" javascript:openIFrame('指定线下发货渠道', 'WayBill/WayBillInfosDetail', '{WayBillNumber:@row.WayBillNumber,ReturnUrl:@HttpUtility.UrlEncode(url),flag:add}') ">指定线下发货渠道</a>
+                    }
+
+                    @*<input type="button" class="btn" value="价格设置" @(row.data.IsEnable ? "class=btn" : "disabled=disabled")  onclick="javascript:openIFrame('价格设置','Template/SetUpTemplate', '{templateId:@row.data.TemplateId,shippingMethodId:@row.data.ShippingMethodId,flag:add}') "/>*@
+                </td>            
+            </tr>
+            n++;
+        }
+        <tr class="data_row_none">
+            <td colspan="14" id="Pager">
+                @Html.Pager(Model.ExpressPrintWayBills, Model.Param)
+            </td>
+        </tr>
+    </table>
+    <div style="position: absolute;width: 100%;height: 100%;filter:alpha(opacity=30);opacity: 0.3;background:#000;top:0px;left: 0px;display: none;" id="loading">
+            <img style="position: absolute;left: 50%;top: 50%;margin-left: -24px;margin-top: -24px;" src="@Url.Content("~/images/loader1.gif")" />
+        </div>
+    <div id="HoldMsg" class="dn">
+        <span class="info_box">&emsp;物流服务商：</span>
+        <span class="info_box "> @Html.DropDownListFor(p => p.Param.VenderCode, Model.VenderList)</span>
+        <br/>
+        <span class="info_box">发货运输方式：</span>
+        <span class="info_box "><select id="OutShippingMethodId"><option value="">请选择</option></select></span>
+        <br/>
+            <span id="message_error" class="mr20 ml10 txt_tip" style="color: red;"></span>
+        </div>
+}
+<script src="@Url.Content("~/Scripts/artdialog/jquery.artDialog.js?skin=default")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/artdialog/plugins/iframeTools.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<script type="text/javascript">
+
+    $(function () {
+        
+        function goPage(url) {
+            var searchContext = $.trim($.getUrlParam("SearchContext", url));
+            if (searchContext != "") {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("SaveExpressPrintWayBillListSearchContext")",
+                    dataType: "JSON",
+                    async: false,
+                    data: { searchContext: searchContext },
+                    success: function (data) {
+                        location.href = url.replace(/SearchContext=(.*?)&/, "");
+                    },
+                    error: function () {
+                        alert("请重试");
+                    }
+                });
+            } else {
+                location.href = url;
+            }
+        }
+
+        $('#Pager a').click(function () {
+            goPage($(this).attr("href"));
+            return false;
+        });
+
+        $('#_MvcPager_Ctrl0_psd').unbind("change");
+        $("#_MvcPager_Ctrl0_psd").change(function () {
+            goPage($(this).find("option:selected").val());
+            return false;
+        });
+        
+
+        $("#Param_VenderCode").bind("change", function () {
+            var val = this.value;
+            if ($.trim(val) != "") {
+                $.ajax({
+                    async: false,
+                    url: '@Url.Action("GetShippingMethodByVenderCode")',
+                    data: {
+                        VenderCode: val
+                    },
+                    success: function (data, textStatus) {
+                        $("#OutShippingMethodId").empty();
+                        $.each(data.Items, function (i, item) {
+                            $("#OutShippingMethodId").append("<option value=\"" + item.ShippingMethodId + "\">" + item.ShippingMethodName + "</option>");
+                        });
+                       
+                    }
+                });
+            }
+        });
+        $("#btnBatchPrinter").bind("click", function() {
+            if ($.trim($("#SelectWayBillNumber").val()) == "") {
+                art.dialog.alert("请选择要打印的运单!");
+                return false;
+            }
+            var wayBillNumbers = $.trim($("#SelectWayBillNumber").val());
+            var url = "@Url.Action("DHLPrintPreview")" + "?wayBillNumber=" + wayBillNumbers;
+            window.open(url);
+
+           @* $.ajax({
+                async: false,
+                url: '@Url.Action("CheckDHLWayBill")',
+                data: {
+                    wayBillNumber: wayBillNumbers
+                },
+                success: function (data) {
+                    if (data.Result) {
+                        window.open(url);
+                    } else {
+                        art.dialog.alert(data.Message);
+                    }
+
+
+                }
+            });*@
+        });
+
+        $("#btnBatchPrinter2").bind("click", function() {
+            if ($.trim($("#SelectWayBillNumber").val()) == "") {
+                art.dialog.alert("请选择要打印的运单!");
+                return false;
+            }
+            var wayBillNumbers = $.trim($("#SelectWayBillNumber").val());
+            var url = "@Url.Action("DHLPrintPreview2")" + "?wayBillNumber=" + wayBillNumbers;
+            window.open(url);
+        });
+
+        $("#btnInvoice").bind("click", function () {
+            if ($.trim($("#SelectWayBillNumber").val()) == "") {
+                art.dialog.alert("请选择要打印发票的运单!");
+                return false;
+            }
+            var ids = $.trim($("#SelectWayBillNumber").val());
+            var url = "/waybill/InvoicePrinter?ids=" + ids;
+            window.open(url, "_blank");
+            return false;
+        });
+
+        var valIds = [];
+        $("#SelectAll").bind("click",function () {
+            var isSelected = $(this).attr("checked");
+            $(":checkbox[name='WayBillNumbers']").each(function () {
+                if (isSelected) {
+                    $(this).attr("checked", "true");
+                   
+                    if ($.inArray($(this).val(), valIds) < 0) {
+                        valIds.push($(this).val());
+                    }
+                } else {
+                    $(this).removeAttr("checked");
+                    valIds.splice(jQuery.inArray($(this).val(), valIds), 1);
+                }
+                $("#SelectWayBillNumber").val(valIds.join(','));
+            });
+        });
+
+        $('.selectorItem').bind("click", function () {
+            var isSelected = $(this).attr("checked");
+            if (isSelected) {
+                $(this).attr("checked", "true");
+                if ($.inArray($(this).val(), valIds) < 0) {
+                    valIds.push($(this).val());
+                }
+            } else {
+                $(this).removeAttr("checked");
+                valIds.splice($.inArray($(this).val(), valIds), 1);
+            }
+            $("#SelectWayBillNumber").val(valIds.join(','));
+        });
+
+
+    });
+    function AddCountries() {
+        if (!$("#divCountry").hasClass("dn")) {
+            $("#divCountry").addClass("dn");
+        }
+        var url = "@Url.Action("CountryList", "WayBill")" + "?" +
+            $.param({
+                Codes: $("#CountryList").val(),
+                SiteId: 1
+            });
+        $.dialog.open(url, {
+            title: "选择国家",
+            lock: true,
+            width: 578,
+            padding: "0",
+            show: true,
+            button: [{
+                    name: '确定',
+                    callback: function () {
+                        var iframe = this.iframe.contentWindow;
+                        var Codes = $(iframe.document).find("#Codes");
+                        $("#txtCodes").val(Codes.val());
+                        $("#CountryList").val(Codes.val());
+
+                    }
+                }, {
+                    name: '取消'
+                }]
+        });
+    }
+    
+
+    $("#Selectbtn").bind("click", function () {
+        var result = true;
+        var sWeight = $.trim($("#Param_StartWeight").val());
+        var eWeight = $.trim($("#Param_EndWeight").val());
+        if (eWeight != "" && sWeight != "") {
+            var sIntWeight = parseFloat(sWeight);
+            var eIntWeight = parseFloat(eWeight);
+            if (sIntWeight > 1) {
+                art.dialog.alert("开始重量必须为大于等于0并小于1的整数");
+                result = false;
+            }
+            if (eIntWeight == 0) {
+                art.dialog.alert("结束重量必须为大于0的整数");
+                result = false;
+            }
+            //if (eIntWeight > 1) {
+            //    art.dialog.alert("结束重量必须为大于等于0并小于1的整数");
+            //    result = false;
+            //}
+        }
+        return result;
+    });
+    
+    function Shipper() {
+        if ($.trim($("#SelectWayBillNumber").val()) == "") {
+            art.dialog.alert("请选择要修改的运单!");
+            return false;
+        }
+        
+        /* 已发货,待转单 状态不能指定发货渠道*/
+        var statusList = [];
+        var inShippingMethodIdList = [];
+        $("input[name='WayBillNumbers']:checked").each(function () {
+            
+            inShippingMethodIdList.push($(this).parents("tr").children("[name='inShippingMethodID']").attr("value"));
+            
+            var statusText = $(this).parents("tr").children("[name='wayBillStatus']").text().trim();
+            
+            if (statusText == "发货运输中" || statusText == "待转单") {
+
+                statusList.push($(this).val());
+            }
+
+        });
+
+        $.unique(inShippingMethodIdList);   //过滤重复的入仓运输方式
+        if (inShippingMethodIdList.length > 1) {
+            art.dialog.alert("指定发货渠道只能选择同一个入仓运输方式的运单!");
+            return false;
+        }
+
+        if (statusList.length != 0) {
+
+            art.dialog.alert(statusList.join('<br/>') + "<br/> 发货运输中、待转单的状态不能指定发货渠道!");
+           
+           // jQuery.messager.alert('提示:', statusList.join('<br/>') + " <br/>发货运输中、待转单的状态不能指定发货渠道!", 'error');
+            return false;
+        }
+
+
+        art.dialog({
+            title: '指定发货渠道',
+            content: document.getElementById('HoldMsg'),
+            lock: true,
+            ok: function () {
+                if ($("#OutShippingMethodId").val() != inShippingMethodIdList[0]) {
+                    art.dialog.alert("指定发货渠道必须与入仓运输方式一致!");
+                    return false;
+                }
+                var msg = $.trim($("#Param_VenderCode").val());
+                if (msg == "") {
+                    $("#Param_VenderCode").focus();
+                    $("#message_error").html("*请选择物流服务商");
+                    
+                    $("#Param_VenderCode option").eq(0).attr('selected', 'true');
+                    $("#OutShippingMethodId").empty();
+                    return false;
+                } else {
+                    $("#message_error").html("");
+                }
+                $.ajax({
+                    type: "GET",
+                    sync: false,
+                    url: "@Url.Action("UpdateWayBillByVenderCode")",
+                    data: { OutShippingMethodId: $("#OutShippingMethodId").val(), venderCode: $("#Param_VenderCode").val(), SelectWayBillNumber: $("#SelectWayBillNumber").val() },
+                    beforeSend: function (XMLHttpRequest) {
+                        $("#loading").show();
+                    },
+                    success: function (data) {
+                        if (data.Result) {
+                            $("#btnPrint").show();
+                            art.dialog.alert(data.Message);
+                            
+                            $("#Param_VenderCode option").eq(0).attr('selected', 'true');
+                            $("#OutShippingMethodId").empty();
+                            
+                            $("#Selectbtn").click();
+                            
+                            return true;
+                        } else {
+                            $("#Param_VenderCode option").eq(0).attr('selected', 'true');
+                            $("#OutShippingMethodId").empty();
+                            art.dialog.alert(data.Message);
+                            return true;
+                        }
+                    },
+                    complete: function (XMLHttpRequest, textStatus) {
+                        $("#loading").hide();
+                    },
+                    error: function (data) {
+                        art.dialog.alert('更新失败，请稍候再试！' + data.Message);
+                        $("#Param_VenderCode option").eq(0).attr('selected', 'true');
+                        $("#OutShippingMethodId").empty();
+                        return false;
+                    },
+                 
+                });
+                this.close();
+                return false;
+            },
+            cancelVal: '关闭',
+            cancel: true
+        });
+        return false;
+    }
+    
+    //选择运输方式
+    $("#selectShippingMethod").bind("click", function () {
+        $("#showShippingMethodList").showWindow("@Url.Action("SelectShippingMethod", "WayBill")?type=1", "选择运输方式");
+            var parentWindow = $("#showShippingMethodList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                top: 120
+            }, {
+                duration: 1000,
+                step: function (now, fx) {
+                    $(".window").css("top", now);
+                }
+            });
+            $("#showShippingMethodList").show();
+        });
+    $("#outShippingMethod").bind("click", function () {
+        $("#showShippingMethodList").showWindow("@Url.Action("SelectShippingMethod", "WayBill")?type=1", "选择运输方式");
+        var parentWindow = $("#showShippingMethodList").parent("div");
+        $(parentWindow).css("top", "0");
+        $(parentWindow).animate({
+            top: 120
+        }, {
+            duration: 1000,
+            step: function (now, fx) {
+                $(".window").css("top", now);
+            }
+        });
+        $("#showShippingMethodList").show();
+    });
+</script>

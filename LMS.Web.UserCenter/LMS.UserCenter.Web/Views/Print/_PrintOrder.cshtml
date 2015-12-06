@@ -1,0 +1,142 @@
+﻿@{
+    Layout = null;
+}
+@model LMS.UserCenter.Controllers.OrderController.Models.CustomerOrderInfoModel
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr valign="top">
+        <td style="padding: 10px;">
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td align="center">
+                        <div style="font-family: c39P36DmTt, sans-serif; font-size: 40px; color: #000;">
+                           *@Model.WayBillNumber*
+                        </div>
+                        <div style="text-align: center; font-size: 16px;">
+                            @Model.WayBillNumber
+                        </div>
+                    </td>
+                    <td>
+                        <div style="text-align: right;">
+                            <img src="@Url.Content("~/images/img_03.jpg")" />
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr valign="top">
+        <td style="padding: 0 10px 5px 10px;">
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td>
+                        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td style="font-size: 12px;">
+                                    <strong>From:</strong> JRFWL
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-size: 12px;">#14-ROOM 4102,SHENZHE POST
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-size: 12px;">ALEXPRESS QIAOXIANG RD.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-size: 12px;">&SHENYUN RD.,OCT NORTH,SHENZHEN NORTH,SHENZHEN
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td valign="top">
+                        <div style="text-align: right;">
+                        </div>
+                        <table>
+                            <tr>
+                                <td>
+                                    @if (Model.IsInsured)
+                                    {
+                                        <img src="@Url.Content("~/images/img_06.jpg")" />
+                                    }
+                                </td>
+                                <td>
+                                    @if (Model.IsReturn)
+                                    { 
+                                        <img src="@Url.Content("~/images/img_07.jpg")" />
+                                    }
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="border-top: 1px solid #999999"></td>
+    </tr>
+    <tr valign="top">
+        <td style="padding: 5px 10px;">
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td>
+                        <table width="100%" border="0" cellpadding="0" cellspacing="0" height="120">
+                            <tr>
+                                <td style="font-size: 12px;">
+                                    <strong>TO:</strong>@Model.ShippingFirstName @Model.ShippingLastName
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-size: 12px;">@Model.ShippingAddress
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-size: 12px;">@Model.ShippingCity, @Model.ShippingState, @Model.ShippingZip
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-size: 12px;">
+                                    <strong style="font-size: 16px;">@Model.CountryName (@Model.CountryChineseName)</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-size: 12px;">
+                                    <strong>Tel:</strong>@Model.ShippingPhone
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td valign="middle">
+                        <div style="text-align: right">
+                            <span style="font-size: 30px;">@if (@Model.ShippingZone.HasValue)
+                                                           {
+                                @Html.Raw("Zone")@Model.ShippingZone
+                                                           }
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="border-top: 1px solid #999999"></td>
+    </tr>
+    <tr valign="bottom">
+        <td style="padding: 5px 10px 0 10px;">
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td colspan="2">
+                        <span style="font-size: 12px;">By：@Model.ShippingMethodName；Customer#@Model.CustomerCode；Order#@Model.CustomerOrderNumber
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+
+
+

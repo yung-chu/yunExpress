@@ -1,0 +1,46 @@
+﻿@using LighTake.Infrastructure.Web.UI
+@{
+    //success messages
+    var successMessages = new List<string>();
+    if (TempData[string.Format("sys.notifications.{0}", NotifyType.Success)] != null)
+    {
+        successMessages.AddRange(TempData[string.Format("sys.notifications.{0}", NotifyType.Success)] as IList<string>);
+    }
+    if (ViewData[string.Format("sys.notifications.{0}", NotifyType.Success)] != null)
+    {
+        successMessages.AddRange(ViewData[string.Format("sys.notifications.{0}", NotifyType.Success)] as IList<string>);
+    }
+
+
+    //error messages
+    var errorMessages = new List<string>();
+    if (TempData[string.Format("sys.notifications.{0}", NotifyType.Error)] != null)
+    {
+        errorMessages.AddRange(TempData[string.Format("sys.notifications.{0}", NotifyType.Error)] as IList<string>);
+    }
+    if (ViewData[string.Format("sys.notifications.{0}", NotifyType.Error)] != null)
+    {
+        errorMessages.AddRange(ViewData[string.Format("sys.notifications.{0}", NotifyType.Error)] as IList<string>);
+    }
+}
+@foreach (var message in successMessages)
+{
+    
+    <div class="message message_success mb10">
+        <span class="icon-warning message_icon"></span>
+        <div class="message_box">
+            <h6>succeed Message</h6>
+            <div class="cell_bk">@message</div>
+        </div>
+    </div>
+}
+@foreach (var message in errorMessages)
+{
+    <div class="message message_error mb10">
+        <span class="icon-delete message_icon"></span>
+        <div class="message_box">
+            <h6>Error Message</h6>
+            <div class="cell_bk">@message</div>
+        </div>
+    </div>
+}

@@ -1,0 +1,89 @@
+﻿@model LMS.Controllers.FubController.Models.FubListViewModel
+@{
+    ViewBag.Title = "CenterSelectList";
+     <link href="/Scripts/artdialog/skins/default.css" type="text/css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("/Scripts/chosen/chosen.css")" />
+
+
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+    Html.AddScriptParts("/Scripts/chosen/chosen.jquery.min.js");
+    Html.AddScriptParts("/Scripts/artdialog/jquery.artDialog.js");
+}
+
+@using (Html.BeginForm())
+{
+    <div>
+        <h2>中心局邮袋扫描查询</h2>
+        <hr style="width: 100%" align="left"/>
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+                <td>
+                    <span class="info_box info_select">
+                        扫描时间:
+                    </span>
+                    @*@Html.TextBoxFor(p => p.FubListFilterModel.StartTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FubListFilterModel.StartTime), @class = "txt wdate", @style = "width:130px;" })
+                    <span>至:</span>
+                    @Html.TextBoxFor(p => p.FubListFilterModel.EndTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FubListFilterModel.EndTime), @class = "txt wdate", @style = "width:130px;" })*@
+                    
+                     <input id="FubListFilterModel_StartTime" name="FubListFilterModel.StartTime" class="txt wdate" style="width:130px" type="text"  Value = "@String.Format("{0:yyyy-MM-dd HH:mm}", Model.FubListFilterModel.StartTime)" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'FubListFilterModel_EndTime\',{M:-1});}',maxDate:'#F{$dp.$D(\'FubListFilterModel_EndTime\',{d:0});}' ,dateFmt:'yyyy-MM-dd HH:mm',isShowClear:false})" />
+                        至:
+                        <input id="FubListFilterModel_EndTime" name="FubListFilterModel.EndTime" class="txt wdate" style="width:130px" type="text" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'FubListFilterModel_StartTime\',{d:0});}',maxDate:'#F{$dp.$D(\'FubListFilterModel_StartTime\',{M:1});}',dateFmt:'yyyy-MM-dd HH:mm',isShowClear:false})" Value = "@String.Format("{0:yyyy-MM-dd HH:mm}", Model.FubListFilterModel.EndTime)" />
+
+                    <span class="info_box info_select">
+                        扫描人:
+                    </span>
+                    @Html.TextBoxFor(p => p.FubListFilterModel.CreatedBy)
+                </td>
+            </tr>
+            <tr class="date_row_select">
+                <td>
+                <input type="submit" name="CenterSelect" value="查询"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+}
+<div>
+    <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr class="data_row_two">
+                    <th>福邮邮袋号 
+                    </th>
+                    <th>总包号 
+                    </th>
+                    <th>中心局扫描日期 
+                    </th>
+                    <th>扫描人 
+                    </th>
+                    <th>总重量
+                    </th>
+                    <th>总件数
+                    </th>
+                    <th>目的国家
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var row in Model.PagedList)
+                    {
+                        <tr class="data_row_dan" style="text-align: center">
+                            <td>@row.FuPostBagNumber</td>
+                            <td>@row.ShortNumber</td>
+                            <td>@row.CenterScanTime</td>
+                            <td>@row.CenterCreatedBy</td>
+                            <td>@row.TotalWeight</td>
+                            <td>@row.TotalNumber</td>
+                            <td>@(row.CountryCode.IsNullOrWhiteSpace() ? "" : Model.CountryList.First(s => s.Value == row.CountryCode.Trim().ToUpperInvariant()).Text)</td>
+                        </tr>
+                    }
+                }
+                <tr class="data_row_none">
+                    <td colspan="7">
+                        @Html.Pager(Model.PagedList, Model.FubListFilterModel)
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</div>
+

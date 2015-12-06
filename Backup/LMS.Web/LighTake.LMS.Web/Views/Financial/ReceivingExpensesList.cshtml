@@ -1,0 +1,234 @@
+﻿@model LMS.Controllers.FinancialController.ViewModels.ReceivingExpenseListViewModel
+@{
+    ViewBag.Title = "InFeeInfoList";
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+}
+<div id="showCustomerList" tabindex="200" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showShippingMethodList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showCountryList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showReceivingExpensesEdit" style="overflow: scroll; display: none; position: relative">
+</div>
+<div class="domebg" id="right_con">
+    <form id="search" name="Search" method="GET">
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+                <td width="25%">
+                    <span class="info_box info_select">客户编码:</span>
+                    <input type="text" id="CustomerCode" value="@Model.FilterModel.CustomerCode" name="FilterModel.CustomerCode" readonly="readonly" class="txt txt_short" />
+                    <a href="javascript:void(0)" id="selectCustomer" class="btn_href">选择</a>
+                </td>
+                <td width="25%">
+                    <span class="info_box info_select">运输方式:</span>
+                    <input type="text" id="ShippingName" value="@Model.FilterModel.ShippingMethodName" name="FilterModel.ShippingMethodName" readonly="readonly" class="txt txt_short"/>
+                    <input type="hidden" id="ShippingMethodId" name="FilterModel.ShippingMethodId" value="@Model.FilterModel.ShippingMethodId" />
+                    <input type="button" id="selectShippingMethod" class="btn" value="选择" />
+                </td>
+                <td rowspan="2" width="25%">
+                    <span class="info_box info_select">查询条件:</span>
+                    @Html.DropDownListFor(o => o.FilterModel.SearchWhere, Model.SearchWheres, new { @style = "width:100px;" })
+                </td>
+                <td rowspan="2" width="25%">
+                    <span class="info_box info_select">查询内容:</span>
+                    @Html.TextAreaFor(p => p.FilterModel.SearchContext, new { @style = "height:80px; width:210px;" })
+                </td>
+            </tr>
+
+            <tr class="date_row_select">
+                <td colspan="2">
+                    <div class="tl">
+                        <input type="submit" class="btn" value="查询" id="btnSearch" name="btnSearch" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div id="pm_dis_div">
+            <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr class="data_row_two">
+                        <th>序号
+                        </th>
+                        <th>客户名称
+                        </th>
+                        <th>客户编码
+                        </th>
+                        <th>运输方式
+                        </th>
+                        <th>订单号
+                        </th>
+                        <th>运单号
+                        </th>
+                        <th>跟踪号
+                        </th>
+                        <th>发货国家
+                        </th>
+                        <th>重量Kg
+                        </th>
+                        <th>计费重量kg
+                        </th>
+                        <th>运费
+                        </th>
+                        <th>挂号费
+                        </th>
+                        <th>燃油费</th>
+                        <th>附加费</th>
+                        <th>关税预付服务费</th>
+                        <th>偏远附加费</th>
+                        <th>总费用</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var index = 1;
+                        foreach (var row in Model.PagedList.InnerList)
+                        {
+                            
+                            <tr class="data_row_dan">
+                                <td>
+                                    @index
+                                </td>
+                                <td>
+                                    @row.CustomerName
+                                </td>
+                                <td>
+                                    @row.CustomerCode
+                                </td>
+                                <td>
+                                    @row.ShippingMethodName
+                                </td>
+                                <td>
+                                    @row.CustomerOrderNumber
+                                </td>
+                                <td>
+                                    @row.WayBillNumber
+                                </td>
+                                <td>
+                                    @row.TrackingNumber
+                                </td>
+                                <td>
+                                    @row.CountryCode
+                                </td>
+                                <td>
+                                    @row.Weight.ToString("F3")
+                                </td>
+                                <td>
+                                    @row.SettleWeight.ToString("F3")
+                                </td>
+                                <td>
+                                    @row.Freight.Value.ToString("F2")
+                                </td>
+                                <td>
+                                    @row.Register.Value.ToString("F2")
+                                </td>
+                                <td>
+                                    @row.FuelCharge.Value.ToString("F2")
+                                </td>
+                                <td>
+                                    @row.Surcharge.Value.ToString("F2")
+                                </td>
+                                <td>
+                                    @row.TariffPrepayFee.Value.ToString("F2")
+                                </td>
+                                <td>@row.RemoteAreaFee.Value.ToString("F2")</td>
+                                <td>
+                                    @((row.Freight+row.Register+row.FuelCharge+row.TariffPrepayFee+row.Surcharge+row.RemoteAreaFee).Value.ToString("F2"))
+                                </td>
+                                <td>
+                                    <input type="button" name="@row.WayBillNumber" onclick="ShowReceivingExpensesEdit('@row.WayBillNumber');" class="btn" value="修改费用" />
+                                </td>
+                            </tr>
+                            index++;
+                        }
+                    }
+                    <tr class="data_row_none">
+                        <td colspan="17">
+                            @Html.Pager(Model.PagedList, Model.FilterModel)
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+
+    function getScrollTop()
+    {
+        var scrollTop=0;
+        if(document.documentElement&&document.documentElement.scrollTop)
+        {
+            scrollTop=document.documentElement.scrollTop;
+        }
+        else if(document.body)
+        {
+            scrollTop=document.body.scrollTop;
+        }
+        return scrollTop;
+    }
+    
+    function ShowReceivingExpensesEdit(wayBillNumber) {
+
+        //弹出修改运费
+
+        $("#showReceivingExpensesEdit").showWindow("@Url.Action("ReceivingExpensesEdit", "Financial")?wayBillNumber=" + wayBillNumber, "编辑费用",550,500);
+        var parentWindow = $("#showReceivingExpensesEdit").parent("div");
+        $(parentWindow).css("top", "0");
+        $(parentWindow).animate({
+            top: 120+ getScrollTop()
+            }, {
+                duration: 1000,
+                step: function(now, fx) {
+                    $(".window").css("top", now);
+                }
+            });
+
+        $("#showReceivingExpensesEdit").show();
+
+    }
+
+    function MvcPagerReplace() {
+        $("#_MvcPager_Ctrl0_psd").find('option').each(function() {
+            $(this).val($(this).val().replace(/&Page/g, "&FilterModel.Page"));
+        });
+    }
+    
+    $(function () {
+        
+        MvcPagerReplace();
+
+        //选择运输方式
+        $("#selectShippingMethod").bind("click", function () {
+            $("#showShippingMethodList").showWindow("@Url.Action("SelectShippingMethod", "WayBill")?customerTypeId=" + $("#CustomerType").val()+"&type=1", "选择运输方式");
+            var parentWindow = $("#showShippingMethodList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                    top: 120
+                }, {
+                    duration: 1000,
+                    step: function (now, fx) {
+                        $(".window").css("top", now);
+                    }
+                });
+            $("#showShippingMethodList").show();
+        });
+        //选择国家
+        $("#selectCountry").bind("click", function () {
+            $("#showCountryList").showWindow("@Url.Action("SelectCountry", "Common")", "选择国家");
+            var parentWindow = $("#showCountryList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                    top: 120
+                }, {
+                    duration: 1000,
+                    step: function (now, fx) {
+                        $(".window").css("top", now);
+                    }
+                });
+            $("#showCountryList").show();
+        });
+        
+    });
+</script>

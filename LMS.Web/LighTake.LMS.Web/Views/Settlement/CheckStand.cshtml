@@ -1,0 +1,520 @@
+@{
+    ViewBag.Title = "收款";
+    Html.AddCssFileParts("/Css/CheckStand.css");
+    Html.AddScriptParts("/Scripts/uploadify/jquery.uploadify.min.js");
+    Html.AddCssFileParts("/Scripts/uploadify/uploadify.css");
+}
+<script type="text/javascript">
+    var i_flash;
+    var v_flash;
+    // Netscape 
+    if (navigator.plugins) {
+        for (var i = 0; i < navigator.plugins.length; i++) {
+            if (navigator.plugins[i].name.toLowerCase().indexOf("shockwave flash") >= 0) {
+                i_flash = true;
+                v_flash = navigator.plugins[i].description.substring(navigator.plugins[i].description.toLowerCase().lastIndexOf("flash ") + 6, navigator.plugins[i].description.length);
+            }
+        }
+    }
+</script>
+
+
+<script type="text/vbscript">
+//IE
+		on error resume next
+		set f = CreateObject("ShockwaveFlash.ShockwaveFlash")
+		if IsObject(f) then
+		i_flash = true
+		v_flash = hex(f.FlashVersion())
+		end if
+</script>
+
+
+<script type="text/javascript">
+    function chickflash() {
+        if (i_flash) {
+            if (v_flash) {
+                verArr = v_flash.split(' '); //用 空格分割
+                if (verArr[0] < '11.1') {
+                    $("#status-message").html('<a href="http://get.adobe.com/cn/flashplayer/" target="_blank">提示:您的Flash插件版本过低可能会影响正常功能,建议升级!</a>');
+                }
+            }
+        } else {
+            $("#status-message").html('<a>错误:你没有安装Flash插件!</a>');
+        }
+    }
+</script>
+<div class="domebg" id="right_con">
+    <div class="mt10">
+        <input type="text" id="keywordtxt" class="txt txt_long" style="width: 230px;" value="输入客户编码或者名称模糊查询" date-value="输入客户编码或者名称模糊查询" />
+        <button type="button" class="submit" onclick="GetUserList();">搜索</button>
+    </div>
+</div>
+<div class="fix mt10">
+    <div class="l w240">
+        <div class="bdccc">
+            <h6 style="background: #376ea6; padding: 0 20px; line-height: 30px; color: #fff">客户编码(名称)
+            </h6>
+            <dl id="userlist">
+            </dl>
+        </div>
+    </div>
+    <div class="cell pl10">
+        <div class="rel">
+            <div class="table_scroll">
+                <table width="100%" cellspacing="0" cellpadding="0" border="1" id="settlementtable" class="data_table">
+                    <thead>
+                        <tr class="data_row_two">
+                            <th width="14%">结算单号</th>
+                            <th width="14%">总票数</th>
+                            <th width="14%">货物总重量(kg)</th>
+                            <th width="14%">结算总重量(kg)</th>
+                            <th width="14%">总金额￥</th>
+                            <th width="14%">创建人</th>
+                            <th>创建时间</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="Tb_fix">
+                <div style="margin-right: 16px;">
+                    <table width="100%" cellspacing="0" cellpadding="0" border="1" class="data_table ">
+                        <tr class="data_row_shuang" align="center" style="background: #FFC">
+                            <td width="14%" class="cof0"><strong>汇总信息</strong></td>
+                            <td width="14%">总票数：<span id="totalNumber"></span></td>
+                            <td width="14%">货物总重量：<span id="totalWeight"></span>kg</td>
+                            <td width="14%">结算总重量：<span id="totalSettleWeight"></span>kg</td>
+                            <td width="14%">总金额：<span id="totalFee"></span></td>
+                            <td width="14%">&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+        <div class="mt20 bdccc">
+            <div class="fix tr p10" style="background-color: #f8f8f8;">
+                <div class="float_four f14 b">上期余额： <span class="cof0" id="prebalance"></span><span class="cof0">元</span></div>
+                <div class="float_four f14 b">本次应收：<span class="cof0" id="theaccounts"></span><span class="cof0">元</span></div>
+                <div class="float_four f14 b">应收总计:<span class="cof0" id="rectotal"></span><span class="cof0">元</span></div>
+            </div>
+            <div class=" pt20 pb20">
+                <form id="checkstandform">
+                    <input id="CustomerCode" name="CustomerCode" type="hidden" />
+                    <input id="flUploadAddress" name="flUploadAddress" type="hidden" />
+                    <input type="hidden" id="Balance" name="Balance" />
+                    <input type="hidden" id="SettlementList" name="SettlementList" />
+                    <div class="f14">
+                        <div class="mb10">
+                            <span class="dib vm">&emsp;&emsp;&emsp;&emsp;&emsp;<span class="vm cof0 mr2">*</span>实收：</span>
+                            <input type="text" id="Amount" name="Amount" class="txt txt_middle vm" />
+                        </div>
+                        <div class="mb10">
+                            <span class="dib vm">&emsp;&emsp;&emsp;<span class="vm cof0 mr2">*</span>付款方式：</span>
+                            <select id="RechargeType" name="RechargeType" class="select select_middle vm">
+                            </select>
+                        </div>
+                        <div class="mb10">
+                            <span class="dib vm">&emsp;&emsp;&emsp;&emsp;&ensp;交易号：</span>
+                            <input type="text" id="TransactionNo" name="TransactionNo" onchange="CheckTransactionNo();"  class="txt txt_middle vm" />
+                        </div>
+                        <div class="mb10">
+                            <span class="dib vt">&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;备注：</span>
+                            <textarea class="area" id="Remark" name="Remark" rows="6" cols="30"></textarea>
+                        </div>
+                        <div class="mb10" style="padding-left: 120px;">
+                            <input id="file_upload" name="file_upload" type="file">
+                            @*<div id="some_file_queue"></div>*@
+                        </div>
+                        <div class="mb10">
+                            <span class="dib vt">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;</span>
+                            @*<input type="file" class="fileField" id="file1">
+                            <label for="file1" class="btn mr20">
+                                上传凭证
+                            </label>*@
+                            <button id="btnconfirm" type="button" class="submit" onclick=" return SaveCheck();">确认收款</button>
+                        </div>
+                        <div class="mb10">
+                            <span class="dib vt">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;</span>
+                            <span id="errormsg" class="cof0"></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        //$("#btnconfirm").attr('disabled', true);
+        $("#keywordtxt").focus(function () {
+            $(this).val('');
+        });
+        $("#keywordtxt").blur(function () {
+            if ($(this).val().replace(/(^\s*)|(\s*$)/g, "") == "") {
+                $(this).val($(this).attr('date-value'));
+            }
+        });
+        $("#keywordtxt").keydown(function (e) {
+            if (e.keyCode == 13) {
+                GetUserList();
+            }
+        });
+        $("#TransactionNo").keydown(function (e) {
+            if (e.keyCode == 13) {
+                CheckTransactionNo();
+            }
+        });
+        uploadifyint();
+    });
+    //自动加载未结清的客户
+    GetUserList();
+    GetRechargeType();
+    function GetUserList() {
+        if ($("#btnconfirm").attr("disabled") != "disabled") {
+            var keyword = "";
+            if ($("#keywordtxt").val() != $("#keywordtxt").attr('date-value')) {
+                keyword = $("#keywordtxt").val();
+            }
+            $.ajax({
+                type: "GET",
+                url: "GetUserList",
+                data: { keyword: keyword },
+                dataType: "json",
+                beforeSend: function () {
+                    $("#userlist").html("加载客户...");
+                },
+                success: function (data) {
+                    if (data.Result == "1" && data.Item != null && data.Item.length > 0) {
+                        $("#userlist").html("");
+                        $(data.Item).each(function (i) {
+                            if (i == 0) {
+                                $("#userlist").append("<dd id='" + this.CustomerCode + "'><a class='two_menuTt_aOn' href=\"javascript:selectUser('" + this.CustomerCode + "');\">" + this.CustomerCode + "(" + this.Name + ")</a></dd>");
+                                selectUser(this.CustomerCode);
+                            } else {
+                                $("#userlist").append("<dd id='" + this.CustomerCode + "'><a class='two_menuTt_aOff' href=\"javascript:selectUser('" + this.CustomerCode + "');\">" + this.CustomerCode + "(" + this.Name + ")</a></dd>");
+                            }
+                        });
+                    } else if (data.Result == "1") {
+                        $("#userlist").html("没有满足要求的客户");
+                    } else if (data.Result == "0") {
+                        $("#userlist").html("加载客户失败");
+                    }
+                }
+            });
+        }
+    }
+
+    function GetRechargeType() {
+        $.ajax({
+            type: "GET",
+            url: "RechargeWayList",
+            dataType: "json",
+            success: function (data) {
+                $(data).each(function () {
+                    $("#RechargeType").append("<option value=\"" + this.RechargeType + "\">" + this.RechargeTypeName + "</option>");
+                });
+            }
+        });
+    }
+    function selectUser(obj) {
+        if ($("#btnconfirm").attr("disabled") != "disabled") {
+            $("#file_upload").uploadify("destroy");
+            uploadifyint();
+            $(".two_menuTt_aOn").attr("class", "two_menuTt_aOff");
+            $("#" + obj + " a").attr("class", "two_menuTt_aOn");
+            $("#CustomerCode").val(obj);
+            $.ajax({
+                type: "GET",
+                url: "GetSettlementList",
+                data: { customerCode: obj },
+                dataType: "json",
+                beforeSend: function () {
+                    $("#settlementtable tbody").html("加载结算单...");
+                    cleartxt();
+                },
+                success: function (data) {
+                    if (data.Result == "1" && data.Item != null) {
+                        $("#settlementtable tbody").html("");
+                        $(data.Item.Data).each(function () {
+                            $("#settlementtable tbody").append($('<tr class="data_row_dan"></tr>').append($('<td></td>').text(this.SettlementNumber))
+                                .append($('<td></td>').text(this.TotalNumber))
+                                .append($('<td></td>').text(this.TotalWeight))
+                                .append($('<td></td>').text(this.TotalSettleWeight))
+                                .append($('<td></td>').text(this.TotalFee))
+                                .append($('<td></td>').text(this.CreatedBy))
+                                .append($('<td></td>').text(this.CreatedOn)));
+                            $("#SettlementList").val($("#SettlementList").val() + this.SettlementNumber + ",");
+                        });
+                        $("#totalNumber").html(data.Item.TotalNumber);
+                        $("#totalWeight").html(data.Item.TotalWeight);
+                        $("#totalSettleWeight").html(data.Item.TotalSettleWeight);
+                        $("#totalFee").html(data.Item.TotalFee);
+                        $("#theaccounts").html(data.Item.TotalFee);
+                        GetUserBalance();
+                    } else if (data.Result == "1") {
+                        $("#settlementtable tbody").html("没有满足要求的结算单");
+                    } else if (data.Result == "0") {
+                        $("#settlementtable tbody").html("加载结算单失败");
+                    }
+                }
+            });
+        }
+    }
+
+    function deleteFile(obj) {
+        //$("#file_upload").uploadify("disable", "false");
+        //$('#file_upload').uploadify('cancel', obj);
+        $("#file_upload").uploadify("destroy");
+        uploadifyint();
+        $("#flUploadAddress").val('');
+        $("#errormsg").html("删除凭证成功！");
+    }
+
+    function CheckTransactionNo() {
+        if ($.trim($("#TransactionNo").val()) == "") {
+            $("#errormsg").html("请填写交易号！");
+        } else {
+            $("#errormsg").html("");
+            $.ajax({
+                type: "GET",
+                url: "CheckTransactionNo",
+                data: { transactionNo: $.trim($("#TransactionNo").val()) },
+                dataType: "json",
+                success: function (data) {
+                    if (data.Result == "1") {
+                        $("#TransactionNo").val("");
+                        $("#errormsg").html("交易号存在！");
+                    }
+                }
+            });
+        }
+    }
+
+    function GetUserBalance() {
+        $.ajax({
+            type: "GET",
+            url: "GetUserBalance",
+            data: { customerCode: $("#CustomerCode").val() },
+            dataType: "json",
+            success: function (data) {
+                $("#Balance").val(data.Balance);
+                $("#CustomerCode").val(data.CustomerCode);
+                var b = parseFloat(data.Balance);
+                b = -1 * b;
+                var t = parseFloat($("#totalFee").html());
+                $("#prebalance").html((t - b).toFixed(2));
+                $("#rectotal").html(b.toFixed(2));
+            }
+        });
+    }
+
+    function SaveCheck() {
+        $("#errormsg").html("");
+        if ($("#CustomerCode").val() == "" || $("#CustomerCode").val() == null) {
+            $("#errormsg").html("请选择客户！");
+            return false;
+        }
+        if ($.trim($("#Remark").val()).length > 400) {
+            $("#errormsg").html("备注不能超过400个字符！");
+            $("#Remark").focus();
+            return false;
+        }
+        if ($.trim($("#Amount").val()) == "") {
+            $("#Amount").focus();
+            $("#errormsg").html("实收金额不能为空！");
+            return false;
+        }
+        var reg = /^\d+[\.]?\d{0,4}$/g;
+        if (!reg.test($("#Amount").val())) {
+            $("#Amount").focus();
+            $("#errormsg").html("实收金额请输入数值!");
+            return false;
+        }
+        var amount = parseFloat($("#Amount").val());
+        if (amount < 0) {
+            $("#Amount").focus();
+            $("#errormsg").html("费用金额必须不小于0！");
+            return false;
+        }
+        var rt = parseInt($("#RechargeType").val());
+        if (rt < 3 && $.trim($("#TransactionNo").val()) == "") {
+            $("#errormsg").html("该付款方式交易号不能为空！");
+            return false;
+        }
+        if (rt < 3 && $("#flUploadAddress").val() == "") {
+            $("#errormsg").html("该付款方式必须上传凭证！");
+            return false;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("SaveCheckStand")",
+            dataType: "json",
+            data: $("#checkstandform").serialize(),
+            beforeSend: function () {
+                $("#btnconfirm").attr('disabled', true);
+                $("#file_upload").uploadify("disable", "true");
+                $("#errormsg").html("保存中，请等待！");
+            },
+            success: function (data) {
+                if (data.Result == "1") {
+                    $("#" + $("#CustomerCode").val()).remove();
+                    $("#checkstandform input[type='text']").val("");
+                    $("#checkstandform input[type='hidden']").val("");
+                    $("#checkstandform input[type='textarea']").val("");
+                    cleartxt();
+                    $("#errormsg").html("保存成功！");
+                    $("#btnconfirm").attr('disabled', false);
+                    if ($("#userlist dd:eq(0)").length > 0) {
+                        selectUser($("#userlist dd:eq(0)").attr("id"));
+                    }
+                } else {
+                    $("#errormsg").html("保存失败!");
+                }
+            },
+            complete: function () {
+                $("#btnconfirm").attr('disabled', false);
+                $("#file_upload").uploadify("disable", "false");
+            }
+        });
+        return true;
+    }
+
+    function cleartxt() {
+        $("#totalNumber").html("");
+        $("#totalWeight").html("");
+        $("#totalSettleWeight").html("");
+        $("#totalFee").html("");
+        $("#prebalance").html("");
+        $("#theaccounts").html("");
+        $("#rectotal").html("");
+        $("#flUploadAddress").val("");
+        $("#Remark").val("");
+        $("#Amount").val("");
+        $("#Balance").val("0");
+        $("#TransactionNo").val("");
+        $("#SettlementList").val("");
+        $("#settlementtable tbody").html("");
+        $("#errormsg").html("");
+    }
+
+    function uploadifyint() {
+        $('#file_upload').uploadify({
+            auto: true,
+            //接受true or false两个值，当为true时选择文件后会自动上传；为false时只会把选择的文件增加进队列但不会上传，这时只能使用upload的方法触发上传。不设置auto时默认为true
+            //buttonClass: "some-class", 
+            //设置上传按钮的class
+            buttonCursor: 'hand',
+            //设置鼠标移到按钮上的开状，接受两个值'hand'和'arrow'(手形和箭头)
+            buttonImage: '/Scripts/uploadify/upload.jpg',
+            //设置图片按钮的路径（当你的按钮是一张图片时）。如果使用默认的样式，你还可以创建一个鼠标悬停状态，但要把两种状态的图片放在一起，并且默认的放上面，悬停状态的放在下面（原文好难表达啊：you can create a hover state for the button by stacking the off state above the hover state in the image）。这只是一个比较便利的选项，最好的方法还是把图片写在CSS里面。
+            buttonText: '<div>选择文件</div>',
+            //formData: { CustomerCode: $("#CustomerCode").val() },
+            //设置按钮文字。值会被当作html渲染，所以也可以包含html标签
+            //checkExisting: '/uploadify/check-exists.php',
+            //接受一个文件路径。此文件检查正要上传的文件名是否已经存在目标目录中。存在时返回1，不存在时返回0(应该主要是作为后台的判断吧)，默认为false
+            debug: false,
+            //开启或关闭debug模式
+            //fileObjName:'filedata',
+            //设置在后台脚本使用的文件名。举个例子，在php中，如果这个选项设置为'the_files',你可以使用$_FILES['the_files']存取这个已经上传的文件。
+            fileSizeLimit: '100MB',
+            //设置上传文件的容量最大值。这个值可以是一个数字或者字符串。如果是字符串，接受一个单位（B,KB,MB,GB）。如果是数字则默认单位为KB。设置为0时表示不限制
+            fileTypeExts: '*.*',
+            //设置允许上传的文件扩展名（也就是文件类型）。但手动键入文件名可以绕过这种级别的安全检查，所以你应该始终在服务端中检查文件类型。输入多个扩展名时用分号隔开('*.jpg;*.png;*.gif')
+            fileTypeDesc: 'All Files',
+            //通过get或post上传文件时，此对象提供额外的数据。如果想动态设置这些值，必须在onUploadStartg事件中使用settings的方法设置。在后台脚本中使用 $_GET or $_POST arrays (PHP)存取这些值。看官网参考写法：http://www.uploadify.com/documentation/uploadify/formdata/
+            height: 25,
+            //设置按钮的高度(单位px)，默认为30.(不要在值里写上单位，并且要求一个整数，width也一样)
+            width: 100,
+            //设置按钮宽度(单位px)，默认120
+            //itemTemplate: false,
+            //模板对象。给增加到上传队列中的每一项指定特殊的html模板。模板格式请看官网http://www.uploadify.com/documentation/uploadify/itemtemplate/
+            method: 'post',
+            //提交上传文件的方法，接受post或get两个值，默认为post
+            multi: false,
+            //设置是否允许一次选择多个文件，true为允许，false不允许
+            //overrideEvents: [],
+            //重写事件，接受事件名称的数组作为参数。所设置的事件将可以被用户重写覆盖
+            preventCaching: true,
+            //是否缓存swf文件。默认为true，会给swf的url地址设置一个随机数，这样它就不会被缓存。(有些浏览器缓存了swf文件就会触发不了里面的事件--by rainweb)
+            progressData: 'percentage',
+            //设置文件上传时显示数据，有‘percentage’ or ‘speed’两个参数(百分比和速度)
+            //queueID: 'some_file_queue',
+            //设置上传队列DOM元素的ID，上传的项目会增加进这个ID的DOM中。设置为false时则会自动生成队列DOM和ID。默认为false
+            //queueSizeLimit: 1,
+            //设置每一次上传队列中的文件数量。注意并不是限制总的上传文件数量（那是uploadLimit）.如果增加进队列中的文件数量超出这个值，将会触发onSelectError事件。默认值为999
+            removeCompleted: false,
+            //是否移除掉队列中已经完成上传的文件。false为不移除
+            removeTimeout: 3,
+            //设置上传完成后删除掉文件的延迟时间，默认为3秒。如果removeCompleted为false的话，就没意义了
+            requeueErrors: false,
+            //设置上传过程中因为出错导致上传失败的文件是否重新加入队列中上传
+            successTimeout: 600,
+            //设置文件上传后等待服务器响应的秒数，超出这个时间，将会被认为上传成功，默认为1000秒
+            swf: '/Scripts/uploadify/uploadify.swf',
+            //swf的相对路径，必写项
+            uploader: 'SaveFile',
+            //hideButton: true,
+            itemTemplate: '<div id="\${fileID}" class="uploadify-queue-item">\
+                    <div class="cancel">\
+                        <a href="javascript:deleteFile(\'\${fileID}\')">X</a>\
+                    </div>\
+                    <span class="fileName">\${fileName} (\${fileSize})</span><span class="data"></span>\
+                </div>',
+            onUploadSuccess: function (file, dat, respone) {
+                var data = eval('(' + dat + ')');
+                if (data.Result == "0") {
+                    $("#errormsg").html("上传凭证失败，原因：" + data.ResultDesc);
+                } else if (data.Result == "1") {
+                    $("#flUploadAddress").val(data.Item.Address);
+                    $("#file_upload").uploadify("disable", "true");
+                    $("#errormsg").html("上传凭证成功！");
+                }
+            },
+            onUploadStart: function (file) {
+                if ($("#CustomerCode").val() == "" || $("#CustomerCode").val() == null) {
+                    $("#errormsg").html("请选择客户！");
+                    $("#file_upload").uploadify('cancel', '*');
+                } else {
+                    $("#file_upload").uploadify("settings", "formData", { 'CustomerCode': $("#CustomerCode").val() });
+                    $("#flUploadAddress").val("");
+                    $("#errormsg").html("正在上传凭证...");
+                }
+                //在onUploadStart事件中，也就是上传之前，把参数写好传递到后台。  
+            },
+            onSelect: function (file) { //选择上传文件后调用
+                if ($("#flUploadAddress").val() != "") {
+                    $("#file_upload").uploadify("disable", "true");
+                    $("#errormsg").html("只能上传一个凭证！");
+                }
+            },
+            //onSelectError: function (file, errorCode) {
+            //    switch (errorCode) {
+            //        case -100:
+            //            alert("上传的文件数量已经超出系统限制的" + $('#file_upload').uploadify('settings', 'queueSizeLimit') + "个文件！");
+            //            break;
+            //        case -110:
+            //            alert("文件 [" + file.name + "] 大小超出系统限制的" + $('#file_upload').uploadify('settings', 'fileSizeLimit') + "大小！");
+            //            break;
+            //        case -120:
+            //            alert("文件 [" + file.name + "] 大小异常！");
+            //            break;
+            //        case -130:
+            //            alert("文件 [" + file.name + "] 类型不正确！");
+            //            break;
+            //    }
+            //},
+            onFallback: function () { //检测FLASH失败调用
+                $("#errormsg").html("您未安装FLASH插件，无法上传！请安装FLASH插件后再试。");
+            },
+            //每个文件上传成功后触发 
+            //服务器端脚本文件路径，必写项
+            //uploadLimit: 1
+            //上传文件的数量。达到或超出这数量会触发onUploadError方法。默认999
+        });
+    }
+</script>

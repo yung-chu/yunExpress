@@ -1,0 +1,299 @@
+﻿@{
+    ViewBag.Title = "List";
+
+       // Html.AddCssFileParts("/Scripts/jquery-easyui-1.3.1/themes/default/easyui.css");
+       //  Html.AddCssFileParts("/Scripts/jquery-easyui-1.3.1/themes/icon.css");
+       // Html.AddScriptParts("/Scripts/jquery-easyui-1.3.1/jquery.easyui.min.js");
+       // Html.AddScriptParts("/Scripts/jquery.json-2.4.min.js");
+       //  Html.AddScriptParts("/Scripts/easyui-public.js");
+
+   <link href="/Scripts/artdialog/skins/default.css" type="text/css" rel="stylesheet" />
+   <link rel="stylesheet" type="text/css" href="@Url.Content("/Scripts/chosen/chosen.css")" />
+
+    Html.AddScriptParts("/Scripts/chosen/chosen.jquery.min.js");
+    Html.AddScriptParts("/Scripts/artdialog/jquery.artDialog.js");
+
+ }
+
+
+
+@model LMS.Controllers.CustomerController.CustomerListViewModel
+
+@using (Html.BeginForm())
+{
+
+    var url = Html.GetUrl("List", "Customer", Model.FilterModel);
+    
+    <input type="hidden" id="returnUrl" value="@url" />
+    
+  <div class="domebg" id="right_con">
+      <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+                <td width="40%">
+                    <span class="info_box info_select">客户:</span>
+
+                    
+                    @Html.TextBoxFor(p => p.FilterModel.CustomerCode, new { @style = "color: #7B7B7B", @class = "txt", onkeydown = "return Select(event)" })
+                </td>
+                <td width="40%">
+                    <span class="info_box info_select">状态:</span>
+                    @Html.DropDownListFor(p=>p.FilterModel.Status,Model.CustomerStatus)
+
+                </td>
+                <td width="30%">
+                    <div class="tl">
+                        <input type="submit" value="搜索" class="btn" id="btnSearch" name="btnSearch"/>
+                        <input type="button" class="btn" value="新增" id="btnAdd" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    <div id="test" style="padding-left: 15px; padding-top: 10px;">
+    </div>
+
+    <div id="pm_dis_div">
+        <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr class="data_row_two">
+
+                    <th>客户编码
+                    </th>
+                    <th>名称 
+                    </th>
+                    <th>状态 
+                    </th>
+                    <th>联系人 
+                    </th>
+                    <th>电话 
+                    </th>
+                    <th>业务经理 
+                    </th>
+                    <th>创建时间 
+                    </th>
+                    <th>余额(￥) 
+                    </th>
+         
+                    <th>操作
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    
+                        foreach (var row in Model.PagedList.InnerList)
+                        {    
+                            <tr class="data_row_dan">
+                                <td style="text-align:center">@row.CustomerCode</td>
+                                <td style="text-align:center">@row.Name</td>
+                                <td style="text-align:center">@row.CurrentStatus</td>
+                                <td style="text-align:center">@row.LinkMan</td>
+                                <td style="text-align:center">@row.Tele</td>
+                                <td style="text-align:center">@row.CustomerManager</td>
+                                <td style="text-align:center">@row.CreatedOn</td>
+                                <td style="text-align:center">@row.Balance</td>
+                                <td>
+                                   
+                                    <a class="btn_href" href="#" onclick="editData('@row.CustomerID')">编 辑</a>
+                                    <a class="btn_href" href="#" onclick="RedirectPage('@row.CustomerCode')">特殊价格</a>
+                                </td>
+                            </tr>
+                             
+                        }
+                }
+                <tr class="data_row_none">
+                    <td colspan="20">
+                        @Html.Pager(Model.PagedList, Model.FilterModel)
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+        
+</div>  
+    
+    
+    
+    
+} 
+
+
+
+
+
+
+@*<script type="text/javascript">
+    $(function () {
+        
+
+    
+
+
+
+
+
+        $('#dataTable').datagrid({
+            url: '@Url.Action("GetCustomerList")',
+            idField: 'CustomerID',
+            rowStyler: function (row) {
+                if (row.persons > 1) {
+                    return 'background:#AAD684;color:#fff';
+                }
+            },
+            onBeforeLoad: function (param) {
+                var obj = {};
+                
+
+                if ($.trim($('#CustomerCode').val()).indexOf("请输入客户编码,名称") != -1) {
+                    obj.CustomerCode = "";
+                } else {
+                    obj.CustomerCode = $.trim($('#CustomerCode').val());
+                }
+
+             
+                
+                if ($('#Status').val() != "") {
+                    obj.Status = $('#Status').val();
+                }
+                param.params = $.toJSON(obj);
+            },
+            columns: [[
+                { field: 'CustomerCode', title: '客户编码', width: 80 },
+                { field: 'Name', title: '名称', width: 100 },
+                {
+                    title: '状态', field: 'Status', width: 50, formatter: function (value) {
+                        if (value == "1")
+                            return "未审核";
+                        else if (value == "2")
+                            return "已审核";
+                        else
+                            return "禁用";
+                    }
+                },
+                { field: 'LinkMan', title: '联系人', width: 100 },
+                { field: 'Tele', title: '电话', width: 100 },
+                { field: 'CustomerManager', title: '维护经理', width: 100 },
+                { field: 'CreatedOn', title: '创建时间', width: 150 },
+                {
+                    field: 'Balance', title: "余额(￥)", width: 100, formatter: function (value) {
+                        if (value != "0") {
+                            var num = parseFloat(value);
+                            return num.toFixed(2);
+                        } else {
+                            return value;
+                        }
+                }},
+                {
+                    field: 'AccountID', title: '操作', width: 150,
+                    formatter: function (a, b) {
+     
+                        var customerCode = b["CustomerCode"].replace(/\s*/g, "");
+                        var name = b["Name"].replace(/\s*/g, "");
+                            
+                        return "<a href='#' onclick=editData('" + b["CustomerID"] + "') >编辑</a> | " + 
+                            //"<a href='#' onclick=Redirect('" + b["CustomerID"] + "','" + b["CustomerTypeID"] + "','" + b["CustomerCode"] + "','" + b["Name"] + "') >特殊价格</a>";
+                                "<a href='#' onclick=Redirect('" + b["CustomerID"] + "','" + b["CustomerTypeID"] + "','" + customerCode + "','" + name + "') >特殊价格</a>";
+                    }
+                }
+            ]]
+        });
+        //<a href='#' onclick=javascript:openIFrame('特殊价格','http://test.tinydx.com:822/Customer/List','{CustomerId：" + b["CustomerID"] + ",CustomerCode:" + b["CustomerCode"] + ",CustomerOrigin:1,flag:add}') >特殊价格</a>
+        $("#btnSearch").click(function () {
+            $('#dataTable').datagrid("reload");
+        });
+ 
+        
+
+
+    });
+    
+    function Select(e) {
+        if (e.keyCode == 13) {
+            $("#btnSearch").click();
+            return false;
+        }
+        return true;
+    }
+
+</script>*@
+
+
+<script type="text/javascript">    
+
+    $(function () {
+
+        if ($("#FilterModel_CustomerCode").val() == "") {
+            
+            $("#FilterModel_CustomerCode").val("请输入客户编码,名称");
+        }
+
+        //聚焦
+        $("#FilterModel_CustomerCode").focus(function () {
+
+            if ($(this).val().indexOf("请输入客户编码,名称") != -1) {
+                $("#FilterModel_CustomerCode").val("");
+            }
+        });
+        //离焦
+        $("#FilterModel_CustomerCode").blur(function () {
+
+            if ($(this).val() == "") {
+                $("#FilterModel_CustomerCode").val("请输入客户编码,名称");
+            }
+        });
+
+        $("#btnSearch").click(function () {
+            
+            if ($("#FilterModel_CustomerCode").val().indexOf("请输入客户编码,名称") != -1) {
+
+                $("#FilterModel_CustomerCode").val("");
+            }
+
+        });
+
+
+        $("#btnAdd").click(function () {
+            $("#test").showWindow("Add", "新增客户", 600, 550);
+        });
+
+    });
+
+    function editData(id) {
+        $("#test").showWindow('Edit?CustomerID=' + id + '&returnUrl=' + $("#returnUrl").val(), "编辑客户信息", 600, 550);
+    }
+    function RedirectPage(customerCode) {
+
+        $("#mainDoMain").val("@LMS.Core.sysConfig.LISDoMain");
+        $.ajax({
+            type: "get",
+            url: "@Url.Action("GetCustomerType")",
+            data: { customerCode: customerCode },
+            success: function(data) {
+                if (data.Result) {
+                 
+                   openIFrame('特殊价格', 'Customer/List', '{CustomerId:' + data.Message + ',CustomerOrigin:1,flag:add}');
+                   // location.href = "@Url.Action("List", "Customer")?CustomerId=" + data.Message + "&flag=add&CustomerOrigin=1";
+
+                } else {
+
+                    $.messager.alert('提示:', '该客户未同步到运费计算系统,请重新编辑,已审核状态下查看报价！', 'error');
+                    return false;
+                }
+            }
+       });
+    }
+
+    function Select(e) {
+        if (e.keyCode == 13) {
+            $("#btnSearch").click();
+            return false;
+        }
+        return true;
+    }
+    
+
+
+
+
+</script>

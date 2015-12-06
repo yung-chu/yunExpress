@@ -1,0 +1,46 @@
+﻿@{
+    Layout = null;
+}
+@model List<LMS.UserCenter.Controllers.OrderController.Models.CustomerOrderInfoModel>
+@{
+    int item = (Model.Count / 2) + (Model.Count % 2 > 0 ? 1 : 0);
+}
+<table border="0" cellpadding="0" cellspacing="0" style="width: 701px;">
+    @for (int i = 0; i < item; i++)
+    {
+
+        <tr>
+            <td valign="top" style="height: 330px; width: 345px; border: 1px solid #444444">
+                @{
+                    var order1 = Model[i * 2];
+                }
+                @Html.Partial("_PrintOrder", order1)
+
+            </td>
+            <td style="height: 330px; width: 14px;"></td>
+            @if (Model.Count > (i * 2 + 1))
+            {
+                var order2 = Model[i * 2 + 1];
+                <td valign="top" style="height: 330px; width: 345px; border: 1px solid #444444">
+                    @Html.Partial("_PrintOrder", order2)
+                </td>
+            }
+            else
+            {
+                <td valign="top" style="height: 330px; width: 345px;"></td>
+            }
+        </tr>
+        if (item > (i + 1))
+        {
+            <tr>
+                <td colspan="3" style="height: 10px;"></td>
+            </tr>
+        }
+    }
+
+</table>
+
+
+
+
+

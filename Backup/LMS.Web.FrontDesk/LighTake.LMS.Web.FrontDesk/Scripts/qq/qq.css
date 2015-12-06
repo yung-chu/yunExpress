@@ -1,0 +1,24 @@
+@charset "utf-8";
+/*默认蓝色皮肤*/
+html{-webkit-text-size-adjust:none;}/*修正谷歌最小字号bug*/
+*html .lrkf{position:absolute;}		/*修正IE6bug的，IE6不支持固定定位，这一句必须要。*/
+.lrkf{width:130px;}					/*必须有一个合适的宽度，否则获取不到正确的宽度*/
+.lrkfshow { right:0;}				/*这个不要动*/
+.lrkf .lrkf a{}
+.lrkf a:hover{color:#B50708;}
+
+.lrkf .lrkf_header{ height:10px; background:url(brd.gif) no-repeat 0 0;}
+
+.lrkf .lrkf_box{}
+
+.lrkf .lrkf_header,.lrkf .lrkf_con,.lrkf .lrkf_tool a{}
+	
+.lrkf .lrkf_header,.lrkf .lrkf_con{ margin-top:0;}
+
+.lrkf .lrkf_con{background:url(brd.gif) repeat-y right top; padding:4px 12px;}
+.lrkf .lrkf_foot{height:10px;background:url(brd.gif) no-repeat -131px 0;}
+
+.lrkf .lrkf_btn{ width:29px; height:117px; text-indent:-9999px; padding:0; left:-28px;
+background:url(ico.gif) no-repeat 0 -397px;color:#fff;}
+.lrkf .lrkf_btn:hover{color:#fff;}
+.lrkfshow .lrkf_btn{background:url(ico.gif) no-repeat -30px -397px;}

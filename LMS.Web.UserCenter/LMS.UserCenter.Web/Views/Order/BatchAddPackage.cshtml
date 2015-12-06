@@ -1,0 +1,61 @@
+﻿@{
+    ViewBag.Title = "BatchAddPackage";
+}
+@using System.Globalization
+@using LMS.Core
+@using LMS.Data.Entity
+@using LMS.UserCenter.Controllers.OrderController.Models
+@model LMS.UserCenter.Controllers.OrderController.Models.BatchAddViewModels
+@{
+    var goodsTypeList = (List<SelectListItem>)ViewBag.GoodsTypeList;
+    
+}
+<div class="bd_b bread_box">
+    <a href="javascript:" class="icon-home bread_home"></a>
+    <strong class="gtlt bread_gtlt">&gt;&gt;</strong>
+    <a href="javascript:" class="bread_off">运输服务</a>
+    <strong class="gtlt bread_gtlt">&gt;&gt;</strong>
+    <a href="javascript:" class="bread_on">小包批量创建订单</a>
+</div>
+<div class="p20">
+    @Html.Partial("_Notifications")
+
+    @using (Html.BeginForm("BatchAddPackage", "Order", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="tab_conStr">
+            <div class="from_box">
+                <div class="fix from_horizontal">
+                    <div class="ww32 l">
+                        <div class="fix">
+                            <span class="info_box info_middle">请选择上传文件：</span>
+                            <input name="file" id="file" type="file" style="width: 200px;" />
+
+                        </div>
+                    </div>
+                    <div class="cell">
+                        <div class="fix">
+                            <div class="l ww49">
+                                <div class="fix">
+                                    <span class="info_box info_middle">包裹类型：</span>
+                                    @Html.DropDownListFormFor(p => Model.GoodsTypeID, goodsTypeList)
+                                </div>
+                            </div>
+                            <div class="cell pl20 fix">
+                                <span class="info_box info_middle"></span>
+                               <a href="@Url.Action("DownloadExcelTemplatePackage")" target="_blank" class="tdl" title="点击下载">下载标准模板</a><br />
+                                 <label>"简易型订单上传模板格式于 <label style="font-size:14px;color:red">@Model.FilePathDate</label> 时间已更新，请注意下载！"</label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 列表 Start -->
+        <div id="divBatch">
+            @Html.Partial("_BatchAddPackageList",Model)
+            </div>
+        <!-- 列表 End -->
+    }
+</div>

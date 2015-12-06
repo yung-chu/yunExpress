@@ -1,0 +1,110 @@
+﻿@using System.Configuration
+@model LMS.Controllers.FinancialController.ViewModels.ReceivingBillViewModel
+@{
+    ViewBag.Title = "ReceivingBillList";
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+}
+
+<div id="showCustomerList" tabindex="200" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showShippingMethodList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showCountryList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showReceivingExpensesEdit" style="overflow: scroll; display: none; position: relative">
+</div>
+<div class="domebg" id="right_con">
+    <form id="search" name="Search" method="POST">
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+                <td width="25%">
+                    <span class="info_box info_select">客户编码:</span>
+                    <input type="text" id="CustomerCode" value="@Model.FilterModel.CustomerCode" name="FilterModel.CustomerCode" readonly="readonly" class="txt txt_short" />
+                    <a href="javascript:void(0)" id="selectCustomer" class="btn_href">选择</a>
+                </td>
+                <td width="25%">
+                    <span class="info_box info_select">结算人:</span>
+                    @Html.TextBoxFor(m=>m.FilterModel.ReceivingBillAuditor,new{@class="txt txt_short"})
+                </td>
+                <td width="25%">
+                    <span class="info_box info_select">账单号:</span>
+                    @Html.TextBoxFor(m=>m.FilterModel.ReceivingBillID,new{@class="txt txt_middle"})
+                </td>
+            </tr>
+
+            <tr class="date_row_select">
+                <td colspan="1">
+                    <span class="info_box info_select">出账时间:</span>
+                    <input type="hidden" id="FilterModel_IsFirstIn" name="FilterModel.IsFirstIn" value="@Model.FilterModel.IsFirstIn"/>
+                    <input type="text" class="Wdate" style="width:100px;" id="FilterModel_StartTime" name="FilterModel.StartTime" value="@String.Format("{0:yyyy-MM-dd}", Model.FilterModel.StartTime)"  onfocus="WdatePicker({minDate:'#F{$dp.$D(\'FilterModel_EndTime\',{y:-1});}',maxDate:'#F{$dp.$D(\'FilterModel_EndTime\',{d:0});}',isShowClear:false})" />
+                    到
+                    <input type="text" class="Wdate" style="width:100px;" id="FilterModel_EndTime" name="FilterModel.EndTime" value="@String.Format("{0:yyyy-MM-dd}", Model.FilterModel.EndTime)"  onfocus="WdatePicker({minDate:'#F{$dp.$D(\'FilterModel_StartTime\',{d:0});}',maxDate:'#F{$dp.$D(\'FilterModel_StartTime\',{y:1});}',isShowClear:false})" />
+                </td>
+                <td colspan="2">
+                    <div class="tl">
+                        <input type="submit" class="btn" value="查询" id="btnSearch" name="btnSearch" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div id="pm_dis_div">
+            <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr class="data_row_two">
+                        <th>账单号
+                        </th>
+                        <th>账单结算起止时间
+                        </th>
+                        <th>账单结算人
+                        </th>
+                        <th>出账时间
+                        </th>
+                        <th>所属客户
+                        </th>
+                        <th>账单明细
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var row in Model.PagedList.InnerList)
+                        {
+                            
+                            <tr class="data_row_dan">
+                                <td>
+                                    @row.ReceivingBillID
+                                </td>
+                                <td>
+                                    @row.BillStartTime.Value.ToString("yyyy-MM-dd") 至 @row.BillEndTime.Value.ToString("yyyy-MM-dd")
+                                </td>
+                                <td>
+                                    @row.ReceivingBillAuditor
+                                </td>
+                                <td>
+                                    @row.ReceivingBillDate
+                                </td>
+                                <td>
+                                    @row.CustomerName
+                                </td>
+                                <td>
+                                    @if (row.Status == 2&&(DateTime.Now-row.ReceivingBillDate.Value).TotalHours>1.5)
+                                    {
+                                        <a target="_blank" href="@(ConfigurationManager.AppSettings["ReceivingBill_Path"] + row.ReceivingBillID + ".xls")">@(row.ReceivingBillID + ".xls")</a>
+                                    }
+                                    else
+                                    {
+                                        @("账单尚未生成")
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    <tr class="data_row_none">
+                        <td colspan="17">
+                            @Html.Pager(Model.PagedList, Model.FilterModel)
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
+</div>

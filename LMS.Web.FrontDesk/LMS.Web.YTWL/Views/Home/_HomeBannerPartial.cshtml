@@ -1,0 +1,471 @@
+﻿
+@using LighTake.Infrastructure.Common
+@model LMS.FrontDesk.Controllers.HomeController.Models.HomeListModel
+<div id="slide">
+    <ul class='slide-box'>
+        <li style="background:url(@Url.Content("~/images/banner/bn2.jpg")) no-repeat #e8a91e center;opacity:1;filter:alpha(opacity=100);">
+					
+        </li>
+        <li style=" background:url(@Url.Content("~/images/banner/bn1.jpg")) no-repeat #13d5df center;">
+					
+        </li>
+    </ul>
+    <div class='slide-nav'>
+        <div class='slide-nav-box'>
+            <a class='active' href="javascript:void(0);"> </a>
+            <a href="javascript:void(1);"> </a>
+        </div>
+    </div>
+</div>
+<div class="conStr">
+    <div class="strIn">
+        <div class="rel zx2">
+            <div class="home_math_box" id="home_math_box">
+                <div class="fix">
+                    <div class="l home_math_box_l">
+                        <ul class="fix" id="sch_tab">
+                            <li class="l tc ww40"> <a href="javascript:" class="home_math_navOn tdn" date_nb="1"> 价格查询 </a> </li>
+                            <li class="l tc ww60"> <a href="javascript:" class="home_math_navOff tdn" date_nb="2"> &nbsp; </a> </li>
+                        </ul>
+                        <div class="p15">
+                            <div id="home_price_sch" class="db">
+                                @using (Html.BeginForm())
+                                {
+                                    <div>&emsp;&emsp;目的地国家：
+                                        @Html.TextBoxFor(f => f.FreightTrialFilter.ChineseName, new {@class = "home_txt size_short", @id = "txt_country", autocomplete = "off"})
+                                        @Html.HiddenFor(f => f.FreightTrialFilter.CountryCode)
+                                        <input type="hidden" id="GetCountryCode"  value=""/>
+                                        <a href="javascript:" class="dib vm" title="挑选国家" id="dis_one"> <img src="@Url.Content("~/images/grid.png")" height="22"> </a> 
+                                    </div>
+                                    <div class="mt10">
+                                        &emsp;&emsp;&emsp;包裹重量：
+                                        <input type="text" value="@(Model.FreightTrialFilter.Weight.HasValue?Model.FreightTrialFilter.Weight.Value.ToString():"单位(kg)")" name="FreightTrialFilter.Weight" class="home_txt size_mini" onblur=" if (this.value == '') {this.value = '单位(kg)'} " onfocus=" if (this.value == '单位(kg)') {this.value = ''} " onkeydown=" javascript:if (event.keyCode == 13); "/>
+                                    </div>
+                                    <div class="mt10"> &emsp;&emsp;&emsp;包裹类型：
+                                        <span class="rel dib" id="home_selWarp">
+                                            <span class="inline_box dib">
+                                                @Html.TextBoxFor(f => f.FreightTrialFilter.PackageTypeName, new {@class = "home_txt size_mini inline_any", id = "pack_val"})	
+                                                @Html.HiddenFor(f => f.FreightTrialFilter.PackageType)
+                                                <span class="btn btn_black inline_any"> 
+                                                    <i class="diamonds_b"></i>  
+                                                </span>
+                                            </span>
+                                            <dl class="home_sel_company">
+                                                <dd>
+                                                    @{
+                                                        foreach (var item in (List<SelectListItem>) ViewBag.GoodsTypeList)
+                                                        {
+                                                            <a href="javascript:" class="db hover_two pl10">@item.Text</a>
+                                                            <span style="display: none">@item.Value</span>
+                                                        }
+                                                    }
+                                                </dd>
+                                            </dl>
+                                        </span> 
+                                    </div>
+                  
+                                    <div class="mt10">
+                                        <span class="ml-2">&emsp;&emsp;&emsp;尺寸(cm)：</span>
+                                        @*<input type="text" class="home_txt size_mini- mr5" onblur="if(this.value==''){this.value='长...'}" onfocus="if(this.value=='长...'){this.value=''}" onkeydown="javascript:if(event.keyCode==13) submitSearch();" onkeyup="keys()" value="长...">*@
+                                        <input type="text" value="@(Model.FreightTrialFilter.Length.HasValue?Model.FreightTrialFilter.Length.Value.ToString():"1")" name="FreightTrialFilter.Length" class="home_txt size_mini- mr5" onblur=" if (this.value == '') {this.value = '长...'} " onfocus=" if (this.value == '长...') {this.value = ''} " onkeydown=" javascript:if (event.keyCode == 13);  " >
+                                        <input type="text" value="@(Model.FreightTrialFilter.Width.HasValue?Model.FreightTrialFilter.Width.Value.ToString():"1")" name="FreightTrialFilter.Width" class="home_txt size_mini- mr5" onblur=" if (this.value == '') {this.value = '宽...'} " onfocus=" if (this.value == '宽...') {this.value = ''} " onkeydown=" javascript:if (event.keyCode == 13);"  >
+                                        <input type="text" value="@(Model.FreightTrialFilter.Height.HasValue?Model.FreightTrialFilter.Height.Value.ToString():"1")" name="FreightTrialFilter.Height" class="home_txt size_mini- mr5" onblur=" if (this.value == '') {this.value = '高...'} " onfocus=" if (this.value == '高...') {this.value = ''} " onkeydown=" javascript:if (event.keyCode == 13); " >
+                                    </div>
+                                    <div class="mt15"> 
+                                        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                                        <input type="submit" id="Search" class="btn btn_black"  style="color: white" value="查 询"/> 
+                                    </div>
+                                }
+                                <div class="idp_line"></div>
+                                @using (Html.BeginForm("Index", "Home", FormMethod.Post, new {id = "formlogin"}))
+                                {
+                                    if (string.IsNullOrWhiteSpace(Model.UserInfoFilter.UserName))
+                                    {
+                                        <div class="p15 fix">
+                                            <div class="l">
+                                                <div class="mb10">
+                                                    <input type="text" tabindex="1" value="@(string.IsNullOrWhiteSpace(Model.UserInfoFilter.UserName) ? "账户..." : Model.UserInfoFilter.UserName)" name="UserInfoFilter.UserName" class="ist_m ist_h false" onblur=" if (this.value == '') {this.value = '账户...'} " onfocus=" if (this.value == '账户...') {this.value = ''} " onkeydown=" javascript:if (event.keyCode == 13); " >		
+                                                    <a id="login" tabindex="3" href="javascript:" class="btn_y gf ml15 mr5">登陆</a>
+                                                    <a href="@Url.Action("AddUser", "User")" tabindex="4"  class="btn_y gf" title="免费注册">注册</a>
+                                                </div>
+                                                <div>
+                                                    @*@Html.TextBoxFor(p=>p.UserInfoFilter.Pwd??"密码...",new{@class="ist_m ist_h",onblur=" if (this.value == '') {this.value = '密码...'} " ,onfocus=" if (this.value == '密码...') {this.value = ''} " ,onkeydown=" javascript:if (event.keyCode == 13) submitSearch(); ", onkeyup=" keys() "})*@
+                                                    <input type="password" tabindex="2" value="@(Model.UserInfoFilter.Pwd)" name="UserInfoFilter.Pwd" class="ist_m ist_h">
+                                                    <input type="checkbox" id="chk" style="cursor: pointer" class="vm ml15"/>
+                                                    <label for="chk" class="gf vm">记住密码</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="p15 fix">
+                                            <div class="l">
+                                                <img src="@Url.Content("~/images/welcome_03.png")">
+                                            </div>
+                                            <div class="cell pl20 tc">
+                                                <div class="mt20">
+                                                    <strong>欢迎你</strong>@Model.UserInfoFilter.UserName
+                                                </div>
+                                                <div class="mt10 gf">
+                                                    @{
+                                                        var url = Tools.GetAppSettings("UserCenter_Path");
+                                                    }
+                                                    <a class="coffe" href="@url">进入账户中心</a> <span class="">| </span><a class="cpi" style="color: white;cursor: pointer" href="@Url.Action("Logout", "Home")">退出</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }                
+                            </div>
+                            <div id="home_order_sch" class="dn">
+                                <textarea class="order_sch_area" onfocus=" this.lastChild.nodeValue = '' ">请输入账单号一次最多40个..
+                                        </textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="country_box">
+                @{
+                    string[] words = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "Q", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
+                }
+                <div class="fix country_move">
+                    <span class="r mt5 mr10">
+                        <a href="javascript:" class="u u16 mt2" id="country_close" title="关闭">
+                        </a>
+                    </span>
+                    <strong class="ml10 coe5">选择目的地国家</strong>
+                </div>
+                <ul class="fix" id="country_az">
+                    @for (int i = 0; i < words.Length; i++)
+                    {
+                        <li class="l" date_nb="@i">
+                            <a class="country_num" href="javascript:">@words[i]</a>
+                        </li>
+                    }
+                </ul>
+                <div class="ova h250" id="country">
+                    <div class="p10">
+                        <div class="mb10">
+                            <strong class="co29 f14">常用国家</strong>
+                            <div class="oneDashed bdc4 mt5"></div>
+                        </div>
+                        <ul class="fix mt10 ml20">
+                            @foreach (var item in Model.CountryList.FindAll(p => p.IsCommonCountry == true))
+                            {
+                                var temp = item.ChineseName.Trim() + "(" + item.Name.Trim() + ")";
+                                <li class="l ww50 mb10">
+                                    <i class="diamonds_tipMn"></i><span class="cpi">@temp</span><span class="poiHidden" style="display: none">@item.CountryCode</span>
+                                </li>
+                            }
+                        </ul>
+                        <div id="country_az_box">
+                            @for (int i = 0; i < words.Length; i++)
+                            {
+                                <div class=" pt10" date_nb="@i">
+                                    <strong class="f14 co29 ml20">
+                                        @words[i]
+                                    </strong>
+                                    <div class="oneDashed bdc4 mt5"></div>
+                                    <ul class="fix mt10 ml20">
+                                        @foreach (var item in Model.CountryList.FindAll(p => p.CountryPinyin.Trim().Substring(0, 1).ToUpper() == words[i].ToUpper()))
+                                        {
+                                            var temp = item.ChineseName.Trim() + "(" + item.Name.Trim() + ")";
+                                            <li class="l ww50 mb10">
+                                                <i class="diamonds_tipMn"></i>
+                                                <span class="cpi">@temp</span><span class="poiHidden" style="display: none">@item.CountryCode</span>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="@Url.Content("~/Scripts/autocomplete/jquery-ui.css")" rel="stylesheet" />
+<script src="@Url.Content("~/Scripts/autocomplete/jquery-ui.js")"></script>
+
+<!--查询判断是否为空-->
+<script type="text/javascript">
+    $(function() {
+
+        var countryHidden = $("#FreightTrialFilter_CountryCode");
+        var setCountryCss = $("#txt_country");
+        var package_weight = $("input[name='FreightTrialFilter.Weight']");
+
+        //查询单击
+        $("input[id='Search']").click(function() {
+   
+            //目的国家不为空
+            if ($(setCountryCss).val() == "") {
+                $(setCountryCss).attr("class", " home_txt size_short false");
+                $(setCountryCss).val("不为空");
+                return false;
+            } 
+            
+            //包裹重量不为空
+            if ($.trim($(package_weight).val()) == ""||$(package_weight).val()=="单位(kg)") {
+                $(package_weight).attr("class", " home_txt size_mini false");
+                $(package_weight).val("不为空");
+                return false;
+            }
+        });
+        
+        //监听目的地国家
+        $(setCountryCss).bind('input', function() {
+            var value = $(this).val();
+            $(countryHidden).attr("value",value);
+            
+            if ($.trim(value) == "") {
+                $(setCountryCss).attr("class", " home_txt size_short false");
+            }
+            else
+            {
+                $(setCountryCss).attr("class", " home_txt size_short");
+            }
+        });
+
+
+        //监听包裹重量
+        $(package_weight).bind('input', function() {
+            var getValue = $(this).val();
+            if ($.trim(getValue) == "") {
+                $(package_weight).attr("class", " home_txt size_mini false");
+            }
+            else
+            {
+                $(package_weight).attr("class", " home_txt size_mini");
+            }
+        });
+
+        //监听账号
+        var userName = $("input[name='UserInfoFilter.UserName']");
+        $(userName).bind("input", function() {
+            var getValue = $(userName).val();
+            if ($.trim(getValue) == "") {
+                $(userName).attr("class", " ist_m ist_h false");
+            } else {
+                $(userName).attr("class", " ist_m ist_h");
+            }
+        });
+        
+
+        //错误聚焦清空
+        $(setCountryCss).focus(function() {
+            if ($.trim($(setCountryCss).val()) == "不为空") {
+                $(setCountryCss).val("");
+                $(setCountryCss).focus();
+            }
+        });
+        
+        $(package_weight).focus(function() {
+            if ($.trim($(package_weight).val()) == "不为空") {
+                $(package_weight).val("");
+                $(package_weight).focus();
+            }
+        })
+
+
+    })
+
+</script>
+
+
+
+<script type="text/javascript">
+    $('#home_selWarp .btn_black').click(function() {
+        $(this).parents('#home_selWarp').find('.home_sel_company').fadeIn('fast').css('width', $(this).parents('#home_selWarp').width());
+
+    });
+    $('#home_selWarp .hover_two').click(function (event) {
+        $('#pack_val').val($(this).text());
+        $('.home_sel_company').fadeOut('fast');
+        event.stopPropagation();
+    });
+    /*点击九方格，国家层谈入*/
+    $("#dis_one").click(function (event) {
+        $(".country_box").fadeIn("fast");
+    });
+    /*点击网页其他位置，淡出*/
+    $('html,body,#country_close,#country span').click(function(event) {
+        $(".country_box").fadeOut("fast");
+    });
+    /*点击在home_math_box区域里，那么终止淡出操作*/
+    $('#home_math_box, .country_box').click(function (event) {
+        event.stopPropagation();
+    });
+    /*点击字母按钮，相应的国家层弹出，其他层全部隐藏*/
+    $("#country_az a").click(function () {
+        var thisIndex = $("#country_az a").index(this);
+        $("#country_az_box").children(".pt10").eq(thisIndex).fadeIn("slow").siblings().hide();
+    });
+    $("#country span").click(function () {
+        //有值
+        var setCountryCss = $("#txt_country");
+        $(setCountryCss).attr("class", "home_txt size_short");
+
+        $('#txt_country').val($(this).text());
+        $('#GetCountryCode').val($(this).text());//赋值隐藏域
+        var countryCode = $(this)[0].nextSibling.lastChild.nodeValue || $(this)[0].nextElementSibling.lastChild.nodeValue;
+        $("#FreightTrialFilter_CountryCode").val(countryCode);
+        
+    });
+    $(".idxC_article").hover(
+        function () {
+            $(this).parent('div').find('.idxC_box').css("display", "none");
+            $(this).find('.idxC_box').css("display", "block");
+        },
+        function () {
+            $(this).removeClass("hover");
+        }
+    );
+</script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/client.js")"></script>
+
+<script type="text/javascript">
+    $(function () {
+        var aSlidePage = $('#slide .slide-nav-box a');
+        var aSlideCon = $('#slide .slide-box li');
+        var iSize = aSlideCon.size();
+        var iNow = 0;
+        var timer = null;
+        aSlidePage.each(function (index) {
+            $(this).mouseover(function () {
+                iNow = index;
+                slideRun()
+            })
+        })
+        function slideRun() {
+            aSlidePage.removeClass('active');
+            aSlidePage.eq(iNow).addClass('active');
+            aSlideCon.stop();
+
+            aSlideCon.eq(iNow).siblings().animate({
+                opacity: 0
+            }, 600)
+            aSlideCon.eq(iNow).animate({
+                opacity: 1
+            }, 600)
+        }
+        autoRun();
+        function autoRun() {
+            timer = setInterval(function () {
+                iNow++;
+                if (iNow > iSize - 1) iNow = 0;
+                slideRun();
+            }, 4000)
+        };
+        $('#slide').hover(function () {
+            clearInterval(timer);
+        }, function () {
+            autoRun();
+        })
+    })
+</script>
+<script type="text/javascript">
+
+    function keypressHandler(e)
+    {
+        if(e.keyCode == 13) {
+            //e.preventDefault();
+            $(this).blur();
+            $('#login').focus().click();
+        }
+    }
+
+    @{
+        string arr = "[";
+        foreach (var item in Model.CountryList)
+        {
+
+            arr += "{ code:\"" + item.CountryCode.Trim() + "\", value:\"" + item.ChineseName.Trim() + "(" + item.Name.Trim() + ")" + "\"},";
+        }
+        arr = arr.Substring(0, arr.LastIndexOf(',')) + "]";
+    }
+    var data = @Html.Raw(arr);
+   
+    function SeachOrder() {
+        var url= "http://www.17track.net/cn/result/post.shtml?nums=" + encodeURIComponent($("#searchOrderNumber").val());
+        window.open(url);
+    }
+
+    $(document).ready(function () {
+        $("#formlogin").keypress(keypressHandler);
+        $("#login").click(function () {
+
+
+            if ($.trim($("input[name='UserInfoFilter.UserName']").val()) == "") {
+                alert("登录帐号不能为空！");
+                $("input[name='UserInfoFilter.UserName']").focus();
+                return false;
+            }
+      
+            if ($.trim($("input[name='UserInfoFilter.Pwd']").val()) == "") {
+                alert("登录密码不能为空！");
+                $("input[name='UserInfoFilter.Pwd']").focus();
+                return false;
+            }
+            
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("ValidateLogOn")",
+                dataType: "json",
+                data:{userName:$("input[name='UserInfoFilter.UserName']").val(),pwd:$("input[name='UserInfoFilter.Pwd']").val(),remember:$("#chk").get(0).checked},
+                success: function (data) {
+                    if (data.Result) {
+
+                        //设置cookie
+                        if (data.Message!=null) {
+                            var getUname = data.Message.split(",")[0];
+                            var getUpwd = data.Message.split(",")[1];
+                            cookieUtil.set(getUname,getUpwd,8);
+                        }
+
+                     
+                        window.location.href = "Home/Index";
+                    } else {
+                        alert(data.Message);
+                        $("#pwdTip").text(data.Message);
+                    }
+                }
+            });
+            
+           
+        });
+    
+        $("#txt_country").autocomplete({
+            source: data,
+            select: function(event, ui) {
+                $("#FreightTrialFilter_CountryCode").val(ui.item.code);
+                cookieUtil.set("countryCode", ui.item.code, new Date("January 1,2020")); //写入cookie
+                cookieUtil.set("inputText2", ui.item.value, new Date("January 1,2020"));
+            }	  
+        });
+        
+
+
+            //记住密码
+            var userName = $("input[name='UserInfoFilter.UserName']");
+            var userPwd = $("input[name='UserInfoFilter.Pwd']");
+            $(userPwd).bind("focus",function() {
+
+            var cookie = $.trim(cookieUtil.get($(userName).val()));
+            if (cookie!="null" && cookie.length > 0 && $(userName).val() != "") {
+                
+                $(userPwd).val(cookieUtil.get($(userName).val()));
+
+            } else {
+                cookieUtil.set("","");
+            }
+
+        });
+
+
+    });
+</script>

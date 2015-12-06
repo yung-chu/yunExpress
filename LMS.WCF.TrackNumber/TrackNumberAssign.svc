@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="LMS.WCF.TrackNumber.TrackNumberAssign" CodeBehind="TrackNumberAssign.svc.cs" %>

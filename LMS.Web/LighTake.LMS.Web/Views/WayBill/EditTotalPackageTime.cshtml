@@ -1,0 +1,144 @@
+﻿@model LMS.Controllers.WayBillController.EditTotalPackageTimeViewModel
+@{
+    ViewBag.Title = "EditTotalPackageTime";
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+}
+
+<div id="showVenderList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showEditTime" style="overflow: scroll; display: none; position: relative">
+</div>
+<div class="domebg" id="right_con">
+    @using (Html.BeginForm())
+    {
+        <table id="firsttable" class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+                <td>
+                    <span class="info_box info_select">服务商:</span>
+                    <input type="text" id="_VenderCode" name="FilterModel.VenderCode" value="@Model.FilterModel.VenderCode" readonly="readonly" class="txt txt_short" onchange=" venderCodeChange(); " />
+                    <input type="text" id="_VenderName" name="FilterModel.VenderName" value="@Model.FilterModel.VenderName" class="txt txt_short" />
+                    <input type="button" id="selectVender" class="btn" value="选择" />
+                </td>
+                <td>
+                    <span class="info_box info_select">创建人:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.CreateBy, new { @class = "txt txt_short" })
+                </td>
+                <td rowspan="2">
+                    <span class="info_box info_select">总包号:</span>
+                    @Html.TextAreaFor(p => p.FilterModel.SearchContext, new { @style = "height:60px; width:120px;" })
+                </td>
+            </tr>
+            <tr class="date_row_select">
+                <td colspan="2">
+                    <span class="info_box info_select">创建时间：</span>
+                    @Html.TextBoxFor(p => p.FilterModel.StartTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.StartTime), @class = "txt wdate", @style = "width:130px;" })
+                    <span>至:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.EndTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.EndTime), @class = "txt wdate", @style = "width:130px;" })
+                </td>
+            </tr>
+            <tr class="date_row_select">
+                <td colspan="3">
+                    <input type="submit" class="btn" value="搜索" id="btnSearch" name="btnSearch" />
+                </td>
+            </tr>
+        </table>
+        <div id="pm_dis_div">
+            <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr class="data_row_two">
+                        <th>总包号</th>
+                        <th>服务商</th>
+                        <th>创建时间</th>
+                        <th>创建人</th>
+                        <th>总票数</th>
+                        <th>总件数</th>
+                        <th>总重量(kg)</th>
+                        <th>备注</th>
+                        @{
+        foreach (var t in LMS.Data.Entity.TotalPackageConfig.GetShowTimeList())
+        {
+                            <th>@t.TextField</th>
+        }
+                                    
+                        }
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+        foreach (var row in Model.PagedList.InnerList)
+        {
+                        <tr class="data_row_dan" id="tr_@(row.Info.TotalPackageNumber)">
+                            <td>@row.Info.TotalPackageNumber</td>
+                            <td>@row.Info.VenderName</td>
+                            <td>@row.Info.CreatedOn.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@row.Info.CreatedBy</td>
+                            <td>@row.Info.TotalVotes</td>
+                            <td>@row.Info.TotalQty</td>
+                            <td>@row.Info.TotalWeight.ToString("F3")</td>
+                            <td>@row.Info.Remark</td>
+                            @{
+            foreach (var t in LMS.Data.Entity.TotalPackageConfig.GetShowTimeList())
+            {
+                
+                var tm = row.TraceInfos.Where(s => s.TraceEventCode.ToString() == t.ValueField).Select(s => s.TraceEventTime).ToList();
+                if (tm.Any())
+                {
+                    <td itemid="@t.ValueField">@tm[0].ToString("yyyy-MM-dd HH:mm:ss")</td>
+                }
+                else
+                {
+                    <td itemid="@t.ValueField"></td>
+                }
+                   
+            } 
+                            }
+                            <td>
+                                <input type="button" class="btn" onclick="EditTime('@row.Info.TotalPackageNumber    ','@row.Info.CreatedOn.ToString("yyyy-MM-dd HH:mm") ');" value="编辑时间" /></td>
+                        </tr>
+        }
+                    }
+                    <tr class="data_row_none">
+                        <td colspan="13">
+                            @Html.Pager(Model.PagedList, Model.FilterModel)
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+<script type="text/javascript">
+    $(function () {
+        //选择服务商
+        $("#selectVender").bind("click", function () {
+            $("#showVenderList").showWindow("@Url.Action("SelectVender", "WayBill")", "选择服务商");
+            var parentWindow = $("#showVenderList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                top: 120
+            }, {
+                duration: 1000,
+                step: function (now, fx) {
+                    $(".window").css("top", now);
+                }
+            });
+            $("#showVenderList").show();
+        });
+    });
+
+    function EditTime(numberstr,createon) {
+        $("#showEditTime").showWindow("@Url.Action("EditTime","WayBill")?totalPackageNumber="+numberstr+"&createdTime="+createon, "填写清关交航日期");
+        var parentWindow = $("#showEditTime").parent("div");
+        $(parentWindow).css("top", "0");
+        $(parentWindow).animate({
+            top: 120
+        }, {
+            duration: 1000,
+            step: function (now, fx) {
+                $(".window").css("top", now);
+            }
+        });
+        $("#showEditTime").show();
+    }
+</script>

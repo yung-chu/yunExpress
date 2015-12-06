@@ -1,0 +1,262 @@
+﻿@{
+    ViewBag.Title = "总包号扫描";
+}
+<div class="domebg mt5 f14 " id="right_con">
+    @*<b>总包号扫描</b>*@
+    @*<hr />*@
+    <table class="data_table mt10" width="100%" border="1" cellpadding="0" cellspacing="0">
+        <tr class="tb_highlight">
+            <td style="width: 200px;">福邮袋牌号/客户袋牌号：</td>
+            <td>
+                <input type="text" id="FuPostBagNumber" name="FuPostBagNumber" class="txt txt_30chars" maxlength="35" /></td>
+            <!--onchange="checkFuPostBagNumber()"-->
+        </tr>
+        <tr class="tb_highlight">
+            <td>总包号：</td>
+            <td>
+                <input type="text" id="MainPostBagNumber" name="MainPostBagNumber" class="txt txt_30chars" maxlength="40" /></td>
+            <!--  onchange="checkMainPostBagNumber()"-->
+        </tr>
+        <tr class="tb_highlight">
+            <td></td>
+            <td>
+                <input type="button" class="btn" value=" 提 交 " id="btnSubmit" onclick="doSubmit();" /></td>
+        </tr>
+    </table>
+</div>
+<div class="mt5 f14" id="message_box">
+</div>
+<audio id="SuccessAudio">
+    <!--你的浏览器不支持播放声音，请升级-->
+    <source src="/Css/Success.wav" type="audio/wav">
+</audio>
+<audio id="FaileAudio">
+    <source src="/Css/Faile.wav" type="audio/wav">
+</audio>
+<!-- version 2015-1-2 15:31:52 -->
+<script type="text/javascript">
+    String.prototype.Trim = function () { return this.replace(/(^\s*)|(\s*$)/g, ""); }
+
+    //0为验证,1验证失败 , 3验证中 ,5验证通过
+    var _fuPostStatus = 0;
+    var _mainPostStatus = 0;
+
+    function checkFuPostBagNumber() {
+        var fuPostNumber = $("#FuPostBagNumber").val().Trim();
+        if (fuPostNumber.length > 0) {
+            var testre = /^[0-9]{26,34}$/.test(fuPostNumber);
+            var testre2 = /^[A-Z]{1}-[A-Z]{2}-[0-9]{10}$/.test(fuPostNumber);
+            if (testre == true || testre2 == true) {
+                //messageBox("[福邮袋牌号]验证中...", 1);
+                $.ajax({
+                    type: "POST",
+                    url: "IsValidFuPostBagNumber",
+                    data: { fuPostNumber: fuPostNumber },
+                    success: function (msg) {
+                        if (msg.Status == 5) {
+                            _fuPostStatus = 5;
+                            messageBox("[福邮袋牌号]或者[客户袋牌号]验证通过.", 3);
+                            moveCursor();
+                        } else {
+                            _fuPostStatus = 1;
+                            messageBox(msg.Message, 2);
+                            PlayFaile();
+                        }
+                        //console.log(msg);
+                    }
+                });
+            } else {
+                messageBox("请输入正确的[福邮袋牌号]或者[客户袋牌号].", 1);
+                _fuPostStatus = 1;
+                PlayFaile();
+            }
+        }
+    }
+
+    function checkMainPostBagNumber() {
+        var mainNumber = $("#MainPostBagNumber").val().Trim();
+        if (mainNumber != "") {
+            var testre = /^[A-Z]{6}[A-Z]{6}[A-Z]{1}[A-Z]{2}[0-9]{1}([0-9]{4})[0-9]{3}[0-9]{1}[0-9]{1}[0-9]{4}$/.test(mainNumber);
+            if (testre == true) {
+                _mainPostStatus = 5;
+                moveCursor();
+            } else {
+                _mainPostStatus = 1;
+                messageBox("请输入正确的[总包号].", 1);
+                PlayFaile();
+            }
+        }
+    }
+
+    function moveCursor() {
+        if (_fuPostStatus != 5) {
+            $("#FuPostBagNumber").focus().select();
+            checkFuPostBagNumber();
+        } else {
+            $("#MainPostBagNumber").focus().select();
+        }
+    }
+
+    function doSubmit() {
+        if (_fuPostStatus == 5 && _mainPostStatus == 5) {
+            doSave();
+        }
+        else if (_fuPostStatus == 3 && _mainPostStatus == 3) {
+            messageBox("验证中...", 1);
+            PlayFaile();
+        }
+        else if (_fuPostStatus == 0 || _mainPostStatus == 0) {
+
+            var fuPostNumber = $("#FuPostBagNumber").val().Trim();
+            var mainNumber = $("#MainPostBagNumber").val().Trim();
+
+            if (_fuPostStatus == 0) {
+                if (fuPostNumber.length > 0) {
+                    checkFuPostBagNumber();
+                } else {
+                    $("#FuPostBagNumber").focus().select();
+                    messageBox("请输入[福邮袋牌]", 1);
+                    return;
+                }
+            }
+            if (_mainPostStatus == 0) {
+                if (mainNumber.length > 0) {
+                    checkMainPostBagNumber();
+                } else {
+                    $("#MainPostBagNumber").focus().select();
+                    messageBox("请输入[总包号]", 1);
+                    return;
+                }
+            }
+
+            //if (fuPostNumber.length > 0 && mainNumber.length > 0) {
+            doSubmit();
+            //}
+        }
+        else {
+            if (_fuPostStatus == 1) {
+                $("#FuPostBagNumber").focus().select();
+                messageBox("福邮袋牌验证未通过.", 2);
+            } else if (_mainPostStatus == 1) {
+                $("#MainPostBagNumber").focus().select();
+                messageBox("总包号验证未通过.", 2);
+            }
+            PlayFaile();
+        }
+    }
+
+    var _posting = 0;
+    function doSave() {
+        if (_posting == 1) {
+            messageBox("提交中...", 1);
+            return;
+        }
+
+        _posting = 1;
+        var fuPostNumber = $("#FuPostBagNumber").val().Trim();
+        var mainNumber = $("#MainPostBagNumber").val().Trim();
+
+        $.ajax({
+            type: "POST",
+            url: "MainPostNumberSave",
+            data: { fuPostNumber: fuPostNumber, mainPostNumber: mainNumber },
+            success: function (msg) {
+                if (msg.Status == 5) {
+                    messageBox("提交成功!", 3);//<br/>福邮袋牌:" + fuPostNumber + ",总包号:"+mainNumber, 3);
+
+                    PlaySuccess();
+                    //reset
+                    _fuPostStatus = 0;
+                    _mainPostStatus = 0;
+
+                    $("#FuPostBagNumber").val("");
+                    $("#MainPostBagNumber").val("");
+
+                    moveCursor();
+                } else {
+                    messageBox(msg.Message, 2);
+                    PlayFaile();
+                }
+                //console.log(msg);
+            },
+            complete: function () {
+                _posting = 0;
+            }
+        });
+    }
+
+    $(function () {
+        $("#MainPostBagNumber").bind("keydown", function (e) {
+            //console.log("MainPostBagNumber:" + e.keyCode);
+            _mainPostStatus = 0;
+            if (e.keyCode == 13) {
+                doSubmit();
+            }
+        });
+        $("#FuPostBagNumber").bind("keydown", function (e) {
+            //console.log("FuPostBagNumber:" + e.keyCode);
+            //_mainPostStatus = 0;
+            _fuPostStatus = 0;
+            if (e.keyCode == 13) {
+                //this.blur();
+
+                moveCursor();
+            }
+        });
+
+        $("#FuPostBagNumber").focus();
+    });
+
+    var noteid = 1;
+    function messageBox(message, status) {
+        var s = "<div class='message' id='tip" + noteid + "'><div class='message_box'>" + message + "</div></div>";
+        var box = $("#message_box");
+        $(box).prepend(s);
+        var tip = $("#tip" + noteid);
+        if (status == 3) {
+            $(tip).addClass("message_success").show().fadeOut(5 * 1000);
+        } else if (status == 2) {
+            $(tip).addClass("message_error").show().fadeOut(8 * 1000);
+        }
+        else {
+            $(tip).addClass("message_warning").show().fadeOut(6 * 1000);
+        }
+        noteid++;
+    }
+
+</script>
+<script type="text/javascript">
+    //----声音播放-------------------------------
+    //function PlaySuccess() {
+    //    $('#SuccessAudio')[0].play(); //播放成功声音 
+    //}
+
+    function PlaySuccess() {
+        $('embed').remove();
+        $('body').append('<embed src="/Css/Success2.wav" autostart="true" hidden="true" loop="false">');
+    }
+
+    function PlayFaile() {
+        $('embed').remove();
+        $('body').append('<embed src="/Css/Faile.wav" autostart="true" hidden="true" loop="false">');
+        //$('#FaileAudio')[0].play(); //播放失败声音 
+    }
+</script>
+<script type="text/javascript">
+    function setSelectText(id) {
+        var textBox = document.getElementById(id);
+        textBox.onfocus = function () {
+            textBox.select();
+            // Work around Chrome's little problem
+            textBox.onmouseup = function () {
+                // Prevent further mouseup intervention
+                textBox.onmouseup = null;
+                return false;
+            };
+        };
+    }
+
+    setSelectText("FuPostBagNumber");
+    setSelectText("MainPostBagNumber");
+</script>
+

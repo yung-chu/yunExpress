@@ -1,0 +1,705 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4FC0106B-B57A-4F8E-A5B0-09F9F6A6AA02}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LMS.Data.Repository</RootNamespace>
+    <AssemblyName>LMS.Data.Repository</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\packages\EntityFramework.6.1.1\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\..\packages\EntityFramework.6.1.1\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AbnormalWayBillLogRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ApplicationInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ArticleRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="B2CPreAlertLogsRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BaseRepository.cs" />
+    <Compile Include="BulkInsert.cs" />
+    <Compile Include="CategoryRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CommonCountryRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CountryRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CurrencyCategoryRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerAmountRecordRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerBalanceRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerCreditInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerManagerInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerOrderInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerOrderStatusRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerSourceInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerUpdatedLogRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeliveryChannelChangeLogRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeliveryChannelConfigurationRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeliveryDeviationRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeliveryFeeInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeliveryFeeRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeliveryImportAccountCheckRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeliveryImportAccountChecksFinalRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeliveryImportAccountChecksTempRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DictionaryTypeRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EubAccountInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EubWayBillApplicationInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExpressAccountInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExpressDeliveryImportAccountCheckRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExpressDeliveryImportAccountChecksTempRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExpressResponsRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Ext\ArticleRepository.cs" />
+    <Compile Include="Ext\B2CPreAlertLogsRepository.cs" />
+    <Compile Include="Ext\CategoryRepository.cs" />
+    <Compile Include="Ext\CountryRepository.cs" />
+    <Compile Include="Ext\CustomerRepository.cs" />
+    <Compile Include="Ext\CustomerAmountRecordRepository.cs" />
+    <Compile Include="Ext\DeliveryFeeInfoRepository.cs" />
+    <Compile Include="Ext\DeliveryFeeRepository.cs" />
+    <Compile Include="Ext\DeliveryImportAccountChecksFinalRepository.cs" />
+    <Compile Include="Ext\FuzhouPostLogRepository.cs" />
+    <Compile Include="Ext\IArticleRepository.cs" />
+    <Compile Include="Ext\IB2CPreAlertLogsRepository.cs" />
+    <Compile Include="Ext\ICountryRepository.cs" />
+    <Compile Include="Ext\ICustomerAmountRecordRepository.cs" />
+    <Compile Include="Ext\ICustomerOrderInfoRepository.cs" />
+    <Compile Include="Ext\ICustomerRepository.cs" />
+    <Compile Include="Ext\IDeliveryFeeInfoRepository.cs" />
+    <Compile Include="Ext\IDeliveryFeeRepository.cs" />
+    <Compile Include="Ext\IDeliveryImportAccountChecksFinalRepository.cs" />
+    <Compile Include="Ext\IFuzhouPostLogRepository.cs" />
+    <Compile Include="Ext\IInStorageInfoRepository.cs" />
+    <Compile Include="Ext\IJobErrorLogRepository.cs" />
+    <Compile Include="Ext\IMailExchangeBagLogRepository.cs" />
+    <Compile Include="Ext\IMailPostBagInfoRepository.cs" />
+    <Compile Include="Ext\IMailTotalPackageInfoRepository.cs" />
+    <Compile Include="Ext\INetherlandsParcelResponsRepository.cs" />
+    <Compile Include="Ext\InStorageInfoRepository.cs" />
+    <Compile Include="Ext\IInTrackingLogInfoRepository.cs" />
+    <Compile Include="Ext\IOutStorageInfoRepository.cs" />
+    <Compile Include="Ext\IReturnGoodsRepository.cs" />
+    <Compile Include="Ext\ISettlementInfoRepository.cs" />
+    <Compile Include="Ext\ITaskRepository.cs" />
+    <Compile Include="Ext\ITrackingNumberDetailInfoRepository.cs" />
+    <Compile Include="Ext\IWayBillInfoImportTempRepository.cs" />
+    <Compile Include="Ext\IWayBillInfoRepository.cs" />
+    <Compile Include="Ext\IWaybillPackageDetailRepository.cs" />
+    <Compile Include="Ext\IWayBillTemplateRepository.cs" />
+    <Compile Include="Ext\JobErrorLogRepository.cs" />
+    <Compile Include="Ext\MailExchangeBagLogRepository.cs" />
+    <Compile Include="Ext\MailPostBagInfoRepository.cs" />
+    <Compile Include="Ext\MailTotalPackageInfoRepository.cs" />
+    <Compile Include="Ext\NetherlandsParcelResponsRepository.cs" />
+    <Compile Include="Ext\OutStorageInfoRepository.cs" />
+    <Compile Include="Ext\ReturnGoodsRepository.cs" />
+    <Compile Include="Ext\SettlementInfoRepository.cs" />
+    <Compile Include="Ext\TaskRepository.cs" />
+    <Compile Include="Ext\TrackingNumberDetailInfoRepository.cs" />
+    <Compile Include="Ext\WayBillInfoImportTempRepository.cs" />
+    <Compile Include="Ext\WayBillInfoRepository.cs" />
+    <Compile Include="Ext\ICategoryRepository.cs" />
+    <Compile Include="Ext\TrackingNumberInfoRepository.cs" />
+    <Compile Include="Ext\WaybillPackageDetailRepository.cs" />
+    <Compile Include="Ext\WayBillTemplateRepository.cs" />
+    <Compile Include="Ext\IReceivingExpensRepository.cs" />
+    <Compile Include="Ext\ReceivingExpensRepository.cs" />
+    <Compile Include="Ext\IReceivingBillRepository.cs" />
+    <Compile Include="Ext\ReceivingBillRepository.cs" />
+    <Compile Include="Ext\INoForecastAbnormalRepository.cs" />
+    <Compile Include="Ext\NoForecastAbnormalRepository.cs" />
+    <Compile Include="FeeTypeRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FinalExpressDeliveryImportAccountCheckRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FuzhouPostLogRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GoodsTypeInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GZPacketAddressInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IAbnormalWayBillLogRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IApplicationInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IArticleRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IB2CPreAlertLogsRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ICategoryRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ICommonCountryRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ICountryRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ICurrencyCategoryRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ICustomerAmountRecordRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ICustomerBalanceRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ICustomerCreditInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ICustomerManagerInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ICustomerOrderInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ICustomerOrderStatusRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ICustomerRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Ext\IDeliveryDeviationRepository.cs" />
+    <Compile Include="ICustomerSourceInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ICustomerUpdatedLogRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IDeliveryChannelChangeLogRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IDeliveryChannelConfigurationRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IDeliveryDeviationRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IDeliveryFeeInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IDeliveryFeeRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IDeliveryImportAccountCheckRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IDeliveryImportAccountChecksFinalRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IDeliveryImportAccountChecksTempRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IDictionaryTypeRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Ext\IEubWayBillApplicationInfoRepository.cs" />
+    <Compile Include="IEubAccountInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IEubWayBillApplicationInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IExpressAccountInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IExpressDeliveryImportAccountCheckRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IExpressDeliveryImportAccountChecksTempRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IExpressResponsRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IFeeTypeRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IFinalExpressDeliveryImportAccountCheckRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IFuzhouPostLogRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IGoodsTypeInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IGZPacketAddressInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IInStorageInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IInStorageOrSettlementRelationalRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IInStorageWeightDeviationRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IInsuredCalculationRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IInTrackingLogInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IJobErrorLogRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ILanguageInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IMailExchangeBagLogRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IMailHoldLogRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ILithuaniaInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IMailPostBagInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Ext\IMailReturnGoodsLogRepository.cs" />
+    <Compile Include="IMailReturnGoodsLogRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IMailTotalPackageInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IMailTotalPackageOrPostBagRelationalRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IMoneyChangeTypeInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IMouthCountryRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="INetherlandsParcelResponsRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="INoForecastAbnormalRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="InStorageInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="InStorageOrSettlementRelationalRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="InStorageWeightDeviationRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="InsuredCalculationRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="InTrackingLogInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IOutStorageInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IPaymentTypeRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IReceivingBillRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IReceivingExpenseInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IReceivingExpensRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IRechargeTypeRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IRepositories.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IReturnGoodsRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ISenderInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ISensitiveTypeInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ISequenceNumberRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ISettlementDetailsInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ISettlementInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IShippingInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ITaskRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ISystemConfigurationRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ITotalPackageInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ITotalPackageOutStorageRelationalInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ITotalPackageTraceInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ITrackingNumberDetailInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ITrackingNumberInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IVenderFeeLogRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IWayBillBusinessDateInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IWayBillChangeLogRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IWayBillEventLogRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IWayBillInfoImportTempRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IWayBillInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IWaybillPackageDetailRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IWayBillPrintLogRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IWayBillTemplateInfoRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IWayBillTemplateRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IWeightAbnormalLogRepository.Generated.cs">
+      <DependentUpon>IRepositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JobErrorLogRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LanguageInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MailExchangeBagLogRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MailHoldLogRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LithuaniaInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MailPostBagInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MailReturnGoodsLogRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MailTotalPackageInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MailTotalPackageOrPostBagRelationalRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MoneyChangeTypeInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MouthCountryRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NetherlandsParcelResponsRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NoForecastAbnormalRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OutStorageInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentTypeRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReceivingBillRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReceivingExpenseInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReceivingExpensRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RechargeTypeRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Repositories.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReturnGoodsRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SenderInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SensitiveTypeInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SequenceNumberRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SettlementDetailsInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SettlementInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShippingInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TaskRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SystemConfigurationRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TotalPackageInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TotalPackageOutStorageRelationalInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TotalPackageTraceInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrackingNumberDetailInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrackingNumberInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VenderFeeLogRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WayBillBusinessDateInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WayBillChangeLogRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WayBillEventLogRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WayBillInfoImportTempRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WayBillInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WaybillPackageDetailRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WayBillPrintLogRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WayBillTemplateInfoRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WayBillTemplateRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WeightAbnormalLogRepository.Generated.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="IRepositories.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>IRepositories.cs</LastGenOutput>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Repositories.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Repositories.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Common.Logging\LighTake.Infrastructure.Common.Logging.csproj">
+      <Project>{7a557dc4-3f10-4c27-b8f4-8d5f7f5d8b3c}</Project>
+      <Name>LighTake.Infrastructure.Common.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Common\LighTake.Infrastructure.Common.csproj">
+      <Project>{eac46871-3661-4d4e-8f6a-fe44593e1191}</Project>
+      <Name>LighTake.Infrastructure.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Seedwork.EF\LighTake.Infrastructure.Seedwork.EF.csproj">
+      <Project>{3fd348e3-2746-4bb4-82ff-90a9fb6cb2e6}</Project>
+      <Name>LighTake.Infrastructure.Seedwork.EF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LighTake.Infrastructure\LighTake.Infrastructure.Seedwork\LighTake.Infrastructure.Seedwork.csproj">
+      <Project>{1B2A08A7-3BBD-4BC3-8014-D702E7DB9E2D}</Project>
+      <Name>LighTake.Infrastructure.Seedwork</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\LMS.Core\LMS.Core\LMS.Core.csproj">
+      <Project>{336E1DCE-A844-4977-AA9A-8F6720C72F6D}</Project>
+      <Name>LMS.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LMS.Data.Context\LMS.Data.Context.csproj">
+      <Project>{3febc511-3a88-4a4e-af8e-f85e2e0d808c}</Project>
+      <Name>LMS.Data.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LMS.Data.Entity\LMS.Data.Entity.csproj">
+      <Project>{be6fe0ef-6a3d-4628-803b-747ff0762fc3}</Project>
+      <Name>LMS.Data.Entity</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

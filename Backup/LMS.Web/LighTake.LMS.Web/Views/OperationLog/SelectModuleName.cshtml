@@ -1,0 +1,109 @@
+﻿
+@{
+    ViewBag.Title = "SelectModuleName";
+    Layout = null;
+}
+@model LMS.Controllers.OperationLogController.ModuleViewModel
+
+@using (Html.BeginForm())
+{
+            
+    <div class="cell pl10 mt30" id="right_con">
+        <div class="domebg">
+            <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <tr class="date_row_select">
+                    <td width="100%">
+                        <span class="info_box info_select">关键字:</span>
+                        <input type="text" id="keyword" class="txt txt_middle" />
+                    </td>
+                </tr>
+                <tr class="date_row_select">
+                    <td colspan="4">  
+                        <div class="tl">
+                            <input type="button" class="btn mr10" value="搜索" id="modulebtnSearch" />
+                            <input type="button" class="btn mr10" value="清空" id="modulebtnCancel" />
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <div id="im_dis_div">
+                <table class="data_table mt20" id="tb_cstmList" width="100%" border="0" cellpadding="0"
+                    cellspacing="0">
+                    <thead>
+                        <tr class="data_row_two">
+                            <th>模块序号
+                            </th>
+                            <th>模块名称
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.ListModule)
+                        {
+                            <tr class="data_row_dan" style="cursor:pointer;" title="双击可以选择一条信息">
+                                <td>@(Model.ListModule.IndexOf(item)+1)
+                                </td>
+                                <td>@item
+                                    <input type="hidden" name="ModuleName" value="@item"/>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        
+        $("#modulebtnSearch").live("click", function () {
+
+            $.ajax({
+                url: '/OperationLog/SearchModuleName',
+                type: 'GET',
+                data: { keyword: $("#keyword").val()},
+                success: function (data) {
+                    $("#tb_cstmList > tbody").html("");
+                    var tr = "";
+                    var i = 1;
+                    for (var item in data) {
+                      
+                        tr += "<tr class=\"data_row_dan\" style=\"cursor:pointer;\" title=\"双击可以选择一条信息\"><td>" + i++ + "</td><td>" + data[item] + "  <input type='hidden' name='ModuleName' value=\"" + item + "\"/></td></tr>";
+                    }
+                    $("#tb_cstmList > tbody").append(tr);
+                }
+            });
+        });
+
+
+        $("#tb_cstmList > tbody > tr ").live("dblclick", (function () {
+            var tdOne = $($(this).children("td:nth-child(2)"));
+            var getModuleName = tdOne.find("input[name='ModuleName']").val();
+         
+            if ($("#ModuleName").length > 0) {
+                $("#ModuleName").val(getModuleName);
+            }
+ 
+            $("#showModuleList").window("close");
+        }));
+
+     
+        
+
+        $("#modulebtnCancel").live("click", function () {
+            if ($("#ModuleName").length > 0) {
+                $("#ModuleName").val("");
+            }
+  
+            $("#showModuleList").window("close");
+        });
+        $("#keyword").bind("keydown", function(e) {
+            if (e.keyCode == 13) {
+                $("#modulebtnSearch").trigger("click");
+                return false;
+            }
+        });
+    });
+</script>
+

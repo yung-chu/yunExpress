@@ -1,0 +1,254 @@
+﻿<div style="height:330px;width:330px;border:1px dashed #000;font-size:11px;line-height:12px;margin-bottom:12px;font-family:Arial, Helvetica, sans-serif;page-break-after:always;">
+    <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse;width:100%;" class="ke-zeroborder">
+        <tbody>
+            <tr valign="top">
+                <td style="padding:0;">
+                    <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse;width:100%;" class="no_pd ke-zeroborder">
+                        <tbody>
+                            <tr valign="top">
+                                <td valign="top">
+                                    <table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size:11px;line-height:12px;padding:3px;" class="ke-zeroborder">
+                                        <tbody>
+                                            <tr>
+                                                <td width="40%" height="12">
+                                                    <div style="padding-left:3px;max-height:23px;font-size:11px;line-height:12px;">
+                                                        CUSTOMS DECLARATION
+                                                    </div>
+                                                </td>
+                                                <td width="40%" align="right">
+                                                    <div style="font-size:11px;line-height:12px;">
+                                                        May be opened officially
+                                                    </div>
+                                                </td>
+                                                <td style="text-align:center;">
+                                                    <div style="font-size:11px;line-height:12px;">
+                                                        <strong style="font-size:11px;">CN 22</strong> 
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr valign="top">
+                                <td valign="top" style="border-top:1px solid #000;border-bottom:1px solid #000;padding:3px;">
+                                    <table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size:11px;line-height:12px;" class="ke-zeroborder">
+                                        <tbody>
+                                            <tr>
+                                                <td width="50%" height="12">
+                                                    <div style="max-height:14px;font-size:11px;">
+                                                        Postal administration
+                                                    </div>
+                                                </td>
+                                                <td align="right" style="font-size:11px;">
+                                                    <div>
+                                                        Tick as appropriat
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr valign="top">
+                                <td valign="top" style="border-top:1px solid #000;border-bottom:1px solid #000;">
+                                    <table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size:11px;line-height:12px;" class="ke-zeroborder">
+                                        <tbody>
+                                            <tr>
+                                                <td width="10%" style="border-right:1px solid #444444;text-align:center;padding:1px 0;">
+                                                    <input @gift="" id="gift@(orderModel.TrackingNumber)" onclick="selpeihuo('gift','@orderModel.TrackingNumber    ');" type="checkbox" style="margin:1px;">
+                                                </td>
+                                                <td width="25%" style="border-right:1px solid #444444;">
+                                                    <span style="padding-left:5px;font-size:11px;line-height:12px;">Gift</span> 
+                                                </td>
+                                                <td width="10%" style="border-right:1px solid #444444;text-align:center;padding:1px 0;">
+                                                    <input @commercial="" id="commercial@(orderModel.TrackingNumber)" onclick="selpeihuo('commercial','@orderModel.TrackingNumber    ');" type="checkbox" style="margin:1px;">
+                                                </td>
+                                                <td width="55%">
+                                                    <span style="padding-left:5px;font-size:11px;line-height:12px;">Commercial sample</span> 
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size:11px;line-height:12px;border-top:1px solid #000;" class="ke-zeroborder">
+                                        <tbody>
+                                            <tr>
+                                                <td width="10%" style="border-right:1px solid #444444;text-align:center;padding:2px 0;">
+                                                    <input @documents="" id="documents@(orderModel.TrackingNumber)" onclick="selpeihuo('documents','@orderModel.TrackingNumber    ');" type="checkbox" style="margin:1px;">
+                                                </td>
+                                                <td width="25%" style="border-right:1px solid #444444;">
+                                                    <span style="padding-left:5px;font-size:11px;line-height:12px;">Document</span> 
+                                                </td>
+                                                <td width="10%" style="border-right:1px solid #444444;text-align:center;padding:2px 0;">
+                                                    <input @other="" id="other@(orderModel.TrackingNumber)" onclick="selpeihuo('other','@orderModel.TrackingNumber    ');" type="checkbox" style="margin:1px;">
+                                                </td>
+                                                <td width="55%">
+                                                    <span style="padding-left:5px;font-size:11px;line-height:12px;">Other</span> 
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr valign="top">
+                <td style="border-bottom:1px solid #444444;line-height:12px;">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <tbody>
+                            <tr>
+                                <td width="50%" style="border-right:1px solid #444444;padding:2px;">
+                                    <div style="max-height:24px;font-size:11px;line-height:12px;">
+                                        Quantity and detailed descriptionof contents
+                                    </div>
+                                </td>
+                                <td width="20%" style="border-right:1px solid #444444;padding:2px;">
+                                    <div style="max-height:24px;font-size:11px;line-height:12px;">
+                                        Weight(in kg)(2)
+                                    </div>
+                                </td>
+                                <td width="20%" style="padding:3px;max-height:24px;">
+                                    <div style="height:24px;font-size:11px;line-height:12px;">
+                                        Value(3)
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr valign="top">
+                <td style="border-bottom:1px solid #444444;">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <tbody>
+                            <tr>
+                                <td width="60%">
+                                    @if (orderModel.ApplicationInfoList.Count>0) { foreach (var app in orderModel.ApplicationInfoList) {
+                                        <table width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #000;">
+                                            <tbody>
+                                                <tr>
+                                                    <td width="50%" style="border-right:1px solid #444444;padding:2px;">
+                                                        <div style="height:24px;line-height:12px;font-size:11px;">
+                                                            @app.ApplicationName&nbsp;<strong style="font-size:10.909090995788574px;line-height:11.988636016845703px;white-space:normal;"><strong>x&nbsp;<span style="font-family:宋体;">@app.Qty</span></strong></strong> 
+                                                        </div>
+                                                    </td>
+                                                    <td width="20%" style="border-right:1px solid #444444;text-align:center;line-height:24px;">
+                                                        <div style="height:24px;line-height:12px;font-size:11px;">
+                                                            @(app.UnitWeight.ToString("#0.00"))
+                                                        </div>
+                                                    </td>
+                                                    <td width="20%" style="text-align:center;line-height:24px;">
+                                                        <div style="height:24px;line-height:12px;font-size:11px;">
+                                                            <strong>@app.Total.ToString("#0.00")USD</strong> 
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    } }
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr valign="top">
+                <td style="border-bottom:1px solid #444444;">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <tbody>
+                            <tr>
+                                <td width="60%">
+                                    <table width="100%" cellpadding="0" cellspacing="0">
+                                        <tbody>
+                                            <tr>
+                                                <td width="50%" style="border-right:1px solid #444444;padding:2px;">
+                                                    <div style="max-height:36px;line-height:12px;font-size:11px;">
+                                                        &nbsp;
+                                                    </div>
+                                                </td>
+                                                <td width="20%" style="border-right:1px solid #444444;text-align:center;padding:2px;">
+                                                    <div style="max-height:24px;font-size:11px;line-height:12px;">
+                                                        Total weight(in kg)
+                                                    </div>
+                                                </td>
+                                                <td width="20%" style="text-align:center;padding:2px;">
+                                                    <div style="max-height:24px;font-size:11px;line-height:12px;">
+                                                        Total Value(USD)
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr valign="top">
+                <td style="border-bottom:1px solid #444444;">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <tbody>
+                            <tr>
+                                <td width="60%">
+                                    <table width="100%" cellpadding="0" cellspacing="0">
+                                        <tbody>
+                                            <tr>
+                                                <td width="50%" style="border-right:1px solid #444444;padding:2px;">
+                                                    <div style="max-height:36px;line-height:12px; font-size:11px;">
+                                                        &nbsp;
+                                                    </div>
+                                                </td>
+                                                <td width="20%" style="border-right:1px solid #444444;text-align:center;line-height:12px;padding:2px;">
+                                                    <div style="max-height:12px;font-size:11px;line-height:12px;">
+                                                        <strong>@orderModel.ApplicationInfoList.Sum(p =>p.UnitWeight).ToString("#0.00")</strong> 
+                                                    </div>
+                                                </td>
+                                                <td width="20%" style="text-align:center;line-height:12px;padding:2px;">
+                                                    <div style="max-height:12px;font-size:11px;line-height:12px;">
+                                                        <strong>@orderModel.ApplicationInfoList.Sum(p =>p.Total).ToString("#0.00")</strong> 
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr valign="top">
+                <td colspan="10" style="padding:2px;">
+                    <div style="font-size:10px;max-height:48px;">
+                        I,the undersigned,whose name and address are given on the item. 
+                        certify that the particulars given in this declaration are correct and that this item does not 
+                        contain any dangerous article or articles pro-hibited by legislation or by postal or by customs
+                        regulations Date and sender's signature
+                        <div style="text-align:right;margin-top:3px;">
+                            <strong style="margin-right:10px;">Lightake</strong>@orderModel.CreatedOn.ToString("yyyy-MM-dd")
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

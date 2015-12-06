@@ -1,0 +1,157 @@
+﻿@model LMS.FrontDesk.Controllers.BillingController.Models.FreightTrialViewModels
+@{
+    ViewBag.Title = "云途物流";
+}
+
+<div class="conStr">
+    <div class="strIn">
+           @Html.Partial("_ShowDialog")
+            @using (@Html.BeginForm())
+            {
+                <div class="pt50">
+        
+                    <div class="from_box pt10 pb10">
+                        <div class="fix from_horizontal">
+                            <div class="ww32 l">
+                                <div class="fix">
+                                    <span class="vm">&emsp;&emsp;&emsp;目的地国家 </span>
+                                    @Html.DropDownListFor(p => p.Filter.CountryCode, (List<SelectListItem>) ViewBag.CountryList, new Dictionary<string, object> {{"class", "chzn-select-deselect select_middle w160"}, {"data-placeholder", "请选择..."}})
+                                </div>
+                            </div>
+                            <div class="cell">
+                                <div class="fix">
+                                    <div class="l ww44">
+                                        <div class="fix">
+                                            &emsp;&emsp;包裹重量kg： 
+                                              @Html.TextBoxFor(f => f.Filter.Weight, new {@class = "ist_m ist_h"})
+                                        </div>
+                                    </div>
+                                    <div class="cell pl20 fix">
+                                        包裹体积(cm)
+                                        长:
+        
+                                             @Html.TextBoxFor(f => f.Filter.Length, new {@class = "ist_Is ist_h"})
+                                        宽:
+  
+                                             @Html.TextBoxFor(f => f.Filter.Width, new {@class = "ist_Is ist_h"})
+                                        高:
+               
+                                             @Html.TextBoxFor(f => f.Filter.Height, new {@class = "ist_Is ist_h"})
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="fix from_horizontal">
+                            <div class="ww32 l">
+                                <div class=" fix">
+                                    <span class="vm">&emsp;&emsp;&emsp;&emsp;包裹类型</span>
+                                   @Html.DropDownListFor(p => p.Filter.PackageType, (List<SelectListItem>) ViewBag.GoodsTypeList, new Dictionary<string, object> {{"class", "chzn-select-deselect select_middle w160"}, {"data-placeholder", "请选择..."}})
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="fix ">
+                            <div class="ww32 l">
+                                <div class="from_horizontal fix">
+                                    <span class="vm">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</span>
+                                    <button type="submit" class="btn--g">查 询</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                   
+                </div>
+            }
+        <div class=" mt20 mb30">
+            <div class="mr-1">
+                <table class="out_order" width="100%">
+                    <tbody><tr>
+                             <th width="5%">
+                                        序号   
+                                    </th>
+                                    <th width="15%">
+                                        运输方式 
+                                    </th>
+                                    <th width="10%">
+                                        计算重量(kg)
+                                    </th>
+                                    <th width="7%">
+                                        运费
+                                    </th>
+                                    <th width="7%">
+                                        挂号费 
+                                    </th>
+                               <th width="7%">
+                                   燃油费 
+                               </th>
+                                   <th width="7%">
+                                        关税预付服务费 
+                                    </th>
+                                    <th width="7%">
+                                        其它费用 
+                                    </th>
+                                    <th width="10%">
+                                        总费用 
+                                    </th>
+                                    <th width="10%">
+                                        时效 
+                                    </th>
+                                    <th width="15%">
+                                        备注
+                                    </th>
+                           </tr>
+                        
+                                @{
+
+                                    int i = 1;
+                                }
+                                @foreach (var item in Model.FreightList)
+                                {
+
+                                    bool flag = i%2 > 0;
+                                    <tr class="@(flag ? "table_single" : "table_even")">
+                                        <td>
+                                            @(i)</td>
+                                        <td>@item.ShippingMethodName</td>
+                                        <td>@item.Weight</td>
+                                        <td>@item.ShippingFee</td>
+                                        <td>@item.RegistrationFee</td>
+                                        <td>@item.FuelFee</td>
+                                        <td>@item.TariffPrepayFee</td>
+                                        <td>@(item.SundryFee)</td>
+                                        <td>@(item.TotalFee)</td>
+                                        <td>@item.DeliveryTime</td>
+                                        <td>@item.Remarks</td>
+                                    </tr>
+                                    {
+                                        i++;
+                                    }
+                                }
+
+
+                    </tbody></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var config = {
+        '.chzn-select': {},
+        '.chzn-select-deselect': { allow_single_deselect: true },
+        '.chzn-select-no-single': { disable_search_threshold: 10 },
+        '.chzn-select-no-results': { no_results_text: 'Oops, nothing found!' },
+        '.chzn-select-width': { width: "95%" }
+    };
+        for (var selector in config) {
+            $(selector).chosen(config[selector]);
+        }
+
+    </script>
+
+
+
+

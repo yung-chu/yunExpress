@@ -1,0 +1,226 @@
+﻿@model LMS.Controllers.FinancialController.ExpressDeliveryFeeListModel
+@{
+    Layout = null;
+}
+
+<table id="dataTable" class="data_table mt10" width="100%" border="1" cellpadding="0" cellspacing="0">
+    <thead>
+        <tr class="data_row_two">
+            <th>
+                <input type="checkbox" class="checkbox" id="SelectAll" name="SelectAll" />
+            </th>
+            <th>序号
+            </th>
+            <!--info-->
+            <th>运单号
+            </th>
+            <th>客户订单号
+            </th>
+            <th>客户名称
+            </th>
+            <th>跟踪号
+            </th>
+            <th>服务商
+            </th>
+            <th>发货时间
+            </th>
+            <th>发货国家
+            </th>
+            <th>运输方式
+            </th>
+            <th>计费重量
+            </th>
+            <th>称重重量
+            </th>
+            <!--fees-->
+            <th>运费
+            </th>
+            <th>挂号费
+            </th>
+            <th>燃油费</th>
+            <th>附加费</th>
+            <th>关税服务费用</th>
+            <th>超重超长超周长费</th>
+            <th>安全附加费</th>
+            <th>增值税费</th>
+            <th>杂费</th>
+            <th>杂费备注</th>
+            <th>总费用</th>
+            <th>最终费用</th>
+            <!--audit-->
+            <th>状态</th>
+            <th>审核人</th>
+            <th>审核时间</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var a = 1;
+        }
+        @foreach (var d in Model.PagedList)
+        {            
+            <tr>
+                <td>
+                    <input type="checkbox" class="checkbox" id="s_@(d.DeliveryFeeID)" name="@(d.DeliveryFeeID)" />
+                    <input type="hidden" id="h_Status_@(d.DeliveryFeeID)" value="@(d.Status)" data="@(a)" />
+                </td>
+                <td>@(a)   @{ a++; }
+                </td>
+                <!--info-->
+                <td>@d.WayBillNumber
+                </td>
+                <td>@d.CustomerOrderNumber
+                </td>
+                <td>@d.CustomerName
+                </td>
+                <td>@d.Trackingnumber
+                </td>
+                <td>@d.VenderName
+                </td>
+                <td>@d.OutStorageCreatedOn
+                </td>
+                <td>@d.CountryChineseName
+                </td>
+                <td>@d.ShippingmethodName
+                </td>
+                <td>@d.SetWeight
+                </td>
+                <td>@d.Weight
+                </td>
+                <td>@d.Freight
+                </td>
+                <td>@d.Register
+                </td>
+                <td>@d.FuelCharge</td>
+                <td>@d.Surcharge</td>
+                <td>@d.TariffPrepayFee</td>
+                <td>@d.OverWeightLengthGirthFee</td>
+                <td>@d.SecurityAppendFee</td>
+                <td>@d.AddedTaxFee</td>
+                <td>@d.OtherFee</td>
+                <td>@d.OtherFeeRemark</td>
+                <td>@d.TotalFee</td>
+                <td>@d.TotalFeeFinal</td>
+                <!--audit-->
+                <td>
+                    @{
+                              var response = "";
+                              switch (d.Status)
+                              {
+                                  case 1:
+                                      response = "未审核";
+                                      break;
+                                  case 2:
+                                      response = "<span style='color:red;'>异常</span>";
+                                      break;
+                                  case 3:
+                                      response = "<span style='color:green;'>已审核</span>";
+                                      break;
+                                  default:
+                                      break;
+                              }
+                    }
+                    @Html.Raw(response)
+                </td>
+                <td>@d.Auditor</td>
+                <td>@d.AuditorDate</td>
+            </tr> 
+        }
+        <tr class="data_row_none">
+            <td colspan="26">
+                @{
+                    var pageMethd = "searchpage";
+                    if (Model.PagedList != null)
+                    { 
+                    <div class="pages">
+                        @if (Model.PagedList.Count() > 0)
+                        {
+                            <a href="javascript:void(0);" onclick="@(pageMethd)(1)">First</a>
+                            <a href="javascript:void(0);" onclick="@(pageMethd)(@(Model.PagedList.PageIndex - 1 > 1 ? Model.PagedList.PageIndex - 1 : 1))">Prev</a>
+                            if (Model.PagedList.TotalPages <= 11)
+                            {
+                                for (int i = 1; i <= Model.PagedList.TotalPages; i++)
+                                {
+                                    if (i == Model.PagedList.PageIndex)
+                                    {                                       
+                            <span>&nbsp;@i&nbsp;</span> 
+                                    }
+                                    else
+                                    {                                                                        
+                            <a href="javascript:void(0);" onclick="@(pageMethd)(@i)">@i</a>                                    
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                //不包括Model.PagedList.PageIndex
+                                var up = (Model.PagedList.PageIndex - 1) > 5 ? 5 : (Model.PagedList.PageIndex - 1);
+                                var down = (Model.PagedList.TotalPages - Model.PagedList.PageIndex) > (10 - up) ?
+                                    (10 - up) : (Model.PagedList.TotalPages - Model.PagedList.PageIndex);
+                                if (down < 5)
+                                {
+                                    var need = 10 - down - up;
+                                    var upLeft = Model.PagedList.PageIndex - 1 - up;
+                                    up = upLeft > need ? up + need : up + upLeft;                                    
+                                }
+                                
+                                for (int i = 1; i <= Model.PagedList.TotalPages; i++)
+                                {
+                                    if (i < Model.PagedList.PageIndex)
+                                    {
+                                        if (Model.PagedList.PageIndex - i <= up)
+                                        {
+                            <a href="javascript:void(0);" onclick="@(pageMethd)(@i)">@i</a> 
+                                        }
+                                    }
+                                    else if (i == Model.PagedList.PageIndex)
+                                    {                                       
+                            <span>&nbsp;@i&nbsp;</span> 
+                                    }
+                                    else
+                                    {
+                                        if (i - Model.PagedList.PageIndex <= down)
+                                        {
+                            <a href="javascript:void(0);" onclick="@(pageMethd)(@i)">@i</a> 
+                                        }
+                                    }                                   
+                                }
+                            }  
+                            
+                            <a href="javascript:void(0);" onclick="@(pageMethd)(@(Model.PagedList.PageIndex + 1 > @Model.PagedList.TotalPages ? @Model.PagedList.TotalPages : Model.PagedList.PageIndex + 1))">Next</a>
+                            <a href="javascript:void(0);" onclick="@(pageMethd)(@Model.PagedList.TotalPages)">Last</a>
+                            <select id="page_Select">                  
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                                <option value="300">300</option>
+                                <option value="500">500</option>
+                            </select>
+                            <span class="pagingInfo">Displaying @((Model.PagedList.PageIndex-1)*Model.PagedList.PageSize+1) to @(Model.PagedList.PageIndex*Model.PagedList.PageSize>Model.PagedList.TotalCount?Model.PagedList.TotalCount:Model.PagedList.PageIndex*Model.PagedList.PageSize) of @(Model.PagedList.TotalCount) (@(Model.PagedList.PageIndex) Pages)</span>
+                        }
+                    </div>
+                    }
+                }
+            </td>
+        </tr>
+    </tbody>
+</table>
+<script type="text/javascript">
+    //page event
+    $(function () {
+        $("#page_Select").val(pagesize);
+        $("#page_Select").change(function () {
+            pagesize = $(this).children('option:selected').val();
+            @(pageMethd)(currentPage);
+        });
+        //复选框全选
+        $("#SelectAll").click(function () {
+            var checks = $("#dataTable").find(":checkbox[name!=SelectAll]");
+            if ($(this).attr("checked")) {
+                $(checks).attr("checked", true);
+            } else {
+                $(checks).attr("checked", false);
+            }
+        });
+    });
+</script>

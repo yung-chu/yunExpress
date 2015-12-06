@@ -1,0 +1,26 @@
+﻿@using LighTake.Infrastructure.Common.InversionOfControl
+@using LMS.Core
+@{
+    Layout = null;
+}
+<div class="fix pt10">
+    <div class="l mb10">
+        <a href="http://www.lightake.com">
+            <img src="@Url.Content("~/images/logo_03.gif")" width="130" />
+        </a>
+    </div>
+    <ul class="top_user">
+        @{
+            IWorkContext workContext = EngineContext.Current.Resolve<IWorkContext>();
+            if (workContext.User != null)
+            {
+            <li class="topUser_li first1"><span class="topUser_item">欢迎&nbsp;&nbsp;</span>@workContext.User.UserUame
+            </li> 
+            <li class="topUser_li"><a target="_blank" class="topUser_item" href="">修改密码</a>
+            </li>
+            <li class="topUser_li"><a class="topUser_item" href="@Url.Action("Logout", "User")">
+                注销</a> </li>
+            }
+        }
+    </ul>
+</div>

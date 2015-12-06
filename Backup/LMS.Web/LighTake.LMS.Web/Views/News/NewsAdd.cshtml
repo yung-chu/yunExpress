@@ -1,0 +1,114 @@
+﻿@{
+    Html.AddScriptParts(Url.Content("~/Scripts/kindeditor/lang/zh_CN.js"));
+    Html.AddScriptParts(Url.Content("~/Scripts/kindeditor/kindeditor-min.js"));
+}
+
+        <form id="editfrom">
+            <div id="right_con">
+                <ul>
+                    <li class="mt20"><span class="info_box info_middle">类目 : </span>
+                        <select id="_categoryID" name="CategoryID" style="width: 300px;"></select>
+                    </li>
+                    <li class="mt20"><span class="info_box info_middle">标题 : </span>
+                        <input type="text" name="title" id="Title" class="txt" />
+                    </li>
+                    <li class="mt20"><span class="info_box info_middle">来源 : </span>
+                        <input type="text" name="Source" id="source" class="txt" />
+                    </li>
+                    <li class="mt20">
+                        <span class="info_box info_middle" style="float:left;">内容 : </span>
+                        <span style="float:left;"><textarea id="detail" name="Detail" style="width:550px;height:350px;"></textarea></span>
+                    </li>
+                    <input type="button" class="btnSave" value="保存" name="btnSave" onclick="Save();" style="margin-left: 150px; margin-top: 10px;" />
+                </ul>
+            </div>
+        </form>
+        <script type="text/javascript">
+            var editor;
+            $(function () {
+                KindEditor.ready(function (K) {
+                    editor = K.create('textarea[name="Detail"]', {
+                        allowFileManager: true,
+                        uploadJson:"/KindEditor/Upload",
+                        filePostName:"imgFile",
+                        filterMode: false //不会过滤HTML代码
+                    });
+                });
+
+                $(function () {
+                    $('#_categoryID').combotree({
+                        url: '/Website/GetAllCategorySelect',
+                        onLoadSuccess: function (data) {
+                            $('#_categoryID').combotree('setValue', '0');
+                        }
+                    });
+                });
+            });
+
+            $('#_categoryID').combotree({
+                onSelect: function (record) {
+                    if (record.id != 0) { //默认加载会选择第一个节点，该节点过滤掉
+                        $.ajax({
+                            type: "POST",
+                            url: "IsParent",
+                            dataType: "json",
+                            data: "helpCategoryID=" + record.id,
+                            success: function (data) {
+                                if (data != null && data == "0") {
+                                    alert("不能选择父节点，只能选择该父节点下子节点！");
+                                    $('#_categoryID').combotree('setValue', '0');
+                                }
+                            },
+                            error: function (data) {
+                                alert(data.responseText);
+                            }
+                        });
+                    }
+                }
+            });
+
+            function Save() {
+             
+                editor.sync();
+                //debugger;
+                //$("#editfrom").serialize();
+                //alert($('#catetoryTree').combotree('getValue'));
+                if ($('#_categoryID').combotree('getValue') == "0") {
+                    alert("请选择类目！");
+                    return false;
+                }
+                //alert(editor.text());
+                if ($('#title').val() == "") {
+                    alert("请输入标题！");
+                    return false;
+                }
+                if ($.trim(editor.text()).length==0) {
+                    alert("请输入内容！");
+                    return false;
+                }
+                
+                $("#editfrom #btnSave").attr('disabled', true);
+                $.ajax({
+                    type: "POST",
+                    url: "AddNews",
+                    dataType: "json",
+                    data: $("#editfrom").serialize(),
+                    success: function (data) {
+                        if (data == "1") {
+                            alert("保存成功！");
+                            parent.window.grid.datagrid("reload");
+                            parent.window.editWin.close();
+                        } else {
+                            alert("保存失败！");
+                        }
+                    },
+                    error: function (data) {
+                        //alert(data.responseText);
+                    },
+                    complete: function (data) {
+                        $("#editfrom #btnSave").attr('disabled', false);
+                    }
+                });
+            }
+
+        </script>

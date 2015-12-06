@@ -1,0 +1,337 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "NetherlandsParcelPreview";
+}
+
+@using LMS.Services.ExpressServices;
+@using LMS.Services.CountryServices;
+@model LMS.Controllers.WayBillController.NLPOSTViewModel
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=8"/> <!-- IE8 mode -->
+        <title>顺丰荷兰小包打印</title>
+        <link rel="stylesheet" href="@Url.Content("~/css/public.css")" />
+    </head>
+    <body>
+        @foreach (var item in @Model.WayBillInfos)
+        {
+            var mailno = LighTake.Infrastructure.Common.InversionOfControl.EngineContext.Current.Resolve<IExpressService>().GetNetherlandsParcelSfNumber(item.WayBillNumber);
+            var countryService = LighTake.Infrastructure.Common.InversionOfControl.EngineContext.Current.Resolve<ICountryService>();
+            var country = countryService.GetCountryByCode(item.CountryCode);
+            <div class="Area_10-10">
+                <table cellpadding="3" class="bd0">
+                    <tr>
+                        <td valign="top" width="50%" align="center">
+                            <img src="/images/Print/NLPOST/logo_06.jpg" height="40" />
+                        </td>
+                        <td align="center">
+                            <img src="/images/Print/NLPOST/logo_03.jpg" height="40" />
+                        </td>
+                    </tr>
+                </table>
+                <table cellpadding="3" class="bd0 mt5">
+                    <tr>
+                        <td class="Sender">Sender: H-11940SFT, Postbus 7040, 3109AA Schiedam The Netherlands
+                        </td>
+                    </tr>
+                </table>
+                <table cellpadding="0" class="mt5">
+                    <tr>
+                        <td class="bd0">
+                            <table class="DeliveryI_Tb">
+                                <tr>
+                                    <td align="center">
+                                        @if (item.IsReturn)
+                                        {
+                                            <img src="/images/Print/NLPOST/logo3.jpg" height="45" />
+                                        }
+                                        else
+                                        {
+                                           <img src="/images/Print/NLPOST/logo_09.jpg" height="45" /> 
+                                        }
+                                        
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td valign="top" class="bd0">
+                            <table cellpadding="0" class="SfN_Tb">
+                                <tr>
+                                    <td align="right" style="width: 28px;">
+                                        <span class="R_w"></span>
+                                    </td>
+                                    <td valign="middle" align="center">
+                                        <div class="bar_area">
+                                            <div class="tc">
+                                                <img alt="" src="@Url.Action("BarCodeFile", "Print")?code=@item.TrackingNumber" />
+
+                                            </div>
+                                            <div class="F_Barcode">
+                                                @item.TrackingNumber
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </td>
+                    </tr>
+                </table>
+                <table class="mt5 bd0" cellpadding="3">
+                    <tr>
+                        <td width="40%">
+                            <div style="height: 96px;"></div>
+                        </td>
+                        <td class="w10"></td>
+                        <td rowspan="2" valign="top">
+                            <table class="Collection_Tb">
+                                <tr>
+                                    <td valign="top">
+                                        <table cellpadding="0">
+                                            <tr>
+                                                <td>Deliver To : 	
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>@item.ShippingInfo.ShippingFirstName @item.ShippingInfo.ShippingLastName
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>@item.ShippingInfo.ShippingAddress @item.ShippingInfo.ShippingAddress1 @item.ShippingInfo.ShippingAddress2
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>@item.ShippingInfo.ShippingCity
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>@item.ShippingInfo.ShippingState @item.ShippingInfo.ShippingZip
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @country.Name
+                                                </td>
+                                            </tr>
+                                     
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="40%">
+                            <img src="/images/Print/NLPOST/SF-logo.jpg" height="30" class="vm" />
+                            <span class="Countrycode_n f24 vm">@item.CountryCode</span>
+                        </td>
+                        <td class="w10"></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td width="40%" align="center">
+                            <span class="SfN">@mailno</span>
+                        </td>
+                        <td class="w10"></td>
+                        <td>
+                            <span class="SfN">Tel:@item.ShippingInfo.ShippingPhone
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+                <table class="mt5 bd0" cellpadding="0">
+                    <tr>
+                        <td>
+                            <table cellpadding="3" class="SfN_Tb">
+                                <tr>
+                                    <td class="CustomerCode">[@LMS.Core.sysConfig.ClientCode] Ref No:
+                                        @item.WayBillNumber.WayBillNumberReplace()&nbsp;
+                                        @DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="Area_10-10 bd0">
+                <table>
+                    <tr>
+                        <td width="40%">
+                            <span class="Back_customer">CUSTOMS DECLARATION
+                            </span>
+                        </td>
+                        <td width="40%" align="right">
+                            <span class="Back_maybe">May be opened officially
+                            </span>
+                        </td>
+                        <td align="center">
+                            <span class="Back_cn">CN22	
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+                <table class="Back_Tb">
+                    <tr>
+                        <td width="50%">
+                            <span class="Back_designated">Designated operator
+                            </span>
+                        </td>
+                        <td align="right">
+                            <span class="Back_important"><b>Important!</b> <br />See instructions on the back
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+                <table class="Back_select_Tb" cellpadding="0">
+                    <tr>
+                        <td width="9%" class="br0">
+                            <table>
+                                <tr>
+                                    <td align="center" class="bb0">
+                                        <input class="Checkbox" type="checkbox">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center">
+                                        <input class="Checkbox" type="checkbox">
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td width="25%" class="br0">
+                            <table>
+                                <tr>
+                                    <td align="center" class="bb0">Gift
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center">Documents
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td width="9%" class="br0">
+                            <table>
+                                <tr>
+                                    <td align="center" class="bb0">
+                                        <input class="Checkbox" type="checkbox">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center">
+                                        <input class="Checkbox" checked="checked" type="checkbox">
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td align="center" class="bb0">Commercial Sample
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center">Other   Tick one more boxes
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <table class="Back_math_Tb" cellpadding="0">
+                    <tr class="p3">
+                        <td class="br0">
+                            <span style=""><b>Quantity and detailed description of contents</b>
+                            </span>
+                        </td>
+                        <td width="20%" class="br0" align="center">
+                            <span><b>Weight (kg)</b>
+                            </span>
+                        </td>
+                        <td width="20%" align="center">
+                            <span><b>Value(USD)</b>
+                            </span>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td colspan="3">
+                            <div class="ovh_4">
+                                <table class="bb0">
+                                    @foreach (var detail in item.ApplicationInfos)
+                                    {
+                                        <tr>
+                                            <td class="br0 bt0">
+                                                <span>@(detail.ApplicationName + " × " + detail.Qty)
+                                                </span>
+                                            </td>
+                                            <td width="20%" class="br0 bt0" align="center">
+                                                <span>@detail.UnitWeight
+                                                </span>
+                                            </td>
+                                            <td width="20%" align="center" class="bt0">
+                                                <span>@detail.UnitPrice.Value.ToString("F3")
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    }
+
+
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <table class="bt0">
+                                <tr>
+                                    <td class="br0">
+                                        <span>For commerical items only If known,HS tariff number and country of origin of goods
+                                        </span>
+                                    </td>
+                                    <td width="20%" class="br0" align="center">
+                                        <span>Total Weight (kg) 
+                                        </span>
+                                    </td>
+                                    <td width="20%" align="center">
+                                        <span>Total Value(USD)
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <table class="">
+                                <tr>
+                                    <td class="br0">
+                                        <span></span>
+                                    </td>
+                                    <td width="20%" class="br0 bt0" align="center">
+                                        <span><b>@item.ApplicationInfos.Sum(p => p.UnitWeight*p.Qty)</b>
+                                        </span>
+                                    </td>
+                                    <td width="20%" align="center" class="bt0">
+                                        <span><b>@item.ApplicationInfos.Sum(p => p.UnitPrice*p.Qty).Value.ToString("F3")</b>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <div class="Back_Guarantee">
+                    I, the undersigned, whose name and address are given on the item, certify that the particulars given in this declaration are correct and that this item does not contain any dangerous article or articles prohibited by legislation or by postal or customs regulations Date and sender's signature
+                </div>
+                <div class="Back_Remarks">
+                </div>
+            </div>
+        }
+    </body>
+</html>

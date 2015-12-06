@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="04/22/2014 13:43:35" ReportInfo.Modified="05/29/2014 16:32:34" ReportInfo.CreatorVersion="2014.2.3.0">
+  <Dictionary/>
+  <ReportPage Name="Page1" PaperWidth="80" PaperHeight="50" LeftMargin="0" TopMargin="0" RightMargin="0" BottomMargin="0" Guides="529.2,689.85">
+    <DataBand Name="Data1" Width="302.4" Height="189">
+      <TextObject Name="Text3" Left="9.45" Top="132.3" Width="66.15" Height="18.9" Text="渠道：" Font="宋体, 12pt"/>
+      <TextObject Name="Text4" Left="66.15" Top="132.3" Width="122.85" Height="18.9" Text="[waybilldetailList.ShippingMethod]" Font="宋体, 12pt"/>
+      <TextObject Name="Text5" Left="9.45" Top="160.65" Width="66.15" Height="18.9" Text="国家：" Font="宋体, 12pt"/>
+      <TextObject Name="Text6" Left="66.15" Top="160.65" Width="66.15" Height="18.9" Text="[waybilldetailList.Country]" Font="宋体, 12pt"/>
+      <TextObject Name="Text7" Left="196.56" Top="151.2" Width="28.35" Height="37.8" Text="[Page#]" Font="微软雅黑, 20pt"/>
+      <TextObject Name="Text8" Left="219.24" Top="151.2" Width="18.9" Height="37.8" Text="/" Font="微软雅黑, 20pt"/>
+      <TextObject Name="Text9" Left="236.25" Top="151.2" Width="28.35" Height="37.8" Text="[TotalPages#]" Font="微软雅黑, 20pt"/>
+      <TextObject Name="Text10" Left="264.6" Top="151.2" Width="66.15" Height="37.8" Text="件" Font="微软雅黑, 20pt"/>
+      <BarcodeObject Name="Barcode1" Left="28.35" Top="18.9" Width="177.5" Height="94.5" Expression="[waybilldetailList.WayBillNumber]" Text="" Barcode.CalcCheckSum="false"/>
+      <TextObject Name="Text1" Left="141.75" Top="160.65" Width="18.9" Height="18.9" Text="(" Padding="2, 2, 2, 0" Font="宋体, 9pt"/>
+      <TextObject Name="Text11" Left="170.1" Top="160.65" Width="18.9" Height="18.9" Text=")" Padding="2, 2, 2, 0" Font="宋体, 9pt"/>
+      <TextObject Name="Text12" Left="151.2" Top="160.65" Width="28.35" Height="18.9" Text="[waybilldetailList.CountryCode]" Font="宋体, 12pt"/>
+    </DataBand>
+  </ReportPage>
+</Report>

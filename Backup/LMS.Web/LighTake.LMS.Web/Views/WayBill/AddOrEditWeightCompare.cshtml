@@ -1,0 +1,156 @@
+﻿@{
+    ViewBag.Title = "AddOrEditWeightCompare";
+}
+
+
+
+@using NPOI.SS.Formula.Functions
+@model LMS.Controllers.WayBillController.InStorageWeightDeviationModel
+
+
+<div id="showCustomerListInfo" tabindex="200" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showShippingMethodListInfo" style="overflow: scroll; display: none; position: relative">
+</div>
+
+@using (Html.BeginForm())
+{
+    <div class="cell pl10 mt30">
+    <div class="domebg" style="margin-left: 100px;margin-top: 60px">
+        
+        <input type="hidden" id="getOperateType" name="Type" value="@Model.Type"/>
+        <input type="hidden" id="getInStorageWeightDeviationID" name="InStorageWeightDeviationID" value="@Model.InStorageWeightDeviationID"/>
+        <input type="hidden" id="getCustomerName" value="@Model.CustomerName"/>
+        <input type="hidden" id="getCustomerCode" value="@Model.CustomerCode"/>
+        <input type="hidden" id="getShippingMethodName" value="@Model.ShippingMethodName"/>
+        <input type="hidden" id="getShippingMethodId" value="@Model.ShippingMethodID"/>
+        <input type="hidden" id="getDeviationValue" value="@Model.DeviationValue"/>
+        <input type="hidden" id="getReturnUrl" value="@Model.ReturnUrl"/>
+        
+     
+
+        <span class="info_box info_select"><span style="color:red">*</span>客户名称:</span>
+        <input type="text" id="CustomerCodeInfo"  name="FilterModel.CustomerCode" value="@Model.FilterModel.CustomerCode" readonly="readonly" class="txt txt_short" />
+        <input type="text" id="nickNameInfo"  name="FilterModel.Name" value=" @Model.FilterModel.CustomerName" readonly="readonly" class="txt txt_short" />
+        <a href="javascript:void(0)" id="selectCustomerInfo" class="btn_href">选择</a>
+        <input type="hidden" id="CustomerIDInfo"/>
+        <input type="hidden" id="CustomerTypeInfo"/>
+            
+        <br/> <br/>
+        
+        <span class="info_box info_select"><span style="color:red">*</span>运输方式:</span>
+        <input type="text" id="ShippingNameInfo"  name="FilterModel.ShippingMethodName" value="@Model.FilterModel.ShippingMethodName" readonly="readonly" class="txt txt_short"/>
+        <input type="hidden" id="ShippingMethodIdInfo" name="FilterModel.ShippingMethodId" value="@Model.FilterModel.ShippingMethodID"/>
+        <input type="button" id="selectShippingMethodInfo" class="btn" value="选择" />
+              
+        <br/> <br/>
+        
+        <span class="info_box info_select"><span style="color:red">*</span>重量偏差值:</span>
+        <input type="text" id="DeviationValue"  value="" name="" class="txt txt_middle" /> g
+        
+        <br/> <br/>
+        <div style="margin-left: 80px">
+            <input type="button" value="保 存" id="Save"  name="Save" class="btn"/>
+            
+            &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;<input type="button" value="取 消" id="Cancel" class="btn"/>
+        </div>
+        
+
+    </div>
+</div>
+}
+
+
+
+
+<script type="text/javascript">
+    $(function () {
+
+        //编辑初始化
+        if ($("#getOperateType").val() == 2) {
+
+            var getCustomerNameInfo = $("#getCustomerName").val();
+            var getCustomerCodeInfo = $("#getCustomerCode").val();
+            var getShippingMethodNameInfo = $("#getShippingMethodName").val();
+            var getShippingMethodIdInfo = $("#getShippingMethodId").val();
+            var getDeviationValueInfo = $("#getDeviationValue").val();
+
+            $("#CustomerCodeInfo").val(getCustomerCodeInfo);
+            $("#nickNameInfo").val(getCustomerNameInfo);
+            $("#ShippingMethodIdInfo").val(getShippingMethodIdInfo);
+            $("#ShippingNameInfo").val(getShippingMethodNameInfo);
+            $("#DeviationValue").val(getDeviationValueInfo);
+
+        }
+
+        //选择客户
+        $("#selectCustomerInfo").bind("click", function () {
+            var url = "/Customer/SelectListInfo?IsAll=true";
+            $.showWindow(url, "选择客户", "showCustomerListInfo");
+
+        });
+
+        //选择运输方式
+        $("#selectShippingMethodInfo").bind("click", function () {
+
+            var url = "@Url.Action("SelectShippingMethodInfo", "WayBill")?customerId=" + $("#CustomerIDInfo").val() + "&customerTypeId=" + $("#CustomerTypeInfo").val() + "&type=1";
+            $.showWindow(url, "选择运输方式", "showShippingMethodListInfo");
+
+        });
+
+        //保存
+        $("#Save").click(function () {
+
+            var getCustomerCode = $("#CustomerCodeInfo").val();
+            var getShippingMethodId = $("#ShippingMethodIdInfo").val();
+            var getPageDeviationValue = parseFloat($("#DeviationValue").val());
+
+            var getNickName = $("#nickNameInfo").val();
+            var getShippingNameInfo = $("#ShippingNameInfo").val();
+
+            if (getCustomerCode == "" || getShippingMethodId == "" || getPageDeviationValue == "") {
+
+                alert("每项必填！");
+                return false;
+            }
+
+            var reg = /^[+-]?\d+(\.\d+)?$/;
+            if (!reg.test(getPageDeviationValue)) {
+
+                alert("输入偏差值有误！");
+                return false;
+            }
+
+            $.ajax({
+                type: "Post",
+                url: "@Url.Action("AddOrEditWeightCompareAjax")",
+                data: { Type: $("#getOperateType").val(), InStorageWeightDeviationID: $("#getInStorageWeightDeviationID").val(), CustomerCode: getCustomerCode, CustomerName: getNickName, ShippingMethodID: getShippingMethodId, ShippingMethodName: getShippingNameInfo, DeviationValue: getPageDeviationValue },
+                success: function (data) {
+                    if (data.Result) {
+                        debugger;
+                        if ($("#getOperateType").val() == "2") {//编辑
+                            window.location = $("#getReturnUrl").val();
+
+                        } else {
+                            window.location = "@Url.Action("InStorageWeightCompare","WayBill")";
+                        }
+
+                    } else {
+                        alert(data.Message);
+                    }
+                }
+            });
+
+        });
+
+
+        //取消
+        $("#Cancel").click(function () {
+
+            $(".panel-tool-close").trigger("click");
+        });
+
+    });
+
+
+</script>

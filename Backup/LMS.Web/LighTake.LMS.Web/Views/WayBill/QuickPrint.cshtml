@@ -1,0 +1,73 @@
+﻿        <div style="margin:200px auto">
+            <table class="data_table" width="400px" border="1" cellpadding="0" cellspacing="0" style="margin:200px auto" >
+                <tr class="date_row_select">
+                    <td style="margin-top: 200px;padding: 50px;height: 46px;vertical-align:top">
+                        <span class="info_box info_select">单号:</span>
+                        <input type="text" id="number" value="" class="txt txt_middle" />
+                        <div style="margin-top: 5px">
+                            <span id="ErrorMessage" style="color: red;margin-left:80px"></span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+<script src="@Url.Content("~/Scripts/quickPrint.js")"></script>
+<script type="text/javascript">
+
+    $(function() {
+
+        $("#number").bind("keydown", function(e) {
+            if (e.keyCode == 13) {
+                $("#ErrorMessage").html("");
+                var number = $.trim($("#number").val());
+                if (number != "") {
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("CanQuickPrint")",
+                        dataType: "json",
+                        data: { Number: number },
+                        success: function(data) {
+                            if (data.Success) {
+                                PrintSuccess();
+                                for (var i = 0; i < data.Urls.length; i++) {
+                                    quickPrint(data.Urls[i]);
+                                }
+                            } else {
+                                $("#number").val("");
+                                PrintFail(data.Message);
+                            }
+                        }
+                    });
+                } else {
+                    $("#number").focus();
+                }
+            }
+        });
+    });
+    
+    function PrintSuccess() {
+        PlaySuccess();
+        $("#number").val("");
+        $("#number").focus();
+        //alert("打印成功");
+    }
+
+    function PrintFail(message) {
+        $("#number").val("");
+        $("#number").focus();
+        PlayFaile();
+        $("#ErrorMessage").html(message);
+    }
+
+    function PlaySuccess() {
+        $('embed').remove();
+        $('body').append('<embed src="/Css/Success.wav" autostart="true" hidden="true" loop="false">');
+    }
+
+    function PlayFaile() {
+        $('embed').remove();
+        $('body').append('<embed src="/Css/Faile.wav" autostart="true" hidden="true" loop="false">');
+    }
+
+</script>

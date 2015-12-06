@@ -1,0 +1,111 @@
+﻿@using LighTake.Infrastructure.Common
+@model LMS.FrontDesk.Controllers.HomeController.Models.HomeListModel 
+
+
+<div class="bgwh">
+  <div class="conStr">
+    <div class="strIn" >
+      	<div class="fix p20">
+        	<div class="r pct50">
+            	<img src="@Url.Content("~/images/idxC_bg_03.jpg")" />
+            </div>  
+	          <div class="cell pr20 pt30 lh26">
+	              
+                        @if (Model.NewsPartialModels.Count > 0)
+                        {
+                            foreach (var row in Model.NewsPartialModels.Take(4).OrderByDescending(a => a.CreatedOn))
+                            {
+
+                                <div class="idxC_article">
+                	
+                                    <h4 class="mb10">
+                                        <a href="@Url.Action("NewList", "New", new {id = @row.ArticleID})" class="IIItt">
+                                            @row.Title
+                                            <img src="@Url.Content("~/images/index_06.png")" class="idxC_abs"/>
+                                        </a>
+                                    </h4>
+                                    
+                                    <!--第一条展开-->
+                                    @{
+                                        string getClass = string.Empty;
+
+                                        switch (Model.NewsPartialModels.Count)
+                                        {
+                                            case 1:
+                                                getClass = "display:block";
+                                                break;
+                                            case 2:
+                                                getClass = Model.NewsPartialModels.IndexOf(row) == 1 ? "display:block" : "display:none";
+                                                break;
+                                            case 3:
+                                                getClass = Model.NewsPartialModels.IndexOf(row) == 2 ? "display:block" : "display:none";
+                                                break;
+                                            case 4:
+                                                getClass = Model.NewsPartialModels.IndexOf(row) == 3 ? "display:block" : "display:none";
+                                                break;
+                                        }
+                                    }
+
+                                    <div class="idxC_box" style="@getClass">
+                                        <div class="p10">
+                                            <div class="mb10 ti25 ovh h80">
+                                                    @if (row.Detail != null && row.Detail.Length > 250)
+                                                    {
+                                                      
+                                                        @Html.Raw(@row.Detail.Substring(0, 250))
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.Raw(@row.Detail)
+                                                    }
+                                            </div>
+                                            <div class="fix">
+                                                <a href="@Url.Action("NewList", "New", new {id = @row.ArticleID})" class="cof5 l">查看详情</a>
+                                                <p class="r">
+                                                    <img src="@Url.Content("~/images/clock_1.jpg")" class="vm"> 
+                                                    <span class="vm">
+                                                           @{
+                                                            if (row.CreatedOn.HasValue)
+                                                            {
+                                                                @row.CreatedOn.Value.ToString("yyyy-MM-dd")
+                                                            }
+                                                         }
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <span class="diamond_top">◆</span>
+                                        <span class="diamond">◆</span>
+                                    </div>
+                                </div>
+
+
+                            }
+                        }
+                        else
+                        {
+                            <div class="tt_box l fw">
+                                <span class="f14 lt0">暂无类容，敬请期待。。。</span>
+                            </div>
+                        }
+	          </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="oneSolid bd5c"></div>
+<div class="oneSolid bd90"></div>
+
+

@@ -1,0 +1,157 @@
+/**********首页**********/
+/*Query waybill--查询运单，qw*/
+.qw_area {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 574px;
+	height: 384px;
+	margin-top: -192px;
+	margin-left: -287px;
+	background: #245a5c;
+	background: linear-gradient(-135deg,#39722e,#245b58);
+}
+
+.qw_scroll {
+	width: 550px;
+	height: 360px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.qw_Textarea {
+	background: url(../images/2014.11_03.jpg) repeat top left;
+	line-height: 30px;
+	border: none;
+	word-wrap: break-word;
+	font-size: 12px;
+	padding: 0 10px;
+	outline: 0 none;
+	height: 360px;
+	margin: 0;
+	width: 2000px;
+	overflow: hidden;
+}
+
+.qw_L {
+	position: absolute;
+	width: 25px;
+	top: 0;
+	left: 515px;
+	height: 100%;
+	text-align: center;
+	line-height: 30px;
+	z-index: 2;
+}
+
+.qw_L li {
+	cursor: pointer;
+}
+
+.qw_L li span {
+	display: inline-block;
+	width: 0;
+	overflow: hidden;
+	vertical-align: middle;
+}
+
+.qw_L li i {
+	display: inline-block;
+	width: 16px;
+	height: 17px;
+	background: url(../images/Sprite_1.png) no-repeat 0 -321px;
+	vertical-align: middle;
+}
+
+/**********详情页**********/
+/*Waybill Filter--订单过滤~wf*/
+.wf_w {
+	-webkit-transform: skew(30deg);
+	display: inline-block;
+}
+
+.wf_Tb {
+	background: #484745;
+	color: #fff;
+	line-height: 40px;
+	text-align: center
+}
+/*Waybill details--查询运单，前缀wd*/
+.wd_Tb {border-bottom:1px solid #dddddd; text-align:center;  cursor:pointer}
+.wd_Tb_on{ background-color:#f8f8f8;}
+.wd_w{line-height:normal; vertical-align:middle; display:inline-block;}
+.wd_dasher{border-top:1px #eaeaea dashed;}
+
+
+
+
+/*Step*/
+.Step_line{height:4px; background:#e8e8e8; overflow:hidden; margin:auto; position:relative}
+.Step_line_in{width:50%; background:#27979b; height:100%; overflow:hidden;}
+.Step_area{margin-top:-22px; line-height:38px;}
+.Step_Dib{ text-align:center; display:inline-block; vertical-align:bottom;}
+.Step_color,.Step_black{display:inline-block; width:14px; height:14px; vertical-align:middle; border-radius:9px; border:2px solid #27979b; background:#fff}
+.Step_black{ border-color:#484645}
+/**********Waybill list--运单列表,前缀wl**********/
+.wl_L{}
+
+/**********Mini Waybill details--查询运单，前缀mwd*********/
+.mwd_area{position:absolute; top:50%; left:-234px; background:#fff;  z-index:10;width:234px;  margin-top:-118px;}
+.mwd_ovh{width:230px; height:200px; overflow-y:auto; overflow-x:hidden; position:relative;  border:2px solid #484745;}
+.mwd_L{position:absolute;  width:25px; top:0; left:205px; height:100%; text-align:center; line-height:25px; z-index:2;}
+.mwd_L li {
+	cursor: pointer;
+}
+
+.mwd_L li span {
+	display: inline-block;
+	width: 0;
+	overflow: hidden;
+	vertical-align: middle;
+}
+
+.mwd_L li i {
+	display: inline-block;
+	width: 16px;
+	height: 17px;
+	background: url(../images/Sprite_1.png) no-repeat 0 -321px;
+	vertical-align: middle;
+}
+.mwd_search,.mwd_detele,.mwd_close{background:#245a5c; cursor:pointer;  text-align:center}
+.mwd_detele{ background:#e1ab2d}
+.mwd_close{ background:#484745}
+.mwd_opsition{position:absolute; left:22%;*left:21.3%; top:50%; margin-top:-39px; margin-left:-49px; z-index:10;}
+.mwd_Testarea{
+	background: url(../images/mwd_bg.Gif) repeat top left;
+	line-height: 25px;
+	border: none;
+	word-wrap: break-word;
+	font-size: 12px;
+	padding: 0 10px;
+	outline: 0 none;
+	height: 200px;
+	margin: 0;
+	width: 2000px;
+	overflow: hidden;
+}
+
+
+.u1{ background:url(../images/Sprite_1.png) no-repeat; display:inline-block; vertical-align:middle; width:32px; height:38px;}
+.u111{ background-position:0 0;}
+.u112{ background-position:0 -38px;}
+.u113{ background-position:0 -76px;}
+.u114{ background-position:0 -114px;}
+.u115{ background-position:0 -152px;}
+.u116{ background-position:0 -190px;}
+.u117{ background-position:0 -228px;}
+.u118{ background-position:0 -266px;}
+.u119{ background-position:0 -303px; width:18px; height:18px;}
+.u129{ background-position:-18px -303px; width:18px; height:18px;}
+.u131{ width:65px; height:49px; background-position:-85px 0;}
+
+
+
+.p12{ padding:12px;}
+.mt-60{margin-top:-60px;}
+.lh32{ line-height:32px;}
+.brf{ border-right:1px solid #fff;}

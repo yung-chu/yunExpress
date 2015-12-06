@@ -1,0 +1,186 @@
+﻿@model LMS.Controllers.WayBillController.WayBillSummaryViewModel
+@{
+    ViewBag.Title = "WayBillSummary";
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+}
+
+<div id="showCustomerList" tabindex="200" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showShippingMethodList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showVenderList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div class="domebg" id="right_con">
+    @using (Html.BeginForm())
+    {
+        <input type="hidden" name="FilterModel.Status" id="setStatus" value="@Model.FilterModel.Status"/>
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+                <td>
+                    <span class="info_box info_select">客户编码:</span>
+                    <input type="text" id="nickName" name="FilterModel.CustomerName" value="@Model.FilterModel.CustomerName" readonly="readonly" class="txt txt_short" />
+                    <input type="hidden" id="CustomerCode" name="FilterModel.CustomerCode" value="@Model.FilterModel.CustomerCode" />
+                    <a href="javascript:void(0)" id="selectCustomer" class="btn_href">选择</a>
+                </td>
+                <td>
+                    <span class="info_box info_select">服务商:</span>
+                    <input type="text" id="_VenderName" name="FilterModel.VenderName" value="@Model.FilterModel.VenderName" readonly="readonly" class="txt txt_short" />
+                    <input type="hidden" id="_VenderCode" name="FilterModel.VenderCode" value="@Model.FilterModel.VenderCode" />
+                    <a href="javascript:void(0)" id="selectVender" class="btn_href">选择</a>
+                </td>
+                <td>
+                    @Html.DropDownListFor(o => o.FilterModel.SelectShippingMethod, Model.SelectShippingMethods, new { @style = "width:100px;" })
+                    <input type="text" id="ShippingName" value="@Model.FilterModel.ShippingName" name="FilterModel.ShippingName" readonly="readonly" class="txt txt_short"/>
+                    <input type="hidden" id="ShippingMethodId" name="FilterModel.ShippingMethodId" value="@Model.FilterModel.ShippingMethodId" />
+                    <input type="button" id="selectShippingMethod" class="btn" value="选择" />
+                </td>
+            </tr>
+            <tr class="date_row_select">
+                <td>
+                    <span class="info_box info_select">状态:</span>
+                    <select id="cc" style="width: 150px"></select>
+                    <div id="sp">
+                        <div style="padding: 10px" id="clickDiv">
+
+                            @for (var i = 0; i < Model.SelectStatus.Count; i++)
+                            {
+                                <input type="checkbox" name="lang" value="@Model.SelectStatus[i].Value"/><span>@Model.SelectStatus[i].Text</span><br />
+                               
+                            }
+
+                        </div>
+                    </div>
+                </td>
+                <td colspan="2">
+                    <span class="info_box info_select">
+                        @Html.DropDownListFor(o => o.FilterModel.SelectTimeName, Model.SelectTimeNames)
+                    </span>
+                    @Html.TextBoxFor(p => p.FilterModel.StartTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm:ss'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm:ss}", Model.FilterModel.StartTime), @class = "txt wdate", @style = "width:150px;" })
+                    <span>至:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.EndTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm:ss'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm:ss}", Model.FilterModel.EndTime), @class = "txt wdate", @style = "width:150px;" })
+                </td>
+            </tr>
+            <tr class="date_row_select">
+                <td colspan="3">
+                    <input type="submit" class="btn" value="搜索" id="btnSearch" name="btnSearch" />
+                </td>
+            </tr>
+            <tr class="date_row_select">
+                <td colspan="3" align="right">总计：运单总票数：@Model.List.Sum(p => p.TotalCount) 总重量：@Model.List.Sum(p => p.SumWeight) kg 已收货：@Model.List.Sum(p => p.InCount) 已发货：@Model.List.Sum(p => p.OutCount) 已退回：@Model.List.Sum(p => p.ReturnCount) 异常单：@Model.List.Sum(p => p.IsHoldCount)
+                </td>
+            </tr>
+        </table>
+        <div id="pm_dis_div">
+            <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr class="data_row_two">
+                        <th>客户名称</th>
+                        <th>入仓渠道</th>
+                        <th>出仓渠道</th>
+                        <th>出仓服务商</th>
+                        <th>运单总票数</th>
+                        <th>总重量kg</th>
+                        <th>已收货</th>
+                        <th>已发货</th>
+                        <th>已退回</th>
+                        <th>异常单</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                            foreach (var item in Model.List)
+                            {
+                        <tr class="data_row_dan">
+                            <td>@item.CustomerName</td>
+                            <td>@item.InShippingMethodName</td>
+                            <td>@item.OutShippingMethodName</td>
+                            <td>@item.VenderName</td>
+                            <td>@item.TotalCount</td>
+                            <td>@item.SumWeight</td>
+                            <td>@item.InCount</td>
+                            <td>@item.OutCount</td>
+                            <td>@item.ReturnCount</td>
+                            <td>@item.IsHoldCount</td>
+                        </tr>
+                            }
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('#cc').combo({
+            required: false,
+            editable: false
+        });
+        $('#sp').appendTo($('#cc').combo('panel'));
+        $('#sp input').click(function () {
+
+            var getText = "";
+            var getValue = "";
+            var textArray = [];
+            var valueArray = [];
+
+            $.each($("#sp input[type='checkbox']"), function () {
+                if ($(this).attr("checked")) {
+
+                    var v = $(this).val(); //value
+                    var s = $(this).next('span').text(); //text
+                    textArray.push(s);
+                    valueArray.push(v);
+
+                }
+            });
+
+            //分号分隔
+            getText = textArray.join(',');
+            getValue = valueArray.join(',');
+            //赋值
+            $("#cc").combo('setText', getText);
+            $("#setStatus").val(getValue);
+
+        });
+        if ($("#setStatus").val() != "") {
+            var statusArr = $("#setStatus").val().split(',');
+            var s = "";
+            for (var i = 0; i < statusArr.length; i++) {
+                $("#sp input[type='checkbox'][value='" + statusArr[i] + "']").prop("checked", true);
+                s = s + $("#sp input[type='checkbox'][value='" + statusArr[i] + "']").next('span').text() + ",";
+            }
+            s = s.substr(0, s.length - 1);
+            $("#cc").combo('setText', s);
+        }
+        //选择服务商
+        $("#selectVender").bind("click", function () {
+            $("#showVenderList").showWindow("@Url.Action("SelectVender", "WayBill")", "选择服务商");
+            var parentWindow = $("#showVenderList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                top: 120
+            }, {
+                duration: 1000,
+                step: function (now, fx) {
+                    $(".window").css("top", now);
+                }
+            });
+            $("#showVenderList").show();
+        });
+        //选择运输方式
+        $("#selectShippingMethod").bind("click", function () {
+            $("#showShippingMethodList").showWindow("@Url.Action("SelectShippingMethod", "WayBill")?type=1", "选择运输方式");
+            var parentWindow = $("#showShippingMethodList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                top: 120
+            }, {
+                duration: 1000,
+                step: function (now, fx) {
+                    $(".window").css("top", now);
+                }
+            });
+            $("#showShippingMethodList").show();
+        });
+    });
+</script>

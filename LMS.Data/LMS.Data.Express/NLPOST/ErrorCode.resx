@@ -1,0 +1,417 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="9000" xml:space="preserve">
+    <value>身份验证失败</value>
+  </data>
+  <data name="9001" xml:space="preserve">
+    <value>客户订单号超过长度限制</value>
+  </data>
+  <data name="9002" xml:space="preserve">
+    <value>客户订单号存在重复</value>
+  </data>
+  <data name="9003" xml:space="preserve">
+    <value>客户订单号格式错误，只能包含数字和字母</value>
+  </data>
+  <data name="9004" xml:space="preserve">
+    <value>运输方式不能为空</value>
+  </data>
+  <data name="9005" xml:space="preserve">
+    <value>运输方式错误</value>
+  </data>
+  <data name="9006" xml:space="preserve">
+    <value>目的国家不能为空</value>
+  </data>
+  <data name="9007" xml:space="preserve">
+    <value>目的国家错误，请填写国家二字码</value>
+  </data>
+  <data name="9008" xml:space="preserve">
+    <value>收件人公司名超过长度限制</value>
+  </data>
+  <data name="9009" xml:space="preserve">
+    <value>收件人姓名不能为空</value>
+  </data>
+  <data name="9010" xml:space="preserve">
+    <value>收件人姓名超过长度限制</value>
+  </data>
+  <data name="9011" xml:space="preserve">
+    <value>收件人州或省超过长度限制</value>
+  </data>
+  <data name="9012" xml:space="preserve">
+    <value>收件人城市超过长度限制</value>
+  </data>
+  <data name="9013" xml:space="preserve">
+    <value>联系地址不能为空</value>
+  </data>
+  <data name="9014" xml:space="preserve">
+    <value>联系地址超过长度限制</value>
+  </data>
+  <data name="9015" xml:space="preserve">
+    <value>收件人手机号码超过长度限制</value>
+  </data>
+  <data name="9016" xml:space="preserve">
+    <value>收件人邮编超过长度限制</value>
+  </data>
+  <data name="9017" xml:space="preserve">
+    <value>收件人邮编只能是英文和数字</value>
+  </data>
+  <data name="9018" xml:space="preserve">
+    <value>重量数字格式不准确</value>
+  </data>
+  <data name="9019" xml:space="preserve">
+    <value>重量必须大于 0</value>
+  </data>
+  <data name="9020" xml:space="preserve">
+    <value>重量超过长度限制</value>
+  </data>
+  <data name="9021" xml:space="preserve">
+    <value>是否退件填写错误，只能填写 Y 或 N</value>
+  </data>
+  <data name="9022" xml:space="preserve">
+    <value>海关申报信息不能为空</value>
+  </data>
+  <data name="9023" xml:space="preserve">
+    <value>英文申报品名不能为空</value>
+  </data>
+  <data name="9024" xml:space="preserve">
+    <value>英文申报品名超过长度限制</value>
+  </data>
+  <data name="9025" xml:space="preserve">
+    <value>英文申报品名只能为英文、数字、空格、（）、()、，、,%</value>
+  </data>
+  <data name="9026" xml:space="preserve">
+    <value>申报价值必须大于 0</value>
+  </data>
+  <data name="9027" xml:space="preserve">
+    <value>申报价值必须为正数</value>
+  </data>
+  <data name="9028" xml:space="preserve">
+    <value>申报价值超过长度限制</value>
+  </data>
+  <data name="9029" xml:space="preserve">
+    <value>申报品数量必须为正整数</value>
+  </data>
+  <data name="9030" xml:space="preserve">
+    <value>申报品数量超过长度限制</value>
+  </data>
+  <data name="9031" xml:space="preserve">
+    <value>中文申报品名超过长度限制</value>
+  </data>
+  <data name="9032" xml:space="preserve">
+    <value>中文申报品名必须为中文</value>
+  </data>
+  <data name="9033" xml:space="preserve">
+    <value>海关货物编号超过长度限制</value>
+  </data>
+  <data name="9034" xml:space="preserve">
+    <value>海关货物编号只能为数字</value>
+  </data>
+  <data name="9035" xml:space="preserve">
+    <value>收件人手机号码格式不正确</value>
+  </data>
+  <data name="9036" xml:space="preserve">
+    <value>服务商单号或顺丰单号已用完，请联系客服人员</value>
+  </data>
+  <data name="9037" xml:space="preserve">
+    <value>寄件人姓名超过长度限制</value>
+  </data>
+  <data name="9038" xml:space="preserve">
+    <value>寄件人公司名超过长度限制</value>
+  </data>
+  <data name="9039" xml:space="preserve">
+    <value>寄件人省超过长度限制</value>
+  </data>
+  <data name="9040" xml:space="preserve">
+    <value>寄件人城市超过长度限制</value>
+  </data>
+  <data name="9041" xml:space="preserve">
+    <value>寄件人地址超过长度限制</value>
+  </data>
+  <data name="9042" xml:space="preserve">
+    <value>寄件人手机号码超过长度限制</value>
+  </data>
+  <data name="9043" xml:space="preserve">
+    <value>寄件人手机号码格式不准确</value>
+  </data>
+  <data name="9044" xml:space="preserve">
+    <value>寄件人邮编超过长度限制</value>
+  </data>
+  <data name="9045" xml:space="preserve">
+    <value>寄件人邮编只能是英文和数字</value>
+  </data>
+  <data name="9046" xml:space="preserve">
+    <value>不支持批量操作</value>
+  </data>
+  <data name="9047" xml:space="preserve">
+    <value>批量交易记录数超过限制</value>
+  </data>
+  <data name="9048" xml:space="preserve">
+    <value>此订单已确认，不能再操作</value>
+  </data>
+  <data name="9049" xml:space="preserve">
+    <value>此订单已收货，不能再操作</value>
+  </data>
+  <data name="9050" xml:space="preserve">
+    <value>此订单已出货，不能再操作</value>
+  </data>
+  <data name="9051" xml:space="preserve">
+    <value>此订单已取消，不能再操作</value>
+  </data>
+  <data name="9052" xml:space="preserve">
+    <value>收件人电话超过长度限制</value>
+  </data>
+  <data name="9053" xml:space="preserve">
+    <value>收件人电话格式不正确</value>
+  </data>
+  <data name="9054" xml:space="preserve">
+    <value>寄件人电话超过长度限制</value>
+  </data>
+  <data name="9055" xml:space="preserve">
+    <value>寄件人电话格式不正确</value>
+  </data>
+  <data name="9056" xml:space="preserve">
+    <value>货物件数必须为正整数</value>
+  </data>
+  <data name="9057" xml:space="preserve">
+    <value>货物件数超过长度限制</value>
+  </data>
+  <data name="9058" xml:space="preserve">
+    <value>寄件人国家错误，请填写国家二字码，默认为 CN</value>
+  </data>
+  <data name="9059" xml:space="preserve">
+    <value>货物单位超过长度限制，默认为 PCE</value>
+  </data>
+  <data name="9060" xml:space="preserve">
+    <value>货物单位重量格式不正确</value>
+  </data>
+  <data name="9061" xml:space="preserve">
+    <value>货物单位重量超过长度限制</value>
+  </data>
+  <data name="9062" xml:space="preserve">
+    <value>该运输方式暂时不支持此国家的派送，请选择其他派送方式</value>
+  </data>
+  <data name="9063" xml:space="preserve">
+    <value>该运输方式暂时不支持此邮编的派送，请选择其他派送方式</value>
+  </data>
+  <data name="9064" xml:space="preserve">
+    <value>该运输方式必须输入邮编</value>
+  </data>
+  <data name="9065" xml:space="preserve">
+    <value>寄件人国家国家不能为空</value>
+  </data>
+  <data name="9066" xml:space="preserve">
+    <value>寄件人公司名不能为空</value>
+  </data>
+  <data name="9067" xml:space="preserve">
+    <value>寄件人公司名不能包含中文</value>
+  </data>
+  <data name="9068" xml:space="preserve">
+    <value>寄件人姓名不能为空</value>
+  </data>
+  <data name="9069" xml:space="preserve">
+    <value>寄件人姓名不能包含中文</value>
+  </data>
+  <data name="9070" xml:space="preserve">
+    <value>寄件人城市不能为空</value>
+  </data>
+  <data name="9071" xml:space="preserve">
+    <value>寄件人城市不能包含中文</value>
+  </data>
+  <data name="9072" xml:space="preserve">
+    <value>寄件人地址不能为空</value>
+  </data>
+  <data name="9073" xml:space="preserve">
+    <value>寄件人地址不能包含中文</value>
+  </data>
+  <data name="9074" xml:space="preserve">
+    <value>寄件人邮编不能为空</value>
+  </data>
+  <data name="9075" xml:space="preserve">
+    <value>寄件人邮编不能包含中文</value>
+  </data>
+  <data name="9076" xml:space="preserve">
+    <value>收件人公司名不能为空</value>
+  </data>
+  <data name="9077" xml:space="preserve">
+    <value>收件人公司名不能包含中文</value>
+  </data>
+  <data name="9078" xml:space="preserve">
+    <value>收件人城市不能为空</value>
+  </data>
+  <data name="9079" xml:space="preserve">
+    <value>收件人城市不能包含中文</value>
+  </data>
+  <data name="9080" xml:space="preserve">
+    <value>查询类别不正确，合法值为：1（运单号），2（订单号）</value>
+  </data>
+  <data name="9081" xml:space="preserve">
+    <value>查询号不能不能为空。</value>
+  </data>
+  <data name="9082" xml:space="preserve">
+    <value>查询方法错误，合法值为：1（标准查询）</value>
+  </data>
+  <data name="9083" xml:space="preserve">
+    <value>查询号不能超过 10 个。注：多个单号，以逗号分隔。</value>
+  </data>
+  <data name="9084" xml:space="preserve">
+    <value>收件人电话不能为空</value>
+  </data>
+  <data name="9085" xml:space="preserve">
+    <value>收件人姓名不能包含中文</value>
+  </data>
+  <data name="9086" xml:space="preserve">
+    <value>英文申报品名必须为英文</value>
+  </data>
+  <data name="9087" xml:space="preserve">
+    <value>收件人手机不能包含中文</value>
+  </data>
+  <data name="9088" xml:space="preserve">
+    <value>收件人电话不能包含中文</value>
+  </data>
+  <data name="9089" xml:space="preserve">
+    <value>寄件人电话不能包含中文</value>
+  </data>
+  <data name="9090" xml:space="preserve">
+    <value>寄件人手机不能包含中文</value>
+  </data>
+  <data name="9091" xml:space="preserve">
+    <value>海关货物编号不能为空</value>
+  </data>
+  <data name="9092" xml:space="preserve">
+    <value>联系地址不能包含中文</value>
+  </data>
+  <data name="9093" xml:space="preserve">
+    <value>当总申报价值超过 75 欧元时【收件人邮箱】不能为空</value>
+  </data>
+  <data name="9094" xml:space="preserve">
+    <value>收件人邮箱超过长度限制</value>
+  </data>
+  <data name="9095" xml:space="preserve">
+    <value>收件人邮箱格式不正确</value>
+  </data>
+  <data name="9096" xml:space="preserve">
+    <value>寄件人省不能包含中文</value>
+  </data>
+  <data name="9098" xml:space="preserve">
+    <value>收件人邮编不能包含中文</value>
+  </data>
+  <data name="9099" xml:space="preserve">
+    <value>英文申报品名根据服务商要求，申报品名包含disc、speaker、power bank、battery、magne禁止运输，请选择其他运输方式！</value>
+  </data>
+</root>

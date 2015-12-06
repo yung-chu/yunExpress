@@ -1,0 +1,130 @@
+﻿@{
+    Layout = null;
+}
+
+<style>
+    .delete_line{text-decoration:line-through;}
+    .red{color: red;}
+</style>
+<div class="cell pl10 mt30" id="right_con">
+    <div class="domebg">
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+                <td width="100%">
+                    <span class="info_box info_select">关键字:</span>
+                    <input type="text" id="countrykeyword" class="txt txt_middle" />
+                </td>
+            </tr>
+            <tr class="date_row_select">
+                <td colspan="4">
+                    <div class="tl">
+                        <input type="button" class="btn mr10" value="搜索" id="countrybtnSearch" />
+                        <input type="button" class="btn mr10" value="清空" id="countrybtnCancel" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div>
+            <table class="data_table mt20" id="tb_countryList" width="100%" border="0" cellpadding="0"
+                cellspacing="0">
+                <thead>
+                    <tr class="data_row_two">
+                        <th>国家代码
+                        </th>
+                        <th>国家名称
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                   
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+
+        $("#tb_countryList > tbody > tr ").die().live("dblclick", (function () {
+            //debugger;
+            if ($(this).attr("notselect")) {
+                alert("不能被选择");
+                return false;
+            } else {
+                var tdOne = $($(this).children("td:nth-child(2)"));
+                var text = $.trim(tdOne.text());
+                var id = tdOne.find("input[name='CountryCode']").val();
+                if ($("#CountryName").length > 0) {
+                    $("#CountryName").val(text);
+                }
+                if ($("#CountryChineseName").length > 0) {
+                    $("#CountryChineseName").val(text);
+                }
+                if ($("#CountryCode").length > 0) {
+                    $("#CountryCode").val(id);
+                }
+                
+                try {
+                    if (typeof (eval(selectCountryCallBack)) == "function") {
+                        selectCountryCallBack(text, id);
+                    }
+                } catch (e) {
+                }
+                
+                $(this).parents(".panel-body:first").window("close");
+            }
+        }));
+        $("#countrybtnSearch").bind("click", function () {
+            var url = '@Url.Action("GetSelectCountry")';
+            if ($("#CustomerCode").length > 0) {
+                url = $.UrlUpdateParams(url, "CustomerCode", $("#CustomerCode").val());
+            }
+            if ($("#ShippingMethodId").length > 0) {
+                url = $.UrlUpdateParams(url, "ShippingMethodId", $("#ShippingMethodId").val());
+            }
+            
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: { keyWord: $("#countrykeyword").val() },
+                success: function (data) {
+                    $("#tb_countryList > tbody").html("");
+                    var tr = "";
+                    for (var item in data) {
+                        if (data[item].CanSelect)
+                        {
+                            tr += "<tr class=\"data_row_dan\" style=\"cursor:pointer;\" title=\"双击可以选择一条信息\"><td>" + data[item].CountryCode + "</td><td>" + data[item].ChineseName + "<input type='hidden' name='CountryCode' value=\"" + data[item].CountryCode + "\" /></td></tr>";
+                        } else {
+                            tr += "<tr class=\"data_row_dan red\" style=\"cursor:pointer;\" notselect=\"notselect\" title=\"不能被选择\"><td>" + data[item].CountryCode + "</td><td>" + data[item].ChineseName + "<input type='hidden' name='CountryCode' value=\"" + data[item].CountryCode + "\" /></td></tr>";
+                        }
+                    }
+                    $("#tb_countryList > tbody").append(tr);
+                }
+            });
+        });
+        $("#countrybtnCancel").bind("click", function () {
+            if ($("#CountryName").length > 0) {
+                $("#CountryName").val("");
+            }
+            if ($("#CountryChineseName").length > 0) {
+                $("#CountryChineseName").val("");
+            }
+            if ($("#CountryCode").length > 0) {
+                $("#CountryCode").val("");
+            }
+            $(this).parents(".panel-body:first").window("close");
+        });
+        $("#countrykeyword").bind("keydown", function (e) {
+            if (e.keyCode == 13) {
+                $("#countrybtnSearch").trigger("click");
+                return false;
+            }
+        });
+    });
+    
+
+    //打开时自动点击搜索按钮
+    $("#countrybtnSearch").trigger("click");
+
+
+</script>

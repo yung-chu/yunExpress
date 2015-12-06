@@ -1,0 +1,143 @@
+﻿@using LMS.Data.Entity
+@using LighTake.Infrastructure.Seedwork
+@model LMS.Controllers.WayBillController.WayBillTemplateListViewModel
+@{
+    ViewBag.Title = "WayBillTemplateList";
+}
+
+<div class="domebg" id="right_con">
+    @Html.Partial("_ShowDialog")
+    @using (Html.BeginForm())
+    {
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+                <td width="20%">
+                    <span class="info_box info_select">运输方式:</span>
+                    @Html.DropDownListFor(p=>p.ShippingMethodId,Model.ShippingMethods)
+                </td>
+                <td width="25%">
+                    <div class="tl">
+                        <input type="submit" class="btn" value="搜索" id="btnSearch" name="btnSearch" />
+                        <a href="@Url.Action("WayBillTemplateSave")" class="btn_href">新增</a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div id="pm_dis_div">
+            <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr class="data_row_two">
+                        <th>序号
+                        </th>
+                        <th>模板名称
+                        </th>
+                        <th>运输方式
+                        </th>
+                        <th>模版类型
+                        </th>
+                        <th>适用国家
+                        </th>
+                        <th>状态
+                        </th>
+                        <th>备注
+                        </th>
+                        <th>添加时间
+                        </th>
+                        <th width="170px">操作
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var index = 1;
+                        foreach (var row in Model.PagedList.InnerList)
+                        {
+                            
+                            <tr class="data_row_dan">
+                                <td>
+                                    @index
+                                </td>
+                                <td>
+                                    @row.TemplateName
+                                </td>
+                                <td>
+                                    @row.ShippingMethodName
+                                </td>
+                                <td>
+                                    @row.TemplateTypeName
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrWhiteSpace(row.Countries) && row.Countries.Length > 10)
+                                    {
+                                        @(row.Countries.Substring(0, 10) + "...")
+                                    }
+                                    else
+                                    {
+                                        @row.Countries
+                                    }
+                                </td>
+                                <td id="@(row.WayBillTemplateId)_status">
+                                    @WayBillTemplateInfo.GetStatusDescription(row.Status)
+                                </td>
+                                <td>@row.Remark</td>
+                                <td>
+                                    @row.CreatedOn.ToString("yyyy-MM-dd")
+                                </td>
+                                <td>
+                                    @{
+                                        var url = Html.GetUrl("WayBillTemplateList", "WayBill", Model.FilterModel);
+                                        var btnStr = "启用";
+                                        if (row.Status != WayBillTemplateInfo.StatusToValue(WayBillTemplateInfo.StatusEnum.Disable))
+                                        {
+                                            btnStr = "禁用";
+                                        }
+                                    }
+                                    <a href="@Url.Action("WayBillTemplateSave",new{wayBillTempLateId=row.WayBillTemplateId,ReturnUrl =url})" class="btn_href">编辑</a>
+
+                                    <input type="button" name="Disable@(row.WayBillTemplateId)" onclick="DisableWayBillTemplate('@row.WayBillTemplateId');" class="btn" value="@btnStr">
+                                    <a href="@Url.Action("WayBillTemplatePreview", "WayBill",new{wayBillTempLateId=row.WayBillTemplateId,ReturnUrl =url})" class="btn_href">预览</a>
+                                </td>
+                            </tr>
+                            index++;
+                        }
+                    }
+                    <tr class="data_row_none">
+                        <td colspan="9">
+                            @Html.Pager(Model.PagedList, Model.FilterModel)
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+<script type="text/javascript">
+    function DisableWayBillTemplate(w) {
+        w = $.trim(w);
+        //$("input[type='button'][name='Disable" + w + "']").attr('disabled', true);
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("DisableWayBillTemplate")",
+            dataType: "json",
+            data: { wayBillTemplateId: w },
+            success: function (data) {
+                if (data.Result) {
+                    //$("input[type='button'][name='" + w + "']").hide();
+                    //$("input[type='button'][name='" + w + "']").val(data.Message);
+                    if (data.Message == "禁用") {
+                        $("input[type='button'][name='Disable" + w + "']").attr('Value', "启用");
+                    } else if (data.Message == "启用") {
+                        $("input[type='button'][name='Disable" + w + "']").attr('Value',"禁用");
+                    }
+                    $("#" + w + "_status").html(data.Message);
+                    alert("操作成功！");
+                } else {
+                    alert(data.Message);
+                }
+            }
+        });
+    }
+</script>
+
+

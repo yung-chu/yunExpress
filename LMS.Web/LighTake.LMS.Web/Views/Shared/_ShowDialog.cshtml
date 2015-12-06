@@ -1,0 +1,70 @@
+﻿@using LighTake.Infrastructure.Common
+@{ 
+    ShowMessageType messageType = ShowMessageType.None;
+    string strMessage = string.Empty;
+    bool isFadeOut = false;
+
+    if (TempData["ShowMessageType"] is ShowMessageType)
+    {
+
+        messageType = (ShowMessageType)TempData["ShowMessageType"];
+        strMessage = TempData["Message"] != null ? TempData["Message"].ToString() : string.Empty;
+        isFadeOut = TempData["IsFadeOut"] != null && TempData["IsFadeOut"] is bool && bool.Parse(TempData["IsFadeOut"].ToString());
+    }
+
+    if (ViewBag.ShowMessageType is ShowMessageType)
+    {
+        messageType = ViewBag.ShowMessageType;
+        strMessage = ViewBag.Message;
+        isFadeOut = ViewBag.isFadeOut != null && ViewBag.isFadeOut is bool && ViewBag.isFadeOut;
+    }
+}
+@if (messageType == ShowMessageType.Error)
+{
+    <div class="message message_error mb10 mt10 fix">
+        <div class="message_box">
+            <h6>
+                Error Message</h6>
+            <span class="cell_bk">@Html.Raw(strMessage)</span>
+        </div>
+    </div>
+    if (isFadeOut)
+    {
+    <script type="text/javascript">
+        $(".message_error").show().fadeOut(5000); 
+    </script>
+    }
+}
+
+else if (messageType == ShowMessageType.Success)
+{
+    <div class="message message_success mb10 fix">
+        <div class="message_box">
+            <h6>
+                Success Message</h6>
+            <span class="cell_bk">@Html.Raw(strMessage)</span>
+        </div>
+    </div>
+    if (isFadeOut)
+    {
+    <script type="text/javascript">
+        $(".message_success").show().fadeOut(5000);
+    </script>
+    }
+}
+else if (messageType == ShowMessageType.Warning)
+{ 
+    <div class="message message_warning mb10 fix">
+        <div class="message_box">
+            <h6>
+                Warning Message</h6>
+            <span class="cell_bk">@Html.Raw(strMessage)</span>
+        </div>
+    </div>
+    if (isFadeOut)
+    {
+    <script type="text/javascript">
+        $(".message_warning").show().fadeOut(5000);
+    </script>
+    }
+}

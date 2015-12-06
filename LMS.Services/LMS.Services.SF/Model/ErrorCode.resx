@@ -1,0 +1,402 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="4001" xml:space="preserve">
+    <value>系统发生数据错误或运行时异常</value>
+  </data>
+  <data name="4002" xml:space="preserve">
+    <value>报文解析错误</value>
+  </data>
+  <data name="6101" xml:space="preserve">
+    <value>请求数据缺少必选项</value>
+  </data>
+  <data name="6102" xml:space="preserve">
+    <value>寄件方公司名称为空</value>
+  </data>
+  <data name="6103" xml:space="preserve">
+    <value>寄方联系人为空</value>
+  </data>
+  <data name="6104" xml:space="preserve">
+    <value>寄方所在省为空</value>
+  </data>
+  <data name="6105" xml:space="preserve">
+    <value>寄方所在城市为空</value>
+  </data>
+  <data name="6106" xml:space="preserve">
+    <value>寄件方详细地址为空</value>
+  </data>
+  <data name="6107" xml:space="preserve">
+    <value>到件方公司名称为空</value>
+  </data>
+  <data name="6108" xml:space="preserve">
+    <value>到件方联系人为空</value>
+  </data>
+  <data name="6109" xml:space="preserve">
+    <value>到件方所在省为空</value>
+  </data>
+  <data name="6110" xml:space="preserve">
+    <value>到件方所在城市为空</value>
+  </data>
+  <data name="6111" xml:space="preserve">
+    <value>到件方地址为空</value>
+  </data>
+  <data name="6112" xml:space="preserve">
+    <value>到件方国家不能为空</value>
+  </data>
+  <data name="6113" xml:space="preserve">
+    <value>到件方所在省份不能为空</value>
+  </data>
+  <data name="6114" xml:space="preserve">
+    <value>必须提供客户订单号</value>
+  </data>
+  <data name="6115" xml:space="preserve">
+    <value>到件方所属城市名称不能为空</value>
+  </data>
+  <data name="6116" xml:space="preserve">
+    <value>到件方所在县/区不能为空</value>
+  </data>
+  <data name="6117" xml:space="preserve">
+    <value>到件方详细地址不能为空</value>
+  </data>
+  <data name="6118" xml:space="preserve">
+    <value>订单号不能为空</value>
+  </data>
+  <data name="6119" xml:space="preserve">
+    <value>到件方联系电话不能为空</value>
+  </data>
+  <data name="6120" xml:space="preserve">
+    <value>快递类型不能为空</value>
+  </data>
+  <data name="6121" xml:space="preserve">
+    <value>寄件方联系电话不能为空</value>
+  </data>
+  <data name="6122" xml:space="preserve">
+    <value>筛单类别不合法</value>
+  </data>
+  <data name="6123" xml:space="preserve">
+    <value>运单号不能为空</value>
+  </data>
+  <data name="6124" xml:space="preserve">
+    <value>付款方式不能为空</value>
+  </data>
+  <data name="6125" xml:space="preserve">
+    <value>需生成电子运单,货物名称等不能为空</value>
+  </data>
+  <data name="6126" xml:space="preserve">
+    <value>月结卡号不合法</value>
+  </data>
+  <data name="6127" xml:space="preserve">
+    <value>增值服务名不能为空</value>
+  </data>
+  <data name="6128" xml:space="preserve">
+    <value>增值服务名不合法</value>
+  </data>
+  <data name="6129" xml:space="preserve">
+    <value>付款方式不正确</value>
+  </data>
+  <data name="6130" xml:space="preserve">
+    <value>体积参数不合法</value>
+  </data>
+  <data name="6131" xml:space="preserve">
+    <value>订单操作标识不合法</value>
+  </data>
+  <data name="6132" xml:space="preserve">
+    <value>路由查询方式不合法</value>
+  </data>
+  <data name="6133" xml:space="preserve">
+    <value>路由查询类别不合法</value>
+  </data>
+  <data name="6134" xml:space="preserve">
+    <value>未传入筛单数据</value>
+  </data>
+  <data name="6135" xml:space="preserve">
+    <value>未传入订单信息</value>
+  </data>
+  <data name="6136" xml:space="preserve">
+    <value>未传入订单确认信息</value>
+  </data>
+  <data name="6137" xml:space="preserve">
+    <value>未传入请求路由信息</value>
+  </data>
+  <data name="6138" xml:space="preserve">
+    <value>代收货款金额传入错误</value>
+  </data>
+  <data name="6139" xml:space="preserve">
+    <value>代收货款金额小于 0 错误</value>
+  </data>
+  <data name="6140" xml:space="preserve">
+    <value>代收月结卡号不能为空</value>
+  </data>
+  <data name="6141" xml:space="preserve">
+    <value>无效月结卡号,未配置代收货款上限</value>
+  </data>
+  <data name="6142" xml:space="preserve">
+    <value>超过代收货款费用限制</value>
+  </data>
+  <data name="6143" xml:space="preserve">
+    <value>是否自取件只能为 1 或 2</value>
+  </data>
+  <data name="6144" xml:space="preserve">
+    <value>是否转寄件只能为 1 或 2</value>
+  </data>
+  <data name="6145" xml:space="preserve">
+    <value>是否上门收款只能为 1 或 2</value>
+  </data>
+  <data name="6146" xml:space="preserve">
+    <value>回单类型错误</value>
+  </data>
+  <data name="6147" xml:space="preserve">
+    <value>清单冷冻箱费用为空或者获取冷冻箱错误</value>
+  </data>
+  <data name="6148" xml:space="preserve">
+    <value>安装费用不能为空</value>
+  </data>
+  <data name="6149" xml:space="preserve">
+    <value>安装费用转数字失败</value>
+  </data>
+  <data name="6150" xml:space="preserve">
+    <value>订单不存在</value>
+  </data>
+  <data name="8000" xml:space="preserve">
+    <value>报文 参数不合法</value>
+  </data>
+  <data name="8001" xml:space="preserve">
+    <value>IP 未授权</value>
+  </data>
+  <data name="8002" xml:space="preserve">
+    <value>服务（功能）未授权</value>
+  </data>
+  <data name="8003" xml:space="preserve">
+    <value>查询单号超过最大限制</value>
+  </data>
+  <data name="8004" xml:space="preserve">
+    <value>路由查询条数超限制</value>
+  </data>
+  <data name="8005" xml:space="preserve">
+    <value>查询次数超限制</value>
+  </data>
+  <data name="8006" xml:space="preserve">
+    <value>已下单，无法接收订单确认请求</value>
+  </data>
+  <data name="8007" xml:space="preserve">
+    <value>此订单已经确认，无法接收订单确认请求</value>
+  </data>
+  <data name="8008" xml:space="preserve">
+    <value>此订单人工筛单还未确认，无法接收订单确认请求</value>
+  </data>
+  <data name="8009" xml:space="preserve">
+    <value>此订单不可收派, 无法接收订单确认请求。</value>
+  </data>
+  <data name="8010" xml:space="preserve">
+    <value>此订单未筛单, 无法接收订单确认请求。</value>
+  </data>
+  <data name="8011" xml:space="preserve">
+    <value>不存在该接入编码与运单号绑定关系</value>
+  </data>
+  <data name="8012" xml:space="preserve">
+    <value>不存在该接入编码与订单号绑定关系</value>
+  </data>
+  <data name="8013" xml:space="preserve">
+    <value>未传入查询单号</value>
+  </data>
+  <data name="8014" xml:space="preserve">
+    <value>校验码错误</value>
+  </data>
+  <data name="8015" xml:space="preserve">
+    <value>未传入运单号信息</value>
+  </data>
+  <data name="8016" xml:space="preserve">
+    <value>重复下单</value>
+  </data>
+  <data name="8017" xml:space="preserve">
+    <value>订单号与运单号不匹配</value>
+  </data>
+  <data name="8018" xml:space="preserve">
+    <value>未获取到订单信息</value>
+  </data>
+  <data name="8019" xml:space="preserve">
+    <value>订单已确认</value>
+  </data>
+  <data name="8020" xml:space="preserve">
+    <value>不存在该订单跟运单绑定关系</value>
+  </data>
+  <data name="8021" xml:space="preserve">
+    <value>接入编码为空</value>
+  </data>
+  <data name="8022" xml:space="preserve">
+    <value>校验码为空</value>
+  </data>
+  <data name="8023" xml:space="preserve">
+    <value>服务名为空</value>
+  </data>
+  <data name="8024" xml:space="preserve">
+    <value>未下单</value>
+  </data>
+  <data name="8025" xml:space="preserve">
+    <value>未传入服务或不提供该服务</value>
+  </data>
+  <data name="8026" xml:space="preserve">
+    <value>不存在的客户</value>
+  </data>
+  <data name="8027" xml:space="preserve">
+    <value>不存在的业务模板</value>
+  </data>
+  <data name="8028" xml:space="preserve">
+    <value>客户未配置此业务</value>
+  </data>
+  <data name="8029" xml:space="preserve">
+    <value>客户未配置默认模板</value>
+  </data>
+  <data name="8030" xml:space="preserve">
+    <value>未找到这个时间的合法模板</value>
+  </data>
+  <data name="8031" xml:space="preserve">
+    <value>数据错误，未找到模板</value>
+  </data>
+  <data name="8032" xml:space="preserve">
+    <value>数据错误，未找到业务配置</value>
+  </data>
+  <data name="8033" xml:space="preserve">
+    <value>数据错误，未找到业务属性</value>
+  </data>
+  <data name="8034" xml:space="preserve">
+    <value>重复注册人工筛单结果推送</value>
+  </data>
+  <data name="8035" xml:space="preserve">
+    <value>生成电子运单，必须存在运单号</value>
+  </data>
+  <data name="8036" xml:space="preserve">
+    <value>注册路由推送必须存在运单号</value>
+  </data>
+  <data name="8037" xml:space="preserve">
+    <value>已消单</value>
+  </data>
+  <data name="8038" xml:space="preserve">
+    <value>业务类型错误</value>
+  </data>
+  <data name="8039" xml:space="preserve">
+    <value>寄方地址错误</value>
+  </data>
+  <data name="8040" xml:space="preserve">
+    <value>到方地址错误</value>
+  </data>
+  <data name="8041" xml:space="preserve">
+    <value>寄件时间格式错误</value>
+  </data>
+</root>

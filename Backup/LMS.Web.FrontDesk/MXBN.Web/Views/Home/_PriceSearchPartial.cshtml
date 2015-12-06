@@ -1,0 +1,276 @@
+﻿@model LMS.FrontDesk.Controllers.HomeController.Models.HomeListModel
+          
+               <div class="main_2">
+                   <div class="constr">
+                       <div class="constr_in">
+                           <div class="main_2_in rel zx2">
+                               <div class="home_math_box" id="home_math_box">
+                                   <div class="fix">
+                                        @using (Html.BeginForm())
+                                        {
+                                            <div class="l home_math_box_l">
+                                                <ul class="fix" id="sch_tab">
+                                                    <li class="l tc ww40">
+                                                        <a href="javascript:" class="home_math_navOn tdn" date_nb="1">
+                                                            价格查询
+                                                        </a>
+                                                    </li>
+                                                    <li class="l tc ww60">
+                                                        <a href="javascript:" class="home_math_navOff tdn" date_nb="2">
+                                                            &nbsp;
+                                                        </a>
+                                                    </li>
+                                                </ul>  
+                                                <div class="p10">
+                                                    <div id="home_price_sch" class="db">
+                                                        <div class="mt5">
+                                                            &emsp;&emsp;目的地国家：
+                                                            @Html.TextBoxFor(f => f.FreightTrialFilter.ChineseName, new {@class = "home_txt size_short", @id = "txt_country", autocomplete = "off",tabindex="1"})
+                                                            @Html.HiddenFor(f => f.FreightTrialFilter.CountryCode)
+                                                            <a href="javascript:" class="dib vm" title="挑选国家" id="dis_one">
+                                                                <img src="@Url.Content("images/grid.png")">
+                                                            </a>
+                                                        </div>
+                                                        <div class="mt15">
+                                                            &emsp;包裹重量(kg)：
+                                                            @Html.TextBoxFor(f => f.FreightTrialFilter.Weight, new {@class = "home_txt w185 ml-1",tabindex="2"})
+                                                        </div>
+                                                         <div class="mt15">
+                                                            &emsp;&emsp;&emsp;包裹类型：
+                                                            <span class="rel" id="home_selWarp">
+                                                                @Html.TextBoxFor(f => f.FreightTrialFilter.PackageTypeName, new {@class = "home_txt size_mini rel",tabindex="3"})
+                                                
+                                                                <span class="btn btn_black ml-5">
+                                                                    <i class="diamonds_b"></i>
+                                                                </span>
+                                                                <dl class="home_sel_company">
+                                                                    <dd>
+                                                                        @{
+                                                                            foreach (var item in (List<SelectListItem>) ViewBag.GoodsTypeList)
+                                                                            {
+                                                                                <a href="javascript:" class="db hover_two pl10">@item.Text</a><span style="display: none">@item.Value</span>
+                                                                            }
+                                                                        }
+                                                                    </dd>
+                                                                </dl>
+                                                                @Html.HiddenFor(f => f.FreightTrialFilter.PackageType)
+                                                            </span>
+                                                        </div>
+                                                        <div class="mt20">
+                                                            &emsp;&emsp;&emsp;<span class="ml-2">尺寸(cm)：</span>
+                                                            长
+                                                            @Html.TextBoxFor(f => f.FreightTrialFilter.Length, new {@class = "home_txt size_mini-",tabindex="4"})
+                                                            宽
+                                                            @Html.TextBoxFor(f => f.FreightTrialFilter.Width, new {@class = "home_txt size_mini-",tabindex="5"})
+                                                            高
+                                                            @Html.TextBoxFor(f => f.FreightTrialFilter.Height, new {@class = "home_txt size_mini-",tabindex="6"})
+                                                        </div>
+                                        
+                                                        <div class="pt10 mt5">
+                                                            <input type="submit" class="btn btn_black" value="查 询"/>
+                                                       
+                                                        </div>
+                                                    </div>
+                                                    <div id="home_order_sch" class="dn">
+                                                        <textarea class="order_sch_area" id="searchOrderNumber" placeholder="一行一个跟踪号,一次最多查询40个" onfocus=" this.lastChild.nodeValue = '' "></textarea>
+                                                        <div class="mt10">
+                                                            <a href="#" class="btn btn_black" onclick=" SeachOrder(); " title="查询">查 询</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        @using (Html.BeginForm("Index","Home",FormMethod.Post,new{id="formlogin"}))
+                                        {
+                                            <div class="cell pl20">
+                                                @{
+                                                    string userStyle = "none";
+                                                    string loginClass = "";
+                                                    if (!string.IsNullOrWhiteSpace(Model.UserInfoFilter.UserName))
+                                                    {
+                                                        loginClass = "dn";
+                                                        userStyle = "block";
+                                                    }
+                                                }
+                                                @*<div class="dn">*@
+                                                <div id="div_login" class="@loginClass">
+                                                    <div class="mt50 f0">
+                                                        @Html.TextBoxFor(f => Model.UserInfoFilter.UserName, new {@class = "home_txt w120", placeholder = "帐户",tabindex="10"})
+                                                        <a id="login" href="javascript:"  class="btn btn_black">
+                                                            登陆</a>
+                                        				
+                                                    </div>
+                                                    <div id="userNameTip" style="color: red;"></div>
+                                                    <div class="mt10">
+                                                        @Html.PasswordFor(f => Model.UserInfoFilter.Pwd, new {@class = "home_txt w120", placeholder = "密码",tabindex="11"})
+                                                        <div id="pwdTip" style="color: red;"></div>
+                                                    </div>
+                                                    <div class="mt15 lh20">
+                                                        您还没有账户？<br>
+                                                               <a href="@Url.Action("AddUser", "User")" class="tdn coe5 b" title="账户注册">
+                                                                   免费注册
+                                                               </a>
+                                                    </div>
+                                                    <div class="mt20">
+                                                        <input type="checkbox" id="chk" class="check">
+                                                        <label for="chk">记住密码</label>
+                                                    </div>
+                                                </div>
+                                                <div id="div_user" class="ml-20" style="display: @userStyle" >
+                                                    <div class="mt40 tc">
+                                                        <div>
+                                                            <img src="images/small.jpg">
+                                                        </div>
+                                                        <div class="mt20">
+                                                            欢迎您，<strong class="coe5" id="s_userName">@Model.UserInfoFilter.UserName</strong>
+                                                        </div>
+                                                        <div class="mt20">
+                                                            <a href="@Model.UserCenterPath"  target="_blank" class="gf tdl">进入账户中心</a> | <a href="@Url.Action("Logout", "Home")" class="gf tdl">退出</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                
+                               
+                                            </div>
+                                        }
+                                   </div>    	
+                               </div>
+                               <div class="country_box" id="country_box" style="display: none;">
+                                   @{
+                                       string[] words = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "Q", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+                                   }
+                                   <div class="fix country_move">
+                                       <span class="r mt5 mr10">
+                                           <a href="javascript:" class="u u16 mt2" id="country_close" title="关闭">
+                                           </a>
+                                       </span>
+                                       <strong class="ml10 coe5">选择目的地国家</strong>
+                                   </div>
+                                   <ul class="fix" id="country_az">
+                                       @for (int i = 0; i < words.Length; i++)
+                                       {
+                                           <li class="l" date_nb="@i">
+                                               <a class="country_num" href="javascript:">@words[i]</a>
+                                           </li>
+                                       }
+                                   </ul>
+                                   <div class="ova h250">
+                                       <div class="p10">
+                                           <div class="mb10">
+                                               <strong class="co29 f14">常用国家</strong>
+                                               <div class="oneDashed bdc4 mt5"></div>
+                                           </div>
+                                           <ul class="fix mt10 ml20">
+                                               @foreach (var item in Model.CountryList.FindAll(p => p.IsCommonCountry == true))
+                                               {
+                                                   var temp = item.ChineseName.Trim() + "(" + item.Name.Trim() + ")";
+                                                   <li class="l ww50 mb10">
+                                                       <i class="diamonds_tipMn"></i><span class="poi">@temp</span><span class="poiHidden" style="display: none">@item.CountryCode</span>
+                                                   </li>
+                                               }
+                                           </ul>
+                                           <div id="country_az_box">
+                                               @for (int i = 0; i < words.Length; i++)
+                                               {
+                                                   <div class=" pt10" date_nb="@i">
+                                                       <strong class="f14 co29 ml20">
+                                                           @words[i]
+                                                       </strong>
+                                                       <div class="oneDashed bdc4 mt5"></div>
+                                                       <ul class="fix mt10 ml20">
+                                                           @foreach (var item in Model.CountryList.FindAll(p => p.CountryPinyin.Trim().Substring(0, 1).ToUpper() == words[i].ToUpper()))
+                                                           {
+                                                               var temp = item.ChineseName.Trim() + "(" + item.Name.Trim() + ")";
+                                                               <li class="l ww50 mb10">
+                                                                   <i class="diamonds_tipMn"></i>
+                                                                   <span class="poi">@temp</span><span class="poiHidden" style="display: none">@item.CountryCode</span>
+                                                               </li>
+                                                           }
+                                                       </ul>
+                                                   </div>
+                                               }
+                                           </div>
+                                       </div>
+                                   </div>
+                               </div> 
+                           </div>
+                       </div>
+                   </div>		
+               </div>
+    <div class="oneSolid bdff"></div>
+<div class="oneSolid bd43"></div>
+<link href="@Url.Content("~/Scripts/autocomplete/jquery-ui.css")" rel="stylesheet" />
+<script src="@Url.Content("~/Scripts/autocomplete/jquery-ui.js")"></script>
+
+<script type="text/javascript">
+
+    function keypressHandler(e)
+    {
+        if(e.keyCode == 13) {
+            //e.preventDefault();
+            $(this).blur();
+            $('#login').focus().click();
+        }
+    }
+
+    @{
+        string arr = "[";
+        foreach (var item in Model.CountryList)
+        {
+
+            arr += "{ code:\"" + item.CountryCode.Trim() + "\", value:\"" + item.ChineseName.Trim() + "(" + item.Name.Trim() + ")" + "\"},";
+        }
+        arr = arr.Substring(0, arr.LastIndexOf(',')) + "]";
+    }
+    var data = @Html.Raw(arr);
+   
+    function SeachOrder() {
+        var url= "http://www.17track.net/cn/result/post.shtml?nums=" + encodeURIComponent($("#searchOrderNumber").val());
+        window.open(url);
+    }
+
+    $(document).ready(function () {
+        $("#formlogin").keypress(keypressHandler);
+        $("#login").click(function () {
+            if ($.trim($("input[name='UserInfoFilter.UserName']").val()) == "") {
+                $("#userNameTip").text("登录帐号不能为空！");
+                return false;
+            }
+            $("#userNameTip").text("");
+            if ($.trim($("input[name='UserInfoFilter.Pwd']").val()) == "") {
+                $("#pwdTip").text("登录密码不能为空！");
+                return false;
+            }
+            $("#pwdTip").text("");
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("ValidateLogOn")",
+                dataType: "json",
+                data:{userName:$("input[name='UserInfoFilter.UserName']").val(),pwd:$("input[name='UserInfoFilter.Pwd']").val(),remember:$("#chk").get(0).checked},
+                success: function (data) {
+                    if (data.Result) {
+                        $("#div_login").addClass("dn");
+                        $('#div_user').css("display", "block");
+                        $("#s_userName").text($("input[name='UserInfoFilter.UserName']").val());
+                        $("#pwdTip").text("");
+                    } else {
+                        $("#pwdTip").text(data.Message);
+                    }
+                }
+            });
+            
+           
+        });
+        
+        $( "#txt_country" ).autocomplete({
+            source: data,
+            select: function( event, ui ) 
+            {
+                $("#FreightTrialFilter_CountryCode").val(ui.item.code);
+                cookieUtil.set("countryCode", ui.item.code, new Date("January 1,2020"));//写入cookie
+                cookieUtil.set("inputText2", ui.item.value, new Date("January 1,2020"));
+            }
+	  
+        });
+    });
+</script>

@@ -1,0 +1,119 @@
+﻿@using LMS.Data.Entity
+@model LMS.Controllers.WayBillController.WayBillTemplateInfoViewModel
+@{
+    ViewBag.Title = "WayBillTemplateInfoList";
+}
+@using (Html.BeginForm())
+{
+    <div>
+        <table width="100%"cellpadding="0" cellspacing="0">
+            <tr class="date_row_select data_row_dan">
+                <td ><span>模板名称:</span>
+                    <span>@Html.TextBoxFor(p=>p.TemplateInfoParam.TemplateName)</span>
+                </td>
+                <td >
+                    <span>模板类型:</span>
+                    <span>@Html.DropDownListFor(p=>p.TemplateInfoParam.TemplateType,Model.TemplateTypeList,new Dictionary<string, object> { { "data-placeholder", "全部" }, { "style", " width:150px;" },{"class", "chzn-select select_middle" }})</span>
+                </td>
+                <td ><span>状态:</span>
+                    <span>@Html.DropDownListFor(p=>p.TemplateInfoParam.Status,Model.StatusList,new Dictionary<string, object> { { "data-placeholder", "全部" }, { "style", " width:150px;" },{"class", "chzn-select select_middle" }})</span>
+                </td>
+                <td >
+                    <input type="submit" name="SelectTempla" class="btn" value="搜索"/>
+                     @{
+                        var url = Html.GetUrl("WayBillTemplateInfoList", "WayBill", @Model.TemplateInfoParam);
+                    }
+                    <a href="@Url.Action("AddWayBillTemplate","WayBill",new{templateModelId=0,returnUrl=url})" class="btn_href">新增</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+        <tr class="data_row_two">
+            <th>ID</th>
+            <th>模板名称</th>
+            <th>模板类型</th>
+            <th>状态</th>
+            <th>备注</th>
+            <th>添加时间</th>
+            <th width="165px">操作</th>
+        </tr>
+        @{
+            int n = 1;
+        }
+        @foreach (var row in Model.WayBillTemplateInfoList)
+        {
+            <tr>
+                <td>@n</td>
+                <td>@row.TemplateName</td>
+                <td>
+                    @if (Model.TemplateTypeList.Find(p => p.Value == row.TemplateType.ToString()) != null)
+                    {
+                        @Model.TemplateTypeList.Find(p=>p.Value==row.TemplateType.ToString()).Text
+                    }
+                </td>
+                <td id="@(row.TemplateModelId)_status">
+                    @if (Model.StatusList.Find(p => p.Value == row.Status.ToString()) != null)
+                    {
+                        @Model.StatusList.Find(p=>p.Value==row.Status.ToString()).Text
+                    }
+                </td>
+                <td>@row.Remarks</td>
+                <td>@row.CreatedOn</td>
+                <td>
+                    @*@{
+                        var url = Html.GetUrl("WayBillTemplateInfoList", "WayBill", @Model.TemplateInfoParam);
+                    }*@
+                    @{
+                        string statusvalue;
+                        if (row.Status == WayBillTemplateInfo.StatusToValue(WayBillTemplateInfo.StatusEnum.Disable))
+                        {
+                            statusvalue = "启用";
+                        }
+                        else
+                        {
+                            statusvalue = "禁用";
+                        }
+                    }
+                    <a href="@Url.Action("AddWayBillTemplate", "WayBill", new { templateModelId = row.TemplateModelId, returnUrl=url})" class="btn_href">编辑</a>
+                    <input type="button" name="@row.TemplateModelId" value="@statusvalue" onclick="EdidWayBillTemplateStatus('@row.TemplateModelId');" class="btn"/>
+                    <a href="@Url.Action("WayBillTemplateInfoPreview", "WayBill",new{templateModelId=row.TemplateModelId,ReturnUrl =url})" class="btn_href">预览</a>
+                </td>
+            </tr>
+            n++;
+        }
+        <tr class="date_row_select data_row_dan">
+            <td colspan="7">
+                @Html.Pager(Model.WayBillTemplateInfoList, Url.MergeRouteValues(Model.TemplateInfoParam))
+            </td>
+        </tr>
+    </table>
+}
+
+<script type="text/javascript">
+    function EdidWayBillTemplateStatus(w) {
+        w = $.trim(w);
+        //$("input[type='button'][name='Disable" + w + "']").attr('disabled', true);
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("EdidWayBillTemplateStatus")",
+            dataType: "json",
+            data: { templateModelId: w },
+            success: function (data) {
+                if (data.Result) {
+                    $("#" + w + "_status").html(data.Message);
+                    if (data.Message == "禁用") {
+                        $("input[type='button'][name='" + w + "']").attr('Value', "启用");
+                    } else if (data.Message == "启用") {
+                        $("input[type='button'][name='" + w + "']").attr('Value',"禁用");
+                    }
+                    alert("操作成功！");
+                } else {
+                    alert(data.Message);
+                }
+            }
+        });
+    }
+</script>
+
+

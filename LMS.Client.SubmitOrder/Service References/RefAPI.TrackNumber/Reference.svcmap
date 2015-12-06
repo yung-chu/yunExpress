@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="2829e7b1-1dd1-441b-a40c-6e4702cdfb38" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:16103/TrackNumberAssign.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="TrackNumberAssign.xsd" MetadataType="Schema" ID="56895edb-e68c-4f65-b905-670ecbe2eaaf" SourceId="1" SourceUrl="http://localhost:16103/TrackNumberAssign.svc?xsd=xsd0" />
+    <MetadataFile FileName="TrackNumberAssign1.xsd" MetadataType="Schema" ID="8d7f3740-83ab-45b2-a892-c78b0a222ff0" SourceId="1" SourceUrl="http://localhost:16103/TrackNumberAssign.svc?xsd=xsd1" />
+    <MetadataFile FileName="TrackNumberAssign2.xsd" MetadataType="Schema" ID="cb6b3b81-d579-4e91-ba16-5f94b2db14cd" SourceId="1" SourceUrl="http://localhost:16103/TrackNumberAssign.svc?xsd=xsd2" />
+    <MetadataFile FileName="TrackNumberAssign3.xsd" MetadataType="Schema" ID="ca141d10-e8bc-43f9-be6d-8079e7018ca5" SourceId="1" SourceUrl="http://localhost:16103/TrackNumberAssign.svc?xsd=xsd3" />
+    <MetadataFile FileName="TrackNumberAssign.wsdl" MetadataType="Wsdl" ID="7215d115-95b6-4d79-89de-4aa6311b093d" SourceId="1" SourceUrl="http://localhost:16103/TrackNumberAssign.svc?wsdl" />
+    <MetadataFile FileName="TrackNumberAssign.disco" MetadataType="Disco" ID="b3159cf0-f13a-4f90-8646-3481a6b3bffe" SourceId="1" SourceUrl="http://localhost:16103/TrackNumberAssign.svc?disco" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

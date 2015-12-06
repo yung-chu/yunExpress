@@ -1,0 +1,260 @@
+﻿@{
+    ViewBag.Title = "国际小包优+";
+}
+@using System.Data.Entity
+@using System.Globalization
+@model  LMS.FrontDesk.Controllers.FubController.InTrackingLogInfoModel
+
+
+<div class="conStr">
+    
+     <form>
+        <div class="tc main_mg">
+            <img src="@Url.Content("~/images/FYB_03.png")" />
+        </div>
+    
+        <table cellpadding="0" width="100%">
+            <tr>
+                <td>&nbsp;</td>
+                <td width="66%">
+                    <div class="inline_box">
+    
+                        @Html.TextAreaFor(a=>a.Number,new{ @class="textArea vm inline_any"})
+                        
+                        <input type="button" class="main_btn inline_any ml3 Avtive"  title="查询结果" data="main_Warp" value=""  />
+
+                    </div>
+                    <div class="mt30">
+                        <div class="mb15">
+                            <i class="main_block vm mr5"></i><span class="dib vm">请输入单号，共计50位的国际小包优+单号</span>
+                        </div>
+                        <div class="mb15">
+                            <i class="main_block vm mr5"></i><span class="dib vm">系统支持最多50个单号的同时查询，每个单号请以回车分割</span>
+                        </div>
+                        <div class="mb15">
+                            <i class="main_block vm mr5"></i><span class="dib vm">最多可查询50个</span>
+                        </div>
+                    </div>
+                </td>
+                <td>&nbsp;</td>
+            </tr>
+        </table>
+    </form>
+    
+    <div class="sr_area">
+        
+        <div class="sr_load tc pb20" id="LoadImage" style="display:none" >
+                
+            <img src="@Url.Content("~/images/89.GIF")"  height="60"/>
+            <div class="mt10">
+                加载中...
+            </div>
+
+        </div>
+           
+        
+        <div id="appendTrackingInfo">
+            
+        </div>
+
+@*        @if (Model != null && Model.ListModel != null)
+        {
+            //按跟踪号分组
+            foreach (var item in Model.ListModel.GroupBy(a=>a.TrackingNumber))
+            {
+
+                var getTrackingNumber = item.Key;
+                   
+                <table class="Tb mt30">
+                    <tr>
+                        <th colspan="3" style="background:#006fbd; color:#fff; text-align:left; padding-left:20px;">
+                            单号：@getTrackingNumber
+
+                        </th>
+                    </tr>
+
+                    <tr>
+                        <th>
+                            日期
+                        </th>
+                        <th>
+                            动态
+                        </th>
+                        <th>
+                            地址
+                        </th>
+                    </tr>
+
+                    @foreach (var item1 in Model.ListModel)
+                    {
+
+                        if (item1.TrackingNumber == getTrackingNumber)
+                        {
+                            <tr>
+                                <td align="center">
+                                @{
+                                    var getProcessDate = item1.ProcessDate != null ? item1.ProcessDate.ToString().Substring(0, 10) : System.DateTime.Now.ToString(CultureInfo.InvariantCulture).Substring(0, 10);
+                                 }
+                                @getProcessDate
+                                   
+                                </td>
+                                <td align="center">
+                                    @item1.ProcessContent	
+                                </td>
+                                <td align="center">
+                                    @item1.ProcessLocation	
+                                </td>
+                            </tr>
+                                
+                        }
+                    }
+                 
+                </table>
+  
+            }
+        }*@
+        
+        
+
+            
+    </div>
+    
+    <!--提示信息-->
+    <div class="main_position main_Warp">
+        <div class="rel">
+            <div class="lh20 g4">
+                    <div class="meeeage_title" id="CorrectMess">正在查询，请稍后...</div>
+                    <div class="meeeage_body tj"  id="ErrorMess">
+                        你好，您输入的单号过长 <br/>
+                        多余会被过滤
+                    </div>
+            </div>
+            <div class="Diamond_position">
+                <span class="Diamond_out">◆</span>
+                <span class="Diamond">◆</span>
+            </div>
+        </div>
+    </div>
+    
+
+</div>
+
+
+<script type="text/javascript">
+    $('.Tb td').hover(
+        function() { $(this).parent().addClass('bgffc892'); },
+        function() { $(this).parent().removeClass('bgffc892'); }
+    );
+
+
+
+    $('.Avtive').click(function() {
+
+        
+        $("#appendTrackingInfo").hide();
+        
+        var getSearchNumber = $.trim($("#Number").val());
+        var numberArray = getSearchNumber.split('\n');
+        var numberCount = numberArray.length;
+
+
+        if (getSearchNumber == "") {
+
+            showTips("", "请输入您要查询的内容");
+            return;
+        }
+        else//有数据
+        {
+
+
+            var unableCheckNumber = [];
+            $.each(numberArray, function (i, item) {
+
+                item = $.trim(item);
+                if (item.length != 11 || item.indexOf("591")<0) {
+                    if (item != "") {
+                        unableCheckNumber.push(item);
+                    }
+                }
+            });
+
+            if (unableCheckNumber.length != 0) {
+
+                showTips("", "单号不是11位长度或不是以591开头 " + "<br/>" + unableCheckNumber.join("    "));
+                return;
+            }
+            else if (numberCount > 50) { //超过50个过滤,信息提示
+
+                var getDeleteNumber = numberArray.splice(50, numberArray.length - 50);
+                $("#Number").val(numberArray.join('\n'));
+
+                showTips("", "您查询的单号超过50个,剩余会被过滤 " + "<br/>" + getDeleteNumber.join("    "));
+                return;
+
+            }
+            else {//正确提示
+
+                $("#LoadImage").show();
+                showTips("正在查询，请稍后...", "");
+            }
+
+
+            $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("ReturnModel", "Home")" + "?diffid=" + new Date().getTime(),
+                    data: { number: getSearchNumber },
+                    success: function (data) {
+
+                        $("#appendTrackingInfo").html(data.TrackData);
+                        $("#appendTrackingInfo").show();
+
+                    //查询不到 服务器返回
+                    if (data.NoQueryNumber != "") {
+                        var getnoQueryNumberArray = data.NoQueryNumber.split(',');
+
+                        showTips("", "对不起，没有查到单号 " + "<br/>" + getnoQueryNumberArray.join("    "));
+                    } else {
+
+                        //隐藏tips
+                        var warp = $('.main_Warp');
+                        warp.hide();
+                    }
+            },
+            complete: function () {
+                $("#LoadImage").hide();
+            }
+        });
+     }
+
+
+});
+
+    var showTips = function (msg_title, msg_body) {
+        var a = $('.Avtive');
+        var warp = $('.main_Warp');
+        
+        warp.find('.meeeage_title').html(msg_title);
+        warp.find('.meeeage_body').html(msg_body);
+        
+        if (!warp.is(':visible')) {
+            warp.show().css({ 'left': a.offset().left - (warp.width() - a.width()) / 2, 'top': a.offset().top + a.height() + 20 });
+            window.tt = window.setTimeout(function() {
+                warp.hide();
+            }, 1000*3);
+
+            warp.bind({
+                mouseenter: function() {
+                    clearTimeout(window.tt);
+                },
+                mouseleave: function() {
+                    clearTimeout(window.tt);
+                    window.tt = window.setTimeout(function() {
+                        warp.hide();
+                    }, 1000 * 3);
+                }
+            });
+        }
+    };
+
+</script>
+

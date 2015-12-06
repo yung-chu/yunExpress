@@ -1,0 +1,13 @@
+﻿@model LMS.Controllers.WayBillController.WayBillTemplateInfoModel
+@{
+    Layout = null;
+    ViewBag.Title = "WayBillTemplateInfoPreview";
+}
+
+<h2></h2>
+<a href="@(!string.IsNullOrWhiteSpace(Request.QueryString["ReturnUrl"])?Request.QueryString["ReturnUrl"]:Url.Action("WayBillTemplateList"))" class="btn_href">返回列表</a>
+
+<fieldset>
+    <legend>模板</legend>
+    @Html.Raw(HttpUtility.HtmlDecode(Model.TemplateContent))
+</fieldset>

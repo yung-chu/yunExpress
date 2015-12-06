@@ -1,0 +1,147 @@
+﻿@model LMS.Controllers.WayBillController.SelectShippingMethodViewModel
+@{
+    Layout = null;
+}
+
+<div class="cell pl10 mt30">
+    <div class="domebg">
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+                <td width="100%">
+                    <span class="info_box info_select">关键字:</span>
+                    <input type="text" id="shippingkeyword" class="txt txt_middle" />
+                    <input type="hidden" id="shippingCustomerTypeId" value="@Model.CustomerTypeId"/>
+                    <input type="hidden" id="shippingVenderCode" value="@Model.VenderCode"/>
+                    <input type="hidden" id="selectType" value="@Model.SelectType"/>
+                </td>
+            </tr>
+            <tr class="date_row_select">
+                <td colspan="4">
+                    <div class="tl">
+                        <input type="button" class="btn mr10" value="搜索" id="shippingbtnSearch"  onclick="ShippingSearch();"/>
+                        <input type="button" class="btn mr10" value="清空" id="shippingbtnCancel" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div>
+            <table class="data_table mt20" id="tb_shippList" width="100%" border="0" cellpadding="0"
+                   cellspacing="0">
+                <thead>
+                    <tr class="data_row_two">
+                        <th>运输方式ID
+                        </th>
+                        <th>运输方式名称
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ShippingMethodList)
+                    {
+                        <tr class="data_row_dan" style="cursor: pointer;" title="双击可以选择一条信息">
+                            <td>@item.ShippingMethodId
+                            </td>
+                            <td>@item.ShippingMethodName
+                                <input type="hidden" name="ShippingMethodId" value="@item.ShippingMethodId"/>
+                                <input type="hidden" name="WeightOrVolume" value="@item.WeightOrVolume"/>
+                                <input type="hidden" name="HaveTrackingNum" value="@item.HaveTrackingNum"/>
+                                <input type="hidden" name="IsHideTrackingNumber" value="@item.IsHideTrackingNumber"/>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    init();//初始化js
+
+
+    function init() {
+
+
+
+        $("#tb_shippList > tbody > tr ").live("dblclick", (function () {
+
+            var tdOne = $($(this).children("td:nth-child(2)"));
+            var text = $.trim(tdOne.text());
+            var id = tdOne.find("input[name='ShippingMethodId']").val();
+            var isVolume = tdOne.find("input[name='WeightOrVolume']").val();
+            var isTrackingNum = tdOne.find("input[name='HaveTrackingNum']").val();
+            var isHideTracking = tdOne.find("input[name='IsHideTrackingNumber']").val();
+
+            if ($("#ShippingMethodName").length > 0) {
+                $("#ShippingMethodName").html(text);
+            }
+            if ($("#ShippingNameInfo").length > 0) {
+                $("#ShippingNameInfo").val(text);
+            }
+            if ($("#ShippingMethodIdInfo").length > 0) {
+                $("#ShippingMethodIdInfo").val(id);
+            }
+
+
+            if ($("#WeightOrVolume").length > 0) {
+                $("#WeightOrVolume").val(isVolume);
+            }
+            if ($("#HaveTrackingNum").length > 0) {
+                $("#HaveTrackingNum").val(isTrackingNum);
+            }
+            if ($("#IsHideTrackingNumber").length > 0) {
+                $("#IsHideTrackingNumber").val(isHideTracking);
+            }
+
+            // $("#showShippingMethodListInfo").window("close");
+           $(".panel-tool-close:last").trigger("click");
+        }));
+        $("#shippingbtnCancel").bind("click", function () {
+            if ($("#ShippingMethodName").length > 0) {
+                $("#ShippingMethodName").html("");
+            }
+            if ($("#ShippingNameInfo").length > 0) {
+                $("#ShippingNameInfo").val("");
+            }
+            if ($("#ShippingMethodIdInfo").length > 0) {
+                $("#ShippingMethodIdInfo").val("");
+            }
+            if ($("#WeightOrVolume").length > 0) {
+                $("#WeightOrVolume").val("");
+            }
+            if ($("#HaveTrackingNum").length > 0) {
+                $("#HaveTrackingNum").val("");
+            }
+            if ($("#IsHideTrackingNumber").length > 0) {
+                $("#IsHideTrackingNumber").val("");
+            }
+            $("#showShippingMethodList").window("close");
+        });
+        $("#shippingkeyword").bind("keydown", function (e) {
+            if (e.keyCode == 13) {
+                $("#shippingbtnSearch").trigger("click");
+                return false;
+            }
+        });
+    };
+
+    function ShippingSearch() {
+        var isAll = "false";
+        if ($("#showShippingMethodList").attr("tabindex") == 100) {
+            isAll = "true";
+        };
+        $.ajax({
+            url: '@Url.Action("GetSelectShippingMethod","WayBill")',
+            type: 'GET',
+            data: { keyWord: $("#shippingkeyword").val(), CustomerTypeId: $("#shippingCustomerTypeId").val(), VenderCode: $("#shippingVenderCode").val(), type: $("#selectType").val(), IsAll: isAll, customerId: "@Model.CustomerId" },
+            success: function (data) {
+                $("#tb_shippList > tbody").html("");
+                var tr = "";
+                for (var item in data) {
+                    tr += "<tr class=\"data_row_dan\" style=\"cursor:pointer;\" title=\"双击可以选择一条信息\"><td>" + data[item].ShippingMethodId + "</td><td>" + data[item].ShippingMethodName + "<input type='hidden' name='WeightOrVolume' value=\"" + data[item].WeightOrVolume + "\" /><input type='hidden' name='ShippingMethodId' value=\"" + data[item].ShippingMethodId + "\"/><input type='hidden' name='HaveTrackingNum' value=\"" + data[item].HaveTrackingNum + "\"/></td><input type='hidden' name='IsHideTrackingNumber' value=\"" + data[item].IsHideTrackingNumber + "\"/></td></tr>";
+                }
+                $("#tb_shippList > tbody").append(tr);
+            }
+        });
+    }
+</script>

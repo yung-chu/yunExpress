@@ -1,0 +1,287 @@
+﻿<#@ template language="C#" debug="true" hostspecific="true"#>
+<#@ include file="EF.Utility.CS.ttinclude"#>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Xml" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.Reflection" #>
+<#@ import namespace="System.Xml" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.IO" #>
+<#@ output extension=".cs"#>
+<#
+	CodeGenerationTools code = new CodeGenerationTools(this);
+    CodeRegion region = new CodeRegion(this, 1);
+    
+    EntityFrameworkTemplateFileManager fileManager = EntityFrameworkTemplateFileManager.Create(this);
+#>
+<#
+		XmlDocument doc = new XmlDocument();
+        string absolutePath = Host.ResolvePath("LMS_Enums.xml");                
+        doc.Load(absolutePath);
+        foreach (XmlNode data in doc.SelectNodes("/Root/Data"))
+        {
+	        string className = data.Attributes["Name"].InnerText+"Enum";
+            fileManager.StartNewFile(className + ".cs"); 
+#>
+using System;
+using System.Collections.Generic;
+using LighTake.Infrastructure.Common;
+
+namespace <#= code.VsNamespaceSuggestion() #>
+{
+	
+    public partial class <#= className #>
+    { 
+		      
+<#foreach (XmlNode collect in data.SelectNodes("Collect"))
+        {
+	        string name = collect.Attributes["Name"].InnerText;
+            string desc = collect.Attributes["Desc"].InnerText;
+            string strEnumType = "";
+			try{
+	           
+                 strEnumType = collect.Attributes["Type"].InnerText;
+	          
+            }catch(Exception ex){
+	           
+                 strEnumType="int";
+            }
+				region.Begin(name + "Enum " + desc); #>
+
+		/// <summary>
+        /// <#= desc #>
+        /// </summary>
+        public enum <#= name #>Enum : <#= strEnumType #>
+        {
+<#
+	        foreach (XmlNode item in collect.SelectNodes("Item"))
+	        {
+	            string id = item.Attributes["ID"].InnerText;
+                string value = item.Attributes["Value"].InnerText;
+                string cnname = item.Attributes["CNName"].InnerText;
+#>
+			/// <summary>
+			/// <#= cnname #>
+			/// </summary>
+			<#= value #> = <#= id #>,
+
+<#
+}
+#>
+        }
+
+		/// <summary>
+        /// 转换成枚举
+        /// </summary>
+		public static <#= name #>Enum ParseTo<#= name #>(<#= strEnumType #> value)
+        {				
+		   try{
+
+			 return	(<#= name #>Enum)value;
+
+			}catch(Exception ex){
+			
+			  throw new ArgumentException("value",ex);
+
+			}
+		}
+
+	    /// <summary>
+        /// 转换成枚举
+        /// </summary>
+		public static <#= strEnumType #> <#= name #>ToValue(<#= name #>Enum enumOption)
+        {				
+		   try{
+
+			 return	 (<#= strEnumType #>)enumOption;
+
+			}catch(Exception ex){
+			
+			  throw new ArgumentException("enumOption",ex);
+
+			}
+		}
+
+
+		/// <summary>
+        /// 获取<#= desc #>的描述
+        /// </summary>
+		public static string Get<#= name #>Description(int id)
+		{
+			string result = "";
+            switch (id)
+            {
+<#
+	        foreach (XmlNode item in collect.SelectNodes("Item"))
+	        {
+	            string id = item.Attributes["ID"].InnerText;
+                string value = item.Attributes["Value"].InnerText;
+                string cnname = item.Attributes["CNName"].InnerText;
+                string enname = item.Attributes["ENName"].InnerText;
+#>
+                case <#= id #>:
+                    result = "<#= enname #>";
+					break;
+<#
+}
+#>
+				default:
+                    result = "--";
+                    break;
+            }
+            return result;
+
+		}
+
+
+
+				/// <summary>
+        /// 获取<#= desc #>的描述
+        /// </summary>
+		public static string Get<#= name #>CNDescription(int id)
+		{
+			string result = "";
+            switch (id)
+            {
+<#
+	        foreach (XmlNode item in collect.SelectNodes("Item"))
+	        {
+	            string id = item.Attributes["ID"].InnerText;
+                string value = item.Attributes["Value"].InnerText;
+                string cnname = item.Attributes["CNName"].InnerText;
+                string enname = item.Attributes["ENName"].InnerText;
+#>
+                case <#= id #>:
+                    result = "<#= cnname #>";
+					break;
+<#
+}
+#>
+				default:
+                    result = "--";
+                    break;
+            }
+            return result;
+
+		}
+
+
+		/// <summary>
+        /// 获取<#= desc #>的值
+        /// </summary>
+		public static int Get<#= name #>(string name)
+		{
+			int result = 0;
+            switch (name.ToLowerInvariant())
+            {
+<#
+	        foreach (XmlNode item in collect.SelectNodes("Item"))
+	        {
+	            string id = item.Attributes["ID"].InnerText;
+                string value = item.Attributes["Value"].InnerText;
+                string cnname = item.Attributes["CNName"].InnerText;
+                string enname = item.Attributes["ENName"].InnerText;
+#>
+                case "<#= value.ToLowerInvariant() #>":
+                    result = <#= id #>;
+					break;
+<#
+}
+#>
+				
+            }
+            return result;
+
+		}
+
+		/// <summary>
+        /// 获取<#= desc #>的列表
+        /// </summary>
+		public static List<DataSourceBinder> Get<#= name #>List()
+		{
+			var list = new List<DataSourceBinder>
+			{
+<#
+	        foreach (XmlNode item in collect.SelectNodes("Item"))
+	        {
+	            string id = item.Attributes["ID"].InnerText;
+                string value = item.Attributes["Value"].InnerText;
+                string cnname = item.Attributes["CNName"].InnerText;
+                string enname = item.Attributes["ENName"].InnerText;
+#>
+				new DataSourceBinder{
+					ValueField = "<#= id #>",
+					TextField = "<#= cnname #>",
+					TextField_EN = "<#= enname #>"
+				},
+<#
+}
+#>
+			};
+            return list;
+
+		}
+
+		/// <summary>
+        /// 枚举值是否有效
+        /// </summary>
+		public static void ValidateIsValid<#= name #>(<#= strEnumType #> value)
+		{
+			if(value==0 ||  !Enum.IsDefined(typeof(<#= name #>Enum),value) ){
+			   throw new ArgumentOutOfRangeException(String.Format("value[{0}]",value), "不能转换成有效的枚举");
+			}             
+		}
+<#		region.End();#>
+
+<#  
+    }
+
+#>
+        
+    }
+
+	public static class <#= className #>Extensions
+	{
+		
+		<#
+        foreach (XmlNode collect in data.SelectNodes("Collect"))
+        {
+	        string name = collect.Attributes["Name"].InnerText;
+            string desc = collect.Attributes["Desc"].InnerText;
+            string strEnumType = "";
+			try{
+	           
+                 strEnumType = collect.Attributes["Type"].InnerText;
+	          
+            }catch(Exception ex){
+	           
+                 strEnumType="int";
+            }	          
+
+	        foreach (XmlNode item in collect.SelectNodes("Item"))
+	        {
+	            string id = item.Attributes["ID"].InnerText;
+                string value = item.Attributes["Value"].InnerText;
+                string cnname = item.Attributes["CNName"].InnerText;
+}
+#>
+public static int Get<#= name #>Value(this <#= className #>.<#= name #>Enum orderType)
+        {
+            return <#= className #>.<#= name #>ToValue(orderType);
+        }
+<#
+}
+#>
+
+	}
+}
+<#
+}
+fileManager.Process();
+#>
+
+<#+
+
+	
+
+#>

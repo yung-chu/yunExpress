@@ -1,0 +1,62 @@
+﻿@model LMS.Models.FeeTypeModel
+@{
+    Layout = null;
+}
+<form id="editfrom">
+    <div  id="right_con" >
+        <ul>
+            <li class="mt20"><span class="info_box info_middle">类型ID : </span>
+                @Html.TextBoxFor(p=>p.FeeTypeID,new { @class = "txt txt_long",@disabled="true" })
+                <input type="hidden" name="FeeTypeID" value="@Model.FeeTypeID"/>
+            </li>
+            <li class="mt20"><span class="info_box info_middle">类型名称 : </span>
+                @Html.TextBoxFor(p=>p.FeeTypeName,new{@class = "txt txt_long",@maxlength="50"})
+            </li>
+            <li class="mt20"><span class="info_box info_middle">公式 : </span>
+                @Html.TextBoxFor(p=>p.CalculateExpression,new {@class = "txt txt_long",@maxlength="100"})
+            </li>
+            <li class="mt20"><span class="info_box info_middle">状态 : </span>
+                @Html.CheckBoxFor(p=>p.IsEnable)启用
+            </li>
+            <li class="mt20"><span class="info_box info_middle">备注 : </span>
+                @Html.TextAreaFor(p=>p.FeeTypeRemark,new{@class="area vt",@cols="45", @rows="6"})
+            </li>
+            <li class="mt20"><span class="info_box info_middle"></span>
+            <input type="button" class="btn" value="保存" id="Savebnt" onclick="Save();" />
+        </ul>
+    </div>
+</form>
+<script type="text/javascript">
+    function Save() {
+        if ($.trim($("#editfrom #FeeTypeName").val()) == "") {
+            alert("费用类型名称不能为空！");
+            return false;
+        }
+        if ($.trim($("#editfrom #FeeTypeRemark").val()).length > 500) {
+            alert("备注不能超过500个字符！");
+            return false;
+        }
+        $("#editfrom #Savebnt").attr('disabled', true);
+        $.ajax({
+            type: "GET",
+            url: "EditFeeType",
+            dataType: "json",
+            data: $("#editfrom").serialize(),
+            success: function (data) {
+                if (data == "1") {
+                    alert("保存成功！");
+                    $('#dataTable').datagrid("reload");
+                    $('#test').dialog("close");
+                } else if (data == "0") {
+                    alert("保存失败！");
+                } else {
+                    alert(data);
+                }
+            },
+            complete: function (data) {
+                $("#editfrom #Savebnt").attr('disabled', false);
+            }
+        });
+        return true;
+    }
+</script>

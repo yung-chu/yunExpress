@@ -1,0 +1,400 @@
+﻿@model LMS.Controllers.WayBillController.OutStorageScanViewModel
+@{
+    ViewBag.Title = "FristOutStorage";
+}
+<div id="showVenderList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showShippingMethodList" tabindex="100" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showCountryList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div class="domebg" id="right_con">
+    <table id="firsttable" width="100%" border="0" cellpadding="0" cellspacing="0">
+        <tr class="date_row_select">
+            <td>
+                <span class="info_box info_select">服务商:</span>
+                <input type="text" id="_VenderCode" readonly="readonly" class="txt txt_short" />
+                <input type="text" id="_VenderName" class="txt txt_short" />
+                <input type="button" id="selectVender" class="btn" value="选择" />
+            </td>
+        </tr>
+        <tr class="date_row_select">
+            <td>
+                <span class="info_box info_select">运输方式:</span>
+                <span id="ShippingMethodName"></span>
+                <input type="hidden" id="WeightOrVolume" />
+                <input type="button" id="selectShippingMethod" class="btn" value="选择" disabled="disabled" />
+            </td>
+        </tr>
+        <tr class="date_row_select">
+            <td>
+                <span class="info_box info_select">目的国家:</span>
+                <input type="text" id="_CountryChineseName" readonly="readonly" class="txt txt_short">
+                <input type="hidden" id="_CountryCode"class="txt txt_short">
+                <input type="button" id="selectCountry" class="btn" value="选择"/>
+            </td>
+        </tr>
+        <tr class="date_row_select">
+            <td>
+                <span class="info_box info_select">货物类型:</span>
+                @Html.DropDownList("goodTypeId", Model.GoodsTypeModels)
+            </td>
+        </tr>
+        <tr class="date_row_select">
+            <td>
+                <span class="info_box info_select">是否带电:</span>
+                <input type="radio" value="false" name="_IsBattery" checked>普货
+                <input type="radio" value="true" name="_IsBattery">带电
+            </td>
+        </tr>
+        <tr class="date_row_select">
+            <td>
+                <div class="tl" style="margin-left: 60px;">
+                    <input type="button" class="btn" value="下一步" id="btnNext" />
+                </div>
+            </td>
+        </tr>
+    </table>
+    <div id="second" style="display: none;">
+        <table class="data_table" width="100%" cellpadding="0" cellspacing="0" style="font-size: 14px;">
+            <tr class="date_row_select">
+                <td width="15%">
+                    <span class="info_box info_select">服务商:</span>
+                    <span class="info_box" id="venderspan" style="font-weight:bold; "></span>
+                </td>
+                <td width="15%">
+                    <span class="info_box info_select">运输方式:</span>
+                    <span class="info_box" id="ShippingMethodspan" style="font-weight:bold; "></span>
+                </td>
+                <td width="15%">
+                    <span class="info_box info_select">目的国家:</span>
+                    <span class="info_box" id="Countryspan" style="font-weight:bold; "></span>
+                </td>
+                <td width="15%">
+                    <span class="info_box info_select">货物类型:</span>
+                    <span class="info_box" id="goodTypespan" style="font-weight:bold; "></span>
+                </td>
+                <td width="15%">
+                    <span class="info_box info_select">是否带电:</span>
+                    <span class="info_box" id="IsBatteryspan" style="font-weight:bold; "></span>
+                </td>
+                <td width="20%">
+                    <div class="tl">
+                        <input type="button" class="btn" value="保存" id="btnSave" />
+                        <a href="@Url.Action("FristOutStorage")" class="btn_href" style="font-size: 12px;">返回</a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <table width="100%" cellpadding="0" cellspacing="0">
+            <tr valign="top" class="date_row_select">
+                <td width="30%">
+                    <form id="OutStorageform">
+                        <input type="hidden" id="VenderCode" name="VenderCode" />
+                        <input type="hidden" id="GoodsTypeID" name="GoodsTypeID" />
+                        <input type="hidden" id="ShippingMethodId" name="ShippingMethodId" />
+                        <input type="hidden" id="CountryCode" name="CountryCode" />
+                        <input type="hidden" id="IsBattery" name="IsBattery" />
+                        <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr class="date_row_select">
+                                <td>
+                                    <span class="info_box">单号/跟踪号:</span>
+                                    <input type="text" id="WayBillNumber" name="WayBillNumber" class="txt txt_middle" />
+                                </td>
+                            </tr>
+                            <tr class="date_row_select">
+                                <td>
+                                    <span class="info_box info_select">结算重量:</span>
+                                    <span id="SettleWeightSpan" style="color: red; font-size: 24px;"></span>
+                                </td>
+                            </tr>
+                            <tr class="date_row_select">
+                                <td>
+                                    <span class="info_box info_select">发货国家:</span>
+                                    <span id="CountryCodeSpan" style="color: red; font-size: 24px;"></span>
+                                </td>
+                            </tr>
+                            <tr class="date_row_select">
+                                <td>
+                                    <span id="ErrorMessage" style="color: red; font-size: 24px; height: 90px; line-height: 24px;"></span>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </td>
+                <td style="border-left:1px solid  #CDCDCD;">
+                    <span class="info_box" style="color: red;">已扫描运单:<span id="SacnedCount">0</span></span>
+                    <span class="info_box" style="color: red;margin-left: 20px;">总重量:<span id="TotalWeight">0</span>kg</span>
+                    <table id="outStorageTable" class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                        <thead>
+                            <tr class="data_row_two">
+                                <th>运单号
+                                </th>
+                                <th>跟踪号
+                                </th>
+                                <th>客户订单号
+                                </th>
+                                <th>运输方式
+                                </th>
+                                <th>结算重量(kg)
+                                </th>
+                                <th>发货国家
+                                </th>
+                                <th>操作
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <input type="text" id="searchWayBillNumber" class="txt txt_short" /></td>
+                                <td>
+                                    <input type="text" id="searchTrackingNumber" class="txt txt_short" /></td>
+                                <td>
+                                    <input type="text" id="searchOrderNumber" class="txt txt_short" /></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <input type="button" class="btn" value="查询" onclick="SearchScaned();" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    var i = 0;
+    $(function () {
+        //选择服务商
+        $("#selectVender").bind("click", function () {
+            $("#showVenderList").showWindow("@Url.Action("SelectVender", "WayBill")", "选择服务商");
+            var parentWindow = $("#showVenderList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                top: 120
+            }, {
+                duration: 1000,
+                step: function (now, fx) {
+                    $(".window").css("top", now);
+                }
+            });
+            $("#showVenderList").show();
+        });
+        //选择运输方式
+        $("#selectShippingMethod").bind("click", function () {
+            $("#showShippingMethodList").showWindow("@Url.Action("FilterShippingMethod", "WayBill")?venderCode=" + $("#_VenderCode").val() + "&type=2", "选择运输方式");
+            var parentWindow = $("#showShippingMethodList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                top: 120
+            }, {
+                duration: 1000,
+                step: function (now, fx) {
+                    $(".window").css("top", now);
+                }
+            });
+            $("#showShippingMethodList").show();
+        });
+        
+        //选择国家
+        $("#selectCountry").bind("click", function () {
+            $("#showCountryList").showWindow("@Url.Action("SelectCountry", "Common")", "选择国家");
+            var parentWindow = $("#showCountryList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                top: 120
+            }, {
+                duration: 1000,
+                step: function (now, fx) {
+                    $(".window").css("top", now);
+                }
+            });
+            $("#showCountryList").show();
+        });
+        
+        //下一步
+        $("#btnNext").click(function () {
+            if ($("#_VenderCode").val() == "") {
+                alert("请选择服务商！");
+                return false;
+            }
+            if ($("#ShippingMethodId").val() == "") {
+                alert("请选择运输方式！");
+                return false;
+            }
+            if ($("#ShippingMethodName").text() == "国际小包优+" && $("#_CountryCode").val()=="") {
+                alert("国际小包优+运输方式必须选择国家！");
+                return false;
+            }
+            
+            $("#firsttable").hide();
+            $("#venderspan").html($("#_VenderCode").val() + "--" + $("#_VenderName").val());
+            $("#VenderCode").val($("#_VenderCode").val());
+            $("#ShippingMethodspan").html($("#ShippingMethodName").html());
+            $("#goodTypespan").html($("#goodTypeId option:selected").text());
+            $("#GoodsTypeID").val($("#goodTypeId").val());
+            $("#Countryspan").html($("#_CountryChineseName").val());
+            $("#CountryCode").val($("#_CountryCode").val());
+            $("#IsBatteryspan").html($("input[name='_IsBattery']:checked").val() == "false" ? "普货" : "带电");
+            $("#IsBattery").val($("input[name='_IsBattery']:checked").val());
+            $("#second").show();
+            $("#WayBillNumber").focus();
+        });
+        //提交;
+        $("#WayBillNumber").bind("keydown", function (e) {
+            if (e.keyCode == 13) {
+                if ($("#WayBillNumber").val() == "") {
+                    $("#WayBillNumber").focus();
+                    alert("请输入单号！");
+                    PlayFaile();
+                    return false;
+                }
+                $("#ErrorMessage").html("");
+                $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("CheckOnOutStorage")",
+                    dataType: "json",
+                    data: $("#OutStorageform").serialize() + "&diffid=" + new Date().getTime(),
+                    success: function (data) {
+                        if (data.IsSuccess) {
+                            if ($("#outStorageTable > tbody>tr:visible input[value='" + $.trim(data.WayBillNumber) + "']").length > 0) {
+                                $("#ErrorMessage").html("该运单已经扫描过，需要重新扫描，请先取消！");
+                                PlayFaile();
+                            } else {
+                                $("#SettleWeightSpan").html(data.SettleWeight + "kg");
+                                $("#CountryCodeSpan").html(data.Message);
+                                if ($("#ShippingMethodName").text() == "国际小包优+" && parseFloat($("#TotalWeight").text()) + data.SettleWeight > 28) {
+                                    $("#ErrorMessage").html("包裹限重：28kg!请下批再出库！");
+                                    PlayFaile();
+                                    return;
+                                }
+                                CreateTD(data);
+                                PlaySuccess();
+                            }
+                        } else {
+                            $("#ErrorMessage").html(data.Message);
+                            PlayFaile();
+                        }
+                        $("#WayBillNumber").val("");
+                        $("#WayBillNumber").focus();
+                    }
+                });
+                return false;
+            }
+        });
+        //保存
+        $("#btnSave").click(function () {
+            $("#btnSave").attr('disabled', true);
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("CreateOutStorage")",
+                dataType: "json",
+                data: $.merge($("#outStorageTable :hidden").serializeArray(), $("#OutStorageform :hidden").serializeArray()),
+                success: function (data) {
+                    if (data.Result) {
+                        alert("保存成功！");
+                        location.href = "@Url.Action("OutStorageDetail")?OutStorageId=" + data.Message;
+                    } else {
+                        $("#ErrorMessage").html(data.Message);
+                    }
+                },
+                complete: function () {
+                    $("#btnSave").attr('disabled', false);
+                }
+            });
+        });
+    });
+    function CreateTD(obj) {
+        SacnedCount(1);
+        var inputHiddens = "<a href=\"javascript:cancelWayBill('" + obj.WayBillNumber + i + "');\" class=\"btn_href\">取消</a>"
+            + "<input type=\"hidden\" value=\"" + obj.WayBillNumber + "\" name=\"[" + i + "].WayBillNumber\"/>"
+            + "<input type=\"hidden\" value=\"" + obj.Freight + "\" name=\"[" + i + "].Freight\"/>"
+            + "<input type=\"hidden\" value=\"" + obj.FuelCharge + "\" name=\"[" + i + "].FuelCharge\"/>"
+            + "<input type=\"hidden\" value=\"" + obj.Register + "\" name=\"[" + i + "].Register\"/>"
+            + "<input type=\"hidden\" value=\"" + obj.Surcharge + "\" name=\"[" + i + "].Surcharge\"/>"
+            + "<input type=\"hidden\" value=\"" + obj.TrackingNumber + "\" name=\"[" + i + "].TrackingNumber\"/>"
+            + "<input type=\"hidden\" value=\"" + obj.SettleWeight + "\" name=\"[" + i + "].SettleWeight\"/>"
+            + "<input type=\"hidden\" value=\"" + obj.Weight + "\" name=\"[" + i + "].Weight\"/>";
+
+        var row = $('<tr class="data_row_dan" id="' + obj.WayBillNumber + i + '"></tr>')
+            .append($('<td></td>').text(obj ? obj.WayBillNumber : ''))
+            .append($('<td></td>').text(obj ? obj.TrackingNumber : ''))
+            .append($('<td></td>').text(obj.CustomerOrderNumber ? obj.CustomerOrderNumber : ''))
+            .append($('<td></td>').html($("#ShippingMethodspan").html()))
+            .append($('<td></td>').text(obj.SettleWeight ? obj.SettleWeight : ''))
+            .append($('<td></td>').text(obj ? obj.CountryCode : ''))
+            .append($('<td></td>').html(inputHiddens));
+            //.append($('<td></td>').html('<a href="javascript:cancelWayBill(\'' + obj.WayBillNumber + i + '\');" class="btn_href">取消</a>'))
+            //.append(inputhidden);
+        $("#outStorageTable > tbody").append(row);
+        i++;
+        updateTotalWeight();
+    }
+
+
+    function updateTotalWeight() {
+
+        var totalWeight = 0;
+        $("#outStorageTable tr:visible input[name$='.Weight']").each(function () {
+            totalWeight += parseFloat($(this).val());
+        });
+
+        $("#TotalWeight").text(totalWeight.toFixed(3));
+    }
+    
+    function cancelWayBill(waybillnumber) {
+        //原来的方法
+        //$("#" + waybillnumber + " :hidden").val("");
+        //$("#" + waybillnumber).hide();
+        
+        //新添加的方法
+        var tr = $("tr[id=" + waybillnumber + "]");
+        tr.find('input[type="hidden"]').val("");
+        tr.find('td').not(':last').text("");
+        $("#" + waybillnumber).hide();
+        SacnedCount(0);
+        updateTotalWeight();
+    }
+    function SacnedCount(obj) {
+        var c = parseInt($("#SacnedCount").html());
+        if (obj == 1) {
+            c++;
+        } else {
+            c--;
+        }
+        $("#SacnedCount").html(c);
+    }
+    function SearchScaned() {
+        var tr = $("#outStorageTable > tbody>tr:gt(0)").filter(function (index) {
+            return $("td:eq(0)", this).text() != "";
+        });
+        if ($.trim($("#searchWayBillNumber").val()) != "") {
+            var wbtr = tr.filter("td:eq(0):contains('" + $.trim($("#searchWayBillNumber").val()) + "')");
+            tr.not(wbtr).hide();
+            tr = wbtr;
+        }
+        if ($.trim($("#searchTrackingNumber").val()) != "") {
+            var tntr = tr.filter("td:eq(1):contains('" + $.trim($("#searchTrackingNumber").val()) + "')");
+            tr.not(tntr).hide();
+            tr = tntr;
+        }
+        if ($.trim($("#searchOrderNumber").val()) != "") {
+            var ontr = tr.filter("td:eq(2):contains('" + $.trim($("#searchOrderNumber").val()) + "')");
+            tr.not(ontr).hide();
+            tr = ontr;
+        }
+        tr.show();
+    }
+    function PlaySuccess() {
+        $('embed').remove();
+        $('body').append('<embed src="/Css/Success.wav" autostart="true" hidden="true" loop="false">');
+    }
+
+    function PlayFaile() {
+        $('embed').remove();
+        $('body').append('<embed src="/Css/Faile.wav" autostart="true" hidden="true" loop="false">');
+    }
+</script>

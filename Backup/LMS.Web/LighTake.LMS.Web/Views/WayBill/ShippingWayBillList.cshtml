@@ -1,0 +1,265 @@
+﻿@model LMS.Controllers.WayBillController.ShippingWayBillListViewModel
+@{
+    ViewBag.Title = "ShippingWayBillList";
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+}
+<div>
+    @using (Html.BeginForm())
+    {
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+            <td width="20%">
+                <span class="info_box info_select">服务商:</span>
+                <input type="hidden" id="_VenderCode" value="@Model.FilterModel.VenderCode" name="FilterModel.VenderCode"/>
+                <input type="text" id="_VenderName" value="@Model.FilterModel.VenderName" name="FilterModel.VenderName" class="txt txt_short"  readonly="readonly"  />
+                <a href="javascript:void(0)" id="OldselectVender" class="btn_href">选择</a>
+            </td>
+            <td width="20%">
+                <span class="info_box info_select">发货渠道:</span>
+                <input type="text" id="OutShippingName" value="@Model.FilterModel.OutShippingMehtodName" name="FilterModel.OutShippingMehtodName" readonly="readonly" class="txt txt_short"/>
+                <input type="hidden" id="OutShippingMethodId" name="FilterModel.OutShippingMehtodId" value="@Model.FilterModel.OutShippingMehtodId" />
+                <input type="button" id="OldOutselectShippingMethod" class="btn" value="选择" />
+            </td>
+            <td width="20%">
+                <span class="info_box info_select">收货渠道:</span>
+                <input type="text" id="ShippingName" value="@Model.FilterModel.InShippingMehtodName" name="FilterModel.InShippingMehtodName" readonly="readonly" class="txt txt_short"/>
+                <input type="hidden" id="ShippingMethodId" name="FilterModel.InShippingMehtodId" value="@Model.FilterModel.InShippingMehtodId" />
+                <input type="button" id="InselectShippingMethod" class="btn" value="选择" />
+            </td>
+            <td width="20%">
+                <span class="info_box info_select">出仓人:</span>
+                @Html.TextBoxFor(p => p.FilterModel.OutCreateBy)
+            </td>
+            <tr />
+            <tr class="date_row_select">
+                <td colspan="2">
+                    <span class="info_box info_select">发货日期:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.StartTime, new {@onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.StartTime), @class = "txt wdate", @style = "width:130px;"})
+                    <span>至:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.EndTime, new {@onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.EndTime), @class = "txt wdate", @style = "width:130px;"})
+                </td>
+                <td rowspan="2" width="20%">
+                    <span class="info_box info_select">查询条件:</span>
+                    @Html.DropDownListFor(o => o.FilterModel.SearchWhere, Model.SearchWheres, new{@style = "width:100px"})
+                </td>
+                <td rowspan="2" width="20%">
+                    <span class="info_box info_select">查询内容:</span>
+                    @Html.TextAreaFor(p => p.FilterModel.SearchContext, new {@style = "height:80px; width:210px;"})
+                </td>
+            </tr>
+            <tr class="date_row_select">
+            <td>
+                <input type="submit" class="btn" value="搜索" id="btnSearch" name="btnSearch" />
+                <input type="hidden" value="@Model.FilterModel.Page" name="FilterModel.Page" />
+                <input type="hidden" value="@Model.FilterModel.PageSize" name="FilterModel.PageSize" />
+                <input type="hidden" value="@Model.FilterModel.DateWhere" name="FilterModel.DateWhere" />
+                <input type="hidden" value="@Model.FilterModel.Filter" name="FilterModel.Filter" disabled="disabled"/>
+                <input type="hidden" id="outStorageID" value="" />
+                <input type="button" class="btn" value="修改发货渠道" id="btnUpdate" name="btnUpdate" onclick="return Update();" />
+                <input type="submit" class="btn" value="导出" id="btnExport" name="btnExport" />
+            </td>
+            <tr />
+        </table>
+        <div>
+            <div id="pm_dis_div">
+                <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                    
+                    <tr class="data_row_two">
+
+                        <th>
+                            <input type="checkbox" class="checkbox" id="SelectAll" name="SelectAll" /><label for="SelectAll">全选单页</label>
+                            <br/>
+                            <input type="checkbox" class="checkbox" id="SelectTotal" name="SelectTotal" /><label for="SelectTotal">全选所有</label>
+                        </th>
+                        <th>运单号
+                        </th>
+                        <th>客户订单号
+                        </th>
+                        <th>跟踪号
+                        </th>
+                        <th>出仓单号
+                        </th>
+                        <th>服务商
+                        </th>
+                        <th>发货渠道
+                        </th>
+                        <th>收货渠道
+                        </th>
+                        <th>收货国家
+                        </th>
+                        <th>发货日期
+                        </th>
+                        <th>出仓人
+                        </th>
+                        <th>备注
+                        </th>
+                    </tr>
+                    @foreach (var row in Model.PagedList)
+                    {
+                        <tr class="data_row_dan">
+                            <td>
+                                @if (row.IsUpdate)
+                                {
+                                    <input type="checkbox" class="checkbox" name="WayBillNumbers" value="@row.WayBillNumber" />
+                                }
+                            </td>
+                            <td>
+                                @row.WayBillNumber
+                            </td>
+                            <td>
+                                @row.CustomerOrderNumber
+                            </td>
+                            <td>
+                                @row.TrackingNumber
+                            </td>
+                            <td>
+                                @row.OutStorageID
+                            </td>
+                            <td>
+                                @row.VenderName
+                            </td>
+                            <td>
+                                @row.OutShippingMethodName
+                            </td>
+                            <td>
+                                @row.InShippingMethodName
+                            </td>
+                            <td>
+                                @row.CountryCode
+                            </td>
+                            <td>
+                                @row.OutStorageCreatedOn
+                            </td>
+                            <td>
+                                @row.OutStorageCreatedBy
+                            </td>
+                            <td>
+                                @row.Remark
+                            </td>
+                        </tr>
+                    }
+                    <tr class="data_row_none">
+                        <td colspan="12">
+                            @Html.Pager(Model.PagedList, Model.FilterModel)
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    }
+</div>
+<div id="test" style="padding-left: 15px; padding-top: 10px;">
+</div>
+<div id="showVenderList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="OutShippingMethodList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showShippingMethodList" style="overflow: scroll; display: none; position: relative">
+</div>
+<script type="text/javascript">
+    $(function () {
+        //选择服务商
+        $("#OldselectVender").bind("click", function () {
+            $("#showVenderList").showWindow("@Url.Action("SelectVender", "WayBill")", "选择服务商");
+            var parentWindow = $("#showVenderList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                    top: 120
+                }, {
+                    duration: 1000,
+                    step: function (now, fx) {
+                        $(".window").css("top", now);
+                    }
+                });
+            $("#showVenderList").show();
+        });
+
+        //选择发货运输方式
+        $("#OldOutselectShippingMethod").bind("click", function () {
+            $("#OutShippingMethodList").showWindow("@Url.Action("SelectOutShippingMethod", "WayBill")?type=1", "选择运输方式");
+            var parentWindow = $("#OutShippingMethodList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                    top: 120
+                }, {
+                    duration: 1000,
+                    step: function (now, fx) {
+                        $(".window").css("top", now);
+                    }
+                });
+            $("#OutShippingMethodList").show();
+        });
+        //选择收货运输方式
+        $("#InselectShippingMethod").bind("click", function () {
+            $("#showShippingMethodList").showWindow("@Url.Action("SelectShippingMethod", "WayBill")?type=1", "选择运输方式");
+            var parentWindow = $("#showShippingMethodList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                    top: 120
+                }, {
+                    duration: 1000,
+                    step: function (now, fx) {
+                        $(".window").css("top", now);
+                    }
+                });
+            $("#showShippingMethodList").show();
+        });
+    });
+
+    $("#SelectAll").click(function () {
+        if ($(this).attr("checked")) {
+            $(":checkbox[name='WayBillNumbers']").attr("checked", true);
+        } else {
+            $(":checkbox[name='WayBillNumbers']").attr("checked", false);
+        }
+    });
+    $("#SelectTotal").click(function () {
+        if ($(this).attr("checked")) {
+            $(":checkbox[name='WayBillNumbers']").attr("checked", true);
+        } else {
+            $(":checkbox[name='WayBillNumbers']").attr("checked", false);
+        }
+    });
+    
+    function Update() {
+        var selectwayBillNumber = [];
+        var w = "";
+        $("input[name='WayBillNumbers']:checked").each(function () {
+            selectwayBillNumber.push($(this).val());
+        });
+        w = selectwayBillNumber.join(',');
+        $("#outStorageID").val(w);
+        if ($("input[name='SelectTotal']:checked").length > 0) {
+            
+        } else{
+            if (w == "") {
+                alert("请选择要修改的运单！");
+                return false;
+            }
+        }
+        $("#test").showWindow('UpdateOutStorageInfo?type=2', "修改发货渠道", 480, 400);
+        var parentWindow = $("#test").parent("div");
+        $(parentWindow).css("top", "0");
+        $(parentWindow).animate({
+            top: 120 + getScrollTop()
+        }, {
+            duration: 1000,
+            step: function (now, fx) {
+                $(".window").css("top", now);
+
+            }
+        });
+        $("#test").show();
+        return false;
+    }
+    function getScrollTop() {
+        var scrollTop = 0;
+        if (document.documentElement && document.documentElement.scrollTop) {
+            scrollTop = document.documentElement.scrollTop;
+        }
+        else if (document.body) {
+            scrollTop = document.body.scrollTop;
+        }
+        return scrollTop;
+    }
+</script>

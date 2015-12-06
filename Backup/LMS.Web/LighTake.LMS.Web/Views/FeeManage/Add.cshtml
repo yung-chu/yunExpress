@@ -1,0 +1,57 @@
+﻿@{
+    Layout = null;
+}
+
+<form id="addfrom">
+    <div  id="right_con" >
+        <ul>
+            <li class="mt20"><span class="info_box info_middle">类型名称 : </span>
+                <input type="text" id="FeeTypeName" name="FeeTypeName" class="txt txt_long" maxlength="50" />
+            </li>
+            <li class="mt20"><span class="info_box info_middle">公式 : </span>
+                <input type="text" id="CalculateExpression" name="CalculateExpression" class="txt txt_long" maxlength="100" />
+            </li>
+            <li class="mt20"><span class="info_box info_middle">状态 : </span>
+                <input type="checkbox" id="IsEnable" name="IsEnable" value="true" />启用
+            </li>
+            <li class="mt20"><span class="info_box info_middle">备注 : </span>
+                <textarea class="area vt" id="FeeTypeRemark" name="FeeTypeRemark" cols="45" rows="6"></textarea>
+            </li>
+            <li class="mt20"><span class="info_box info_middle"></span>
+            <input type="button" class="btn" value="保存" id="Savebnt" onclick="Save();" />
+        </ul>
+    </div>
+</form>
+<script type="text/javascript">
+    function Save() {
+        if ($.trim($("#addfrom #FeeTypeName").val()) == "") {
+            alert("费用类型名称不能为空！");
+            return false;
+        }
+        if ($.trim($("#addfrom #FeeTypeRemark").val()).length > 500) {
+            alert("备注不能超过500个字符！");
+            return false;
+        }
+        $("#addfrom #Savebnt").attr('disabled', true);
+        $.ajax({
+            type: "GET",
+            url: "CreateFeeType",
+            dataType: "json",
+            data: $("#addfrom").serialize(),
+            success: function (data) {
+                if (data.Result) {
+                    alert("保存成功！");
+                    if (data.Message != null) {
+                        $('#dataTable').datagrid("reload");
+                        $('#test').dialog("close");
+                    }
+                } else {
+                    alert(data.Message);
+                }
+            },
+            complete: function (data) {
+                $("#addfrom #Savebnt").attr('disabled', false);
+            }
+        });
+    }
+</script>

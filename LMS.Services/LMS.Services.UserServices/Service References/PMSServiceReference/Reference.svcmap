@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="3cdc12f1-5427-412e-8f0d-7542af7a097d" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://192.168.5.186:901/PMS.WcfService/PMSService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="PMSService.xsd" MetadataType="Schema" ID="43db88de-f57a-45d5-be16-305bdf80295e" SourceId="1" SourceUrl="http://192.168.5.186:901/PMS.WcfService/PMSService.svc?xsd=xsd2" />
+    <MetadataFile FileName="PMSService.disco" MetadataType="Disco" ID="dfdc3d09-3ecd-4cfb-b856-16978c4555a8" SourceId="1" SourceUrl="http://192.168.5.186:901/PMS.WcfService/PMSService.svc?disco" />
+    <MetadataFile FileName="PMSService1.xsd" MetadataType="Schema" ID="f9730a2f-13e2-4f91-a953-7f9432b7d082" SourceId="1" SourceUrl="http://192.168.5.186:901/PMS.WcfService/PMSService.svc?xsd=xsd1" />
+    <MetadataFile FileName="PMSService2.xsd" MetadataType="Schema" ID="691f39af-7e68-48ce-ac3b-08770fd6057d" SourceId="1" SourceUrl="http://192.168.5.186:901/PMS.WcfService/PMSService.svc?xsd=xsd3" />
+    <MetadataFile FileName="PMSService3.xsd" MetadataType="Schema" ID="581dfc10-582b-441b-b150-cb70599cd813" SourceId="1" SourceUrl="http://192.168.5.186:901/PMS.WcfService/PMSService.svc?xsd=xsd0" />
+    <MetadataFile FileName="PMSService.wsdl" MetadataType="Wsdl" ID="2fcc3465-f4e6-4ff8-9b16-ad097b602081" SourceId="1" SourceUrl="http://192.168.5.186:901/PMS.WcfService/PMSService.svc?wsdl" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

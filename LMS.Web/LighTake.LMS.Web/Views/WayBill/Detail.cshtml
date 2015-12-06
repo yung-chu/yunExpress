@@ -1,0 +1,512 @@
+﻿@using LMS.Data.Entity
+@model LMS.Controllers.WayBillController.WayBillInfoModel
+@{
+    ViewBag.Title = "Detail";
+}
+<div id="showShippingMethodList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div class="domebg" id="right_con">
+    <h2>运单详细</h2>
+    <hr style="width: 70%" align="left"/>
+    <input id="WayBillNumber" type="hidden" value="@Model.WayBillNumber"/>
+    <div class="fix pct70">
+        <div class="float_four">
+            <span class="info_box" style="font-size: 16px" >&nbsp;运单号:</span>
+            <span class="info_box" style="color: red; font-size: 14px">@Model.WayBillNumber </span>
+        </div>
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">&emsp;&emsp;状态:</span>
+            <span class="info_box" style="font-size: 14px">@WayBill.GetStatusDescription(Model.Status)</span>
+        </div>
+        <div class="float_four">
+            @if (Model.Status < WayBill.StatusToValue(WayBill.StatusEnum.Delete) || Model.Status == WayBill.StatusToValue(WayBill.StatusEnum.WaitOrder))
+            {
+                <input type="button" class="btn" value="保存" onclick=" saveWayBillInfo(this); " />
+            }
+         @*   <a href="@(!string.IsNullOrWhiteSpace(Request.QueryString["ReturnUrl"])?Request.QueryString["ReturnUrl"]:Url.Action("List"))" class="btn_href">返回列表</a>*@
+        </div>
+        <div class="float_four">
+        </div>
+    </div>
+    <br/>
+    <div class="fix pct70">
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">客户单号:</span>
+            <span class="info_box" style="font-size: 14px"> @Model.CustomerOrderNumber</span>
+        </div>
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">客户编号:</span>
+            <span class="info_box" style="font-size: 14px">@Model.CustomerCode</span>   
+        </div>
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">客户名称:</span>
+            <span class="info_box" style="font-size: 14px">@Model.CustomerCodeName</span>
+        </div>
+        <div class="float_four">
+        </div>
+    </div>
+    <hr style="width: 70%" align="left"/>
+    <h3 class="info_box">货物信息:</h3>
+    <br/>
+    <div class="fix pct70">
+        <div class="float_four">
+           <span class="info_box" style="font-size: 14px">包裹类型:</span> 
+            @if (Model.GoodsTypeInfo != null)
+            {
+                <span class="info_box" style="font-size: 14px">@Model.GoodsTypeInfo.GoodsTypeName</span>
+            }
+        </div>
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">&emsp;&emsp;重量:</span>
+            <span class="info_box" style="font-size: 14px">@(Model.Weight)kg</span>   
+        </div>
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">&emsp;&emsp;件数:</span>
+            <span class="info_box" style="font-size: 14px">@Model.CustomerOrderInfo.PackageNumber</span>
+        </div>
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">收货时间:</span>
+            <span class="info_box" style="font-size: 14px">@(Model.InStorageTime.HasValue ? Model.InStorageTime.Value.ToString("yyyy-MM-dd HH:mm") : "")</span>
+        </div>
+    </div>
+    <br/>
+    <div class="fix pct70">
+        <div class="float_four">
+           <span class="info_box" style="font-size: 14px">&emsp;&emsp;体积:</span>
+           <span class="info_box" style="font-size: 14px">@(Model.Length)cm*@(Model.Width)cm*@(Model.Height)cm</span>
+        </div>
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">保险类型:</span>
+            @if (Model.InsuredCalculation != null)
+            {
+                <span class="info_box" style="font-size: 14px">@(Model.InsuredCalculation.InsuredName)</span>
+            }  
+        </div>
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">保险价值:</span>
+            <span class="info_box" style="font-size: 14px">@(Model.CustomerOrderInfo.InsureAmount)</span>
+        </div>
+        
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">是否关税预付:</span>
+            <span class="info_box" style="font-size: 14px">
+              @if (Model.EnableTariffPrepay)
+              { <text>是</text> }
+              else
+              { <text>否</text>}
+            </span>
+        </div>
+        
+
+            <div class="float_four">
+                <span class="info_box" style="font-size: 14px">发货时间:</span>
+                <span class="info_box" style="font-size: 14px">@(Model.OutStorageTime.HasValue ? Model.OutStorageTime.Value.ToString("yyyy-MM-dd HH:mm") : "")</span>
+            </div>
+        </div>
+    <hr style="width: 70%" align="left"/>
+    <h3 class="info_box">发货客户信息:</h3>
+    <br/>
+    <div class="fix pct70">
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">客户名称:</span>
+            @if (Model.SenderInfo != null)
+            {
+                <span class="info_box" style="font-size: 14px">@(Model.SenderInfo.SenderFirstName + "" + Model.SenderInfo.SenderLastName)</span>   
+            }
+        </div>
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">&emsp;&emsp;电话:</span>
+            @if (Model.SenderInfo != null)
+            {
+                <span class="info_box" style="font-size: 14px">@(Model.SenderInfo.SenderPhone)</span>
+            }
+        </div>
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">&emsp;&emsp;邮编:</span>
+            @if (Model.SenderInfo != null)
+            {
+                <span class="info_box" style="font-size: 14px">@(Model.SenderInfo.SenderZip)</span>
+            } 
+        </div>
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">&emsp;&emsp;城市:</span>
+            @if (Model.SenderInfo != null)
+            {
+                <span class="info_box" style="font-size: 14px">@(Model.SenderInfo.SenderCity)</span>
+            }
+        </div>
+    </div>
+    <div class="fix pct70">
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">&emsp;&emsp;省/州:</span>
+            @if (Model.SenderInfo != null)
+            {
+                <span class="info_box" style="font-size: 14px">@(Model.SenderInfo.SenderState)</span>   
+            }
+        </div>
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">发货地址:</span>
+            @if (Model.SenderInfo != null)
+            {
+                <span class="info_box" style="font-size: 14px">@(Model.SenderInfo.SenderAddress)</span>   
+            }
+        </div>
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">发货公司:</span>
+            @if (Model.SenderInfo != null)
+            {
+                <span class="info_box" style="font-size: 14px">@(Model.SenderInfo.SenderCompany)</span>   
+            }
+        </div>
+        <div class="float_four">
+        </div>
+    </div>
+    <hr style="width: 70%" align="left"/>
+    <h3 class="info_box">收货人信息:</h3>
+    <br/>
+    <div class="fix pct70">
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">&emsp;收件人:</span>
+            @if (Model.ShippingInfo != null)
+            {
+                <span class="info_box" style="font-size: 14px">@(Model.ShippingInfo.ShippingFirstName + " " + Model.ShippingInfo.ShippingLastName)</span>
+            }
+        </div>
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">&emsp;&emsp;电话:</span>
+            @if (Model.ShippingInfo != null)
+            {
+                <span class="info_box" style="font-size: 14px">@Model.ShippingInfo.ShippingPhone</span>
+            } 
+        </div>
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">&emsp;&emsp;邮编:</span>
+            @if (Model.ShippingInfo != null)
+            {
+                <span class="info_box" style="font-size: 14px">@Model.ShippingInfo.ShippingZip</span> 
+            }
+        </div>
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">&emsp;&emsp;城市:</span>
+            @if (Model.ShippingInfo != null)
+            {
+                <span class="info_box" style="font-size: 14px">@Model.ShippingInfo.ShippingCity</span>
+            }
+        </div>
+    </div>
+    <br/>
+    <div class="fix pct70">
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">&emsp;省/州:</span>
+            @if (Model.ShippingInfo != null)
+            {
+                <span class="info_box" style="font-size: 14px">@Model.ShippingInfo.ShippingState</span>
+            }
+        </div>
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">收件人税号:</span>
+            @if (Model.ShippingInfo != null)
+            {
+                <span class="info_box" style="font-size: 14px">@(Model.ShippingInfo.ShippingTaxId)</span>
+            }
+        </div>
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">详细地址:</span>
+            @if (Model.ShippingInfo != null)
+            {
+                <span class="info_box" style="font-size: 14px">@(Model.ShippingInfo.ShippingAddress + " " + Model.ShippingInfo.ShippingAddress1 + " " + Model.ShippingInfo.ShippingAddress2)</span>
+            }
+        </div>
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">收货公司:</span>
+            @if (Model.ShippingInfo != null)
+            {
+                <span class="info_box" style="font-size: 14px">@Model.ShippingInfo.ShippingCompany</span>
+            }
+        </div>
+    </div>
+    <hr style="width: 70%" align="left"/>
+    <h3 class="info_box">承运信息:</h3>
+    <br/>
+    <div class="fix pct70">
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">&emsp;&emsp;国家:</span>
+            @if (Model.SenderInfo != null)
+            {
+                <span class="info_box" style="font-size: 14px">@Model.ShippingInfo.CountryCode</span>
+            }
+        </div>
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">客户发货方式:</span>
+            <span id="ShippingMethodName" style="font-size: 14px">@Model.InShippingName</span>
+            <input type="hidden" id="ShippingMethodId" value="@Model.InShippingMethodID"/>
+            @if (Model.Status < WayBill.StatusToValue(WayBill.StatusEnum.Have))
+            {
+                <input type="button" id="selectShippingMethod" class="btn" value="选择" />
+            }
+        </div>
+        <div class="float_four">
+          
+            @*    @if (Model.Status < WayBill.StatusToValue(WayBill.StatusEnum.Send))
+            {
+                <span class="info_box" style="font-size: 14px">@Html.TextBoxFor(p => p.TrackingNumber, new { @class = "txt txt_short" })</span>
+            }
+            else
+            {
+                <span class="info_box" style="font-size: 14px">@Model.TrackingNumber</span>
+            }*@
+
+       @*     <span class="info_box" style="font-size: 14px" id="TrackingNumber" name="TrackingNumber">@Model.TrackingNumber</span>*@
+             @if (Model.Status < WayBill.StatusToValue(WayBill.StatusEnum.Delete) || Model.Status == WayBill.StatusToValue(WayBill.StatusEnum.WaitOrder))
+             {
+                 <span class="info_box" style="font-size: 14px">录入跟踪号:</span>
+                <input type="text" class = "txt txt_short" id="TrackingNumber" name="TrackingNumber"/>
+             }
+        </div>
+        
+        
+        <div class="float_four">
+             <span class="info_box" style="font-size: 14px">新跟踪号:</span>
+             <span class="info_box" style="font-size: 14px" id="setTrackingNumber">@Model.TrackingNumber</span>
+        </div>
+
+        <div class="float_four">
+        </div>
+    </div>
+    <div class="fix pct70">
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">原跟踪号:</span>
+            <span class="info_box" style="font-size: 14px">@Model.RawTrackingNumber</span>
+        </div>
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">转单时间:</span>
+            <span class="info_box" style="font-size: 14px">@(Model.TransferOrderDate.HasValue ? Model.TransferOrderDate.Value.ToString("yyyy-MM-dd HH:mm") : "")</span>
+        </div>
+        <div class="float_four">
+        </div>
+        <div class="float_four">
+        </div>
+    </div>
+    <hr style="width: 70%" align="left"/>
+    <h3 class="info_box">申报信息:</h3>
+    <br/>
+    <div class="fix pct70">
+        <div class="float_four">
+            <span class="info_box" style="font-size: 14px">申报类型:</span>
+            @{
+                var appLicationType = CustomerOrder.GetApplicationTypeDescription(Model.CustomerOrderInfo.AppLicationType);
+            }
+            <span class="info_box" style="font-size: 14px">@appLicationType</span>
+        </div>
+        <div class="float_four">
+            @{
+                decimal totalprice = 0;
+                if (Model.ApplicationInfos != null && Model.ApplicationInfos.Count > 0)
+                {
+                    totalprice = Model.ApplicationInfos.Sum(p => p.UnitPrice == null ? 0 : p.UnitPrice.Value * (p.Qty ?? 0));
+                }
+            }
+            <span class="info_box" style="font-size: 14px">申报价值:</span>
+            <span class="info_box" style="font-size: 14px">$@totalprice.ToString("F2")</span>
+        </div>
+        <div class="float_four">
+        </div>
+        <div class="float_four">
+        </div>
+    </div>
+    @*<table id="firsttable" class="data_table" width="100%" border="0" cellpadding="0" cellspacing="0">
+         <tr class="date_row_select">
+             
+            <th>
+                <span class="info_box">物流公司:</span>
+                @Model.VenderName
+            </th>
+            <th>
+                <span class="info_box">实际发货方式:</span>
+                @Model.OutShippingName
+            </th>
+             <td>
+                 <span class="info_box">客户单号:</span>
+                 @Model.CustomerOrderNumber
+             </td>
+             <td>
+                 <span class="info_box">客户编号:</span>
+                 @Model.CustomerCode
+             </td>
+             <td>
+                 <span class="info_box">客户发货方式:</span>
+                 <span id="ShippingMethodName">@Model.InShippingName</span>
+                 <input type="hidden" id="ShippingMethodId" value="@Model.InShippingMethodID"/>
+                 @if (Model.Status < WayBill.StatusToValue(WayBill.StatusEnum.Have))
+                 {
+                     <input type="button" id="selectShippingMethod" class="btn" value="选择" />
+                 }
+             </td>
+             <td rowspan="3">
+                 @if (Model.Status < WayBill.StatusToValue(WayBill.StatusEnum.Send))
+                 {
+                     <input type="button" class="btn" value="保存" onclick="saveWayBillInfo(this);" />
+                 }
+                 <a href="@(!string.IsNullOrWhiteSpace(Request.QueryString["ReturnUrl"])?Request.QueryString["ReturnUrl"]:Url.Action("List"))" class="btn_href">返回列表</a>
+             </td>
+         </tr>
+        <tr class="date_row_select">
+            <td>
+               
+            </td>
+            <td>
+                @{
+                    decimal totalprice = 0;
+                    if (Model.ApplicationInfos != null && Model.ApplicationInfos.Count > 0)
+                    {
+                        totalprice = Model.ApplicationInfos.Sum(p => p.UnitPrice == null ? 0 : p.UnitPrice.Value * (p.Qty ?? 0));
+                    }
+                }
+                <span class="info_box">申报价值:</span>
+                $@totalprice.ToString("F2")
+            </td>
+            <td>
+                <span class="info_box">跟踪号:</span>
+                @if (Model.Status < WayBill.StatusToValue(WayBill.StatusEnum.Send))
+                {
+                    @Html.TextBoxFor(p => p.TrackingNumber, new { @class = "txt txt_short" })
+                }
+                else
+                {
+                    @Model.TrackingNumber
+                }
+            </td>
+        </tr>
+        <tr class="date_row_select">
+            <td>
+                <span class="info_box">收货时间:</span>
+                
+            </td>
+            <td>
+                <span class="info_box">发货时间:</span>
+                
+            </td>
+            <td></td>
+        </tr>
+        @if (Model.ShippingInfoID.HasValue)
+        {
+            <tr class="date_row_select">
+                <td>
+                    <span class="info_box">收件人:</span>
+                    @(Model.ShippingInfo.ShippingFirstName + " " + Model.ShippingInfo.ShippingLastName)
+                </td>
+                <td>
+                    <span class="info_box">国家:</span>
+                    @Model.ShippingInfo.CountryCode
+                </td>
+                <td>
+                    <span class="info_box">电话:</span>
+                    @Model.ShippingInfo.ShippingPhone
+                </td>
+                <td>
+                    <span class="info_box">邮编:</span>
+                    @Model.ShippingInfo.ShippingZip
+                </td>
+            </tr>
+            <tr class="date_row_select">
+                <td>
+                    <span class="info_box">地址:</span>
+                    @Model.ShippingInfo.ShippingAddress
+                </td>
+                <td>
+                    <span class="info_box">城市:</span>
+                    @Model.ShippingInfo.ShippingCity
+                </td>
+                <td>
+                    <span class="info_box">省/州:</span>
+                    @Model.ShippingInfo.ShippingState
+                </td>
+                <td></td>
+            </tr>
+        }
+    </table>
+    <span>申报信息</span>*@
+    <table class="data_table mt20" width="70%" border="1" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr class="data_row_two">
+                <th>序号</th>
+                <th>申报名称</th>
+                <th>申报中文名称</th>
+                <th>海关编号</th>
+                <th>数量</th>
+                <th>重量Kg</th>
+                <th>申报价值</th>
+                <th>备注</th>
+                <th>总额</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var index = 1;
+                foreach (var w in Model.ApplicationInfos)
+                {
+                    decimal total;
+                    total = w.UnitPrice == null ? 0 : w.UnitPrice.Value * (w.Qty ?? 0);
+                    <tr>
+                        <td>@index</td>
+                        <td>@w.ApplicationName</td>
+                        <td>@w.PickingName</td>
+                        <td>@w.HSCode</td>
+                        <td>@w.Qty</td>
+                        <td>@(w.UnitWeight.HasValue ? w.UnitWeight.Value.ToString("F2") : "")</td>
+                        <td>@(w.UnitPrice.HasValue ? w.UnitPrice.Value.ToString("F2") : "")</td>
+                        <td>@w.Remark</td>
+                        <td>@(total.ToString("F2"))</td>
+                    </tr>
+                    index++;
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    $(function () {
+        if ($("#selectShippingMethod").length > 0) {
+        $("#selectShippingMethod").bind("click", function () {
+           
+                $("#showShippingMethodList").showWindow("@Url.Action("SelectShippingMethod", "WayBill")?customerTypeId=" + $("#CustomerType").val()+"&type=1", "选择运输方式");
+                var parentWindow = $("#showShippingMethodList").parent("div");
+                $(parentWindow).css("top", "0");
+                $(parentWindow).animate({
+                    top: 120
+                }, {
+                    duration: 1000,
+                    step: function (now, fx) {
+                        $(".window").css("top", now);
+                    }
+                });
+                $("#showShippingMethodList").show();
+            });
+        }
+    });
+    
+    function saveWayBillInfo(obj) {
+        $(obj).attr('disabled', true);
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("SaveWayBill")",
+            dataType: "json",
+            data: { WayBillNumber: $("#WayBillNumber").val(), ShippingMethodId: $("#ShippingMethodId").val(), TrackingNumber: $.trim($("#TrackingNumber").val()), ShippingMethodName: $("#ShippingMethodName").html()},
+            success: function (data) {
+                if (data.Result) {
+                    alert("保存成功！");
+
+                    //清空跟踪号
+                    $("input[id='TrackingNumber']").val("");
+                } else {
+                    alert(data.Message);
+                }
+             
+
+            },
+            complete: function () {
+                $(obj).attr('disabled', false);
+            }
+        });
+    }
+</script>

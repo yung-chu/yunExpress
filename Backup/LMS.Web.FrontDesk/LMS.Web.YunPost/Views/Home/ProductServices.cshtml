@@ -1,0 +1,140 @@
+﻿
+@model LMS.FrontDesk.Controllers.HomeController.Models.HomeListModel
+@{
+
+    if (Model.CategoryInfo != null)
+    {
+        ViewBag.Title = string.IsNullOrWhiteSpace(Model.CategoryInfo.SeoTitle) ? "云途物流" : Model.CategoryInfo.SeoTitle;
+    }
+    else
+    {
+        ViewBag.Title = "云途物流";
+    }
+
+}
+
+@section ExtraHeadContent {
+    <meta name="description" content="@ViewBag.Description">
+    <meta name="Keywords" content="@ViewBag.SeoKey">
+}
+
+
+<!--bn-->
+
+@*<div class="bn_area" style="height:300px;box-shadow:0 0 3px #b1b1b1; position:relative;" id="inx_AdSlide">
+    <div style=" background:url(@Url.Content(string.IsNullOrWhiteSpace(Model.CategoryModel.Pic)?"~/images/banner/bn5.jpg":Model.PicPath+Model.CategoryModel.Pic)) no-repeat center #FFF; height:300px;">
+    </div>
+</div>*@
+
+
+@*<div class="conStr">
+  <div class="strIn">
+  <div class="tr pt20 lh20">
+                    <div class="bread_area">
+                                <span class="vm">
+                                    <a href="@Url.Action("Index","Home")" class="tdn" title="回到首页">首页</a>
+                                    &gt;
+                                    <span href="@Url.Action("ProductServices", "Home", new { id = 3 })" class="bread_on">
+                                        产品服务
+                                    </span>
+                                </span>
+                                
+                            </div>
+                    
+                </div>	  
+  <div class="fix mt10 pl10">
+        	<div class="l w220">
+                <ul class="mul_box">
+                    <li class="mul_tt">
+                        产品服务
+                        <img src="@Url.Content("~/images/mul_ll_03.jpg")" style="position:absolute; right:-7px; top:0;"  />
+                    </li>
+                    
+                    
+                    @foreach (var row in Model.CategoryModels)
+                    {
+                        string css = Model.CategoryId == row.CategoryID ? "mul_a on" : "mul_a";
+                            <li class="rel">
+                    	        <a href="@Url.Action("ProductServices", "Home", new { id = @row.CategoryID })" style="overflow: hidden" class="@css">
+                        	            @row.Name
+                                    <span class="mul_trigon">
+                                    </span>
+                                </a>
+                            </li>
+                    }
+
+                </ul>
+            </div>
+            <div class="cell pl20">
+                <div class="pack_area">
+                    @Html.Raw(Model.CategoryModel.Description) 
+                </div>
+            </div>
+        </div>
+
+  </div>
+</div>*@
+
+
+
+
+<div class="conStr up_warp">
+    <div class="strIn fix mt30">
+        <div class="l w220 bgf mb30">
+            <div class="mul_Tt fw rel">
+                <span class="vm dib f44">
+                    P
+                </span>
+                <span class="vm dib f16 lh18">
+                    产品服务
+                    <br/>
+                    RODUCT
+                </span>
+                <div class="mul_positon">
+                </div>
+            </div>
+            <ul class="Fixed fix pt20 pb20">
+                
+                @foreach (var item in Model.ShowCategoryListModel.ShippingMethodServices)
+                {
+                    string classAttr = Model.GetId == item.CategoryID ? "r pct70 pl30 mul_on" : "r pct70 pl30";
+                    <li>
+                        <a href="@Url.Action("ProductServices", "Home", new { id = @item.CategoryID })" class="@classAttr">
+                            @item.Name
+                        </a>
+                    </li>
+                }
+
+            </ul>
+        </div>
+        <div class="cell">
+            <div class="bdd bgf p20 mb30">
+                <div class="bread_area tr">
+                    <a href="@Url.Action("Index","Home")" class="A" title="回到首页">首页</a>
+                    &gt;
+                    <span href="#" class="bread_on">
+                        产品服务
+                    </span>
+                </div>
+                <div class="mt10 mb30">
+                    <img src="@Url.Content("~/images/banner/banner_07.png")"/>
+                </div>
+                <div class="pack_area">
+                    <div class="pack_in">
+                        <h2>	
+                            @Model.CategoryInfo.Name
+                        </h2>
+      
+                        <div class="part">
+                             @if (!string.IsNullOrEmpty(Model.CategoryInfo.Description))
+	                         {
+                                  @Html.Raw(Model.CategoryInfo.Description)
+	                         }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

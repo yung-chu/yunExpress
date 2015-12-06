@@ -1,0 +1,500 @@
+﻿@using Castle.Core.Internal
+@using LMS.FrontDesk.Controllers.HomeController.Models
+@using LMS.FrontDesk.Controllers.NewController
+@model LMS.FrontDesk.Controllers.HomeController.Models.HomeListModel
+@{
+    if (Model.CategoryInfo != null)
+    {
+        ViewBag.Title = string.IsNullOrWhiteSpace(Model.CategoryInfo.SeoTitle) ? "云途物流" : Model.CategoryInfo.SeoTitle;
+    }
+    else
+    {
+        ViewBag.Title = "云途物流";
+    }
+}
+@section ExtraHeadContent {
+    <meta name="description" content="@ViewBag.Description">
+    <meta name="Keywords" content="@ViewBag.SeoKey">
+}
+
+@Html.Partial("_HomeBannerPartial")
+
+
+@*
+<style type="text/css">
+    .word_slide { height: 65px; overflow: hidden; position: relative; color: #666; }
+    .word_slide li { position: absolute; display: none; width:100%; height:100%;}
+    .arrow{margin-right: 10px; vertical-align: middle; color:#28959c;margin-top: -3px; font-family: simsun; letter-spacing: -.5em;font-size: 14px;}
+    .f18{ font-size:18px;}
+    .pct47{ width:47%;}
+</style>
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.Sonline.js")"></script>
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/css/datouwang.css")"/>*@
+
+
+
+@*<div class="conStr">
+    <div class="strIn" >
+    
+
+        <div class="g3 mb10 fix mt20">
+                   
+            @{
+                CheckHtml ch = new CheckHtml();
+            }
+
+            <!--最新通知<-->
+ 
+            <div class="pct47 l">
+                <strong class="arrow">&gt;&gt;</strong>
+                <span class="f18 vm dib fw">Notice</span> <span class="g6 vm dib fw"> / 最新通知</span>
+                <div class="mt10 p15 bgwh">
+                    <div>
+                        <img src="@Url.Content("~/images/20140514-云途物流-02_03.jpg")" width="100%" height="120" />
+                    </div>
+                    <dl class="mt20">
+                        
+                        
+                        @if (Model.NewsPartialModels.Count > 0)
+                        {
+                            foreach (var row in Model.NewsPartialModels.OrderByDescending(a => a.CreatedOn).Take(4))
+                            {
+                                           
+                                <dt class="mt10  ell">
+                                    <strong class="arrow">&gt;&gt;</strong>
+                                    <a href="@Url.Action("NewList", "New", new { id = @row.ArticleID })" class="b fw tdn  vm">
+                                        @if (!row.Detail.IsNullOrEmpty() && ch.ParseTags(row.Detail).Length > 100)
+                                        {
+                                                   
+                                            @Html.Raw(row.Title+"  "+ch.ParseTags(row.Detail).Substring(0,60));
+
+                                        }
+                                        else if (!row.Detail.IsNullOrEmpty())
+                                        {
+                                            @Html.Raw(row.Title + "  " + ch.ParseTags(row.Detail));
+                                        }
+                                    </a>
+                                    <span class="db ml20">--@row.CreatedOn.Value.Year/@row.CreatedOn.Value.Month/@row.CreatedOn.Value.Day</span>
+                                </dt>
+     
+                            }
+                        }
+
+                    </dl>
+                </div>
+                <dt class="mt10 fix">
+                    <a href="@Url.Action("NewList", "New", new {categoryID = 5, id = 0})" class="b tdn r g9">
+                        <strong class="arrow-">&gt;&gt;</strong>
+                        更多
+                    </a>
+                </dt>
+            </div>
+            
+            
+
+            
+            <!--新闻动态<-->
+            <div class="pct47 r">
+                <strong class="arrow">&gt;&gt;</strong>
+                <span class="f18 vm dib fw">News</span> <span class="g6 vm dib fw"> / 新闻动态</span>
+                <div class="mt10 p15 bgwh">
+                    <div>
+                        <img src="@Url.Content("~/images/20140514-云途物流-02_05.jpg")" width="100%" height="120"/>
+                    </div>
+                    <dl class="mt20">
+                        
+                        @if (Model.ArticleModels.Count > 0)
+                        {
+                            foreach (var row in Model.ArticleModels.OrderByDescending(a => a.CreatedOn).Take(4))
+                            {
+                                   
+                                <dt class="mt10  ell">
+                                    <strong class="arrow">&gt;&gt;</strong>
+                                    <a href="@Url.Action("NewList", "New", new { id = @row.ArticleID })" class="b fw tdn  vm">
+                                        @if (!row.Detail.IsNullOrEmpty() && ch.ParseTags(row.Detail).Length > 100)
+                                        {
+                                            @Html.Raw(row.Title + "  " + ch.ParseTags(row.Detail).Substring(0, 60)) ;
+                                        }
+                                        else if (!row.Detail.IsNullOrEmpty())
+                                        {
+                                            @Html.Raw(row.Title + "  " + ch.ParseTags(row.Detail));
+                                        }
+                                    </a>
+                                    <span class="db ml20">--@row.CreatedOn.Value.Year/@row.CreatedOn.Value.Month/@row.CreatedOn.Value.Day</span>
+                                </dt>
+	
+                            }
+                        }
+
+                    </dl>
+                </div>
+                <dt class="mt10 fix">
+                    <a href="@Url.Action("NewList", "New", new { categoryID = 6, id = 0 })" class="b tdn r g9">
+                        <strong class="arrow-">&gt;&gt;</strong>
+                        更多
+                    </a>
+                </dt>
+            </div>
+
+
+        </div>
+        
+        
+        
+
+        <div class="mt30 mb10">
+            <strong class="arrow">&gt;&gt;</strong>
+            <span class="f18 vm dib fw">Product</span> <span class="g6 vm dib fw"> / 动态产品</span>
+        </div>
+        <div>
+            <img src="@Url.Content("~/images/product_bn.jpg")" width="100%" />
+        </div>
+        <div class="mb10 mt30">
+            <strong class="arrow">&gt;&gt;</strong>
+            <span class="f18 vm dib fw">Partner</span> <span class="g6 vm dib fw"> / 合作伙伴</span>
+        
+            
+        </div>
+      
+        
+        <div  style="padding:20px 40px;  box-shadow: 0 0 1px #999; margin-bottom:50px; background:#fff;">
+            <div id="caroEndless" class="caro_trigger caro_trigger2">
+                <a href="javascript:" class="caro_prev" data-rel="caroSwitchEnd"></a>
+                <a href="javascript:" class="caro_next" data-rel="caroSwitchEnd"></a>
+            </div>
+            <div class="caro_box caro_box2">
+                <ul id="caroBoxEnd" class="caro_container caro_container2">
+
+                    <li class="caroSwitchEnd"><a href="https://www.google.com.hk/" target="_blank" title="google"><img src="@Url.Content("~/images/idx_1.jpg")" width="130"></a></li>
+                    <li class="caroSwitchEnd"><a href="http://www.ebay.com/" target="_blank" title="ebay"><img src="@Url.Content("~/images/idx_2.jpg")" width="130"></a></li>
+                    <li class="caroSwitchEnd"><a href="https://www.paypal.com/c2/webapps/mpp/home" target="_blank" title="paylal"><img src="@Url.Content("~/images/idx_3.jpg")" width="130"></a></li>
+                    <li class="caroSwitchEnd"><a href="http://www.cn.dhl.com/zh/express.html" target="_blank" title="dhl"><img src="@Url.Content("~/images/idx_4.jpg")" width="130"></a></li>
+                    <li class="caroSwitchEnd"><a href="http://www.ems.com.cn/?COLLCC=187564182&" target="_blank" title="ems"><img src="@Url.Content("~/images/idx_5.jpg")" width="130"></a></li>
+                    <li class="caroSwitchEnd"><a href="javascript:" target="_blank" title="TONGTOOL"><img src="@Url.Content("~/images/idx_7.jpg")" width="130"></a></li>
+                    <li class="caroSwitchEnd"><a href="javascript:" target="_blank" ><img src="@Url.Content("~/images/idx_8.png")" width="130"></a></li>
+
+                </ul>
+            </div>
+        </div>
+        
+        
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        $("body").Sonline({
+            Position: "right",//left或right
+            Top: 200,//顶部距离，默认200px
+            Effect: true, //滚动或者固定两种方式，布尔值：true或false
+            DefaultsOpen: false, //默认展开：true,默认收缩：false
+            Qqlist: "2851260175|业务01,2851260176|业务02,2851260179|业务03,2851260155|业务04,2851260178|推广专员,2851260158|小包客服,2851260167|快递客服,2851260189|投诉建议" //多个QQ用','隔开，QQ和客服名用'|'隔开
+        });
+    });
+
+
+    $("#caroEndless a").powerSwitch({
+        autoTime: 2000,
+        classDisabled: '',
+        container: $("#caroBoxEnd"),
+        number: 6
+    });
+</script>*@
+
+
+
+<!--news -->
+<div class="bgf pt30 pb30">
+    <div class="conStr">
+        <div class="strIn">
+            <div class="fix">
+                <div class="l">
+                    <a href="@Url.Action("NewList", "New", new {categoryID =1 })" title="新闻列表">
+                         <img src="@Url.Content("~/images/advt_03.jpg")" alt="新闻列表">
+                    </a> 
+                </div>
+                <div class="cell pl30">
+                    <div class="pl20">
+                        
+                        @{
+                            ArticleModel articleModel = Model.ArticleModels.Take(1).FirstOrDefault();
+                            var checkHtml = new CheckHtml();
+          
+                        }
+                       
+                        @if (articleModel != null)
+                        { 
+                         <div class="mb10 rel"> <span class="idxm_position"> <span class="idxm_w">@articleModel.CreatedOn.Value.Day</span> <span class="db lh20 tc">@articleModel.CreatedOn.Value.Year-@articleModel.CreatedOn.Value.Month</span> </span>
+                            <div class="idxm_mg">
+                                <h4 class="mb10"> <a href="@Url.Action("NewDetailed", "New", new { id =articleModel.ArticleID })">@articleModel.Title</a> </h4>
+                                <div class="lh20">
+                                    @{
+                                          string detailInfo = !string.IsNullOrEmpty(articleModel.Detail) ? checkHtml.ParseTags(articleModel.Detail).Length > 50 ?checkHtml.ParseTags(articleModel.Detail).Substring(0, 50) : checkHtml.ParseTags(articleModel.Detail) : "";
+                                    }
+                                    @detailInfo
+                                    
+                                </div>
+                            </div>
+                         </div>
+                        }
+
+                       <br />
+                        <ul class="lh32">
+                           
+                            @foreach (var item in Model.ArticleModels.Skip(1))
+                            {
+                              <li class="cell_bk rel">
+                                <div class="pct80 ell"> <a href="@Url.Action("NewDetailed", "New", new { id =item.ArticleID })" class="A">@checkHtml.ParseTags(item.Title)</a> </div>
+                                <div class="abs_r"> <span>@item.CreatedOn.Value.ToString("yyyy-MM-dd")</span> </div>
+                              </li>
+                            }
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--news end-->
+
+
+
+<!--产品服务-->
+<div class="bgeb pt30 pb30">
+    <div class="conStr">
+        <div class="strIn">
+            <table width="100%" class="pro_tb">
+                
+       @*         <tr>
+                     <td rowspan="2">
+                        <a href="@Url.Action("ProductServices", "Home", new {id = 3})">
+                             <img src="@Url.Content("~/images/project_03.jpg")"/> 
+                         </a>
+                     </td>
+                    
+                      @foreach (var item in Model.ShowCategoryListModel.ShippingMethodServices.Take(4))
+                      {
+                          string imgUrl = Url.Content("~/images/defaultImg.png"); ;
+                          int index = Model.ShowCategoryListModel.ShippingMethodServices.Take(4).ToList().IndexOf(item);
+
+                          switch (item.Name.Trim())
+                          {
+                              case "美国专线":
+                              case "中美专线":
+                                  imgUrl = Url.Content("~/images/product_03.jpg");
+                                  break;
+                              case "瑞典邮政":
+                              case "瑞典小包":
+                                  imgUrl = Url.Content("~/images/product_05.jpg");
+                                  break;
+                              case "DHL":
+                              case "DHL国际快递":
+                                  imgUrl = Url.Content("~/images/product_07.jpg");
+                                  break;
+                              case "澳大利亚专线":
+                              case "中澳专线":
+                                  imgUrl = Url.Content("~/images/product_09.jpg");
+                                  break;
+                              case "马来西亚邮政":
+                                  imgUrl = Url.Content("~/images/product_15.jpg");
+                                  break;
+                              case "FedEx":
+                              case "联邦国际快递":
+                                  imgUrl = Url.Content("~/images/product_16.jpg");
+                                  break;
+                              case "UPS":
+                                  imgUrl = Url.Content("~/images/product_17.jpg");
+                                  break;
+                              case "中国邮政":
+                              case "Chinese postal EMS":
+                                  imgUrl = Url.Content("~/images/product_19.jpg");
+                                  break;
+
+                          }
+                          
+                          if (index != 3)
+                          {
+                              <td>
+                                  <a  href="@Url.Action("ProductServices", "Home", new { id = @item.CategoryID })" class="rel db" title="@item.Name">
+                                      <img src="@imgUrl" alt="@item.Name">
+                                      <div class="pro_Mask trans">
+                                          @item.Name <span class="div_vm"></span> 
+                                      </div>
+                                  </a>
+                              </td>
+
+                          }
+                          else
+                          {
+                              
+                              <td colspan="2">
+                               <a  href="@Url.Action("ProductServices", "Home", new { id = @item.CategoryID })" class="rel db" title="@item.Name">
+                                  <img src="@imgUrl" alt="@item.Name">
+                                  <div class="pro_Mask trans">
+                                      @item.Name <span class="div_vm"></span> 
+                                  </div>
+                               </a>
+                             </td>
+                              
+                          }
+
+                      }
+
+                </tr>
+
+                <tr>
+                    
+                      @foreach (var item in Model.ShowCategoryListModel.ShippingMethodServices.Skip(4).Take(4))
+                      {
+
+                        string imgUrl = Url.Content("~/images/defaultImg.png"); 
+                        int index = Model.ShowCategoryListModel.ShippingMethodServices.Skip(4).Take(4).ToList().IndexOf(item);
+                          
+                        switch (item.Name.Trim())
+                        {
+                            case "美国专线":
+                            case "中美专线":
+                                imgUrl = Url.Content("~/images/product_03.jpg");
+                                break;
+                            case "瑞典邮政":
+                            case "瑞典小包":
+                                imgUrl = Url.Content("~/images/product_05.jpg");
+                                break;
+                            case "DHL":
+                            case "DHL国际快递":
+                                imgUrl = Url.Content("~/images/product_07.jpg");
+                                break;
+                            case "澳大利亚专线":
+                            case "中澳专线":
+                                imgUrl = Url.Content("~/images/product_09.jpg");
+                                break;
+                            case "马来西亚邮政":
+                                imgUrl = Url.Content("~/images/product_15.jpg");
+                                break;
+                            case "FedEx":
+                            case "联邦国际快递":
+                                imgUrl = Url.Content("~/images/product_16.jpg");
+                                break;
+                            case "UPS":
+                                imgUrl = Url.Content("~/images/product_17.jpg");
+                                break;
+                            case "中国邮政":
+                            case "Chinese postal EMS":
+                                imgUrl = Url.Content("~/images/product_19.jpg");
+                                break;
+
+                        }
+
+
+                          if (index == 0)
+                          {
+
+                              <td colspan="2">
+                                  <a  href="@Url.Action("ProductServices", "Home", new { id = @item.CategoryID })" class="rel db" title="@item.Name">
+                                       <img src="@imgUrl" alt="@item.Name"/>
+                                      <div class="pro_Mask trans">
+                                          @item.Name
+                                          <span class="div_vm"></span> 
+                                      </div>
+                                  </a>
+                              </td>
+                          }
+                          else
+                          {
+                              <td>
+                                  <a  href="@Url.Action("ProductServices", "Home", new { id = @item.CategoryID })" class="rel db" title="@item.Name">
+                                       <img src="@imgUrl" alt="@item.Name"/>
+                                      <div class="pro_Mask trans">
+                                          @item.Name
+                                          <span class="div_vm"></span> 
+                                      </div>
+                                  </a>
+                              </td>
+                          }
+
+                      }
+
+                </tr>
+                *@
+
+                
+                
+                <!--这里适应于线上环境-->
+                <tr>
+                       <td rowspan="2">
+                        <a href="@Url.Action("ProductServices", "Home", new {id = 3})">
+                             <img src="@Url.Content("~/images/project_03.jpg")"/> 
+                         </a>
+                     </td>
+                    
+
+                    <td>
+                        <a  href="@Url.Action("ProductServices", "Home", new { id =24 })" class="rel db" title="美国专线">
+                             <img src="@Url.Content("~/images/product_03.jpg")" alt="美国专线 ">
+                            <div class="pro_Mask trans"> 美国专线 <span class="div_vm"></span>
+                            </div>
+                        </a>
+                    </td>
+                    <td>
+                        <a  href="@Url.Action("ProductServices", "Home", new { id =28 })" class="rel db" title="瑞典邮政"> <img src="@Url.Content("~/images/product_05.jpg")" alt="瑞典邮政"/>
+                            <div class="pro_Mask trans"> 瑞典邮政 <span class="div_vm"></span>
+                            </div>
+                         </a>
+                    </td>
+                    <td>
+                        <a  href="@Url.Action("ProductServices", "Home", new { id =14 })" class="rel db" title="DHL"> <img src="@Url.Content("~/images/product_07.jpg")" alt="DHL"/>
+                            <div class="pro_Mask trans"> DHL <span class="div_vm"></span> 
+                            </div>
+                        </a>
+                    </td>
+                    <td colspan="2">
+                        <a  href="@Url.Action("ProductServices", "Home", new { id =18 })" class="rel db" title="澳大利亚专线"> <img src="@Url.Content("~/images/product_09.jpg")" alt="澳大利亚专线"/>
+                            <div class="pro_Mask trans"> 澳大利亚专线 <span class="div_vm"></span> 
+                            </div>
+                         </a>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2">
+                        <a  href="@Url.Action("ProductServices", "Home", new { id =30 })" class="rel db" title="马来西亚邮政"> <img src="@Url.Content("~/images/product_15.jpg")" alt="马来西亚邮政"/>
+                                  <div class="pro_Mask trans"> 马来西亚邮政 <span class="div_vm"></span> </div>
+                      </a>
+                    </td>
+                    <td>
+                        <a  href="@Url.Action("ProductServices", "Home", new { id =15 })" class="rel db" title="FedEx"> <img src="@Url.Content("~/images/product_16.jpg")" alt="FedEx"/>
+                                  <div class="pro_Mask trans"> FedEx <span class="div_vm"></span> </div>
+                        </a>
+                    </td>
+                    <td>
+                        <a  href="@Url.Action("ProductServices", "Home", new { id =17 })" class="rel db" title="UPS"> <img src="@Url.Content("~/images/product_17.jpg")" alt="UPS"/>
+                                  <div class="pro_Mask trans"> UPS <span class="div_vm"></span> </div>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("ProductServices", "Home", new { id =12 })" class="rel db" title="中国邮政"> <img src="@Url.Content("~/images/product_19.jpg")" alt="中国邮政"/>
+                                  <div class="pro_Mask trans"> 中国邮政 <span class="div_vm"></span> </div>
+                       </a>
+                    </td>
+                </tr>
+                
+
+                
+                
+                
+
+            </table>
+
+        </div>
+    </div>
+</div>
+<!--产品服务 end-->
+
+
+
+
+
+

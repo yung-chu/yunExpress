@@ -1,0 +1,100 @@
+﻿@model LMS.Controllers.WayBillController.FastInStorageViewModel
+@{
+    ViewBag.Title = "FastInStorage";
+}
+<div id="showVenderList" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showShippingMethodList" tabindex="100" style="overflow: scroll; display: none; position: relative">
+</div>
+<div class="domebg" id="right_con">
+    <form id="formConfirm">
+        <input type="hidden"  id="Opereate" value="@Model.Opereate" name="Opereate"/><!--入仓重量对比异常-->
+        <table id="firsttable" class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+                <td>
+                    <span class="info_box info_select">客户编码:</span>
+                    <input type="text" id="CustomerCode" name="CustomerCode" readonly="readonly" class="txt txt_short" value="@Model.CustomerCode"/>
+                    <input type="text" id="CustomerNickName" readonly="readonly" name="CustomerNickName" class="txt txt_short" value="@Model.CustomerNickName"/>
+                    @*                <input type="button" id="selectCustomer" class="btn" value="选择" disabled="disabled"/>*@
+                </td>
+                <td>
+                    <span class="info_box info_select">运输方式:</span>
+                    <span id="ShippingMethodName">@Model.ShippingMethodName</span>
+                    <input type="hidden" id="ShippingMethodId" name="ShippingMethodId" value="@Model.ShippingMethodId"/>
+                    @*                <input type="button" id="selectShippingMethod" class="btn" value="选择" disabled="disabled" />*@
+                </td>
+                <td>
+                    <span class="info_box info_select">货物类型:</span>
+                    @Html.DropDownList("GoodsTypeId", Model.GoodsTypeModels)
+                </td>
+                <td>
+                    <input type="button"  class="btn" value="确定入仓" id="btnSubmit" />
+
+                    <input type="hidden" value="@Model.ReturnUrl" name="ReturnUrl" id="ReturnUrl"/>
+                    <a href="@Model.ReturnUrl" class="btn_href">返回</a>
+                </td>
+            </tr>
+            <tr class="date_row_select">
+                <td colspan="4">
+                    <div class="fix">
+                        <div class="l">
+                            运单号：  
+                        </div>
+                        <div class="cell pl10">
+                            <div class="cell_bk">
+                                @Model.WayBillNumbers
+                            </div>
+                        </div>
+                    </div>
+                    <div><input type="hidden" id="WayBillNumbers" name="WayBillNumbers" value="@Model.WayBillNumbers"/></div>
+                </td>
+            
+            </tr>
+            <tr class="date_row_select">
+                <td colspan="4" style="color: red;">
+                    <span id="ErrorMessage">@Model.ErrorMessage</span>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<script type="text/javascript">
+    $(function () {
+        
+        //点击提交按钮
+        $("#btnSubmit").click(function () {
+            //清空错误
+            if ($.trim($("#ErrorMessage").text()) != "") {
+                $("#ErrorMessage").html(" ");
+            }
+            $(this).attr('disabled', true);
+            
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("CreateFastInStorage")",
+                dataType: "json",
+                data: $("#formConfirm").serialize(),
+                success: function(data) {
+                    if (data.Result) {
+
+                        $("#ErrorMessage").html(data.Message);
+
+                        //如果是入仓重量对比异常单
+                        if ("@(Model.Opereate)" == "InStorageWeightAbnormal") {
+                            
+                            location.href = $("#ReturnUrl").val();
+                        }
+
+                    }
+                    else {
+                        $("#ErrorMessage").html(data.Message);
+                    }
+                },
+                complete: function () {
+                    $("#btnSubmit").attr('disabled', false);
+                }
+            });
+        });
+        
+    });
+</script>

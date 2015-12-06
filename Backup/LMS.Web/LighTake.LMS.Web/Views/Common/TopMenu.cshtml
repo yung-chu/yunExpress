@@ -1,0 +1,34 @@
+﻿@model LMS.Models.Menu
+@{
+    Layout = null;
+}
+<div class="head fix">
+    <div class="l">
+        <a class="home" href="@Url.Action("Index", "Home")" title="Home" style="padding-left: 50px; color: white; line-height: 40px; vertical-align: middle;">
+            首页</a>
+    </div>
+    @if (Model != null && Model.Items != null && Model.Items.Count > 0)
+    {
+        <ul id="quick" class="menu_box">
+            @foreach (var menuItem in Model.Items)
+            {
+                <li class="menu_li"><a href="javascript:void();" class="menu_itembox" title="Products">
+                    <span class="menu_item">
+                        @menuItem.Name</span></a>
+                    @if (@menuItem.SubItems.Count > 0)
+                    {
+                        <ul class="menu_initembox">
+                            @foreach (var subMenuItem in menuItem.SubItems)
+                            {
+                                <li class="menu_in_li"><a class="menu_initem" href="@subMenuItem.NavigateUrl">@subMenuItem.Name</a>
+                                </li> 
+                            }
+                        </ul>
+                    }
+                </li>
+            }
+        </ul>
+    }
+    <div class="headAbs_r">
+    </div>
+</div>

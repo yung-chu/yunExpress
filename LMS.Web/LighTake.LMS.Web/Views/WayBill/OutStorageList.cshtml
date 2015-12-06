@@ -1,0 +1,177 @@
+﻿@model LMS.Controllers.WayBillController.OutStorageListViewModel
+@{
+    ViewBag.Title = "OutStorageList";
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+}
+<div id="showVenderList" style="overflow: scroll; display: none; position: relative">
+</div>
+
+<div class="domebg" id="right_con">
+    @Html.Partial("_ShowDialog")
+    @using (Html.BeginForm())
+    {
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select"style="text-align: center">
+                <td width="20%">
+                    <span class="info_box info_select">服务商:</span>
+                    <input type="text" id="_VenderCode" value="@Model.FilterModel.VenderCode" name="FilterModel.VenderCode" readonly="readonly" class="txt txt_short" />
+                    <input type="hidden" id="_VenderName" />
+                    <a href="javascript:void(0)" id="selectVender" class="btn_href">选择</a>
+                </td>
+                <td width="20%">
+                    <span class="info_box info_select">出仓单号:</span>
+                    @Html.TextBoxFor(p=>p.FilterModel.OutStorageID,new{@class="txt txt_middle"})
+                </td>
+                <td width="25%">
+                    <span class="info_box info_select">出仓时间:</span>
+                    <br/>
+                    @Html.TextBoxFor(p => p.FilterModel.OutStartDate, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.OutStartDate), @class = "txt wdate", @style = "width:130px;" })
+                    <span>至:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.OutEndDate, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.OutEndDate), @class = "txt wdate", @style = "width:130px;" })
+                </td>
+                <td width="20%">
+                    <span class="info_box info_select">邮袋号:</span>
+                    @Html.TextBoxFor(p=>p.FilterModel.PostBagNumber,new{@class="txt txt_middle"})
+                </td>
+                <td width="25%">
+                    <div class="tl">
+                        <input type="submit" class="btn" value="搜索" id="btnSearch" name="btnSearch" />
+                        <input type="submit" class="btn" value="导出" id="btnExport" name="btnExport" />
+                        <a href="@Url.Action("FristOutStorage")" class="btn_href">出仓扫描</a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div id="pm_dis_div">
+            <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr class="data_row_two">
+                        <th>序号
+                        </th>
+                        <th>出仓单号
+                        </th>
+                        <th>服务商
+                        </th>
+                        <th>出仓时间
+                        </th>
+                        <th>件数
+                        </th>
+                        <th>总重量(kg)
+                        </th>
+                        <th>总费用(￥)
+                        </th>
+                        <th>邮袋号
+                        </th>
+                        <th>备注
+                        </th>
+                        <th>操作
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var index = 1;
+                        foreach (var row in Model.PagedList.InnerList)
+                        {
+                            
+                            <tr class="data_row_dan">
+                                <td>
+                                    @index
+                                </td>
+                                <td>
+                                    @row.OutStorageID
+                                </td>
+                                <td>
+                                    @row.VenderCode
+                                </td>
+                                <td>
+                                    @row.CreatedOn.Value.ToString("yyyy-MM-dd HH:mm")
+                                </td>
+                                <td>
+                                    @row.TotalQty
+                                </td>
+                                <td>
+                                    @(row.TotalWeight.HasValue?row.TotalWeight.Value.ToString("F3"):"0")
+                                </td>
+                                <td>
+                                    @(row.TotalFee.HasValue?row.TotalFee.Value.ToString("F2"):"0")
+                                </td>
+                                <td>
+                                    @row.PostBagNumber
+                                </td>
+                                <td>
+                                    @row.Remark
+                                </td>
+                                <td>
+                                    @{
+                                        var url = Html.GetUrl("OutStorageList", "WayBill", Model.FilterModel);
+                                    }
+                                    <a href="@Url.Action("OutStorageDetail", "WayBill",new{@OutStorageId=row.OutStorageID,ReturnUrl =url})" class="btn_href">查看</a>
+                                    @if (row.isUpdate)
+                                    {
+                                        <input type="button" id="btnUpdate" name="btnUpdate" class="btn" value="批量审核修改" onclick="return Update('@(row.OutStorageID)');"/>
+                                        <input type="hidden" id="outStorageID" name="outStorageID" value="@row.OutStorageID" disabled="disabled"/>
+                                    }
+                                </td>
+                            </tr>
+                            index++;
+                        }
+                    }
+                    <tr class="data_row_none">
+                        <td colspan="12">
+                            @Html.Pager(Model.PagedList, Model.FilterModel)
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+<div id="test" style="padding-left: 15px; padding-top: 10px;">
+</div>
+<script type="text/javascript">
+    $(function() {
+        //选择服务商
+        $("#selectVender").bind("click", function() {
+            $("#showVenderList").showWindow("@Url.Action("SelectVender", "WayBill")", "选择服务商");
+            var parentWindow = $("#showVenderList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                    top: 120
+                }, {
+                    duration: 1000,
+                    step: function(now, fx) {
+                        $(".window").css("top", now);
+                    }
+                });
+            $("#showVenderList").show();
+        });
+    });
+
+    function Update(outStorageID) {
+        $("#test").showWindow('UpdateOutStorageInfo?outStorageID=' + outStorageID+"&type=1", "修改发货渠道", 480, 400);
+        var parentWindow = $("#test").parent("div");
+        $(parentWindow).css("top", "0");
+        $(parentWindow).animate({
+            top: 120 + getScrollTop()
+        }, {
+            duration: 1000,
+            step: function (now, fx) {
+                $(".window").css("top", now);
+
+            }
+        });
+        $("#test").show();
+        return false;
+    }
+    function getScrollTop() {
+        var scrollTop = 0;
+        if (document.documentElement && document.documentElement.scrollTop) {
+            scrollTop = document.documentElement.scrollTop;
+        }
+        else if (document.body) {
+            scrollTop = document.body.scrollTop;
+        }
+        return scrollTop;
+    }
+</script>

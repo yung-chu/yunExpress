@@ -1,0 +1,168 @@
+﻿@{
+
+    Html.AddCssFileParts(Url.Content("~/Scripts/liger/liger/skins/Aqua/css/ligerui-all.css"));
+    Html.AddCssFileParts(Url.Content("~/Scripts/liger/liger/skins/Gray/css/all.css"));
+    Html.AddCssFileParts(Url.Content("~/Scripts/liger/liger/skins/Gray/css/dialog.css"));
+    Html.AddScriptParts(Url.Content("~/Scripts/liger/liger/js/core/base.js"));
+    Html.AddScriptParts(Url.Content("~/Scripts/liger/liger/js/plugins/ligerDialog.js"));
+    Html.AddScriptParts(Url.Content("~/Scripts/jquery.json-2.4.min.js"));
+    Html.AddScriptParts(Url.Content("~/Scripts/my97DatePicker/WdatePicker.js"));
+}
+
+<style type="text/css">
+  .l-dialog-cl {
+    background: none repeat scroll 0 0 black;
+  }
+
+  .l-dialog-tc {
+    background:#D6D6D6;border-bottom:1px solid #D6D6D6;
+  }
+
+</style>
+
+<div class="domebg" id="right_con">
+    <form id="SearchFrom">
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+                <td width="20%" id="tdCategory"> 
+                    <span style="width: 50px;">新闻类型:</span>
+                    <select id="categoryID" name="CategoryID" style="width: 200px;"></select>
+                </td>
+                <td width="20%" id="tdTitle">
+                    <span class="info_box info_select">关键字:</span>
+                    <input type="text" id="Title" class="txt" />
+                </td>
+                <td width="40%">
+                    <span class="info_box info_select">发布时间:</span>
+                    <input type="text" id="PublishedTime" class="txt txt_short Wdate" onclick="WdatePicker({ name: 'simple', charset: 'gb2312', dateFmt: 'yyyy-MM-dd' })"/>
+                    <span>至:</span>
+                    <input type="text" id="PublishedEndTime" class="txt txt_short Wdate" onclick="WdatePicker({ name: 'simple', charset: 'gb2312', dateFmt: 'yyyy-MM-dd' })"/>
+                </td>
+                <td width="30%">
+                    <div class="tl">
+                        <input type="button" value="搜索" class="btn" id="btnSearch" />
+                        <input type="button" class="btn" value="发布" id="btnAdd" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+        
+    </form>
+    <div id="test" style="padding-left: 15px; padding-top: 10px;">
+    </div>
+    <table id="dataTable">
+    </table>
+    @*@StackExchange.Profiling.MiniProfiler.RenderIncludes()*@
+</div>
+<script type="text/javascript">
+    var editWin, grid;
+    $("#btnSearch").click(function () {
+        grid.datagrid("load");
+    });
+    
+    $(function () {
+
+        $('#categoryID').combotree({
+            url: '/Website/GetAllCategorySelect',
+            onLoadSuccess: function (data) {
+                $('#categoryID').combotree('setValue', '0');
+                //debugger;
+                //$('#categoryID').combotree('select', '0');
+                
+                //var t = $('#categoryID').combotree('tree');	// 得到树对象
+                //var n = t.tree('getSelected');		// 得到选择的节点
+                //n.text = "11";
+                //alert(n.text);
+
+
+            }
+        });
+
+        grid = $('#dataTable').datagrid({
+            url: '@Url.Action("GetNewsList")',
+            idField: 'ArticleID',
+            pageNumber: 1,
+            pageSize: 10,
+            pageList: [10,20,30,40,50],
+            pagination: true,
+            remoteSort: false,
+            onBeforeLoad: function (param) {
+                var obj = {};
+                if ($('#Title').val() != "")
+                    obj.Title = $('#Title').val();
+                if ($('#categoryID').combotree('getValue') != "") {
+                    if ($('#categoryID').combotree('getValue') != "0")
+                        obj.CategoryID = $('#categoryID').combotree('getValue');
+                }
+                if ($('#PublishedTime').val() != "") //开始时间
+                    obj.PublishedTime = $('#PublishedTime').val();
+                if ($('#PublishedEndTime').val() != "") //结束时间
+                    obj.PublishedEndTime = $('#PublishedEndTime').val();
+                //debugger;
+                obj.Page = param.page;
+                obj.PageSize = param.rows;
+                param.params = $.toJSON(obj);
+            },
+            columns: [[
+                {
+                    field: 'CategoryName', title: '问题类型', width: 180
+                },
+                { field: 'Title', title: '标题', width: 400 }
+                ,
+                {
+                    field: 'UserName', title: '发布人', width: 180
+                },
+                {
+                    field: 'CreatedOn', title: '发布时间', width: 180
+                },
+                {
+                    field: 'ArticleID', title: '操作', width: 100,
+                    formatter: function (a, b) {
+                        return "<a href='#' onclick=editData('" + b["ArticleID"] + "') >编辑</a>";
+                    }
+                },
+                {
+                    field: 'IsDelete', title: '删除', width: 100,
+                    formatter: function (a, b) {
+                        return "<a href='#' onclick=Del('" + b["ArticleID"] + "') >删除</a>";
+                    }
+                }
+            ]]
+        });
+    });
+
+        function Del(id) {
+            $.ajax({
+                type: "GET",
+                url: "DelNews",
+                dataType: "html",
+                data: "articleId=" + id,
+                success: function (data) {
+                    if (data == "1") {
+                        alert("删除成功！");
+                        $('#dataTable').datagrid("load");
+                    } else {
+                        alert("删除失败！");
+                    }
+                }
+            });
+        }
+
+       $("#btnAdd").click(function () {
+            editWin = $.ligerDialog.open({
+                width: 800,
+                height: 630,
+                title: "发布新闻",
+                url: 'NewsAdd'
+            });
+        });
+
+        function editData(id) {
+            editWin = $.ligerDialog.open({
+                width: 800,
+                height: 630,
+                title: "编辑新闻",
+                url: 'NewsEdit?articleId=' + id
+            });
+        }
+</script>

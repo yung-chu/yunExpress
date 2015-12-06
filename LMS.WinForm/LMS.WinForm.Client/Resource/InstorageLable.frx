@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="04/29/2014 11:28:30" ReportInfo.Modified="06/28/2014 15:35:42" ReportInfo.CreatorVersion="2014.2.3.0">
+  <Dictionary/>
+  <ReportPage Name="Page1">
+    <PageHeaderBand Name="PageHeader1" Width="718.2" Height="170.1">
+      <TextObject Name="Instorage" Left="302.4" Top="9.45" Width="94.5" Height="18.9" Text="入仓交接单" Font="微软雅黑, 12pt"/>
+      <TextObject Name="lblCoustmer" Left="37.8" Top="56.7" Width="47.25" Height="18.9" Text="客户：" Font="宋体, 9pt"/>
+      <TextObject Name="Custmoer" Left="113.4" Top="56.7" Width="113.4" Height="18.9" Text="[waybillList.Name]" Font="宋体, 9pt"/>
+      <TextObject Name="lblinstorage" Left="245.7" Top="56.7" Width="75.6" Height="18.9" Text="入仓单号：" Font="宋体, 9pt"/>
+      <TextObject Name="instorageCode" Left="330.75" Top="56.7" Width="113.4" Height="18.9" Text="[waybillList.InStorageID]" Font="宋体, 9pt"/>
+      <TextObject Name="lblInstorageDate" Left="463.05" Top="56.7" Width="75.6" Height="18.9" Text="入仓时间：" Font="宋体, 9pt"/>
+      <TextObject Name="InstorageDate" Left="548.1" Top="56.7" Width="160.65" Height="28.35" Text="[waybillList.CreatedOn]" Font="宋体, 9pt"/>
+      <TextObject Name="lblWeight" Left="37.8" Top="103.95" Width="85.05" Height="18.9" Text="总重量(KG)：" Font="宋体, 9pt"/>
+      <TextObject Name="CountWeight" Left="113.4" Top="103.95" Width="113.4" Height="18.9" Text="[waybillList.TotalWeight]" Format="Number" Format.UseLocale="false" Format.DecimalDigits="3" Format.DecimalSeparator="." Format.GroupSeparator="," Format.NegativePattern="1" Font="宋体, 9pt"/>
+      <TextObject Name="lblCountPiece" Left="245.7" Top="103.95" Width="66.15" Height="18.9" Text="总件数：" Font="宋体, 9pt"/>
+      <TextObject Name="CountPiece" Left="302.4" Top="103.95" Width="28.35" Height="18.9" Text="[waybillList.TotalPieces]" Font="宋体, 9pt"/>
+      <TableObject Name="Table2" Left="37.8" Top="151.2" Width="635.04" Height="18.9" Border.Lines="Left">
+        <TableColumn Name="Column6" Width="105.84"/>
+        <TableColumn Name="Column7" Width="105.84"/>
+        <TableColumn Name="Column8" Width="105.84"/>
+        <TableColumn Name="Column9" Width="105.84"/>
+        <TableColumn Name="Column10" Width="105.84"/>
+        <TableColumn Name="Column11" Width="105.84"/>
+        <TableRow Name="Row3">
+          <TableCell Name="Cell11" Border.Lines="All" Text="客户订单号" VertAlign="Center" Font="宋体, 9pt"/>
+          <TableCell Name="Cell12" Border.Lines="All" Text="运输方式" VertAlign="Center" Font="宋体, 9pt"/>
+          <TableCell Name="Cell13" Border.Lines="All" Text="目的地国家" VertAlign="Center" Font="宋体, 9pt"/>
+          <TableCell Name="Cell14" Border.Lines="All" Text="件数" VertAlign="Center" Font="宋体, 9pt"/>
+          <TableCell Name="Cell15" Border.Lines="All" Text="结算重量(KG)" VertAlign="Center" Font="宋体, 9pt"/>
+          <TableCell Name="Cell18" Font="宋体, 9pt"/>
+        </TableRow>
+      </TableObject>
+      <TextObject Name="Text7" Left="359.1" Top="103.95" Width="66.15" Height="18.9" Text="总票数：" Font="宋体, 9pt"/>
+      <TextObject Name="Text8" Left="415.8" Top="103.95" Width="28.35" Height="18.9" Text="[waybillList.TotalWayBill]" Font="宋体, 9pt"/>
+    </PageHeaderBand>
+    <DataBand Name="Data1" Top="174.1" Width="718.2" Height="22.68">
+      <TableObject Name="Table1" Left="37.8" Width="635.04" Height="22.68">
+        <TableColumn Name="Column1" Width="105.84"/>
+        <TableColumn Name="Column2" Width="105.84"/>
+        <TableColumn Name="Column3" Width="105.84"/>
+        <TableColumn Name="Column4" Width="105.84"/>
+        <TableColumn Name="Column5" Width="105.84"/>
+        <TableColumn Name="Column12" Width="105.84"/>
+        <TableRow Name="Row2" Height="22.68">
+          <TableCell Name="Cell6" Border.Lines="All" Text="[waybillList.CustomerOrderNumber]" VertAlign="Center" Font="宋体, 9pt"/>
+          <TableCell Name="Cell7" Border.Lines="All" Text="[waybillList.InShippingMethodName]" VertAlign="Center" Font="宋体, 9pt"/>
+          <TableCell Name="Cell8" Border.Lines="All" Text="[waybillList.ChineseNameAndCode]" VertAlign="Center" Font="宋体, 9pt"/>
+          <TableCell Name="Cell9" Border.Lines="All" Text="[waybillList.Pieces]" VertAlign="Center" Font="宋体, 9pt"/>
+          <TableCell Name="Cell10" Border.Lines="All" Text="[waybillList.SettleWeight]" Format="Number" Format.UseLocale="false" Format.DecimalDigits="3" Format.DecimalSeparator="." Format.GroupSeparator="," Format.NegativePattern="1" VertAlign="Center" Font="宋体, 9pt"/>
+          <TableCell Name="Cell19" Font="宋体, 9pt"/>
+        </TableRow>
+      </TableObject>
+      <DataFooterBand Name="DataFooter1" Top="200.78" Width="718.2" Height="56.7">
+        <TextObject Name="Text1" Left="37.8" Top="28.35" Width="75.6" Height="18.9" Text="财务签章：" VertAlign="Center" Font="宋体, 9pt"/>
+        <TextObject Name="Text2" Left="122.85" Top="28.35" Width="94.5" Height="18.9" Font="宋体, 9pt"/>
+        <TextObject Name="Text3" Left="255.15" Top="28.35" Width="75.6" Height="18.9" Text="收货签章：" VertAlign="Center" Font="宋体, 9pt"/>
+        <TextObject Name="Text4" Left="359.1" Top="28.35" Width="94.5" Height="18.9" Font="宋体, 9pt"/>
+        <TextObject Name="Text5" Left="463.05" Top="28.35" Width="85.05" Height="18.9" Text="客户签章：" VertAlign="Center" Font="宋体, 9pt"/>
+        <TextObject Name="Text6" Left="567" Top="28.35" Width="94.5" Height="18.9" Font="宋体, 9pt"/>
+      </DataFooterBand>
+    </DataBand>
+  </ReportPage>
+</Report>

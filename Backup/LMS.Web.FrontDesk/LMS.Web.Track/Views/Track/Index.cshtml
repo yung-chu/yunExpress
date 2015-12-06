@@ -1,0 +1,39 @@
+﻿
+@{
+    
+    ViewBag.Title = "跟踪号查询";
+}
+
+@model LMS.FrontDesk.Controllers.TrackController.Models.TrackModel
+           
+@using (Html.BeginForm("Detail","Track"))
+{
+    
+
+<div class="qw_area">
+	<div class="" style="margin:12px;">
+        <div class="qw_scroll rel">
+
+            @Html.TextAreaFor(p=>p.WayBillNumber,new{@cols=50,@rows=12,@class="qw_Textarea"})
+            
+            <ul class="qw_L trans">
+            </ul>
+        </div>
+        <div class="tc rel mt-60">
+            <a href="javascript:"  onclick="SearchInfo()">
+                <img src="@Url.Content("~/images/earch_btn.png")"/>
+            </a>
+            <input type="submit"  style="display:none" id="submitSearch" />
+        </div>
+    </div>
+</div>
+ 
+}
+
+<script type="text/javascript">
+
+    function SearchInfo() {
+        $("#submitSearch").trigger("click");
+    }
+
+</script>

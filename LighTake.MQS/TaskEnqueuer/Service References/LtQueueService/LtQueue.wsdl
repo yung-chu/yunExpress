@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="LtQueue" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://localhost:25058/LtQueue.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:25058/LtQueue.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:25058/LtQueue.svc?xsd=xsd2" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://localhost:25058/LtQueue.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/LighTake.MQS.Dto" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ILtQueue_Enqueue_InputMessage">
+    <wsdl:part name="parameters" element="tns:Enqueue" />
+  </wsdl:message>
+  <wsdl:message name="ILtQueue_Enqueue_OutputMessage">
+    <wsdl:part name="parameters" element="tns:EnqueueResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILtQueue_Dequeue_InputMessage">
+    <wsdl:part name="parameters" element="tns:Dequeue" />
+  </wsdl:message>
+  <wsdl:message name="ILtQueue_Dequeue_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DequeueResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILtQueue_QueueLength_InputMessage">
+    <wsdl:part name="parameters" element="tns:QueueLength" />
+  </wsdl:message>
+  <wsdl:message name="ILtQueue_QueueLength_OutputMessage">
+    <wsdl:part name="parameters" element="tns:QueueLengthResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILtQueue_WaitEnqueue_InputMessage">
+    <wsdl:part name="parameters" element="tns:WaitEnqueue" />
+  </wsdl:message>
+  <wsdl:message name="ILtQueue_WaitEnqueue_OutputMessage">
+    <wsdl:part name="parameters" element="tns:WaitEnqueueResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ILtQueue">
+    <wsdl:operation name="Enqueue">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILtQueue/Enqueue" message="tns:ILtQueue_Enqueue_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILtQueue/EnqueueResponse" message="tns:ILtQueue_Enqueue_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Dequeue">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILtQueue/Dequeue" message="tns:ILtQueue_Dequeue_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILtQueue/DequeueResponse" message="tns:ILtQueue_Dequeue_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="QueueLength">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILtQueue/QueueLength" message="tns:ILtQueue_QueueLength_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILtQueue/QueueLengthResponse" message="tns:ILtQueue_QueueLength_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="WaitEnqueue">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILtQueue/WaitEnqueue" message="tns:ILtQueue_WaitEnqueue_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILtQueue/WaitEnqueueResponse" message="tns:ILtQueue_WaitEnqueue_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_ILtQueue" type="tns:ILtQueue">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Enqueue">
+      <soap:operation soapAction="http://tempuri.org/ILtQueue/Enqueue" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Dequeue">
+      <soap:operation soapAction="http://tempuri.org/ILtQueue/Dequeue" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QueueLength">
+      <soap:operation soapAction="http://tempuri.org/ILtQueue/QueueLength" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WaitEnqueue">
+      <soap:operation soapAction="http://tempuri.org/ILtQueue/WaitEnqueue" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="LtQueue">
+    <wsdl:port name="BasicHttpBinding_ILtQueue" binding="tns:BasicHttpBinding_ILtQueue">
+      <soap:address location="http://localhost:25058/LtQueue.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

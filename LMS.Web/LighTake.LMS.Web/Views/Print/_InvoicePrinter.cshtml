@@ -1,0 +1,72 @@
+﻿@{
+    ViewBag.Title = "_InvoicePrinter";
+    Layout = null;
+}
+
+@using System.Text
+@using LMS.Controllers.WayBillController
+@using RazorEngine
+@model LMS.Controllers.WayBillController.InvoivePrinterViewModel
+
+@foreach (var item in Model.WayBillTemplates)
+{
+    var list = Model.CustomerOrderInfoModels.FindAll(p => p.ShippingMethodId == item.ShippingMethodId && item.Countries.Contains(p.CountryCode));
+    
+    if (list.Count == 0)
+    {
+        continue;
+    }
+    PrinterTemplateViewModel templateViewModel =new PrinterTemplateViewModel()
+        {
+            RowNumber = item.RowNumber,
+            ColumnNumber = item.ColumnNumber,
+            TemplateBodyContent = item.TemplateBodyContent,
+            TemplateHead = item.TemplateHead,
+            CustomerOrderInfoModels = list,
+        };
+    
+    StringBuilder sb = new StringBuilder();
+    if (item.RowNumber == 1 && item.ColumnNumber == 1)
+    {
+        sb.Append("@foreach (var orderModel in Model.CustomerOrderInfoModels){ string gift = orderModel.AppLicationType == 1 ? \"checked='checked'\" : \"\"; string commercial = orderModel.AppLicationType == 2 ? \"checked='checked'\" : \"\"; string documents = orderModel.AppLicationType == 3 ? \"checked='checked'\" : \"\"; string other = orderModel.AppLicationType == 4 ? \"checked='checked'\" : \"\";");
+        sb.Append("<div style=\"page-break-after: always;\">");
+        sb.Append(item.TemplateHead);
+        sb.Append(item.TemplateBodyContent);
+        sb.Append("</div>}");
+        @Html.Raw(Razor.Parse(HttpUtility.HtmlDecode(sb.ToString()), templateViewModel))
+    }
+    else
+    {
+        sb.Append("@{int number = 0;foreach (var orderModel in Model.CustomerOrderInfoModels){ string gift = orderModel.AppLicationType == 1 ? \"checked='checked'\" : \"\"; string commercial = orderModel.AppLicationType == 2 ? \"checked='checked'\" : \"\"; string documents = orderModel.AppLicationType == 3 ? \"checked='checked'\" : \"\"; string other = orderModel.AppLicationType == 4 ? \"checked='checked'\" : \"\";");
+        sb.Append("if (number%(Model.RowNumber*Model.ColumnNumber) == 0){@:<table style=\"page-break-after: always;\"><tbody>");
+        sb.AppendLine();
+        sb.Append("}");
+        sb.Append(" if (number%Model.ColumnNumber == 0){@:<tr>");
+        sb.AppendLine();
+        sb.Append("}");
+        sb.Append("<td>");
+        sb.Append(item.TemplateHead);
+        sb.Append(item.TemplateBodyContent);
+        sb.Append("</td>");
+        sb.Append("if (number%Model.ColumnNumber == Model.ColumnNumber - 1){@:</tr>");
+        sb.AppendLine();
+        sb.Append("}");
+        sb.Append("if (number%(Model.RowNumber*Model.ColumnNumber) == Model.RowNumber*Model.ColumnNumber - 1){@:</tbody> </table>");
+        sb.AppendLine();
+        sb.Append("}");
+        sb.Append("number++;}");
+        sb.Append("int moldValue = Model.CustomerOrderInfoModels.Count%(Model.RowNumber*Model.ColumnNumber);");
+        sb.Append(" if (moldValue != 0){");
+        sb.Append(" for (int i = 1; i <= Model.RowNumber*Model.ColumnNumber - moldValue; i++){@:<td></td>");
+        sb.AppendLine();
+        sb.Append("}@:</tr></tbody></table>");
+        sb.AppendLine();
+        sb.Append("}}");
+        
+        
+        @Html.Raw(Razor.Parse(HttpUtility.HtmlDecode(sb.ToString()), templateViewModel))
+    }
+
+
+}
+

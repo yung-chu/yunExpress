@@ -1,0 +1,56 @@
+﻿@using LMS.Data.Entity
+@model LMS.Controllers.WayBillController.TrackingNumberModel
+@{
+    ViewBag.Title = "TrackingNumberDetail";
+}
+
+@Html.Partial("_ShowDialog")
+<div>
+    <li>
+        运输方式:@Model.ShippingMethodName
+    </li>
+    <li>
+        适用国家:
+        @if (Model.ApplianceCountry != null)
+        {
+            @Html.TextArea("Country",Model.ApplianceCountry,new{@readonly="readonly"})
+        }
+    </li>
+    <table class="data_table mt20" width="30%" border="1" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr class="data_row_two">
+                <th width="15%">序号
+                </th>
+                <th width="50%">跟踪号
+                </th>
+                <th width="35%">状态
+                </th>
+            </tr>
+            @if (Model.PagedList.Any())
+            {
+                int n = 1;
+                foreach (var row in Model.PagedList)
+                {
+                    <tr align="center">
+                        <td>
+                            @n
+                        </td>
+                        <td>
+                            @row.TrackingNumber
+                        </td>
+                        <td>
+                            @TrackingNumberDetailInfo.GetStatusDescription(row.Status)
+                        </td>
+                    </tr>
+                    n++;
+                }
+            }
+        </thead>
+        <tr class="data_row_none">
+                        <td colspan="3">
+                            @Html.Pager(Model.PagedList,Model.TrackingNumberID)
+                        </td>
+       </tr>
+    </table>
+      <a  class="btn_href" href="@(!string.IsNullOrWhiteSpace(Request.QueryString["ReturnUrl"]) ? Request.QueryString["ReturnUrl"] : Url.Action("SelectTrackingNumber", "WayBill"))" class="btn_href">返回</a>
+</div>

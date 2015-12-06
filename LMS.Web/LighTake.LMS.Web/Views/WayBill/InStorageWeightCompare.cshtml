@@ -1,0 +1,206 @@
+﻿@{
+    ViewBag.Title = "InStorageWeightDeviation";
+}
+
+@model LMS.Controllers.WayBillController.InStorageWeightDeviationModel
+
+<div id="showCustomerList" tabindex="200" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showShippingMethodList" style="overflow: scroll; display: none; position: relative" tabindex="100">
+</div>
+
+<!--新增，编辑-->
+<div id="AddOrEdit" style="overflow: scroll; display: none; position: relative">
+</div>
+
+<div class="domebg" id="right_con">
+    
+ @Html.Partial("_Notifications")
+    @using (Html.BeginForm())
+    {
+
+
+        var url = Html.GetUrl("InStorageWeightCompare", "WayBill", Model.FilterModel);
+        <input type="hidden" id="ReturnUrl" value="@url"/>
+
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+        
+           <tr class="date_row_select">
+               <td width="30%">
+                   <span class="info_box info_select">客户:</span>
+                   <input type="text" id="CustomerCode"  name="FilterModel.CustomerCode" value="@Model.FilterModel.CustomerCode" readonly="readonly" class="txt txt_short" />
+                   <input type="text" id="nickName"  name="FilterModel.CustomerName" value="@Model.FilterModel.CustomerName" readonly="readonly" class="txt txt_short" />
+                   <input type="hidden" id="CustomerType"/>
+                   <a href="javascript:void(0)" id="selectCustomer" class="btn_href">选择</a>
+                   <input type="hidden" id="CustomerID"/>
+               </td>
+                
+
+               <td width="25%">
+                   <span class="info_box info_select">运输方式:</span>
+                   <input type="text" id="ShippingName"  name="FilterModel.ShippingMethodName" value="@Model.FilterModel.ShippingMethodName" readonly="readonly" class="txt txt_short"/>
+                   <input type="hidden" id="ShippingMethodId" name="FilterModel.ShippingMethodId" value="@Model.FilterModel.ShippingMethodID"/>
+                   <input type="button" id="selectShippingMethod" class="btn" value="选择" />
+               </td>
+
+                
+
+           </tr>
+           
+           <tr class="date_row_select">
+               <td width="25%">
+               &nbsp;    &nbsp;    &nbsp;  &nbsp;    &nbsp;    &nbsp;  &nbsp;    &nbsp;    &nbsp;    <input type="submit" value="查 询" id="Search" name="Search" class="btn"/>
+               &nbsp;    &nbsp;    &nbsp;    &nbsp;    &nbsp;    &nbsp;    &nbsp;
+               <input type="button" value="新 增" id="Add" name="Add" class="btn"/>  
+           </tr>
+
+       </table>
+
+
+       <div id="pm_dis_div">
+        <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr class="data_row_two">
+                    <th>客户名称
+                    </th>
+                    <th>客户编码
+                    </th>
+                    <th>是否对比重量
+                    </th>
+                    <th>运输方式
+                    </th>
+                    <th>重量偏差值（g）
+                    </th>
+                    <th>操 作
+                    </th>
+             
+                </tr>
+            </thead>
+            <tbody>
+                @{
+        if (Model != null)
+        {
+            foreach (var row in Model.PagedList.InnerList)
+            {
+                            <tr class="data_row_dan">
+    
+                                <td style="text-align: center">
+                                    @row.CustomerName
+                                </td>
+                                <td style="text-align: center">
+                                    @row.CustomerCode
+                                </td>
+                                <td style="text-align: center">
+                                    @if (row.Status == 1)
+                                    {
+                                        <text>是</text>
+                                    }
+                                    else
+                                    {
+                                        <text>否</text>
+                                    }
+                                                
+                                </td>
+                                <td style="text-align: center">
+                                    @row.ShippingMethodName
+                                </td>
+                                <td style="text-align: center">
+                                    @row.DeviationValue<span>g</span>
+                                </td>
+                                <td style="text-align: center">
+                                         
+                                    <a  onclick="return confirm('确定要删除吗？');" class="btn_href" href="@Url.Action("DeleteWeightCompare", new { id = @row.InStorageWeightDeviationID ,returnUrl= url})">删除</a>
+                                    &nbsp;&nbsp;&nbsp;
+                                    <input type="button" name="Edit"  id="@row.InStorageWeightDeviationID"  onclick="EditData(this.id)" class="btn" value="编 辑" />
+                                </td>
+                            </tr>
+                              
+            }
+        }
+
+                }
+                <tr class="data_row_none">
+                    <td colspan="14">
+                        @Html.Pager(Model.PagedList, Model.FilterModel)
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    
+
+    }
+
+
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+
+        //选择运输方式
+        $("#selectShippingMethod").bind("click", function () {
+
+            $("#showShippingMethodList").showWindow("@Url.Action("FilterShippingMethod", "WayBill")?customerId=" + $("#CustomerID").val() + "&customerTypeId=" + $("#CustomerType").val() + "&type=1", "选择运输方式");              
+            var parentWindow = $("#showShippingMethodList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                    top: 120
+                }, {
+                    duration: 1000,
+                    step: function(now, fx) {
+                        $(".window").css("top", now);
+                    }
+                });
+            $("#showShippingMethodList").show();
+        });
+
+        //新增1
+        Add();
+
+    });    
+
+
+    //新增1 
+    var Add = function() {
+
+        $("#Add").bind("click", function() {
+            $("#AddOrEdit").showWindow("@Url.Action("AddOrEditWeightCompare", "WayBill")?type=1&inStorageWeightDeviationID=0&returnUrl=" + encodeURIComponent($("#ReturnUrl").val()), "新增");
+            var parentWindow = $("#AddOrEdit").parent("div");
+               $(parentWindow).css("top", "0");
+               $(parentWindow).animate({
+                   top: 120
+               }, {
+                   duration: 1000,
+                   step: function (now, fx) {
+                       $(".window").css("top", now);
+                   }
+               });
+               $("#AddOrEdit").show();
+           });
+    };
+    
+
+
+    //编辑2
+    function EditData(id) {
+
+        $("#AddOrEdit").showWindow("@Url.Action("AddOrEditWeightCompare", "WayBill")?type=2&inStorageWeightDeviationID=" + id + "&returnUrl=" + encodeURIComponent($("#ReturnUrl").val()), "编辑");
+            var parentWindow = $("#AddOrEdit").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                    top: 120
+                }, {
+                    duration: 1000,
+                    step: function(now, fx) {
+                        $(".window").css("top", now);
+                    }
+                });
+            $("#AddOrEdit").show();
+    
+    };
+
+
+
+</script>

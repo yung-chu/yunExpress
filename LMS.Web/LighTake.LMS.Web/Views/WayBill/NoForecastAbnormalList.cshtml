@@ -1,0 +1,300 @@
+﻿@using LMS.Data.Entity
+@model LMS.Controllers.WayBillController.NoForecastAbnormalViewModel
+@{
+    ViewBag.Title = "List";
+    <link href="/Scripts/artdialog/skins/default.css" type="text/css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("/Scripts/chosen/chosen.css")" />
+
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+}
+
+<div id="showCustomerList" tabindex="200" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showShippingMethodList" style="overflow: scroll; display: none; position: relative">
+</div>
+
+<div class="domebg" id="right_con">
+    @using (Html.BeginForm())
+    {
+        @Html.HiddenFor(m=>m.FilterModel.IsFirstIn)
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class="date_row_select">
+                <td width="15%">
+                    <span class="info_box info_select">客户编码:</span>
+                    <input type="text" id="CustomerCode" value="@Model.FilterModel.CustomerCode" name="FilterModel.CustomerCode" readonly="readonly" class="txt txt_short" />
+                    <a href="javascript:void(0)" id="selectCustomer" class="btn_href">选择</a>
+                </td>
+                <td width="20%">
+                    <span class="info_box info_select">运输方式:</span>
+                    <input type="text" id="ShippingName" value="@Model.FilterModel.ShippingName" name="FilterModel.ShippingName" readonly="readonly" class="txt txt_short"/>
+                    <input type="hidden" id="ShippingMethodId" name="FilterModel.ShippingMethodId" value="@Model.FilterModel.ShippingMethodId" />
+                    <input type="button" id="selectShippingMethod" class="btn" value="选择" />
+                </td>
+                <td width="20%">
+                    <span class="info_box info_select">状态:</span>
+                    @Html.DropDownListFor(o => o.FilterModel.Status, Model.StatusList)
+                </td>
+            </tr>
+            <tr class="date_row_select">
+                <td width="15%">
+                    <span class="info_box info_select">单号:</span>
+                    @Html.TextAreaFor(p => p.FilterModel.SearchContext, new {@style = "height:80px; width:210px;"})
+                </td>
+                <td >
+                    <span class="info_box info_select">创建时间:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.StartTime, new {@onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.StartTime), @class = "txt wdate", @style = "width:130px;"})
+                    <span>至:</span>
+                    @Html.TextBoxFor(p => p.FilterModel.EndTime, new {@onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.EndTime), @class = "txt wdate", @style = "width:130px;"})
+                </td>
+                <td colspan="1">
+                    <input type="submit" class="btn" value="搜索" id="btnSearch" name="btnSearch" />
+                    <input type="submit" class="btn ml10" value="导出" id="btnExport" name="btnExport" />
+                    <input type="button" class="btn ml10" value="无预报退回" id="btnReturn" name="btnReturn" />
+                  
+                    @if (Model.DisplayDelete)
+                    {
+                     <input type="button" class="btn ml10" value="删除异常" id="btnDelete" name="btnDelete" />           
+                    }
+                
+
+                </td>
+            </tr>
+        </table>
+
+        <div id="pm_dis_div">
+            <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr class="data_row_two">
+                        <th>
+                            <input type="checkbox" class="checkbox" id="SelectAll" name="SelectAll" /><label for="SelectAll">全选</label>
+                        </th>
+                        <th>客户名称
+                        </th>
+                        <th>订单号/跟踪号
+                        </th>
+                        <th>运输方式
+                        </th>
+                        <th>重量kg
+                        </th>
+                        <th>状态
+                        </th>
+                        <th>异常说明
+                        </th>
+                        <th>创建人
+                        </th>
+                        <th>创建时间
+                        </th>
+                        <th>操作
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+
+                        foreach (var row in Model.PagedList.InnerList)
+                        {
+                            <tr class="data_row_dan" number="@(row.NoForecastAbnormalId)">
+                                <td>
+                                    <input type="checkbox" class="checkbox" name="Numbers" value="@row.NoForecastAbnormalId" />     
+                                </td>
+                                  
+                                <td>
+                                    @row.CustomerName
+                                </td>
+                                <td >
+                                    @row.Number
+                                </td>
+                                <td>
+                                    @row.ShippingMethodName
+                                </td>
+                               
+                                <td>
+                                    @row.Weight
+                                </td>
+                                <td name="Status">
+                                    @WayBill.GetNoForecastAbnormalDescription(row.Status)
+                                </td>
+                               
+                                <td>
+                                    @row.Description
+                                </td>
+                               
+                                <td>
+                                    @row.CreatedBy
+                                </td>
+
+                     
+                                <td>
+                                    @row.CreatedOn
+                                </td>
+                               
+
+                                <td>
+                                    <input type="button" class="btn" value="删除异常" onclick="javascript:Delete(this)"/>
+                                </td>
+                             
+                            </tr>
+
+                        }
+                    }
+                    <tr class="data_row_none">
+                        <td colspan="20">
+                            @Html.Pager(Model.PagedList, Model.FilterModel)
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        
+        //选择运输方式
+        $("#selectShippingMethod").bind("click", function () {
+            $("#showShippingMethodList").showWindow("@Url.Action("SelectShippingMethod", "WayBill")?customerTypeId=" + $("#CustomerType").val() + "&type=1", "选择运输方式");
+            var parentWindow = $("#showShippingMethodList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                    top: 120
+                }, {
+                    duration: 1000,
+                    step: function (now, fx) {
+                        $(".window").css("top", now);
+                    }
+                });
+            $("#showShippingMethodList").show();
+        });
+
+        //全选
+        $("#SelectAll").click(function () {
+            if ($(this).attr("checked")) {
+                $(":checkbox[name='Numbers']").attr("checked", true);
+            } else {
+                $(":checkbox[name='Numbers']").attr("checked", false);
+            }
+        });
+
+        $("#btnDelete").click(function () {
+            var selectNoForecastAbnormalId = [];
+            var checkRow = $(":checkbox[name='Numbers']:checked");
+            checkRow.each(function () {
+                selectNoForecastAbnormalId.push($(this).val());
+            });
+            
+            if (selectNoForecastAbnormalId.length < 1) {
+                alert("请先选择！");
+                return false;
+            }
+            
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("NoForecastAbnormalDelete")",
+                dataType: "JSON",
+                async: true,
+                data: { noForecastAbnormalId: selectNoForecastAbnormalId.join(",") },
+                success: function (data) {
+                    if (data.Result) {
+                        checkRow.each(function () {
+                            $(this).parents("tr").remove();
+                        });
+                    } else {
+                        alert(data.Message);
+                    }
+                },
+                error: function () {
+                    alert("失败");
+                }
+            });
+        });
+        
+
+        $("#btnReturn").click(function () {
+            var selectNoForecastAbnormalId = [];
+            var error = false;
+            var checkRow = $(":checkbox[name='Numbers']:checked");
+            checkRow.each(function () {
+                
+                if ($.trim($(this).parents("tr").children("td[name='Status']").text()) != "无预报") {
+                    error = true;
+                    alert("必须全部为无预报单才能批量退回");
+                    return false;
+                }
+                
+                selectNoForecastAbnormalId.push($(this).val());
+            });
+
+            if (error) {
+                return false;
+            }
+
+            if (selectNoForecastAbnormalId.length < 1) {
+                alert("请先选择！");
+                return false;
+            }
+            
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("NoForecastAbnormalReturn")",
+                dataType: "JSON",
+                async: true,
+                data: { noForecastAbnormalId: selectNoForecastAbnormalId.join(",") },
+                success: function (data) {
+                    if (data.Result) {
+                        checkRow.each(function () {
+                            $(this).parents("tr").children("td[name='Status']").html("无预报退回");
+                        });
+                    } else {
+                        alert(data.Message);
+                    }
+                },
+                error: function () {
+                    alert("失败");
+                }
+            });
+                });
+        
+    });
+
+    function Delete(obj) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("NoForecastAbnormalDelete")",
+            dataType: "json",
+            async: true,
+            data: { noForecastAbnormalId: $(obj).parents("tr").attr("number")},
+            success: function (data) {
+                if (data.Result) {
+                    $(obj).parents("tr").remove();
+                } else {
+                    alert(data.Message);
+                }
+            },
+            error: function () {
+                alert("失败");
+            }
+        });
+    }
+
+    function Retrun(obj) {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("NoForecastAbnormalDelete")",
+            dataType: "json",
+            async: true,
+            data: { noForecastAbnormalId: $(obj).parents("tr").attr("number") },
+            success: function (data) {
+                if (data.Result) {
+                    $(obj).parents("tr").remove();
+                } else {
+                    alert(data.Message);
+                }
+            },
+            error: function () {
+                alert("失败");
+            }
+        });
+    }
+</script>

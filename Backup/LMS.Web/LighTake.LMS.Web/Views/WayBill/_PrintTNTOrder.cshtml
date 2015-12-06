@@ -1,0 +1,566 @@
+﻿@{
+    Layout = null;
+}
+@model LMS.Controllers.WayBillController.CustomerOrderInfosModel
+
+<table cellpadding="0" width="350" height="540" cellspacing="0" border="0" style="font-size:11px; font-family:'Times New Roman', Times, serif; line-height:1;">
+    <tr>
+        <td >
+            <table cellpadding="0" width="100%" cellspacing="0" border="0" style="border-top: 1px solid #000;">
+                <tr>
+                    <td colspan="2" style="padding: 5px; border: 1px solid #000; border-top: none;">
+                        <table cellpadding="0" width="100%" cellspacing="0" border="0">
+                            <tr>
+                                <td width="40%" style="font-size: 12px; font-family: 'Times New Roman', Times, serif;">
+                                    From: <br/>
+                                    <strong style="font-size: 16px;">S-11024 </strong><br/>
+                                    Postbus 71203<br/>
+                                    3000 PE Rotterdam Netherlands<br/>
+                                </td>
+                                <td width="60%">
+                                    <img src="@Url.Content("~/images/Print/TNT/priority.jpg")" width="95" />
+                                    <img src="@Url.Content("~/images/Print/TNT/postnl.jpg")" width="95" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" >
+                        <table cellpadding="0" width="100%" style="border: 1px solid #000; border-top: none;" cellspacing="0">
+                            <tr>
+                                <td colspan="2">
+                                    <table cellpadding="0" width="100%" cellspacing="0" border="0" style="font-family: 'Times New Roman', Times, serif; font-size: 12px;">
+	                                                     
+                                        <tr>
+                                            <td align="left" style="padding: 5px; border-bottom: 1px solid #000; font-size: 12px;">
+                                                To:<br/>
+                                                @(Model.ShippingFirstName+" "+Model.ShippingLastName)<br/>
+                                                @Model.ShippingAddress<br/>
+                                                @(Model.ShippingCity+" "+Model.ShippingState+","+Model.ShippingZip)<br/>
+                                                @Model.CountryName<br/>
+                                                Tel:@Model.ShippingPhone
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>	
+                            </tr>
+                            <tr>
+                                <td valign="top" colspan="2" style="padding: 5px; border-bottom: 1px solid #000;">
+                                    <table cellpadding="0" width="100%" cellspacing="0" border="0" style="font-family: 'Times New Roman', Times, serif; font-size: 12px;">
+                                        <tr>
+                                            <td width="20%"></td>
+                                            <td  align="center">
+                                                <strong style="float:left; font-size:16px;">R</strong>
+                                                Registered/recommande
+                                            </td>
+                                            <td width="20%">&nbsp;</td>
+                                        </tr>
+                                        @if (!string.IsNullOrWhiteSpace(Model.TrackingNumber))
+                                        {
+                                            <tr>
+                                                <td width="20%"></td>
+                                                <td> 
+                                                    <span style="font-family: c39P36DmTt; font-size: 40px; color: #000;">
+                                                        <img id="img"  src="/barcode.ashx?m=0&h=35&vCode=@Model.TrackingNumber" alt="@Model.TrackingNumber"/>
+                                                    </span>
+                                                </td>
+                                                <td width="20%">&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td width="20%"></td>
+                                                <td  align="center" >
+                                                    <strong style="font-size: 16px;">@Model.TrackingNumber</strong>
+                                                </td>
+                                                <td width="20%">&nbsp;</td>
+                                            </tr>
+                                        }
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="padding: 5px;">
+                                    <table cellpadding="0" width="100%" cellspacing="0" border="0" >
+                                        <tr>
+                                            <td>
+                                                <table cellpadding="0" width="100%" cellspacing="0" border="0" style="font-family: 'Times New Roman', Times, serif; font-size: 12px;" >
+                                                    <tr>
+                                                        <td align="right">Customer Code:</td>
+                                                        <td align="left">@Model.CustomerCode</td>
+                                                        <td align="right">Order ID:</td>
+                                                        <td align="left">@Model.CustomerOrderNumber</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="">
+                        <table cellpadding="0" width="100%" cellspacing="0" border="0" style="border: 1px solid #000; border-top: none">
+                            <tr>
+                                <td style="padding: 2px 4px;">
+                                    <table cellpadding="0" width="100%" cellspacing="0" border="0" style="font-family: 'Times New Roman', Times, serif; font-size: 12px;">
+                                        <tr>
+                                            <td width="33%" align="left">
+                                                <strong style="font-size: 12px; line-height: 1; color: #000">CUSTOMS DECLARATION</strong>
+                                            </td>
+                                            <td align="center">
+                                                I may be opened officially
+                                            </td>
+                                            <td width="20%" align="right">
+                                                <strong>CN22</strong>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 2px 4px; border-top: 1px solid #000;">
+                                    <table cellpadding="0" width="100%" cellspacing="0" border="0" style="font-family: 'Times New Roman', Times, serif; font-size: 12px;">
+                                        <tr>
+                                            <td width="33%" align="left">
+                                                Designated operator
+                                            </td>
+                                            <td width="33%" align="center">
+                                                POSTNL
+                                            </td>
+                                            <td  align="right" style="display: table; width: 100%; table-layout: fixed; word-wrap: break-word;">
+                                                I Important! See instructions on the bock
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border-top: 1px solid #000;">
+                                    <table cellpadding="0" width="100%" cellspacing="0" border="0" style="font-family: 'Times New Roman', Times, serif; font-size: 12px;">
+                                        <tr>
+                                            <td width="10%" style="border-right: 1px solid #000;">
+                                                <span style="display: block; height: 16px; position: relative; cursor: pointer;" id="img1" class="img1">
+                                                    <img src="@Url.Content("~/images/Print/TNT/selec.jpg")" style="position: absolute; left: 0; top: 0;" />
+                                                </span>
+                                            </td>
+                                            <td width="40%" style="border-right: 1px solid #000;">
+                                                Gift
+                                            </td>
+                                            <td width="10%" style="border-right: 1px solid #000;">
+                                                <span style="display: block; height: 16px; position: relative; cursor: pointer;" id="img2"  class="img2">
+                                                    <img src="@Url.Content("~/images/Print/TNT/selec.jpg")" style="position: absolute; left: -9999em; top: 0;" />
+                                                </span>
+                                            </td>
+                                            <td width="40%" style="display: table; width: 100%; table-layout: fixed; word-wrap: break-word;">
+                                                Commercial Sample
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border-top: 1px solid #000;">
+                                    <table cellpadding="0" width="100%" cellspacing="0" border="0" style="font-family: 'Times New Roman', Times, serif; font-size: 12px;">
+                                        <tr>
+                                            <td width="10%" style="border-right: 1px solid #000;">
+                                                <span style="display: block; height: 16px; position: relative; cursor: pointer;" id="img3"  class="img3">
+                                                    <img src="@Url.Content("~/images/Print/TNT/selec.jpg")" style="position: absolute; left: -9999em; top: 0;" />
+                                                </span>
+                                            </td>
+                                            <td valign="middle" width="40%" style="border-right: 1px solid #000;">
+                                                Documents
+                                            </td>
+                                            <td width="10%" style="border-right: 1px solid #000;">
+                                                <span style="display: block; height: 16px; position: relative; cursor: pointer;" id="img4" class="img4">
+                                                    <img src="@Url.Content("~/images/Print/TNT/selec.jpg")" style="position: absolute; left: -9999em; top: 0;" />
+                                                </span>
+                                            </td>
+                                            <td valign="middle" width="40%" style="display: table;">
+                                                Other
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border-top: 1px solid #000;">
+                                    <table cellpadding="0" width="100%" cellspacing="0" border="0" style="font-family: 'Times New Roman', Times, serif; font-size: 12px;">
+                                        <tr>
+                                            <td width="45%" style="border-right: 1px solid #000; padding: 2px 4px;">
+                                                Quantity and detailed <br>
+                                                                      description of contents
+                                            </td>
+                                            <td width="30%" align="center" style="border-right: 1px solid #000; padding: 2px 4px;">
+                                                Weight(in g)
+                                            </td>
+                                            <td width="25%" align="center" style="padding: 2px 4px;">
+                                                value
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            @if (Model.ApplicationInfoList.Count > 0)
+                            {
+                                foreach (var app in Model.ApplicationInfoList)
+                                {
+                                    <tr>
+                                        <td style="border-top: 1px solid #000;">
+                                            <table cellpadding="0" width="100%" cellspacing="0" border="0" style="font-family: 'Times New Roman', Times, serif; font-size: 12px;">
+                                                <tr>
+                                                    <td width="45%" align="center" style="border-right: 1px solid #000; padding: 2px 4px;">
+                                                        <strong> @app.ApplicationName</strong>
+                                                    </td>
+                                                    <td width="30%" align="center" style="border-right: 1px solid #000; padding: 2px 4px;">
+                                                        <strong>@(app.UnitWeight==null?"0.00":(app.UnitWeight.Value*1000).ToString("#0.00"))</strong>
+                                                    </td>
+                                                    <td width="25%" align="center" style="padding: 2px 4px;">
+                                                        <strong>@(app.Total==null?"0.00":app.Total.Value.ToString("#0.00"))</strong>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                   
+                                }
+                                <tr>
+                                    <td style="border-top: 1px solid #000;">
+                                        <table cellpadding="0" width="100%" cellspacing="0" border="0" style="font-family: 'Times New Roman', Times, serif; font-size: 12px;">
+                                            <tr>
+                                                <td width="45%" style="border-right: 1px solid #000; padding: 2px 4px;">
+                                                    For commercial items only. If known, HS tariff number(4) and country of origin of goods(5) Singapore 
+                                                </td>
+                                                <td width="30%" align="center" style="border-right: 1px solid #000; padding: 2px 4px;">
+                                                    Total Weight (in kg)<br/> 
+                                                    <strong>@Model.ApplicationInfoList.Sum(p=>p.UnitWeight==null?0:p.UnitWeight.Value).ToString("#0.00")</strong>
+                                                </td>
+                                                <td width="25%" align="center" style="padding: 2px 4px;">
+                                                    Total Value <strong>USD @Model.ApplicationInfoList.Sum(p=>p.Total==null?0:p.Total.Value).ToString("#0.00")</strong>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td style="border-top: 1px solid #000;">
+                                        <table cellpadding="0" width="100%" cellspacing="0" border="0" style="font-family: 'Times New Roman', Times, serif; font-size: 12px;">
+                                            <tr>
+                                                <td width="45%" align="center" style="border-right: 1px solid #000; padding: 2px 4px;">
+                                                    pig(1 pc)
+                                                </td>
+                                                <td width="30%" align="center" style="border-right: 1px solid #000; padding: 2px 4px;">
+                                                    0
+                                                </td>
+                                                <td width="25%" align="center" style="padding: 2px 4px;">
+                                                    0
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-top: 1px solid #000;">
+                                        <table cellpadding="0" width="100%" cellspacing="0" border="0" style="font-family: 'Times New Roman', Times, serif; font-size: 12px;">
+                                            <tr>
+                                                <td width="45%" style="border-right: 1px solid #000; padding: 2px 4px;">
+                                                    For commercial items only. If known, HS tariff number(4) and country of origin of goods(5) Singapore 
+                                                </td>
+                                                <td width="30%" align="center" style="border-right: 1px solid #000; padding: 2px 4px;">
+                                                    Total Weight (in kg) 0
+                                                </td>
+                                                <td width="25%" align="center" style="padding: 2px 4px;">
+                                                    Total Value USD0
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            }
+                            <tr>
+                                <td style="border-top: 1px solid #000;">
+                                    <table cellpadding="0" width="100%" cellspacing="0" border="0" style="font-family: 'Times New Roman', Times, serif; font-size: 12px;">
+                                        <tr>
+                                            <td style="padding: 2px 4px;">
+                                                I, the undersigned, whose name and address are give on the item certify that the particulars given in this declaration are correct and that this item does not contain any dangerous article or articles prohibited by legislation or by postal or customs regulations.
+                                                Date and sender's signature(9)     <div style="text-align: right;margin-top: -12px;">Catherine &nbsp;&nbsp;@Model.CreatedOn.ToString("yyyy-MM-dd")</div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+	         
+        </td>
+    </tr>
+</table>
+
+
+
+
+
+
+<table border="0" cellpadding="0" cellspacing="0" style="width:701px; font-size:12px; line-height:12px; font-family:Arial, Helvetica, sans-serif;">
+    	<tbody><tr>
+        	<td valign="top" style="width:345px; padding:0; height:337px;">
+            	<table border="0" cellpadding="0" cellspacing="0" style="border:1px solid #000; border-collapse:collapse; width:100%; height:100%;">
+                    <tbody><tr valign="top">
+                        <td valign="top" style="padding-bottom:0;">
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                        <tbody><tr>
+                                            <td>
+                                                <strong style="font-size:14px;">Equick</strong>
+                                            </td>
+                                            <td width="40%">
+                                                <img src="images/img_2_03.jpg">
+                                            </td>
+                                            <td>
+                                                <div style="text-align:right;">
+                                                    <img src="images/img_1_05.jpg" width="120">
+                                                </div>
+                                            </td>
+                                        </tr>
+                            </tbody></table>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                                <td valign="top">
+                                    <table width="100%" border="0" cellpadding="0" cellspacing="0" style="padding-bottom:0;">
+                                        <tbody><tr>
+                                            <td valign="top" width="8%" style="padding:0;">
+                                                <img src="images/img_5_13.jpg">
+                                            </td>
+                                            <td valign="top" width="50%" style="padding:0;">
+                                                <table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size:11px; line-height:12px;">
+                                                    <tbody><tr>
+                                                        <td>@(Model.ShippingFirstName + " " + Model.ShippingLastName)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>@Model.ShippingAddress</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>@(Model.ShippingCity + " " + Model.ShippingState)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>@Model.ShippingZip</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>@Model.CountryName</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>@Model.ShippingPhone</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="line-height:normal;">
+                                                            <div style="text-align:center;">
+                                                                <div style="font-family:c39P36DmTt;font-size:40px; text-align:left;">
+                                                                    <img id="img"  src="/barcode.ashx?m=0&h=35&vCode=@Model.TrackingNumber" alt="@Model.TrackingNumber"/>
+                                                                </div>
+                                                                <strong>@Model.TrackingNumber</strong>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody></table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <div>
+                                                    customer code:@Model.CustomerCode
+                                                </div>
+                                                <div>
+                                                    customer order:@Model.CustomerOrderNumber
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody></table>
+                                </td>
+                            </tr>
+                </tbody></table>
+            </td>
+            <td>
+            	
+            </td>
+            <td valign="top" style="width:345px; padding:0;  height:337px;">
+            	<table border="0" cellpadding="0" cellspacing="0" style="border:1px solid #000; border-collapse:collapse; width:100%; height:100%;">
+                    <tbody><tr valign="top">
+                        <td style="padding:0;">
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" class="no_pd">
+                                <tbody><tr valign="top">
+                                    <td valign="top">
+                                        <table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-size:10px; ">
+                                            <tbody><tr>
+                                                <td width="40%" height="12">
+                                                    CUSTOMS DECLARATION
+                                                </td>
+                                                <td width="40%" align="right">
+                                                    May be opened officially
+                                              </td>
+                                                <td style="text-align:center;">
+                                                    <strong style="font-size:12px;">CN 22</strong>
+                                                </td>
+                                            </tr>
+                                        </tbody></table>
+                                    </td>
+                                </tr>
+                                <tr valign="top">
+                                    <td style="border-top:1px solid #444444; border-bottom:1px solid #444444; font-size:11px;">
+                                        <table width="100%" cellpadding="0" cellspacing="0">
+                                            <tbody><tr>
+                                                <td width="35%" style="border-right:1px solid #444444; padding:3px ;">
+                                                    Designated operator
+                                                </td>
+                                                <td width="65%" style=" padding:3px ;">
+                                                    <strong>IMPORTANT</strong> See instructionson the back
+                                                </td>
+                                            </tr>
+                                        </tbody></table>
+                                    </td>
+                                </tr>
+                                <tr valign="top">
+                                    <td style=" font-size:11px;">
+                                        <table width="100%" cellpadding="0" cellspacing="0">
+                                            <tbody><tr>
+                                                <td width="10%" style="border-right:1px solid #444444; border-bottom:1px solid #444444;">
+                                                    <input type="checkbox" checked="checked" id="gift@(Model.TrackingNumber)" onclick="selpeihuo('gift','@Model.TrackingNumber');" style=" margin:2px;">
+                                                </td>
+                                                <td width="25%" style=" border-right:1px solid #444444;">
+                                                    Gift
+                                                </td>
+                                                <td width="10%" style="border-right:1px solid #444444;  border-bottom:1px solid #444444;">
+                                                    <input type="checkbox" checked="checked" id="commercial@(Model.TrackingNumber)" onclick="selpeihuo('commercial','@Model.TrackingNumber');" style=" margin:2px;">
+                                                </td>
+                                                <td width="55%">
+                                                    Commercial sample
+                                                </td>
+                                            </tr>
+                                            
+                                        </tbody></table>
+                                    </td>
+                                </tr>
+                                <tr valign="top">
+                                    <td style="border-bottom:1px solid #444444; font-size:11px;">
+                                        <table width="100%" cellpadding="0" cellspacing="0">
+                                            <tbody><tr>
+                                                <td width="10%" style="border-right:1px solid #444444;">
+                                                    <input type="checkbox" checked="checked" id="documents@(Model.TrackingNumber)" onclick="selpeihuo('documents','@Model.TrackingNumber');" style=" margin:2px;">
+                                                </td>
+                                                <td width="25%" style=" border-right:1px solid #444444;">
+                                                    Documents
+                                                </td>
+                                                <td width="10%" style="border-right:1px solid #444444;">
+                                                    <input type="checkbox" checked="checked" id="other@(Model.TrackingNumber)" onclick="selpeihuo('other','@Model.TrackingNumber');" style=" margin:2px;">
+                                                </td>
+                                                <td width="55%">
+                                                    other
+                                                </td>
+                                            </tr>
+                                            
+                                        </tbody></table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="10" align="right" style=" padding-right:5px; border-bottom:1px solid #444444;">
+                                        Tick one or more boxes
+                                    </td>
+                                </tr>
+                                <tr valign="top">
+                                    <td style="border-bottom:1px solid #444444; font-size:11px;">
+                                        <table width="100%" cellpadding="0" cellspacing="0">
+                                            <tbody><tr>
+                                                <td width="60%" style="border-right:1px solid #444444;">
+                                                    Quantity and detailed descriptionof contents
+                                                </td>
+                                                <td width="20%" style=" border-right:1px solid #444444;">
+                                                    Weight(in kg)(2)
+                                                </td>
+                                                <td width="20%">
+                                                    Value(3)
+                                                </td>
+                                            </tr>
+                                        </tbody></table>
+                                    </td>
+                                </tr>
+                                <tr valign="top">
+                                    <td style="border-bottom:1px solid #444444; font-size:11px;">
+                                        @if (Model.ApplicationInfoList.Count>0)
+    {
+        foreach (var app in Model.ApplicationInfoList)
+        {
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #000;">
+                <tbody><tr>
+                           <td width="60%" style="border-right: 1px solid #444444;">
+                                @app.ApplicationName
+                           </td>
+                           <td width="20%" style="border-right: 1px solid #444444;">
+                               @(app.UnitWeight.ToString("#0.00"))
+                           </td>
+                           <td width="20%">
+                               <strong>@app.Total.ToString("#0.00")USD</strong>
+                           </td>
+                       </tr>
+                </tbody>
+            </table>
+        }
+    }
+                                             </td>
+                                </tr>
+                                <tr valign="top">
+                                    <td style="border-bottom:1px solid #444444; font-size:11px;">
+                                        <table width="100%" cellpadding="0" cellspacing="0">
+                                            <tbody><tr>
+                                                <td width="60%" style="border-right:1px solid #444444;">
+                                                    For commercial items only if known, HS tariff number (4) and country of origin of goods
+                                                </td>
+                                                <td width="20%" style=" border-right:1px solid #444444;">
+                                                    Total weight (in kg) (6)
+                                                </td>
+                                                <td width="20%">
+                                                    Total value()(7)
+                                                </td>
+                                            </tr>
+                                        </tbody></table>
+                                    </td>
+                                </tr>
+                                <tr valign="top">
+                                    <td style="border-bottom:1px solid #444444; font-size:11px;">
+                                        <table width="100%" cellpadding="0" cellspacing="0">
+                                            <tbody><tr>
+                                                <td align="center" width="60%" style="border-right:1px solid #444444;">
+                                                        <strong>China</strong>
+                                                </td>
+                                                <td width="20%" style=" border-right:1px solid #444444;">
+                                                    <strong>@Model.ApplicationInfoList.Sum(p =>p.UnitWeight).ToString("#0.00")</strong>
+                                                </td>
+                                                <td width="20%">
+                                                    <strong>@Model.ApplicationInfoList.Sum(p => p.Total).ToString("#0.00")USD</strong>
+                                                </td>
+                                            </tr>
+                                        </tbody></table>
+                                    </td>
+                                </tr>
+                                <tr valign="top">
+                                    <td colspan="10">
+                                        <div style="font-size:11px; padding:3px;">
+                                            I,the undersigned,whose name and address are given on the item. <br>
+                                            certify that the particulars given in this declaration are correct and that this item does not 
+                                            contain any dangerous article or articles pro-hibited by legislation or by postal or by customs
+                                            regulations Date and sender's signature
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody></table>
+                        </td>
+                     </tr>
+        		</tbody></table>
+            </td>
+        </tr>
+</tbody></table>
+

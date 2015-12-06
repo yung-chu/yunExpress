@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+
+  <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+  <Import Project="LMS.Config.targets"/>
+
+  <PropertyGroup>
+    <CurrentTime>$([System.DateTime]::Now)</CurrentTime>
+    <StringDate>$([System.DateTime]::Now.ToString('yyyyMMddHHmmssfff'))</StringDate>
+    <LastUpgradeDate></LastUpgradeDate>
+    <ProjectPublishPath>$(PublishPath)\$(Version)-$(StringDate)</ProjectPublishPath>
+    <Configuration>Release</Configuration>
+    <Platform>AnyCPU</Platform>
+  </PropertyGroup>
+
+
+  <Target Name="Build" >
+    <CallTarget Targets="Framework-Build" ContinueOnError="false" />
+    <CallTarget Targets="BuildProjectOutput" ContinueOnError="false" />
+  </Target>
+
+  <Target Name="Deploy" DependsOnTargets="Build">
+    <CallTarget Targets="ReadLastDate"  />
+    <CallTarget Targets="ZipPackage" />
+    <CallTarget Targets="FtpPackage" Condition="$(FtpAutoUpload) == 'true'" />
+    <CallTarget Targets="WriteLastDate" />
+  </Target>
+
+  <!--过滤文件-->
+  <UsingTask
+      TaskName="FileCompareDates"
+      TaskFactory="CodeTaskFactory"
+      AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" >
+    <ParameterGroup>
+      <TargetPath ParameterType="System.String" Required="true" />
+      <LastUpgradeDate ParameterType="System.DateTime" Required="true" />
+      <Result ParameterType="System.String[]" Output="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System"/>
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Linq" />
+      <Using Namespace="System.Collections.Generic" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+        Log.LogMessage("TargetPath: " + TargetPath, MessageImportance.High);
+        Log.LogMessage("LastUpgradeDate: " + LastUpgradeDate, MessageImportance.High);
+        var diInfo = new DirectoryInfo(TargetPath);
+        
+        if (diInfo.Exists)
+        {
+            Result = diInfo.GetFiles("*", SearchOption.AllDirectories)
+                      .Where(f => f.LastWriteTime >= LastUpgradeDate)
+                      .Where(f => f.FullName.ToLower() != Path.Combine(TargetPath,"Web.config").ToLower() )
+                      .Select(file => file.FullName).ToArray();
+        }
+
+        Log.LogMessage("Files: " + Result.Length, MessageImportance.High);
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
+  <!-- Build -->
+  <Target Name="Framework-Build">
+    <MSBuild Projects="$(SolutionPath)" Targets="Build"  />
+  </Target>
+
+  <!--生成网站-->
+  <Target Name="BuildProjectOutput" Inputs="@(ProjectsToPublish)" Outputs="%(Identity).Dummy">
+
+    <MakeDir Directories="%(ProjectsToPublish.OutputDir)" Condition="!Exists('%(ProjectsToPublish.OutputDir)')" />
+
+
+    <Message Text="@(ProjectsToPublish)" />
+    <Message Text="%(ProjectsToPublish.ProjectName)" />
+    <Message Text="%(ProjectsToPublish.OutputDir)" />
+
+    <!--Compile-->
+    <!--<MSBuild Projects="@(ProjectsToPublish)"
+             Targets="ResolveReferences;Compile;Build;_CopyWebApplication"
+             Properties="WebProjectOutputDir=%(ProjectsToPublish.OutputDir)\;OutDir=%(ProjectsToPublish.OutputDir)\bin\;Configuration=Release;Platform=AnyCPU;" />-->
+    <MSBuild Projects="@(ProjectsToPublish)"
+                 Targets="ResolveReferences;Build;_WPPCopyWebApplication"
+                 Properties="_ResolveReferenceDependencies=true;WebProjectOutputDir=%(ProjectsToPublish.OutputDir)\;Configuration=Release;Platform=AnyCPU;" />
+    <!--CreateItem
+                Include="%(ProjectsToPublish.OutputDir)\*.config;
+                         %(ProjectsToPublish.OutputDir)\bin\*.config;
+                         %(ProjectsToPublish.OutputDir)\bin\*.nupkg;
+                         %(ProjectsToPublish.OutputDir)\bin\*.pdb;
+                         %(ProjectsToPublish.OutputDir)\bin\*.xml;
+                ">
+      <Output ItemName="PreviousDeployment" TaskParameter="Include" />
+    </CreateItem>
+    <Delete Files="@(PreviousDeployment)" ContinueOnError="true" />
+-->
+
+    <!--<FileCompareDates TargetPath="%(ProjectsToPublish.OutputDir)" LastUpgradeDate="$(LastUpgradeDate)">
+      <Output TaskParameter="Result" PropertyName="DateCompareResult"/>
+    </FileCompareDates>
+
+    <Zip Files="$(DateCompareResult)"
+      Condition="$(DateCompareResult.Length)>0"
+      WorkingDirectory="%(ProjectsToPublish.OutputDir)"
+      ZipFileName="$(ProjectPublishPath)\%(ProjectsToPublish.ProjectName)-$(Version)-$(StringDate).zip"
+      ZipLevel="9"  />-->
+  </Target>
+
+  <!--生成部署包-->
+  <Target Name="ZipPackage" Inputs="@(ProjectsToPublish)" Outputs="%(Identity).Dummy">
+
+    <MakeDir Directories="$(ProjectPublishPath)" Condition="!Exists('$(ProjectPublishPath)')" />
+    <Message Text="$(LastUpgradeDate)" />
+
+    <Error Text="%(ProjectsToPublish.OutputDir)" Condition="!Exists('%(ProjectsToPublish.OutputDir)')" />
+    <Error Text="$(ProjectPublishPath)" Condition="!Exists('$(ProjectPublishPath)')" />
+
+    <CreateItem Include="%(ProjectsToPublish.OutputDir)">
+      <Output ItemName="MSBuildProjectParentDirectory" TaskParameter="Include"/>
+    </CreateItem>
+
+    <!-- You can now retrieve its fullpath using Fullpath metadata -->
+    <Message Text="%(MSBuildProjectParentDirectory.Fullpath)"/>
+
+    <CreateProperty Value="%(MSBuildProjectParentDirectory.Fullpath)">
+      <Output PropertyName="OutputDir" TaskParameter="Value"/>
+    </CreateProperty>
+
+    <FileCompareDates TargetPath="$(OutputDir)" LastUpgradeDate="$(LastUpgradeDate)">
+      <Output TaskParameter="Result" PropertyName="DateCompareResult"/>
+    </FileCompareDates>
+
+    <Zip Files="$(DateCompareResult)"
+      Condition="$(DateCompareResult.Length)>0"
+      WorkingDirectory="$(OutputDir)"
+      ZipFileName="$(ProjectPublishPath)\%(ProjectsToPublish.ProjectName)-$(Version)-$(StringDate).zip"
+      ZipLevel="9"  />
+
+    <!--Lets delete the %(ProjectsToPublish.OutputDir)-->
+    <RemoveDir Directories="%(ProjectsToPublish.OutputDir)" />
+
+  </Target>
+
+  <!--上传部署包-->
+  <Target Name="FtpPackage" >
+
+    <FindInList CaseSensitive="false" List="@(FtpConfig)" ItemSpecToFind="$(FtpServer)">
+      <Output TaskParameter="ItemFound" ItemName="FtpInfo"/>
+    </FindInList>
+
+    <Message Text="Hello from %(FtpInfo.FTPHost)" />
+
+    <ItemGroup>
+      <!-- Specify FilesToUpload -->
+      <FilesToUpload Include="$(ProjectPublishPath)\**\*.zip" />
+    </ItemGroup>
+
+    <!--  <MSBuild.Community.Tasks.Ftp
+	    LocalFiles="@(FilesToUpload)"
+      Username="$(FTPUser)"
+      Password="$(FTPPass)"
+      RemoteFiles="@(FilesToUpload->'%(RecursiveDir)%(Filename)%(Extension)')"
+      RemoteUri="ftp://$(FTPHost)/UpgradePackages/" />-->
+    <Message Text="************************$(ProjectPublishPath)" />
+    <FtpUploadDirectoryContent
+              ServerHost="%(FtpInfo.FTPHost)"
+              Port="21"
+              Username="%(FtpInfo.FTPUser)"
+              Password="%(FtpInfo.FTPPass)"
+              LocalDirectory="$(ProjectPublishPath)"
+              RemoteDirectory="UpgradePackages"
+              Recursive="true"
+        />
+  </Target>
+
+  <!--读取最后发布时间-->
+  <Target Name="ReadLastDate">
+    <ReadLinesFromFile File="$(MyTextFile)" >
+      <Output
+          TaskParameter="Lines"
+          ItemName="LastUpgradeDate"/>
+    </ReadLinesFromFile>
+
+    <CreateProperty Value="@(LastUpgradeDate)" >
+      <Output PropertyName="LastUpgradeDate" TaskParameter="Value"/>
+    </CreateProperty>
+
+    <CreateProperty Value="1999-1-1" Condition="@(LastUpgradeDate) == ''" >
+      <Output PropertyName="LastUpgradeDate" TaskParameter="Value"/>
+    </CreateProperty>
+
+    <Message Text="********** $(LastUpgradeDate)" />
+
+  </Target>
+
+  <!--写入最后发布时间-->
+  <Target Name="WriteLastDate">
+    <Message Text="WriteDate:********** $(CurrentTime)" />
+    <WriteLinesToFile
+            File="$(MyTextFile)"
+            Lines="$(CurrentTime)"
+            Overwrite="true"
+            Encoding="Unicode"/>
+  </Target>
+
+  <!-- Test -->
+  <Target Name="Tips">
+    <!--<Message Text="Hello from $(MSBuildProjectDirectory)" />
+    <Message Text="Hello from $(MSBuildToolsPath)" />
+    <Message Text="Hello from $([System.IO.Path]::GetDirectoryName($(RootFolder)))" />-->
+
+
+
+    <!-- You can now retrieve its fullpath using Fullpath metadata -->
+    <Message Text="$(RootFolder)"/>
+
+    <FindInList CaseSensitive="false" List="@(FtpConfig)" ItemSpecToFind="$(FtpServer)">
+      <Output TaskParameter="ItemFound" ItemName="Projects"/>
+    </FindInList>
+
+    <Message Text="Hello from %(Projects.FTPHost)" />
+
+  </Target>
+
+</Project>

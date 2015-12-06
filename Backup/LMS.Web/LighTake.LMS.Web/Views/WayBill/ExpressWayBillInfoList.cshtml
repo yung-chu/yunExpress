@@ -1,0 +1,201 @@
+﻿@model LMS.Controllers.WayBillController.ExpressWayBillViewModel
+@{
+    ViewBag.Title = "ExpressWayBillInfoList";
+    Html.AddScriptParts("/Scripts/My97DatePicker/WdatePicker.js");
+}
+<div id="showCustomerList" tabindex="200" style="overflow: scroll; display: none; position: relative">
+</div>
+<div id="showShippingMethodList" style="overflow: scroll; display: none; position: relative">
+</div>
+
+<div>
+    @using (Html.BeginForm())
+    {
+        <div>
+            <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <tr class="date_row_select">
+                    <td width="20%">
+                        <span class="info_box info_select">客户编码:</span>
+                        <input type="text" id="nickName" value="" readonly="readonly" class="txt txt_short" />
+                        <input type="hidden" id="CustomerCode" name="FilterModel.CustomerCode" value="@Model.FilterModel.CustomerCode" />
+                        <a href="javascript:void(0)" id="selectCustomer" class="btn_href">选择</a>
+                    </td>
+                    <td width="20%">
+                        <span class="info_box info_select">运输方式:</span>
+                        <input type="text" id="ShippingName" value="@Model.FilterModel.ShippingName" name="FilterModel.ShippingName" readonly="readonly" class="txt txt_short"/>
+                        <input type="hidden" id="ShippingMethodId" name="FilterModel.ShippingMethodId" value="@Model.FilterModel.ShippingMethodId" />
+                        <input type="button" id="selectShippingMethod" class="btn" value="选择" />
+                    </td> 
+                    <td>
+                        <span class="info_box info_select">状态:</span>
+                        @Html.DropDownListFor(o => o.FilterModel.Status, Model.StatusList, new { @style = "width:100px;" })
+                    </td>
+                </tr>
+                <tr class="date_row_select">
+                    <td colspan="2">
+                        <span class="info_box info_select">@Html.DropDownListFor(o => o.FilterModel.DateWhere, Model.DateWheres)</span>
+                        @Html.TextBoxFor(p => p.FilterModel.StartTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.StartTime), @class = "txt wdate", @style = "width:130px;" })
+                        <span>至:</span>
+                        @Html.TextBoxFor(p => p.FilterModel.EndTime, new { @onclick = "WdatePicker({name:'simple', charset:'gb2312',dateFmt:'yyyy-MM-dd HH:mm'})", @Value = String.Format("{0:yyyy-MM-dd HH:mm}", Model.FilterModel.EndTime), @class = "txt wdate", @style = "width:130px;" })
+                    </td>
+                    <td rowspan="2">
+                        <span class="vt">
+                            @Html.DropDownListFor(o => o.FilterModel.SearchWhere, Model.SearchWheres, new { @style = "width:100px;" })
+                        </span>
+                        @Html.TextAreaFor(p => p.FilterModel.SearchContext, new { @style = "height:80px; width:210px;" })
+                    </td>
+                </tr>
+                <tr class="date_row_select">
+                    <td colspan="2">
+                        <input type="submit" name="btnSearch" class="btn" value="搜索"/>
+                        <input type="submit" name="btnExprot" class="btn" value="导出"/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <hr/>
+        <div>
+            <table id="report" class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <tr class="data_row_two">
+                    <th>运单号</th>
+                    <th>跟踪号</th>
+                    <th>客户订单号</th>
+                    <th>客户名称</th>
+                    <th>运输方式</th>
+                    <th>发货国家</th>
+                    <th>件数</th>
+                    <th>总重量</th>
+                    <th>结算重量</th>
+                    <th>发货时间</th>
+                    <th>状态</th>
+                </tr>
+                @foreach (var row in Model.PagedList)
+                {
+                    <tr class="data_row_dan">
+                        <td>
+                            @row.WayBillNumber
+                        </td>
+                        <td>
+                            @row.TrackingNumber
+                        </td>
+                        <td>
+                            @row.CustomerOrderNumber
+                        </td>
+                        <td>
+                            @{
+                    var customer = Model.Customers.FirstOrDefault(p => p.Value == row.CustomerCode);
+                            }
+                            @if (customer != null)
+                            {
+                                @customer.Text
+                            }
+                        </td>
+                        <td>
+                            @row.InShippingMethodName
+                        </td>
+                        <td>
+                            @row.CountryCode
+                        </td>
+                        <td>
+                            @row.wayBillDetails.Count()
+                        </td>
+                        <td>
+                            @(row.Weight)
+                        </td>
+                        <td>
+                            @row.SettleWeight
+                        </td>
+                        <td>
+                            @if (row.OutStorageTime !=null)
+                            {
+                               @row.OutStorageTime.Value.ToString("yyyy/MM/dd-hh:mm") 
+                            }
+                        </td>
+                        <td>
+                            @{
+                            var status = Model.StatusList.FirstOrDefault(p => p.Value == row.Status.ToString());
+                            }
+                            @if (status != null)
+                            {
+                                @status.Text
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="10">
+                            @{
+                                var n = 1;
+                            }
+                            @foreach (var d in row.wayBillDetails)
+                            {
+                                <div class="fix" style="padding: 7px; background-color: #f7f7f7;">
+                                    <div class="l" style=" width:150px; margin-right:5px">
+                                        序号:<span>@n</span></div>
+                                    <div class="l" style=" width:150px; margin-right:5px">
+                                        货物ID:<span>@d.PackageDetailID</span></div>
+                                    <div class="l" style=" width:150px; margin-right:5px">
+                                        重量(kg):<span>@(d.Weight+d.AddWeight)</span></div>
+                                    <div class="l" style=" width:100px; margin-right:5px">
+                                        长(cm):<span>@d.Length</span></div>
+                                    <div class="l" style=" width:100px; margin-right:5px">
+                                        宽(cm):<span>@d.Width</span></div>
+                                    <div class="l" style=" width:100px; margin-right:5px">
+                                        高(cm):<span>@d.Height</span></div>
+                                    <div class="l" style=" width:210px; margin-right:5px">
+                                        结算重量(kg):<span>@d.SettleWeight</span></div>
+                                </div>
+                                n++;
+                            }
+                        </td>
+                    </tr>
+                }
+                <tr class="data_row_none">
+                    <td colspan="11">
+                        @Html.Pager(Model.PagedList, Model.FilterModel)
+                    </td>
+                </tr>
+            </table>
+        </div>
+    }
+</div>
+
+<style type="text/css">
+    #report tr.odd td
+    {
+        cursor: pointer;
+    }
+</style>
+<script type="text/javascript">
+    $(function() {
+        //选择运输方式
+        $("#selectShippingMethod").bind("click", function() {
+            $("#showShippingMethodList").showWindow("@Url.Action("SelectShippingMethod", "WayBill")?customerTypeId=" + $("#CustomerType").val() + "&type=1", "选择运输方式");
+            var parentWindow = $("#showShippingMethodList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                    top: 120
+                }, {
+                    duration: 1000,
+                    step: function(now, fx) {
+                        $(".window").css("top", now);
+                    }
+                });
+            $("#showShippingMethodList").show();
+        });
+        
+        debugger;
+        $("#report tr:odd").addClass("odd");
+        $("#report tr:not(.odd)").hide();
+        $("#report tr:first-child").show();
+
+        $("#report tr:odd").click(function () {
+            debugger;
+            $(this).next("tr").toggle();
+        });
+
+    });
+    
+    //$(document).ready(function () {
+
+    //});
+</script>

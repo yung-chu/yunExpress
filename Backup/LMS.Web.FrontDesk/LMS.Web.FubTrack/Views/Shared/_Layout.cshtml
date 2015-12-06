@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <title>国际小包优+</title>
+        <script src="@Url.Content("~/Scripts/jquery-1.7.1.min.js")" type="text/javascript"></script>
+        <link type="text/css" rel="stylesheet" href="@Url.Content("~/Css/base.css")" />
+      
+  <style type="text/css">
+body{ background:#f2f2f2;}
+.conStr{ width:960px; margin:0 auto;}
+.top{ line-height:66px; border-bottom:1px solid #e1e1e1; background:#fff;}
+.nav_w{font-size:16px; color:#000000; display:inline-block; margin:0 1.5em; padding:0 0.5em; font-family:"微软雅黑"; color:#444} 
+.nav_w:hover{ color:#ff7f02}
+.nav_area{line-height:46px; font-weight:bold;}
+.nav_on{color:#ff7f02; border-bottom:3px solid #ff7f02;}
+.main_mg{ margin:80px 0;}
+.textArea{ padding:10px; height:31px; border:2px solid #006fbd; width:460px; box-shadow:-2px 2px 8px #ccc inset; outline-style:none; overflow-y:auto;}
+.main_btn{ background:url(@Url.Content("~/Images/FYB_07.jpg")) no-repeat; cursor:pointer; vertical-align:middle; height:55px; width:138px; border:none;}
+.ml3{ margin-left:3px;}
+.main_block{ width:12px; height:4px; display:inline-block; overflow:hidden; background:#444;}
+.main_position{ max-width:300px; _width:200px; border:2px solid #0070bd; display:none;  box-shadow: 0 0 8px #ddd; padding:10px; background:#fff; position:absolute;}
+.sr_load{ background:#fff; border:1px solid #dbdbdb; padding:20px 0;}
+.Diamond_position{position:absolute; line-height:22px; left:50%; width:20px; text-align:center; margin-left:-10px; top:-20px;}
+.Diamond_out{color:#fff; position:absolute;font-size:20px;}
+.Diamond{ color:#0070bd;  font-size:20px; margin-top:-3px; display:inline-block;}
+.sr_area{ min-height:220px; _height:220px; margin-top:80px;}
+.foot{border-top:1px solid #e1e1e1; padding:20px 0; background:#fff}
+.A:hover{ color:#ff7f02}
+.Tb{ border-collapse:collapse; width:100%; border:2px solid #cecece; background:#fff}
+.Tb td,.Tb th{ padding:10px; border:1px solid #cecece}
+.Tb td{ color:#000; }
+.Tb th{ text-align:center; background:#f2f2f2}
+.bgffc892{ background:#ffc892}
+   </style>
+      
+    </head>
+    
+
+    <body>
+        <div class="top">
+            <div class="conStr">
+                <div class="fix">
+                    <div class="l">
+                        <span class="dib_vm"></span>
+                        <a href="@Url.Action("Index","Home")">
+                            <img  class="vm" src="@Url.Content("~/Images/FYB_03.png")" height="36" />
+                        </a>
+                    </div>
+                    <div class="nav_area r mt20">
+                        <a class="nav_w tdn nav_on" href="javascript:" title="回到首页">
+                            首页
+                        </a>
+                        <a class="nav_w tdn"  href="javascript:" title="了解我们">
+                            关于国际小包优+
+                        </a>
+                        <a class="nav_w tdn"  href="javascript:" title="与我们联系">
+                            联系我们
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        
+          @RenderBody()
+        
+        
+        <div class="foot tc f14 mt30">
+            <a href="javascript:" class="mr30 ml30  A ">关于国际小包优+</a>
+            <a href="javascript:" class="mr30 ml30  A ">联系我们</a>
+            <a href="javascript:" class="mr30 ml30  A ">隐私条例</a>
+            <div class="mt15">
+                Copyright 2015, 版权所有福州纵腾网络技术有限公司 ICP/IP证：粤ICP备14056599号
+            </div>
+        </div>
+</body>
+
+</html>

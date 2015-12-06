@@ -1,0 +1,232 @@
+﻿@{
+    ViewBag.Title = "DeliveryDeviation";
+}
+
+@using NPOI.SS.Formula.Functions
+@model LMS.Controllers.FinancialController.DeliveryDeviationModel
+
+<div id="showVenderList" style="overflow: scroll; display: none; position: relative">
+</div>
+
+<div id="showShippingMethodList" style="overflow: scroll; display: none; position: relative">
+</div>
+
+
+<div id="AddOrEdit" style="overflow: scroll; display: none; position: relative">
+</div>
+
+
+
+
+<div class="domebg" id="right_con">
+    
+  @Html.Partial("_Notifications")
+
+    @using (Html.BeginForm())
+    {
+        <table class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+         
+            <tr class="date_row_select">
+                <td width="25%">
+                    <span class="info_box info_select">服务商:</span>
+                    <input type="text" id="_VenderName"  name="FilterModel.VenderName" value="@Model.FilterModel.VenderName" readonly="readonly" class="txt txt_short"/>
+                    <input type="button" id="selectVender" class="btn" value="选择" />
+                    <input type="hidden" id="_VenderCode" name="FilterModel.VenderCode"  value="@Model.FilterModel.VenderCode"/>
+                </td>
+                
+
+                <td width="25%">
+                    <span class="info_box info_select">运输方式:</span>
+                    <input type="text" id="ShippingName"  name="FilterModel.ShippingMethodName" value="@Model.FilterModel.ShippingmethodName" readonly="readonly" class="txt txt_short"/>
+                    <input type="hidden" id="ShippingMethodId" name="FilterModel.ShippingMethodId" value="@Model.FilterModel.ShippingmethodID"/>
+                    <input type="button" id="selectShippingMethod" class="btn" value="选择" />
+                </td>
+
+
+            </tr>
+            <tr class="date_row_select">
+                <td colspan="2">
+
+                    <br/>
+                    &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp; &nbsp;  &nbsp;&nbsp;  &nbsp;&nbsp;  &nbsp; 
+                    <input type="submit" value="查询" id="Search" name="Search" class="btn"/>
+                    &nbsp;&nbsp;&nbsp;  &nbsp;
+                    <input type="button" value="新增" id="Add" name="Add" class="btn"/>           
+
+
+                </td>
+                
+                <td colspan="2">
+    
+
+                </td>
+            </tr>
+
+        </table>
+        
+        
+        <div id="pm_dis_div">
+            <table class="data_table mt20" width="100%" border="1" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr class="data_row_two">
+                        <th>服务商
+                        </th>
+                        <th>
+                            运输方式
+                        </th>
+                        <th>
+                            运费偏差值（元）
+                        </th>
+                        <th>
+                            运费偏差率（%）
+                        </th>
+                        <th>
+                            重量偏差值Kg
+                        </th>
+                        <th>重量偏差率（%）
+                        </th>
+                        <th>操作
+                        </th>
+             
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (Model != null)
+                        {
+                            foreach (var row in Model.PagedList.InnerList)
+                            {
+                                
+                               
+                                <tr class="data_row_dan">
+
+                                    <td style="text-align: center">
+                                        <span id="getVenderName">@row.VenderName</span>  
+                                        <input type="hidden" id="getVenderCode" value="@row.VenderCode"/>
+                                    </td>
+                                    <td style="text-align: center">
+                                        @row.ShippingmethodName
+                                        <input type="hidden" id="getShippingmethodId" value="@row.ShippingmethodID"/>
+                                    </td>
+                                             
+                                             
+                          
+                                    <td style="text-align: center">
+                                        @(row.WaillDeviationValue.HasValue?row.WaillDeviationValue.Value.ToString("F3")+"元":"")
+                                    </td>
+                                    <td style="text-align: center">
+                                        @(row.WaillDeviationRate.HasValue?(row.WaillDeviationRate.Value*100).ToString("F3")+"%":"") 
+                                    </td>
+                                    <td style="text-align: center">
+                                        @(row.WeightDeviationValue.HasValue?row.WeightDeviationValue.Value.ToString("F3")+"kg":"") 
+                                    </td>
+                                    <td style="text-align: center">
+                                         @(row.WeightDeviationRate.HasValue?(row.WeightDeviationRate.Value*100).ToString("F3")+"%":"") 
+                                    </td>
+
+
+                                    <td style="text-align: center">
+                                        
+                                         <a title="删除"  class="btn_href" id="Delete"   onclick="return confirm('确认删除吗?');" href="@Url.Action("DeleteDeliveryDeviations", new { ID = row.DeviationID })">
+                                           删除
+                                         </a>
+                                
+                                        &nbsp;  &nbsp;  &nbsp;  &nbsp;
+                                        <input type="button" class="btn" value="编辑" id="@row.DeviationID" onclick="editData(this.id)" name="Edit">
+                                    </td>
+
+                                </tr>
+                              
+                            }
+                        }
+
+                    }
+                    <tr class="data_row_none">
+                        <td colspan="14">
+                            @Html.Pager(Model.PagedList, Model.FilterModel)
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+
+<script type="text/javascript">
+    $(function() {
+
+
+        //选择服务商
+        $("#selectVender").bind("click", function() {
+
+            $("#showVenderList").showWindow("@Url.Action("SelectVender", "WayBill")", "选择服务商");
+            var parentWindow = $("#showVenderList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                    top: 120
+                }, {
+                    duration: 50,
+                    step: function(now, fx) {
+                        $(".window").css("top", now);
+                    }
+                });
+            $("#showVenderList").show();
+        });
+
+
+        //选择运输方式
+        $("#selectShippingMethod").bind("click", function() {
+            $("#showShippingMethodList").showWindow("@Url.Action("SelectShippingMethod", "WayBill")?venderCode=" + $("#_VenderCode").val() + "&type=2", "选择运输方式");
+            var parentWindow = $("#showShippingMethodList").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                    top: 120
+                }, {
+                    duration: 50,
+                    step: function(now, fx) {
+                        $(".window").css("top", now);
+                    }
+                });
+            $("#showShippingMethodList").show();
+        });
+
+
+        //新增 1，编辑2弹出框
+        $("#Add").bind("click", function() {
+
+            $("#AddOrEdit").showWindow("@Url.Action("AddOrEditDeliveryDeviation", "Financial")?type=1&id="+0, "新增");
+            var parentWindow = $("#AddOrEdit").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                    top: 120
+                }, {
+                    duration: 50,
+                    step: function(now, fx) {
+                        $(".window").css("top", now);
+                    }
+                });
+            $("#AddOrEdit").show();
+        });
+
+
+    });    
+
+
+    function editData(id) {
+        $("#AddOrEdit").showWindow("@Url.Action("AddOrEditDeliveryDeviation", "Financial")?type=2&id="+id, "编辑");
+            var parentWindow = $("#AddOrEdit").parent("div");
+            $(parentWindow).css("top", "0");
+            $(parentWindow).animate({
+                top: 120
+            }, {
+                duration: 50,
+                step: function (now, fx) {
+                    $(".window").css("top", now);
+                }
+            });
+            $("#AddOrEdit").show();
+    }
+
+</script>

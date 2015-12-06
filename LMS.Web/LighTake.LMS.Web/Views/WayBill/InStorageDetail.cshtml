@@ -1,0 +1,103 @@
+﻿@model LMS.Controllers.WayBillController.InStorageInfoModelDetailViewModel
+@{
+    ViewBag.Title = "InStorageDetail";
+}
+
+<div class="domebg" id="right_con">
+    <table id="firsttable" class="data_table" width="100%" border="1" cellpadding="0" cellspacing="0">
+        <tr class="date_row_select">
+            <td>
+                <span class="info_box">入仓单号:</span>
+                @Model.InStorageInfoModel.InStorageID
+            </td>
+            <td>
+                <span class="info_box">客户:</span>
+                @Model.Customer.Name<span style="color: red">(@Model.Customer.Balance.ToString("F2"))</span>
+            </td>
+            <td>
+                <span class="info_box">结算方式:</span>
+                @Model.Customer.PaymentTypeName
+            </td>
+            <td>
+                @if (Model.Customer.PaymentTypeID == 3 || Model.Customer.PaymentTypeID == 4)
+                {
+                    <a href="@Url.Action("NoSettlementList", "Settlement", new {customerCode = @Model.Customer.CustomerCode})" class="btn_href">打印结算单</a>
+                }
+                <a href="@Url.Action("FristInStorage")" class="btn_href">继续入仓</a>
+                <a href="@(!string.IsNullOrWhiteSpace(Request.QueryString["ReturnUrl"])?Request.QueryString["ReturnUrl"]:Url.Action("InStorageList"))" class="btn_href">返回列表</a>
+                <a href="@Url.Action("ExportInStorage",new{InStorageId=Model.InStorageInfoModel.InStorageID})" class="btn_href">导出
+
+                </a>
+            </td>
+        </tr>
+        <tr class="date_row_select">
+            <td>
+                <span class="info_box">运输方式:</span>
+                @Model.InStorageInfoModel.ShippingMethodName
+            </td>
+            <td>
+                <span class="info_box">收货员:</span>
+                @Model.InStorageInfoModel.ReceivingClerk
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr class="date_row_select">
+            <td>
+                <span class="info_box">货物总重量:</span>
+                @(Model.InStorageInfoModel.PhysicalTotalWeight.ToString("F3")+"kg")
+            </td>
+            <td>
+                <span class="info_box">结算总重量:</span>
+                @(Model.InStorageInfoModel.TotalWeight.HasValue?Model.InStorageInfoModel.TotalWeight.Value.ToString("F3")+"kg":"")
+            </td>
+            <td>
+                <span class="info_box">总件数:</span>
+                @Model.InStorageInfoModel.TotalQty
+            </td>
+            <td></td>
+        </tr>
+    </table>
+    <table class="data_table mt20" width="60%" border="1" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr class="data_row_two">
+                <th>运输方式
+                </th>
+                <th>目的地国家
+                </th>
+                <th>入仓货物总重量
+                </th>
+                <th>入仓结算总重量
+                </th>
+                <th>包裹数量
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                //var list = from w in Model.InStorageInfoModel.WayBillInfos
+                //           group w by w.CountryCode
+                //           into g
+                //           select new
+                //               {
+                //                   CountryCode= g.Key,
+                //                   PackCount=g.Count(),
+                //                   TotalWeight = g.Sum(w => w.SettleWeight),
+                //                   PhysicalTotalWeight = g.Sum(w => w.Weight)
+                //               };
+                foreach (var w in Model.InStorageInfoModel.InStorageTotalModels)
+                {
+                    <tr>
+                        <td>@Model.InStorageInfoModel.ShippingMethodName</td>
+                        <td>@w.CountryCode</td>
+                        <td>@w.PhysicalTotalWeight</td>
+                        <td>@w.TotalWeight</td>
+                        <td>@w.PackCount</td>
+                    </tr>
+                }            
+            }
+        </tbody>
+    </table>
+</div>

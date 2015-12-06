@@ -1,0 +1,305 @@
+﻿@{
+    ViewBag.Title = "EUB运单管理";
+}
+@section Scripts{
+    <link href="@Url.Content("~/css/pager.css")" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="@Url.Content("~/js/My97DatePicker/WdatePicker.js")"></script>
+}
+@using LMS.Data.Entity
+@model LMS.UserCenter.Controllers.OrderController.Models.EubWayBillViewModel
+
+
+
+<!-- 面包屑 Start -->
+<div class="bd_b bread_box">
+    <a href="javascript:" class="icon-home bread_home"></a>
+    <strong class="gtlt bread_gtlt">&gt;&gt;</strong>
+    <a href="javascript:" class="bread_off">订单管理</a>
+    <strong class="gtlt bread_gtlt">&gt;&gt;</strong>
+    <a href="javascript:" class="bread_on">EUB订单申请打印</a>
+</div>
+<!-- 面包屑 Start -->
+ @Html.Partial("_Notifications")
+ <!-- 高级搜索 Start -->
+    @using (Html.BeginForm())
+    {
+        <!-- 高级搜索 End -->
+         <div class="tab_conStr">
+            <div class="from_box">
+                <div class="fix from_horizontal">
+                    <div class="ww32 l">
+                        <div class=" fix">
+                            <span class="info_box info_middle">运输方式：</span>
+
+                            @Html.DropDownListFormFor(p => Model.Filter.ShippingMethodId, Model.ShippingMethods, new Dictionary<string, object> { { "class", "chzn-select-deselect select_middle" }, { "data-placeholder", "全部" } })
+                        </div>
+                    </div>
+                    <div class="cell">
+                        <div class="fix">
+                            <div class="l ww49">
+                                <div class=" fix">
+                                    <span class="info_box info_middle">
+                                        @Html.DropDownListFor(p => p.Filter.TimeType, Model.TimeTypeList)
+                                    </span>
+
+                                    @Html.DateFormFor(p => Model.Filter.CreatedOnFrom)
+                                    到:
+                                    @Html.DateFormFor(p => Model.Filter.CreatedOnTo)
+
+                                </div>
+                            </div>
+                            <div class="cell pl20  fix">
+                                <span class="info_box info_middle ">收货国家：</span>
+                                @Html.DropDownListFormFor(p => p.Filter.CountryCode, Model.CountryList, new Dictionary<string, object> { { "class", "chzn-select-deselect select_middle r" }, { "data-placeholder", "全部" } })
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="fix from_horizontal">
+
+                    <div class="ww32 l">
+                        <div class=" fix">
+                            <span class="info_box info_middle l">@Html.DropDownListFor(p => p.Filter.QueryNumber, Model.QueryNumberList)：</span>
+
+                            @Html.TextAreaFor(f => f.Filter.Numbers, new { @class = "area area_short" })
+                        </div>
+                    </div>
+
+                    <div class="cell">
+                        <div class="fix">
+                            <div class="l ww49">
+                              
+                            </div>
+                            <div class="cell pl20 fix">
+                                <span class="info_box info_middle">状态：</span>
+                                @Html.DropDownListFormFor(p => Model.Filter.Status, Model.StatusList, new Dictionary<string, object> { { "class", "chzn-select-deselect select_middle r" }, { "data-placeholder", "全部" } })
+                              
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+                <div class="fix from_horizontal">
+
+                    <div class="">
+                        <div class=" fix">
+                            <span class="info_box info_middle"></span>
+                            @Html.HiddenFor(p => Model.Filter.WayBillNumbers)
+                            <input type="submit" class="btn btn_red" value="搜索" />
+                            <input type="submit" name="BatchApplyWayBill" id="BatchApplyWayBill" onclick="return CheckEubWayBill();" class="btn btn_green" value="申请EUB运单" />
+                            <input type="button" name="BatchPrintWayBill" id="BatchPrintWayBill"  class="btn btn_green" value="批量打印运单" />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- 列表 Start -->
+        <div class="top_solid mt20"></div>
+        <table class="data_table " width="100%" border="1" cellpadding="0" cellspacing="0">
+            <tr class=" data_row_head">
+                <th valign="middle" width="3%">
+                    <input type="checkbox" id="selectAll" /></th>
+                <th valign="middle" width="4%">序号</th>
+                <th width="12%">客户订单号</th>
+                <th width="10%">运单号</th>
+                <th width="10%">跟踪号</th>
+                <th width="12%">批次号</th>
+                <th width="8%">收货国家</th>
+                <th width="10%">运输方式</th>
+                <th width="5%">状态</th>
+                <th width="10%">申请时间</th>
+                <th width="10%">创建时间</th>
+                <th width="6%">操作</th>
+            </tr>
+            @{
+            
+        int i = 1;
+            }
+            @foreach (var item in Model.PagedList.InnerList)
+            {
+
+                bool flag = i % 2 > 0;
+                <tr class="@(flag ? "data_row_dan" : "data_row_shuang")">
+                    <td valign="middle">
+                        <input type="checkbox" name="selected" value="@item.WayBillNumber"/>
+                    </td>
+                    <td valign="middle">
+                        @(i + (Model.Filter.Page - 1) * Model.Filter.PageSize)</td>
+                    <td valign="middle">@item.CustomerOrderNumber</td>
+                    <td>@item.WayBillNumber</td>
+                    <td id="@(item.TrackingNumber)_number">@item.TrackingNumber</td>
+                    <td>@item.BatchNumber</td>
+                    <td>@(item.CountryCode.IsNullOrWhiteSpace() ? "" : Model.CountryList.First(s => s.Value == item.CountryCode.ToUpperInvariant()).Text)</td>
+                    <td>@item.ShippingMethodName</td>
+                    <td id="@(item.WayBillNumber)_status">
+                        @{
+                string statusDescription = string.Empty;
+                statusDescription = item.Status.HasValue ? EubWayBillApplicationInfo.GetStatusDescription(item.Status.Value) : "未申请";
+                        }
+                        @statusDescription
+                    </td>
+                    <td>@(item.ApplyDate.HasValue ? item.ApplyDate.Value.ToString("yyyy-MM-dd HH:mm") : "")</td>
+                    <td>@item.CreatedOn.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>
+                        @if (item.Status.HasValue)
+                        {
+                            if (item.Status.Value == (int)EubWayBillApplicationInfo.StatusEnum.DownLoad || item.Status.Value == (int)EubWayBillApplicationInfo.StatusEnum.Printer)
+                            {
+                                string print = "打印";
+                                string cl = "data_btn btn_yellow";
+                                if ( item.Status.Value == (int)EubWayBillApplicationInfo.StatusEnum.Printer)
+                                {
+                                    cl = "data_btn btn_gray";
+                                    print = "已打印";
+                                }
+                                var adress = string.IsNullOrWhiteSpace(item.LocalDownLoad) ? item.EubDownLoad : item.LocalDownLoad;
+                                @*<a title="打印" class="data_btn btn_green" href="@adress"><i class="icon-print data_icon"></i></a>*@
+                                  <a title="@print" class="@cl" target="_blank" onclick="return confirm('确认打印吗?');" href="@Url.Action("PrintEubOrder", new { Id = item.EubOrderId,url=adress })">
+                                    <i class="icon-print data_icon"></i>
+                                  </a>
+                            }
+                        }
+                    </td>
+                </tr>
+                        {
+                            i++;
+                        }
+            }
+            <tr class="date_row_none">
+                <td colspan="12">
+                    <div class="fix">
+                        @Html.Pager(Model.PagedList, Url.MergeRouteValues(Model.Filter))
+                    </div>
+                </td>
+            </tr>
+        </table>
+        
+        <!-- 列表 End -->
+         <input type="hidden" value="" id="ApplyWayBill" name="ApplyWayBill" />
+        <div id="PrintMsg" class="dn">
+            <span class="info_box info_short ">打印规格：</span>
+            @Html.DropDownListFor(p => Model.Filter.PrintFormat, Model.PrintFormatList)
+            <span id="message_error" class="mr20 ml10 txt_tip"></span>
+        </div>
+        <style>
+            #Filter_PrintFormat_chzn{
+                width: 80px !important;
+            }
+        </style>
+       
+    }
+
+<script type="text/javascript">
+
+    function CheckEubWayBill() {
+        var ids = [];
+        $("input[name='selected']").each(function () {
+            if ($(this).attr("checked")) {
+                var statuText = $.trim($(this).parents("tr").find("td:eq(8)").text());
+                if (statuText == "未申请") {
+                    ids.push($(this).val());
+                }
+            }
+        });
+        if (ids.length == 0) {
+            alert("请选择状态为未申请的运单");
+            return false;
+        }
+        $("#Filter_WayBillNumbers").val(ids);
+        art.dialog({
+            title: '请选择打印规格',
+            content: document.getElementById('PrintMsg'),
+            lock: true,
+            ok: function () {
+                this.close();
+                $("#ApplyWayBill").val("hid");
+                $("form").submit();
+                return true;
+            },
+            cancelVal: '关闭',
+            cancel: true
+          });
+        return false;
+    }
+    
+    $(function () {
+        $('#selectAll').click(function () {
+            var isSelected = $(this).attr("checked");
+            $("input[name='selected']").each(function () {
+                if (isSelected) {
+                    $(this).attr("checked", "true");
+                } else {
+                    $(this).removeAttr("checked");
+                }
+            });
+        });
+        
+        $("#PrintLable").click(function () {
+            var ids = [];
+            $("input[name='selected']").each(function () {
+
+                if ($(this).attr("checked")) {
+                    ids.push($(this).val());
+                }
+            });
+
+            if (ids.length == 0) {
+                artDialog.alert("请选择要打印的订单");
+                return false;
+            }
+            var url = "/order/print?ids=" + ids.join(',');
+
+            window.open(url, "_blank");
+            return true;
+        });
+        
+        $('#BatchPrintWayBill').bind("click", function () {
+            var ids = [];
+            $("input[name='selected']").each(function () {
+
+                if ($(this).attr("checked")) {
+                    var statuText = $.trim($(this).parents("tr").find("td:eq(8)").text());
+                    if (statuText != "未申请") {
+                        ids.push($(this).val());
+                    }
+                }
+            });
+
+            if (ids.length == 0) {
+                alert("请选择要打印的订单");
+                return false;
+            }
+            
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "@Url.Action("BatchPrintOrder")",
+                data: { wayBillNumbers: ids.join(',') },
+                success: function (data) {
+                    if (data.Result) {
+                        for (var i = 0; i < ids.length; i++) {
+                            $("#" + ids[i] + "_status").html("已打印");
+                        }
+                        window.location.href = data.Url;
+                        return true;
+                    } else {
+                        alert(data.Message);
+                        return false;
+                    }
+                },
+                error: function (data) {
+                    alert('运单批量打印失败，请稍候再试！');
+                    return false;
+                }
+            });
+            
+            return false;
+        });
+    });
+</script>

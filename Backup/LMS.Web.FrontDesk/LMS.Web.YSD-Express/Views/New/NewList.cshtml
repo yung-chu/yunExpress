@@ -1,0 +1,208 @@
+﻿
+@using System.Collections
+@using System.Text
+@using LMS.FrontDesk.Controllers.NewController
+@using LMS.FrontDesk.Framework
+@using LighTake.Infrastructure.Web
+@model LMS.FrontDesk.Controllers.NewController.Models.NewListModel
+@{
+    ViewBag.Title = "新闻中心";
+}
+@section ExtraHeadContent {
+    @if (Model.CategoryModels.Count > 0)
+    {
+        <meta name="description" content="@Model.CategoryModels[0].SeoDescription"/>
+        <meta name="Keywords" content="@Model.CategoryModels[0].SeoKeywords"/>
+    }
+    else
+    {
+        <meta name="description" content=""/>
+        <meta name="Keywords" content=""/>
+    }
+  
+}
+
+
+
+<div class="bn_area" style="height:300px;box-shadow:0 0 3px #b1b1b1; position:relative;" id="inx_AdSlide">
+  <div style="background:#33949a; height:100%">
+    <div class="conStr">
+      <div class="strIn">
+          <div class="tr">
+               <a href="javascript:">
+                   <img src="@Url.Content(string.IsNullOrWhiteSpace(Model.CategoryModel.Pic) ? "~/images/banner/bn7.jpg" : Model.PicPath + Model.CategoryModel.Pic)"  height="300">
+               </a> 
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="bgf6">
+    <div class="conStr">
+        <div class="strIn">
+            <div class="bgf shadow">
+                <div class="tr pt20 mr20 lh20">
+                    <div class="bread_area mb15">
+                        <a href="#" class="dib vm" title="回到首页"><img src="@Url.Content("~/images/house.jpg")" /></a>
+                        <span class="vm">
+                            <a href="@Url.Action("Index", "Home")" class="tdn" title="回到首页">首页</a>
+                            --&gt;
+                            <span href="#" class="bread_on">
+                                新闻中心
+                            </span>
+                        </span>
+                        
+                    </div>
+                </div>
+                <div class="fix mt-20 pl10">
+                    <div class="l w250">
+                        <div>
+                            <span class="tt">新闻中心</span>
+                            <span class="fa">News</span>
+                        </div>
+                        <!--新闻类别-->
+                        @if (Model.CategoryModelNews.Count > 0)
+                        {
+                            <ul class="Inav_box mt10">
+                                @foreach (var row in Model.CategoryModelNews)
+                                {
+                                    string css = Model.CategoryId == row.CategoryID ? "Inav_on" : "Inav_off";
+                                    <li>
+                                        <a href="@Url.Action("NewList", "New", new { categoryID = @row.CategoryID, id = 0 })" class="@css" title="@row.Name">@row.Name</a>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                    <!--新闻点击显示详细-->
+                    <div class="cell pl20">
+                        <!--按年显示新闻条数-->
+                        @{
+                            ArrayList list = new ArrayList();
+                        }
+                 
+                        <!--获取年-->
+                        @foreach (var row in Model.PagedList.InnerList)
+                        {
+                            string year = row.CreatedOn.Value.Year.ToString();
+                            if (!list.Contains(year))
+                            {
+                                list.Add(year);
+                            }
+                        }
+                        <div class="cn_area">
+                            @for (int i = 0; i < list.Count; i++)
+                            {
+                                <div class="cn_box rel">  <!--年-->
+                                    @foreach (var rows in Model.PagedList.InnerList.OrderByDescending(a=>a.CreatedOn))
+                                    {
+
+                                        var getYear = rows.CreatedOn.Value.Year;
+                                        if (getYear == Convert.ToInt32(list[i]))
+                                        {
+                                            <!--标题-->
+                                            <div class="cn_control"> 
+                                                <img class="cn_circle" src="@Url.Content("~/images/quan_2.png")" />
+                                                <div class="cn_pd">
+                                                    <h3>
+                                                        @rows.Title
+                                                    </h3>
+                                                    <div class="mt10 pct60">
+                                                        
+                                                       @{
+                                                            CheckHtml ch = new CheckHtml();
+                                                        }
+
+                                                        @if (rows.Detail != null && ch.ParseTags(rows.Detail).Length > 250)
+                                                        {
+	                                            
+                                                            @Html.Raw(ch.ParseTags(rows.Detail).Substring(0, 250))
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.Raw(@rows.Detail)
+	                                             
+                                                        }
+                                                    </div>
+                                                    <div class="mt10">
+                                                        <img src="@Url.Content("~/images/clock_1.jpg")" class="vm" /> 
+                                                        <span class="vm">@rows.CreatedOn.Value.ToString("yyyy-MM-dd")</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--标题end-->
+                                        
+                                            string sty = "";
+                                            if (rows.ArticleID == Model.ArticleId)
+                                            {
+                                                sty = "display: block;";
+                                            }
+                                            <!--详细-->
+                                            <div class="cn_Warp" style="@sty">
+                                                <div class="cn_pd">
+                                                    <h3 class="Itt">
+                                                        @rows.Title
+                                                    </h3>
+                                                    <p>
+                                                        @Html.Raw(@rows.Detail)  
+                                                    </p>
+                       
+                                                    <div>
+                                                        <img src="@Url.Content("~/images/clock_1.jpg")" class="vm" /> 
+                                                        <span class="vm">@rows.CreatedOn.Value.ToString("yyyy-MM-dd")</span>
+                                                    </div>
+                                                </div>
+                                                <div class="tr mr20 mb20" >
+                                                    <span class="cpi" >
+                                                        <span class="f20 code">×</span>
+                                                    </span>
+                                                </div>
+                                                <img class="cn_-circle" src="@Url.Content("~/images/quan_1.png")" />
+                                            </div>
+                                            <!--详细 end-->
+                                        }
+                                    }
+                                    <span class="cn_--circle">
+                                        <img src="@Url.Content("~/images/year.png")" class="vm" />
+                                        <strong class="vb f20 co00">@list[i]</strong>
+                                    </span>
+                                </div><!--年 end-->
+                            }
+                        </div>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+		
+    $(".cn_control").hover(
+        function () {
+            $(this).addClass("hover").css('background','#f8f8f8');
+        },
+        function () {
+            $(this).removeClass("hover").css('background','');
+        }
+    );
+    $(".cn_control").click(function(){
+        $(this).fadeOut('fast');
+        $(this).next().slideDown('fast');
+    })
+    $(".cn_Warp .cpi").click(function(){
+        $(this).parents('.cn_Warp').fadeOut('fast');
+        $('.cn_control').fadeIn('fast');
+    });
+</script>
+
+

@@ -1,0 +1,167 @@
+﻿@{
+    ViewBag.Title = "ReturnGoods";
+}
+@model LMS.Controllers.FubController.Models.ReturnGoodsViewModel
+<div class="domebg" id="right_con">
+    <h3>退件扫描</h3>
+    <hr>
+    <div style="margin: 15px;float: left;">
+        <table class="data_table" style="width:350px;" border="1" cellpadding="0" cellspacing="0">
+            <tr>
+                <td style="width: 100px; text-align: right;">退回原因：</td>
+                <td style="width: 60%;"> @Html.DropDownList("ReasonType",Model.ReasonTypeList)</td>
+            </tr>
+            <tr>
+                <td style="width: 100px; text-align: right;">包裹单号：</td>
+                <td><input type="text" id="TrackNumber" name="TrackNumber" class="txt" style="width: 150px;" maxlength="35" /></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center;">
+                    <input type="button" id="btnSubmit" class="btn" value="提交" title="提交扫描袋牌"/></td>
+            </tr>
+        </table> 
+        <p id="ErrorMessage" style="color: red;font-size: 16px;margin-top: 10px;text-align: center;"></p>
+    </div>
+    <p style="font-size: 14px;display:inline-block;margin-top: 10px">扫描总数：<span id="ReturnGoodsCount" style="color: red">0</span></p>
+    <input type="button" id="btnSave" class="btn" style="margin-left: 650px;width: 60px;" value="保存" title="保存"/>
+    <table id="returnGoodsTable" class="data_table mt20" style="margin: 15px; width: 800px;"  border="1" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr class="data_row_two">
+                <th>序号
+                </th>
+                <th>包裹单号
+                </th>
+                <th>发货国家
+                </th>
+                <th>重量kg
+                </th>
+                <th>操作人
+                </th>
+                <th>退回原因
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+</div>
+<script type="text/javascript">
+    $(function() {
+        $(":text").focus(function() {
+            this.select();
+        });
+        $(":text").click(function() {
+            this.select();
+        });
+        $(":text").mouseup(function() {
+            return false;
+        });
+        $("#TrackNumber").bind("keydown", function(e) {
+            if (e.keyCode == 13) {
+                $("#btnSubmit").click();
+            }
+        });
+
+        var ischecking = false;
+        $("#btnSubmit").bind("click", function() {
+            $("#ErrorMessage").html("");
+            var trackNumber = $("#TrackNumber").val();
+            if ($("#returnGoodsTable > tr > td input[value='" + trackNumber + "']").length > 0) {
+                $("#ErrorMessage").html("该单号已经扫描过！");
+                $("#TrackNumber").select();
+                PlayFaile();
+                return;
+            }
+            if ($.RegExpHelper.IsNumber(trackNumber) && trackNumber.length == 11 && trackNumber.indexOf("591") == 0) {
+                if (ischecking) return;
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("CanReturnGoods")",
+                    data: { TrackNumber: $("#TrackNumber").val(), ReasonType: $.trim($("#ReasonType").val()) },
+                    dataType: "JSON",
+                    beforeSend: function () { ischecking = true; },
+                    success: function(data) {
+                        if (!data.Result) {
+                            $("#TrackNumber").select();
+                            $("#ErrorMessage").html(data.Message);
+                            PlayFaile();
+                        } else {
+                            $("#TrackNumber").val("");
+                            AddReturnGoodsRow(data);
+                            PlaySuccess();
+                        }
+                    },
+                    complete: function () { ischecking = false; },
+                });
+            } else {
+                $("#TrackNumber").select();
+                $("#ErrorMessage").html("包裹单号必须为11位纯数字且以591开头");
+                PlayFaile();
+            }
+        });
+
+        $("#btnSave").bind("click", function() {
+            $("#ErrorMessage").html(" ");
+            if (indexScanedCount == 0) {
+                $("#ErrorMessage").html("无需要保存单，请先扫描！");
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddReturnGoods")",
+                data: $("#returnGoodsTable :hidden").serializeArray(),
+                dataType: "JSON",
+                beforeSend: function() { $("#btnSave").attr('disabled', true); },
+                success: function(data) {
+                    if (!data.Result) {
+                        $("#ErrorMessage").html(data.Message);
+                    } else {
+                        $("#returnGoodsTable > tr ").remove();
+                        indexScanedCount = 0;
+                        $("#ReturnGoodsCount").text(indexScanedCount);
+                        alert("保存成功");
+                    }
+                },
+                complete: function () { $("#btnSave").attr('disabled', false); },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(errorThrown);
+                }
+            });
+        });
+    });
+
+    var indexScanedCount = 0;
+    function AddReturnGoodsRow(data) {
+        var inputHiddens = 
+               "<input type=\"hidden\" value=\"" + data.TrackNumber + "\" name=\"[" + indexScanedCount + "].TrackNumber\"/>"
+               + "<input type=\"hidden\" value=\"" + data.ReasonType + "\" name=\"[" + indexScanedCount + "].ReasonType\"/>";
+
+        var row = $('<tr class="data_row_dan" </tr>')
+            .append($('<td></td>').text(++indexScanedCount))
+            .append($('<td></td>').text(data.TrackNumber))
+            .append($('<td></td>').text(data.Country))
+            .append($('<td></td>').text(data.Weight))
+            .append($('<td></td>').text(data.ReturnBy))
+            .append($('<td></td>').text($("#ReasonType").find("option:selected").text()).append(inputHiddens));
+        
+        $(row).insertAfter("#returnGoodsTable > tbody");
+
+        $("#ReturnGoodsCount").text(indexScanedCount);
+    }
+    
+    function PlaySuccess() {
+        $('embed').remove();
+        $('body').append('<embed src="/Css/Success.wav" autostart="true" hidden="true" loop="false">');
+    }
+
+    function PlaySuccess2() {
+        $('embed').remove();
+        $('body').append('<embed src="/Css/Success2.wav" autostart="true" hidden="true" loop="false">');
+    }
+
+    function PlayFaile() {
+        $('embed').remove();
+        $('body').append('<embed src="/Css/Faile.wav" autostart="true" hidden="true" loop="false">');
+    }
+</script>
